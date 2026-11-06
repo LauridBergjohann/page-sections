@@ -22,7 +22,7 @@ On Windows with PowerShell script restrictions, use `npm.cmd` instead of `npm`; 
 | --- | --- |
 | packages/core | Framework-independent models, numeric layouts, registries and utilities |
 | packages/svelte | Svelte components and CSS |
-| apps/demo | SvelteKit 2 reference application with three statically prerendered routes |
+| apps/demo | SvelteKit 2 reference application with statically prerendered showcases and website examples |
 | scripts | Layout generation and artifact/release verification |
 | tests | Core, SSR and browser regressions |
 | .changeset | Versioning configuration and pending change notes |
@@ -37,6 +37,8 @@ The Wiki is a separate repository, normally checked out as sibling `page-section
 - [Tests and documentation checks](testing.md)
 - [Running and developing the demo](demo.md)
 - [Versioning and releases](releasing.md)
+- [0.2 release preparation](release-0.2.md)
+- [Spatial Elements adoption contract](spatial-elements-adoption.md)
 - [Editing and publishing the Wiki](wiki.md)
 - [API observations](api-notes.md)
 

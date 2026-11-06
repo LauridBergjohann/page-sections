@@ -1,5 +1,6 @@
 // Extracted from Spatial Elements Beta.8; see NOTICE.
 import tokens from './layoutTokens.json' with { type: 'json' };
+import type { CardMediaAspect, CardMediaFit } from './types.js';
 
 /** Canonical values also consumed by the generated, SSR-safe stylesheet. */
 export const layoutTokens = tokens;
@@ -25,6 +26,27 @@ const clamp = (value: number, min: number, max: number) => Math.min(Math.max(val
 export function resolveViewportLayout(width: number): ViewportLayoutSize {
 	const w = size(width);
 	return [...viewportLayoutSizes].reverse().find((name) => w >= tokens.layoutMinWidths[name]) ?? 'xs';
+}
+
+/** Canonical page/menu rectangles in CSS pixels. Reading widths do not change this geometry. */
+export function resolvePageLayout(input: ResponsiveLayoutInput) {
+  const viewport = size(input.width);
+  const available = Math.max(0, viewport - size(input.scrollbarWidth));
+  const left = Math.min(available, size(input.safeArea?.left));
+  const right = Math.min(available - left, size(input.safeArea?.right));
+  const width = available - left - right;
+  const layout = resolveViewportLayout(viewport);
+  const wide = viewport >= tokens.layoutMinWidths.xl;
+  const contentWidth = Math.min(tokens.contentMax, Math.max(0, width - (layout === 'xl' ? 2 * tokens.xlContentInset : 0)));
+  const content = { x: left + (width - contentWidth) / 2, width: contentWidth };
+  return { layout, content, menu: { x: wide ? content.x : left, width: wide ? content.width : width,
+    y: size(input.safeArea?.top) + (wide ? tokens.menu.wideTop : 0), height: wide ? tokens.menu.wideHeight : tokens.menu.height } };
+}
+
+/** Offset shared by native and enhanced navigation shells. */
+export function resolveMenuOffset(scrollY: number, fixed = false): number {
+  const delta = size(scrollY) - tokens.menu.scrollThreshold;
+  return fixed || delta <= 0 ? 0 : -delta;
 }
 
 /** Width includes the grid's two outer margins, implemented once as section padding. */
@@ -60,20 +82,30 @@ export function contentSpanWidth(width: number, span: number) {
 	return Math.min(grid.width, columns * grid.columnWidth + (columns - 1) * grid.gap);
 }
 
-/** Uses the same slot for poster containment and measured 3D fitting. */
-export function resolveCardLayout(containerWidth: number, cardSize: LayoutCardSize = 'm') {
+export interface CardLayoutOptions {
+  mediaAspect?: CardMediaAspect;
+  mediaFit?: CardMediaFit;
+  /** Set from the entire collection, so missing eyebrows keep their allocated row. S always hides it. */
+  reserveEyebrow?: boolean;
+}
+
+/** Default catalog geometry in CSS pixels; media is the actual poster/3D fitting rectangle. */
+export function resolveCardLayout(containerWidth: number, cardSize: LayoutCardSize = 'm', options: CardLayoutOptions = {}) {
 	const grid = resolveContentGrid(containerWidth);
 	const card = tokens.cards[cardSize];
 	const span = cardSize === 'l' && grid.size === 's' ? tokens.cards.l.gridSSpan : card.span;
 	const width = contentSpanWidth(grid.width, span);
-	const textHeight = Math.min(width, Math.max(width / 4, card.rows * card.lineHeight + 2 * tokens.cardTextInset.block));
-	const availableHeight = width - textHeight;
-	const fitWidth = Math.min(width, availableHeight * 4 / 3);
-	const fitHeight = fitWidth * 3 / 4;
+	const aspect = options.mediaAspect ?? '3/2';
+	const [horizontal, vertical] = aspect.split('/').map(Number);
+	const mediaHeight = width * vertical / horizontal;
+	const eyebrowRows = cardSize !== 's' && options.reserveEyebrow ? 1 : 0;
+	const textHeight = (card.rows + eyebrowRows) * card.lineHeight + 2 * tokens.cardTextInset.block;
+	const inset = options.mediaFit === 'cover' ? 0 : Math.min(tokens.cardMediaInset, width / 2, mediaHeight / 2);
 	return {
 		...card,
-		span, width, height: width, textHeight,
-		media: { x: (width - fitWidth) / 2, y: (availableHeight - fitHeight) / 2, width: fitWidth, height: fitHeight }
+		span, width, height: mediaHeight + textHeight, textHeight, eyebrowRows,
+		mediaFrame: { x: 0, y: 0, width, height: mediaHeight },
+		media: { x: inset, y: inset, width: Math.max(0, width - 2 * inset), height: Math.max(0, mediaHeight - 2 * inset) }
 	};
 }
 

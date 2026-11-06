@@ -7,6 +7,11 @@ async function openSettings(page: Page) {
   }
 }
 
+async function openMenu(page: Page) {
+  const menu = page.locator('.ps-navigation .mobile-menu');
+  if (await menu.isVisible() && await menu.getAttribute('open') === null) await menu.locator('summary').click();
+}
+
 const routes = [
   { path: '/', title: 'Page Sections — A place for your content', heading: 'Space for your ideas.', menu: 'Home' },
   { path: '/components/', title: 'Components — Page Sections', heading: 'The building blocks.', menu: 'Components' },
@@ -22,6 +27,7 @@ for (const width of [375, 840, 1600]) {
       expect(response?.status()).toBe(200);
       await expect(page).toHaveTitle(route.title);
       await expect(page.getByRole('heading', { level: 1, name: route.heading })).toBeVisible();
+      await openMenu(page);
       await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: route.menu, exact: true })).toHaveAttribute('aria-current', 'page');
       await openSettings(page);
       await expect(page.getByRole('button', { name: 'Dark', exact: true })).toBeDisabled();
@@ -33,6 +39,7 @@ for (const width of [375, 840, 1600]) {
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: `.artifacts/demo-${route.menu.toLowerCase()}-no-js-${width}.png`, fullPage: true });
     }
+    await openMenu(page);
     await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Components', exact: true }).click();
     await expect(page).toHaveURL(/\/components\/$/);
     await page.getByRole('navigation', { name: 'On this page' }).getByRole('link', { name: 'Responsive grid', exact: true }).click();
@@ -77,10 +84,10 @@ test('client routing preserves the layout and theme, including browser history',
     await expect(page).toHaveTitle(route.title);
     await expect(shell).toHaveAttribute('data-ps-theme', 'dark');
     await expect(shell).toHaveAttribute('data-persistence-probe', 'retained');
-    await expect(menu.locator('[aria-current="page"]')).toHaveText(route.menu);
+    await expect(menu.locator('[aria-current="page"]:visible')).toHaveText(route.menu);
   }
   await page.goBack();
-  await expect(menu.locator('[aria-current="page"]')).toHaveText('Components');
+  await expect(menu.locator('[aria-current="page"]:visible')).toHaveText('Components');
   await expect(shell).toHaveAttribute('data-ps-theme', 'dark');
   await page.getByRole('button', { name: 'Next cards' }).click();
   await expect.poll(() => page.locator('#carousel-track').evaluate(el => el.scrollLeft)).toBeGreaterThan(0);
@@ -93,6 +100,7 @@ test('client routing preserves the layout and theme, including browser history',
 });
 
 test('all gradients and automatic group corners work in both themes', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
   await page.goto('/backgrounds/');
   for (const mode of ['Light', 'Dark']) {
     await openSettings(page);
@@ -133,17 +141,11 @@ test('compact navigation fits wider font metrics on every route at 320px', async
     const nav = page.getByRole('navigation', { name: 'Main navigation' });
     const header = (await nav.locator('.header').boundingBox())!;
     expect(header.height).toBe(66);
-    const links = await nav.locator('.menu a').evaluateAll(elements => elements.map(element => {
-      const { x, y, right, bottom } = element.getBoundingClientRect();
-      return { x, y, right, bottom };
-    }));
-    expect(links).toHaveLength(3);
-    for (const link of links) {
-      expect(link.y).toBe(links[0].y);
-      expect(link.x).toBeGreaterThanOrEqual(header.x);
-      expect(link.right).toBeLessThanOrEqual(header.x + header.width);
-      expect(link.bottom).toBeLessThanOrEqual(header.y + header.height);
-    }
+    await expect(nav.getByRole('link', { name: 'Page Sections home' })).toBeVisible();
+    await openMenu(page);
+    const links = nav.locator('.mobile-panel a');
+    await expect(links).toHaveCount(4);
+    for (const link of await links.all()) await expect(link).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
 });
@@ -156,21 +158,22 @@ for (const width of [320, 600, 840, 1200, 1599, 1600, 1809, 2300]) {
     await expect(nav.getByRole('link', { name: 'Page Sections home' })).toBeVisible();
     const header = await nav.locator('.header').boundingBox();
     expect(header!.height).toBe(width < 1600 ? 66 : 64);
+    expect(header!.width).toBe(width < 1600 ? width : width < 1809 ? width - 272 : 1536);
     if (width < 1600) {
       await expect(nav.locator('.satellite.left')).toBeHidden();
       await expect(nav.locator('.satellite.right')).toBeHidden();
       await expect(page.getByRole('button', { name: 'Dark', exact: true })).toHaveCount(0);
-      await nav.locator('summary').focus(); await page.keyboard.press('Enter');
+      await nav.locator('.settings > summary').focus(); await page.keyboard.press('Enter');
       await page.getByRole('button', { name: 'Dark', exact: true }).click();
       await expect(page.locator('[data-ps-theme]')).toHaveAttribute('data-ps-theme', 'dark');
       await expect(page.getByRole('link', { name: 'Documentation', exact: true })).toBeVisible();
       await page.keyboard.press('Escape');
-      await expect(nav.locator('summary')).toBeFocused();
-      await expect(nav.locator('details')).not.toHaveAttribute('open');
-      await nav.locator('summary').click();
+      await expect(nav.locator('.settings > summary')).toBeFocused();
+      await expect(nav.locator('.settings')).not.toHaveAttribute('open');
+      await nav.locator('.settings > summary').click();
       await page.screenshot({ path: '.artifacts/navigation-settings-' + width + '.png' });
       await page.locator('.demo-footer').click();
-      await expect(nav.locator('details')).not.toHaveAttribute('open');
+      await expect(nav.locator('.settings')).not.toHaveAttribute('open');
     } else {
       await expect(nav.locator('.settings')).toBeHidden();
       await expect(page.getByRole('button', { name: 'Dark', exact: true })).toBeVisible();

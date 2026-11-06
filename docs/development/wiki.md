@@ -8,7 +8,7 @@ If needed, clone it from the parent directory:
 git clone https://github.com/LauridBergjohann/page-sections.wiki.git
 ```
 
-Home.md is the landing page; _Sidebar.md contains the navigation; _Footer.md provides repository links. Page filenames are their URL slugs. Use ordinary Markdown links to full Wiki URLs, which work from npm READMEs as well. Keep the sidebar and related-page links current when renaming files.
+Home.md is the landing page; _Sidebar.md contains the navigation; _Footer.md provides repository links. Link between Wiki pages using relative page names **without `.md`**, for example `[Installation](Installation)` or `[Cards](Card-and-Image#card-props)`. GitHub Wiki serves the rendered page at that name; adding `.md` targets the source file. VS Code's Markdown link resolver also looks for a matching `.md` file when following an extensionless link, so these links remain usable locally. Keep file extensions for assets such as `assets/page-sections-logo.svg` and for ordinary repository Markdown links. Repository/npm READMEs may link to the public Wiki URL. Keep the sidebar and related-page links current when renaming files.
 
 ## Review the prepared changes
 

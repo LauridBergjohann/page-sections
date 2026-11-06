@@ -6,6 +6,7 @@ import PageHeaders from './PageHeaders.svelte';
 import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
+import StructuredPage from './StructuredPage.svelte';
 it('preserves the default page heading and document title', () => {
   const { body, head } = render(ContentPage, { props: { page: { title: 'Page heading', pageTitle: 'Browser title' } } });
   expect(body).toMatch(/<h1[^>]*>Page heading<\/h1>/);
@@ -70,4 +71,37 @@ it('isolates nested surface groups even when their local numeric ids match', () 
   const scopes = [...body.matchAll(/data-ps-section-group="([^"]+)"/g)].map(match => match[1]);
   expect(new Set(scopes).size).toBe(2);
   for (const scope of scopes) expect(body).toContain(`[data-ps-surface-owner="${scope}"][data-ps-section-surface="0"]`);
+});
+it('renders a complete portfolio from data, with one hero h1 and nested heading levels', () => {
+  const { body } = render(StructuredPage);
+  expect(body.match(/<h1\b/g)).toHaveLength(1);
+  expect(body).toContain('aria-labelledby="welcome-title"');
+  expect(body).toMatch(/<h2[^>]*id="about-title"/);
+  expect(body).toMatch(/<h3[^>]*id="approach-title"/);
+  expect(body).toMatch(/<h3[^>]*id="profile-title"/);
+  expect(body).toContain('Interaction design');
+  expect(body).toContain('mailto:hello@example.com');
+  expect(body).toContain('data-card-variant="editorial"');
+});
+it('renders legal document structures without a custom renderer', () => {
+  const { body } = render(StructuredPage, { props: { kind: 'legal' } });
+  expect(body).toContain('data-body-layout="narrow"');
+  expect(body).toContain('<address');
+  expect(body).toContain('Sample Street 12');
+  expect(body).toMatch(/<h3[^>]*>Document note/);
+  expect(body).toContain('<ol');
+});
+it('passes detail context through normalization and surface corner rules', () => {
+  const { body } = render(StructuredPage, { props: { kind: 'detail' } });
+  expect(body).toContain('data-background-size="standard"');
+  expect(body).not.toContain('linear-gradient');
+  expect(body).toContain('@media (min-width:2300px)');
+});
+it('escapes structured inline content and rejects unsafe action and inline links', () => {
+  const { body } = render(Sections, { props: { sections: [{ type: 'panel', id: 'safe', title: 'Safe', blocks: [
+    { type: 'paragraph', text: [{ type: 'strong', text: '<script>bad()</script>' }, { type: 'link', text: 'Unsafe', href: 'javascript:alert(1)' }] }
+  ], actions: [{ label: 'Unsafe action', href: 'javascript:alert(1)' }] }] } });
+  expect(body).not.toContain('<script>');
+  expect(body).not.toContain('href="javascript:');
+  expect(body).toContain('&lt;script');
 });

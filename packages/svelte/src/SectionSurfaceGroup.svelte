@@ -1,9 +1,13 @@
 <!-- Extracted from Spatial Elements Beta.8; see NOTICE. -->
 <script lang="ts">
-	import { onMount, setContext, type Snippet } from 'svelte';
-	import { SECTION_SURFACES, SectionSurfaceRegistry } from '@page-sections/core';
+	import { getContext, onMount, setContext, type Snippet } from 'svelte';
+	import { SECTION_SURFACES, SectionSurfaceRegistry, layoutTokens, type PageKind } from '@page-sections/core';
 	import { SURFACE_SCOPE } from './surfaceContext.js';
-	let { children }: { children?: Snippet } = $props();
+	import { SECTION_CONTEXT, defaultSectionContext, type ReadSectionContext } from './sectionContext.js';
+	let { children, pageKind }: { children?: Snippet; pageKind?: PageKind } = $props();
+	const parent = getContext<ReadSectionContext | undefined>(SECTION_CONTEXT);
+	const context = $derived(parent?.() ?? defaultSectionContext);
+	setContext<ReadSectionContext>(SECTION_CONTEXT, () => ({ ...context, pageKind: pageKind ?? context.pageKind }));
 	const componentId = $props.id();
 	const scope = componentId.replace(/[^a-zA-Z0-9_-]/g, '_');
 	let host: HTMLDivElement;
@@ -22,11 +26,13 @@
 	});
 	const rules = $derived.by(() => {
 		void revision;
-		return surfaces.corners.map(({ id, top, bottom }) =>
+		const corners = surfaces.corners.map(({ id, top, bottom }) =>
 			`[data-ps-surface-owner="${scope}"][data-ps-section-surface="${id}"] {` +
 			`--ps-section-top-radius:${top ? 'var(--ps-radius)' : '0px'};` +
 			`--ps-section-bottom-radius:${bottom ? 'var(--ps-radius)' : '0px'};}`
 		).join('\n');
+		return `@media (min-width:${layoutTokens.layoutMinWidths.xl}px) {${corners}}` +
+			((pageKind ?? context.pageKind) === 'detail' ? `@media (min-width:${layoutTokens.layoutMinWidths['3xl']}px) { [data-ps-surface-owner="${scope}"][data-ps-section-surface] { --ps-section-top-radius:0px; --ps-section-bottom-radius:0px; } }` : '');
 	});
 </script>
 

@@ -11,7 +11,7 @@ const wikiIndex = process.argv.indexOf('--wiki');
 const wiki = resolve(wikiIndex < 0 ? join(root, '../page-sections.wiki') : process.argv[wikiIndex + 1] ?? '');
 if (!existsSync(join(wiki, 'Home.md'))) throw new Error('Wiki checkout missing. Clone page-sections.wiki beside the main repository, or pass --wiki PATH.');
 const require = createRequire(import.meta.url);
-const markdown = new MarkdownIt();
+const markdown = new MarkdownIt({ html: true });
 const wikiBase = 'https://github.com/LauridBergjohann/page-sections/wiki';
 const repoBase = 'https://github.com/LauridBergjohann/page-sections/';
 const read = path => readFileSync(path, 'utf8');
@@ -45,6 +45,11 @@ function checkLink(href, source) {
   } else if (!/^[a-z][a-z\d+.-]*:/i.test(decoded) && !decoded.startsWith('//')) {
     const [path, hash] = decoded.split('#');
     target = path ? resolve(dirname(source), path) : source; anchor = hash;
+    if (path && wikiFiles.includes(source)) {
+      if (wikiFiles.includes(target)) throw new Error(`${relative(root, source)}: Wiki page links must omit .md: ${href}`);
+      // GitHub uses page slugs; VS Code also resolves these to Markdown files.
+      if (wikiFiles.includes(`${target}.md`)) target += '.md';
+    }
   }
   if (!target) return; // External URL availability is a separate online review.
   if (!existsSync(target)) throw new Error(`${relative(root, source)}: missing link target ${href}`);
@@ -57,13 +62,16 @@ for (const file of files) {
   let index = 0;
   for (const token of tokens) {
     for (const child of token.children ?? []) if (child.type === 'link_open') checkLink(child.attrGet('href'), file);
+    for (const html of [token, ...(token.children ?? [])].filter(item => item.type === 'html_block' || item.type === 'html_inline')) {
+      for (const match of html.content.matchAll(/\bhref\s*=\s*(["'])(.*?)\1/gi)) checkLink(match[2], file);
+    }
     if (token.type === 'fence') fences.push({ file, index: index++, info: token.info.trim(), content: token.content });
   }
 }
 const sidebar = read(join(wiki, '_Sidebar.md'));
 for (const file of wikiFiles) {
   const name = file.slice(wiki.length + 1, -3);
-  if (!name.startsWith('_') && !sidebar.includes(`${wikiBase}/${name}`)) throw new Error(`Sidebar is missing ${name}.`);
+  if (!name.startsWith('_') && !sidebar.includes(`](${name})`)) throw new Error(`Sidebar is missing relative page link to ${name}.`);
 }
 const componentExports = [...read(join(root, 'packages/svelte/src/index.ts')).matchAll(/default as (\w+)/g)].map(match => match[1]);
 const svelteApi = read(join(wiki, 'Svelte-API.md'));

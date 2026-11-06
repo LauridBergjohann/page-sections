@@ -11,8 +11,8 @@ The components work with Svelte 5 and SvelteKit. SvelteKit, Tailwind and special
 ## Features
 
 - Composable pages, sections and responsive content grids.
-- Hero, Markdown, image and video sections.
-- Responsive card grids and native scroll-snap carousels.
+- Overlay/artwork heroes, structured text, panels, image and video sections.
+- Canonical catalog cards, editorial card grids and native scroll-snap carousels.
 - Independent navigation with optional left and right controls, called satellites.
 - Breadcrumbs and automatically generated section navigation.
 - CSS custom properties and shared themes.
@@ -60,8 +60,9 @@ The components load their styles. For content to remain available without JavaSc
 | Area | Components |
 | --- | --- |
 | Page composition | `PageShell`, `ContentPage`, `Section`, `SectionSurfaceGroup` |
+| Content primitives | `RichTextContent`, `InlineTextContent`, `ContentPanel`, `Actions` |
 | Content layout | `ContentGrid`, `ContentBlock` |
-| Content sections | `HeroSection`, `RichTextSection`, `ImageSection`, `VideoSection` |
+| Content sections | `HeroSection`, `RichTextSection`, `PanelSection`, `ImageSection`, `VideoSection` |
 | Collections | `CardGridSection`, `CarouselSection`, `Card`, `Image` |
 | Navigation | `Navigation`, `MainMenu`, `ButtonGroup`, `Breadcrumbs`, `SectionNavigation` |
 | Data-driven rendering | `Sections` |
@@ -77,7 +78,11 @@ npm ci
 npm run demo
 ```
 
-This builds both packages and the SvelteKit demo, prerenders its three routes with adapter-static, and starts a preview server at **http://127.0.0.1:4173**. Explore the landing page, `/components/` and `/backgrounds/`. Disable JavaScript to inspect their initial HTML. For development with hot reload, use `npm run dev:demo` at **http://127.0.0.1:5173**; see the [demo guide](docs/development/demo.md).
+This builds both packages and the SvelteKit demo, prerenders its routes with adapter-static, and starts a preview server at **http://127.0.0.1:4173**. Explore `/components/`, `/backgrounds/` and the data-only portfolio, legal and catalog examples under `/examples/`. Disable JavaScript to inspect their initial HTML. For development with hot reload, use `npm run dev:demo` at **http://127.0.0.1:5173**; see the [demo guide](docs/development/demo.md).
+
+## Upgrading to 0.2
+
+See the [migration guide](https://github.com/LauridBergjohann/page-sections/wiki/Migrating-to-0.2) for catalog/editorial cards and canonical geometry. Maintainers can review the [release preparation](docs/development/release-0.2.md).
 
 ## Documentation
 
