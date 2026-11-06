@@ -61,9 +61,11 @@ for (const file of files) {
   }
 }
 const sidebar = read(join(wiki, '_Sidebar.md'));
+const sidebarTargets = markdown.parse(sidebar, {}).flatMap(token =>
+  (token.children ?? []).filter(child => child.type === 'link_open').map(child => decodeURIComponent(child.attrGet('href'))));
 for (const file of wikiFiles) {
   const name = file.slice(wiki.length + 1, -3);
-  if (!name.startsWith('_') && !sidebar.includes(`${wikiBase}/${name}`)) throw new Error(`Sidebar is missing ${name}.`);
+  if (!name.startsWith('_') && !sidebarTargets.some(href => href === `${name}.md` || href === `./${name}.md` || href === `${wikiBase}/${name}`)) throw new Error(`Sidebar is missing ${name}.`);
 }
 const componentExports = [...read(join(root, 'packages/svelte/src/index.ts')).matchAll(/default as (\w+)/g)].map(match => match[1]);
 const svelteApi = read(join(wiki, 'Svelte-API.md'));

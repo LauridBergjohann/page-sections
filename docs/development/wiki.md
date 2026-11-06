@@ -8,7 +8,7 @@ If needed, clone it from the parent directory:
 git clone https://github.com/LauridBergjohann/page-sections.wiki.git
 ```
 
-Home.md is the landing page; _Sidebar.md contains the navigation; _Footer.md provides repository links. Page filenames are their URL slugs. Use ordinary Markdown links to full Wiki URLs, which work from npm READMEs as well. Keep the sidebar and related-page links current when renaming files.
+Home.md is the landing page; _Sidebar.md contains the navigation; _Footer.md provides repository links. Inside the Wiki, use relative Markdown links with file extensions, such as `[Quick Start](Quick-Start.md)` or `[Layout](Section-and-ContentGrid.md#layout)`, and relative asset paths such as `assets/page-sections-logo.svg`. This makes the checkout readable in local editors and portable to another location. Links from npm READMEs to the Wiki still use full Wiki URLs; links to external websites or the separate project repository remain absolute. Keep the sidebar and related-page links current when renaming files.
 
 ## Review the prepared changes
 
