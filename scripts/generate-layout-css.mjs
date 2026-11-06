@@ -16,7 +16,7 @@ const css = [
   }),
   ...Object.entries(tokens.grid).map(([name, grid]) => grid.minWidth ? `@container ps-content (min-width: ${grid.minWidth}px) {\n${rules(name, grid)}\n}` : rules(name, grid)),
   ...Object.entries(tokens.cards).map(([name, card]) => `[data-ps-card-size='${name}'] { --ps-card-span: ${name === 'l' ? 'var(--ps-card-large-span)' : card.span}; --ps-card-title-size: ${card.titleSize}px; --ps-card-title-weight: ${card.titleWeight}; --ps-card-eyebrow-size: ${card.eyebrowSize}px; --ps-card-eyebrow-weight: ${card.eyebrowWeight}; --ps-card-line-height: ${card.lineHeight}px; --ps-card-text-rows: ${card.rows}; }`),
-  `:root { --ps-card-text-inset-inline: ${tokens.cardTextInset.inline}px; --ps-card-text-inset-block: ${tokens.cardTextInset.block}px; }`,
+  `:root { --ps-card-text-inset-inline: ${tokens.cardTextInset.inline}px; --ps-card-text-inset-block: ${tokens.cardTextInset.block}px; --ps-card-media-inset: ${tokens.cardMediaInset}px; }`,
   ...Object.entries({ none: 0, tight: .5, normal: 1, loose: 2, spacious: 4 }).map(([name, factor]) => `[data-spacing='${name}'] { --ps-spacing-factor: ${factor}; }`),
   '.ps-section-surface { border-radius: var(--ps-section-top-radius, 0px) var(--ps-section-top-radius, 0px) var(--ps-section-bottom-radius, 0px) var(--ps-section-bottom-radius, 0px); }'
 ].join('\n\n') + '\n';

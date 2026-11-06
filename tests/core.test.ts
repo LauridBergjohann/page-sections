@@ -25,11 +25,24 @@ describe('shared navigation and catalog geometry', () => {
     expect([0, 111, 112, 113, 200].map(value => resolveMenuOffset(value))).toEqual([0, 0, 0, -1, -88]);
     expect(resolveMenuOffset(200, true)).toBe(0);
   });
-  it.each([[320, 's', 65, 1], [320, 'm', 142, 2], [320, 'l', 296, 4], [720, 'l', 336, 3], [840, 'm', 190, 2], [1536, 'm', 228, 2], [1536, 'l', 480, 4]] as const)('fits %s/%s cards into canonical spans', (width, cardSize, expected, span) => {
+  it.each([[320, 's', 142, 2], [320, 'm', 142, 2], [320, 'l', 296, 4], [720, 'l', 336, 3], [840, 'm', 190, 2], [1536, 'm', 228, 2], [1536, 'l', 480, 4]] as const)('fits %s/%s cards into canonical spans', (width, cardSize, expected, span) => {
     const card = resolveCardLayout(width, cardSize);
-    expect(card).toMatchObject({ width: expected, height: expected, span });
-    expect(card.media.width / card.media.height).toBeCloseTo(4 / 3);
+    expect(card).toMatchObject({ width: expected, span });
+    expect(card.mediaFrame.width / card.mediaFrame.height).toBeCloseTo(3 / 2);
     expect(card.media.y * 2 + card.media.height + card.textHeight).toBeCloseTo(card.height);
+  });
+  it('allocates independent media, title and optional eyebrow space', () => {
+    const compact = resolveCardLayout(320, 'm');
+    const labeled = resolveCardLayout(320, 'm', { reserveEyebrow: true });
+    const square = resolveCardLayout(320, 'm', { reserveEyebrow: true, mediaAspect: '1/1' });
+    expect(compact.textHeight).toBe(64); // Two 20px title lines plus 24px padding.
+    expect(labeled.textHeight).toBe(84); // The label never consumes a title line.
+    expect(square).toMatchObject({ width: 142, height: 226, textHeight: 84, media: { x: 8, y: 8, width: 126, height: 126 } });
+    expect(resolveCardLayout(320, 's', { reserveEyebrow: true }).eyebrowRows).toBe(0);
+    const cropped = resolveCardLayout(320, 'm', { mediaAspect: '4/3', mediaFit: 'cover' });
+    expect(cropped.media).toEqual(cropped.mediaFrame);
+    expect(cropped.textHeight).toBe(compact.textHeight);
+    expect(cropped.media.height).toBe(106.5);
   });
   it('normalizes full backgrounds in a detail context', () => {
     expect(normalizeSectionBackground({ color: 'standardToMuted', size: 'full' }, { pageKind: 'detail' })).toMatchObject({ size: 'standard', color: 'muted', gradient: false });

@@ -3,6 +3,8 @@ import type { ContentSpan } from './responsiveLayout.js';
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type PageKind = 'content' | 'detail';
 export type CardVariant = 'catalog' | 'editorial';
+export type CardMediaAspect = '3/2' | '4/3' | '1/1';
+export type CardMediaFit = 'contain' | 'cover';
 export type InlineText = string | InlineRun[];
 export type InlineRun =
   | { type: 'text' | 'strong' | 'emphasis' | 'code'; text: string }
@@ -49,8 +51,8 @@ export type RichTextSectionData = SectionDefinition & RichTextContentData & { ty
 export interface PanelSectionData extends SectionDefinition { type: 'panel'; blocks: RichTextBlock[]; tone?: 'standard' | 'muted'; actions?: ContentAction[] }
 export interface ImageSectionData extends SectionDefinition { type: 'image'; image: ImageData; description?: string; imageSide?: 'left' | 'right' }
 export interface VideoSectionData extends SectionDefinition { type: 'video'; video: VideoData; description?: string; videoSide?: 'left' | 'right' }
-export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid'; list: CardItem[]; cardSize?: CardSize; variant?: SectionDefinition['variant']; cardVariant?: CardVariant; itemSpan?: ContentSpan; textAlign?: 'start' | 'center' }
-export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; cardVariant?: CardVariant; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string }
+export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid'; list: CardItem[]; cardSize?: CardSize; variant?: SectionDefinition['variant']; cardVariant?: CardVariant; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; itemSpan?: ContentSpan; textAlign?: 'start' | 'center' }
+export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; cardVariant?: CardVariant; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string }
 export interface GridSectionData extends SectionDefinition { type: 'grid'; blocks: { id: string; span?: ContentSpan; sections: SectionData[] }[] }
 /** Extend this map by module augmentation. Models remain JSON data; renderers are separate. */
 export interface SectionTypeMap { hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData }

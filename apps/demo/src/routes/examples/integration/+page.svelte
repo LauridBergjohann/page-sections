@@ -1,6 +1,8 @@
 <script lang="ts">
   import { CardGridSection, CarouselSection, ContentPage, Navigation, Section, SectionSurfaceGroup, RichTextSection, type CardElements } from '@page-sections/svelte';
   import { catalogItems } from '$lib/examples';
+  import type { CardMediaAspect } from '@page-sections/core';
+  let mediaAspect: CardMediaAspect = $state('1/1');
   const integrationItems = catalogItems.map(item => ({ ...item, href: '/examples/cards/#catalog-m' }));
   let items = $state(integrationItems.slice(0, 3));
   let attached = $state(0);
@@ -19,7 +21,8 @@
   <button onclick={() => items = items.toReversed()}>Reverse items</button>
   <button onclick={() => items = items.slice(1)}>Remove item</button>
   <output data-testid="attached">{attached}</output><output data-testid="detached">{detached}</output>
-  <CardGridSection section={{ id: 'adapter-cards', title: 'Adapter cards' }} list={items} oncardready={ready}>
+  <label>Media format <select bind:value={mediaAspect}><option value="3/2">3:2</option><option value="4/3">4:3</option><option value="1/1">1:1</option></select></label>
+  <CardGridSection section={{ id: 'adapter-cards', title: 'Adapter cards' }} list={items} {mediaAspect} oncardready={ready}>
     {#snippet media(item)}<span data-custom-media>{item.itemKey}</span>{/snippet}
     {#snippet surface(item)}<span data-custom-surface={item.itemKey}></span>{/snippet}
   </CardGridSection>

@@ -8,7 +8,7 @@ for (const width of [320, 600, 720, 840, 1200, 1536, 1600, 1920]) {
     for (const size of ['s', 'm', 'l'] as const) {
       const section = page.locator(`#catalog-${size}`);
       const box = (await section.boundingBox())!;
-      const expected = resolveCardLayout(box.width, size);
+      const expected = resolveCardLayout(box.width, size, { reserveEyebrow: true });
       const card = section.locator('.ps-card').first();
       const measured = (await card.boundingBox())!;
       expect(measured.width).toBeCloseTo(expected.width, 1);
@@ -20,6 +20,10 @@ for (const width of [320, 600, 720, 840, 1200, 1536, 1600, 1920]) {
       await expect(card.locator('[data-ps-card-part="title"]')).toHaveCSS('font-size', `${expected.titleSize}px`);
       await expect(card.locator('[data-ps-card-part="eyebrow"]')).toHaveCount(size === 's' ? 0 : 1);
       await expect(card).toHaveAttribute('href', '#catalog-m');
+      const heights = await section.locator('.ps-card').evaluateAll(cards => cards.map(card => card.getBoundingClientRect().height));
+      expect(Math.max(...heights) - Math.min(...heights)).toBeLessThan(.1);
+      const copyOffsets = await section.locator('.ps-card').evaluateAll(cards => cards.map(card => card.querySelector('.title')!.getBoundingClientRect().top - card.getBoundingClientRect().top));
+      expect(Math.max(...copyOffsets) - Math.min(...copyOffsets)).toBeLessThan(.1);
     }
     const nested = page.locator('#nested-cards');
     const expected = resolveCardLayout((await nested.boundingBox())!.width, 'm');
@@ -27,11 +31,57 @@ for (const width of [320, 600, 720, 840, 1200, 1536, 1600, 1920]) {
     const carousel = page.locator('#catalog-carousel');
     const slide = (await carousel.locator('.ps-card').first().boundingBox())!;
     expect(slide.width).toBeCloseTo(resolveCardLayout((await carousel.boundingBox())!.width, 'm').width, 1);
-    expect(slide.height).toBeCloseTo(slide.width, 1);
+    expect(slide.height).toBeCloseTo(resolveCardLayout((await carousel.boundingBox())!.width, 'm', { mediaAspect: '1/1', reserveEyebrow: true }).height, 1);
+    for (const [id, mediaAspect, mediaFit, size] of [
+      ['media-landscape', '3/2', 'contain', 'm'], ['media-square', '1/1', 'contain', 'm'], ['catalog-cover', '4/3', 'cover', 'l']
+    ] as const) {
+      const collection = page.locator(`#${id}`);
+      const expected = resolveCardLayout((await collection.boundingBox())!.width, size, { mediaAspect, mediaFit, reserveEyebrow: true });
+      const cards = collection.locator('.ps-card');
+      for (const card of await cards.all()) {
+        const box = (await card.boundingBox())!;
+        expect(box.height).toBeCloseTo(expected.height, 1);
+        const frame = (await card.locator('.media-frame').boundingBox())!;
+        const media = (await card.locator('.media').boundingBox())!;
+        expect(frame.height).toBeCloseTo(expected.mediaFrame.height, 1);
+        expect(media.width).toBeCloseTo(expected.media.width, 1);
+        expect(media.height).toBeCloseTo(expected.media.height, 1);
+        expect(media.x - box.x).toBeCloseTo(expected.media.x, 1);
+        expect(media.y - box.y).toBeCloseTo(expected.media.y, 1);
+        await expect(card.locator('img')).toHaveCSS('object-fit', mediaFit);
+      }
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     await page.screenshot({ path: `.artifacts/catalog-${width}.png`, fullPage: true });
   });
 }
+
+test('catalog text space and equal heights work before hydration and with larger type', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 900 } });
+  const page = await context.newPage();
+  await page.goto('/examples/cards/');
+  const cards = page.locator('#media-square .ps-card');
+  await expect(cards).toHaveCount(6);
+  await expect(cards.nth(1)).toHaveAccessibleName('Object 2: a deliberately long collection title');
+  await expect(cards.nth(1).locator('.eyebrow')).toHaveAttribute('aria-hidden', 'true');
+  const before = (await cards.first().boundingBox())!;
+  const mediaBefore = (await cards.first().locator('.media').boundingBox())!;
+  // Mutate through Playwright's isolated world: addStyleTag waits indefinitely with JS disabled.
+  await cards.evaluateAll(elements => elements.forEach(element => {
+    (element as HTMLElement).style.setProperty('--ps-card-title-size', '24px');
+    (element as HTMLElement).style.setProperty('--ps-card-line-height', '32px');
+  }));
+  const heights = await cards.evaluateAll(elements => elements.map(el => el.getBoundingClientRect().height));
+  expect(Math.max(...heights) - Math.min(...heights)).toBeLessThan(.1);
+  expect(heights[0]).toBeGreaterThan(before.height);
+  expect((await cards.first().locator('.media').boundingBox())!.height).toBeCloseTo(mediaBefore.height, 1);
+  for (const copy of await cards.locator('.text').all()) {
+    expect(await copy.evaluate(el => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  await page.locator('#media-square').screenshot({ path: '.artifacts/catalog-large-type-no-js.png' });
+  await context.close();
+});
 
 for (const width of [320, 840, 1920]) {
   for (const javaScriptEnabled of [false, true]) {
@@ -110,6 +160,11 @@ test('card adapters attach once per occurrence and clean up removed elements', a
   await expect(cards.first()).toHaveAttribute('data-adapter', 'occurrence-0');
   await expect(cards.locator('[data-custom-media]')).toHaveCount(3);
   await expect(cards.locator('[data-custom-surface]')).toHaveCount(3);
+  const squareHeight = (await cards.first().boundingBox())!.height;
+  await page.getByLabel('Media format').selectOption('3/2');
+  expect((await cards.first().boundingBox())!.height).toBeLessThan(squareHeight);
+  await expect(page.getByTestId('attached')).toHaveText('3');
+  await expect(page.getByTestId('detached')).toHaveText('0');
   await page.getByRole('button', { name: 'Reverse items' }).click();
   await expect(cards.first()).toHaveAttribute('data-adapter', 'occurrence-2');
   await expect(page.getByTestId('attached')).toHaveText('3');

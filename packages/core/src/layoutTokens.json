@@ -53,19 +53,19 @@
   },
   "cards": {
     "s": {
-      "span": 1,
-      "titleSize": 9,
+      "span": 2,
+      "titleSize": 12,
       "titleWeight": 500,
       "eyebrowSize": 0,
       "eyebrowWeight": 400,
       "lineHeight": 18,
-      "rows": 1
+      "rows": 2
     },
     "m": {
       "span": 2,
-      "titleSize": 12,
+      "titleSize": 14,
       "titleWeight": 500,
-      "eyebrowSize": 10,
+      "eyebrowSize": 12,
       "eyebrowWeight": 400,
       "lineHeight": 20,
       "rows": 2
@@ -82,8 +82,8 @@
     }
   },
   "cardTextInset": {
-    "inline": 4,
-    "block": 2
+    "inline": 12,
+    "block": 12
   },
   "xlContentInset": 136,
   "menu": {
@@ -127,5 +127,6 @@
       "fontSize": 14,
       "height": 40
     }
-  }
+  },
+  "cardMediaInset": 8
 }

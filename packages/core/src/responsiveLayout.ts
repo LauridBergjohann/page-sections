@@ -1,5 +1,6 @@
 // Extracted from Spatial Elements Beta.8; see NOTICE.
 import tokens from './layoutTokens.json' with { type: 'json' };
+import type { CardMediaAspect, CardMediaFit } from './types.js';
 
 /** Canonical values also consumed by the generated, SSR-safe stylesheet. */
 export const layoutTokens = tokens;
@@ -81,20 +82,30 @@ export function contentSpanWidth(width: number, span: number) {
 	return Math.min(grid.width, columns * grid.columnWidth + (columns - 1) * grid.gap);
 }
 
-/** Uses the same slot for poster containment and measured 3D fitting. */
-export function resolveCardLayout(containerWidth: number, cardSize: LayoutCardSize = 'm') {
+export interface CardLayoutOptions {
+  mediaAspect?: CardMediaAspect;
+  mediaFit?: CardMediaFit;
+  /** Set from the entire collection, so missing eyebrows keep their allocated row. S always hides it. */
+  reserveEyebrow?: boolean;
+}
+
+/** Default catalog geometry in CSS pixels; media is the actual poster/3D fitting rectangle. */
+export function resolveCardLayout(containerWidth: number, cardSize: LayoutCardSize = 'm', options: CardLayoutOptions = {}) {
 	const grid = resolveContentGrid(containerWidth);
 	const card = tokens.cards[cardSize];
 	const span = cardSize === 'l' && grid.size === 's' ? tokens.cards.l.gridSSpan : card.span;
 	const width = contentSpanWidth(grid.width, span);
-	const textHeight = Math.min(width, Math.max(width / 4, card.rows * card.lineHeight + 2 * tokens.cardTextInset.block));
-	const availableHeight = width - textHeight;
-	const fitWidth = Math.min(width, availableHeight * 4 / 3);
-	const fitHeight = fitWidth * 3 / 4;
+	const aspect = options.mediaAspect ?? '3/2';
+	const [horizontal, vertical] = aspect.split('/').map(Number);
+	const mediaHeight = width * vertical / horizontal;
+	const eyebrowRows = cardSize !== 's' && options.reserveEyebrow ? 1 : 0;
+	const textHeight = (card.rows + eyebrowRows) * card.lineHeight + 2 * tokens.cardTextInset.block;
+	const inset = options.mediaFit === 'cover' ? 0 : Math.min(tokens.cardMediaInset, width / 2, mediaHeight / 2);
 	return {
 		...card,
-		span, width, height: width, textHeight,
-		media: { x: (width - fitWidth) / 2, y: (availableHeight - fitHeight) / 2, width: fitWidth, height: fitHeight }
+		span, width, height: mediaHeight + textHeight, textHeight, eyebrowRows,
+		mediaFrame: { x: 0, y: 0, width, height: mediaHeight },
+		media: { x: inset, y: inset, width: Math.max(0, width - 2 * inset), height: Math.max(0, mediaHeight - 2 * inset) }
 	};
 }
 

@@ -69,20 +69,28 @@ export const legal: PageData = {
 };
 
 export const catalogItems: CardItem[] = Array.from({ length: 12 }, (_, index) => ({
-  id: `object-${index % 6}`, itemKey: `occurrence-${index}`, title: `Object ${index + 1}: a deliberately long collection title`,
-  eyebrow: 'Collection', href: '#catalog-m', image: index % 2 ? coast : landscape
+  id: `object-${index % 6}`, itemKey: `occurrence-${index}`, title: index % 3 ? `Object ${index + 1}: a deliberately long collection title` : `Object ${index + 1}`,
+  eyebrow: index % 2 ? undefined : 'Collection', href: '#catalog-m', image: index % 2 ? coast : landscape
 }));
 
 export const catalog: PageData = {
   title: 'Catalog geometry', pageTitle: 'Catalog example — Page Sections',
-  intro: 'Square cards use fixed column spans. Resize the page to compare small, medium and large cards.',
+  intro: 'Choose a media format without sacrificing text space. Cards within each collection share a height, including short titles and missing labels.',
   sections: [
+    { type: 'grid', id: 'media-comparison', title: 'Media formats', headline: 'The same cards, two media formats', blocks: [
+      ...(['3/2', '1/1'] as const).map((mediaAspect, index) => ({ id: `format-${index}`, span: { xs: 4, s: 6, m: 4, l: 6 }, sections: [
+        { type: 'cardGrid' as const, id: index ? 'media-square' : 'media-landscape', title: index ? '1:1 media' : '3:2 media',
+          headline: index ? '1:1 - more room for objects' : '3:2 - a compact overview', cardSize: 'm' as const, mediaAspect, list: catalogItems.slice(0, 6) }
+      ] }))
+    ] },
     ...(['s', 'm', 'l'] as const).map(cardSize => ({
       type: 'cardGrid' as const, id: `catalog-${cardSize}`, title: `Size ${cardSize.toUpperCase()}`,
       headline: `Size ${cardSize.toUpperCase()}`, cardSize, list: catalogItems, background: { color: 'standard' as const }
     })),
     { type: 'carousel', id: 'catalog-carousel', title: 'Carousel', headline: 'The same card geometry in a carousel',
-      cardSize: 'm', list: catalogItems, initialItemKey: 'occurrence-2' },
+      cardSize: 'm', mediaAspect: '1/1', list: catalogItems, initialItemKey: 'occurrence-2' },
+    { type: 'cardGrid', id: 'catalog-cover', title: 'Photo crop', headline: '4:3 photos with an edge-to-edge crop',
+      cardSize: 'l', mediaAspect: '4/3', mediaFit: 'cover', list: catalogItems.slice(0, 6) },
     { type: 'grid', id: 'nested-catalog', title: 'Nested catalog', headline: 'A smaller container', blocks: [
       { id: 'small-container', span: { xs: 4, s: 6, m: 4, l: 6 }, sections: [
         { type: 'cardGrid', id: 'nested-cards', title: 'Nested cards', cardSize: 'm', list: catalogItems.slice(0, 4) }
