@@ -1,0 +1,61 @@
+/* Generated from core layoutTokens.json; extracted from Beta.8. Do not edit. */
+
+.ps-content-width { width: min(100%, var(--ps-content-max, 1536px)); margin-inline: auto; }
+
+.ps-content-container { container: ps-content / inline-size; min-width: 0; }
+
+@media (min-width: 1600px) { .ps-content-width { width: min(var(--ps-content-max, 1536px), max(0px, calc(100% - 272px))); } }
+
+@media (min-width: 1809px) { .ps-content-width { width: min(100%, var(--ps-content-max, 1536px)); } }
+
+.ps-grid-scope {
+  --ps-grid-columns: var(--ps-xs-columns, 4);
+  --ps-grid-gap: var(--ps-xs-gap, 12px);
+  --ps-grid-headline-size: var(--ps-xs-headline-size, 18px);
+  --ps-grid-headline-line-height: var(--ps-xs-headline-line-height, 28px);
+  --ps-grid-body-size: var(--ps-xs-body-size, 14px);
+  --ps-grid-body-line-height: var(--ps-xs-body-line-height, 20px);
+  --ps-grid-headline-gap: var(--ps-xs-headline-gap, 8px);
+}
+.ps-content-block { --ps-content-block-span: var(--ps-content-block-span-xs); }
+
+@container ps-content (min-width: 600px) {
+.ps-grid-scope {
+  --ps-grid-columns: var(--ps-s-columns, 6);
+  --ps-grid-gap: var(--ps-s-gap, 16px);
+  --ps-grid-headline-size: var(--ps-s-headline-size, 18px);
+  --ps-grid-headline-line-height: var(--ps-s-headline-line-height, 28px);
+  --ps-grid-body-size: var(--ps-s-body-size, 14px);
+  --ps-grid-body-line-height: var(--ps-s-body-line-height, 20px);
+  --ps-grid-headline-gap: var(--ps-s-headline-gap, 8px);
+}
+.ps-content-block { --ps-content-block-span: var(--ps-content-block-span-s); }
+}
+
+@container ps-content (min-width: 840px) {
+.ps-grid-scope {
+  --ps-grid-columns: var(--ps-m-columns, 8);
+  --ps-grid-gap: var(--ps-m-gap, 16px);
+  --ps-grid-headline-size: var(--ps-m-headline-size, 20px);
+  --ps-grid-headline-line-height: var(--ps-m-headline-line-height, 32px);
+  --ps-grid-body-size: var(--ps-m-body-size, 14px);
+  --ps-grid-body-line-height: var(--ps-m-body-line-height, 20px);
+  --ps-grid-headline-gap: var(--ps-m-headline-gap, 12px);
+}
+.ps-content-block { --ps-content-block-span: var(--ps-content-block-span-m); }
+}
+
+@container ps-content (min-width: 1200px) {
+.ps-grid-scope {
+  --ps-grid-columns: var(--ps-l-columns, 12);
+  --ps-grid-gap: var(--ps-l-gap, 24px);
+  --ps-grid-headline-size: var(--ps-l-headline-size, 24px);
+  --ps-grid-headline-line-height: var(--ps-l-headline-line-height, 40px);
+  --ps-grid-body-size: var(--ps-l-body-size, 16px);
+  --ps-grid-body-line-height: var(--ps-l-body-line-height, 24px);
+  --ps-grid-headline-gap: var(--ps-l-headline-gap, 16px);
+}
+.ps-content-block { --ps-content-block-span: var(--ps-content-block-span-l); }
+}
+
+.ps-section-surface { border-radius: var(--ps-section-top-radius, 0px) var(--ps-section-top-radius, 0px) var(--ps-section-bottom-radius, 0px) var(--ps-section-bottom-radius, 0px); }

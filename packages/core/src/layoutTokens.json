@@ -1,0 +1,131 @@
+{
+  "contentMax": 1536,
+  "layoutMinWidths": {
+    "xs": 0,
+    "s": 600,
+    "m": 840,
+    "l": 1200,
+    "xl": 1600,
+    "2xl": 1809,
+    "3xl": 2300
+  },
+  "grid": {
+    "xs": {
+      "minWidth": 0,
+      "columns": 4,
+      "gap": 12,
+      "headlineSize": 18,
+      "headlineLineHeight": 28,
+      "bodySize": 14,
+      "bodyLineHeight": 20,
+      "headlineGap": 8
+    },
+    "s": {
+      "minWidth": 600,
+      "columns": 6,
+      "gap": 16,
+      "headlineSize": 18,
+      "headlineLineHeight": 28,
+      "bodySize": 14,
+      "bodyLineHeight": 20,
+      "headlineGap": 8
+    },
+    "m": {
+      "minWidth": 840,
+      "columns": 8,
+      "gap": 16,
+      "headlineSize": 20,
+      "headlineLineHeight": 32,
+      "bodySize": 14,
+      "bodyLineHeight": 20,
+      "headlineGap": 12
+    },
+    "l": {
+      "minWidth": 1200,
+      "columns": 12,
+      "gap": 24,
+      "headlineSize": 24,
+      "headlineLineHeight": 40,
+      "bodySize": 16,
+      "bodyLineHeight": 24,
+      "headlineGap": 16
+    }
+  },
+  "cards": {
+    "s": {
+      "span": 1,
+      "titleSize": 9,
+      "titleWeight": 500,
+      "eyebrowSize": 0,
+      "eyebrowWeight": 400,
+      "lineHeight": 18,
+      "rows": 1
+    },
+    "m": {
+      "span": 2,
+      "titleSize": 12,
+      "titleWeight": 500,
+      "eyebrowSize": 10,
+      "eyebrowWeight": 400,
+      "lineHeight": 20,
+      "rows": 2
+    },
+    "l": {
+      "span": 4,
+      "gridSSpan": 3,
+      "titleSize": 18,
+      "titleWeight": 500,
+      "eyebrowSize": 14,
+      "eyebrowWeight": 400,
+      "lineHeight": 24,
+      "rows": 3
+    }
+  },
+  "cardTextInset": {
+    "inline": 4,
+    "block": 2
+  },
+  "xlContentInset": 136,
+  "menu": {
+    "height": 66,
+    "wideHeight": 64,
+    "wideTop": 16,
+    "scrollThreshold": 112
+  },
+  "satellite": {
+    "width": 80,
+    "height": 40,
+    "inset": 28,
+    "top": 28
+  },
+  "breadcrumb": {
+    "xs": {
+      "fontSize": 10,
+      "height": 24
+    },
+    "s": {
+      "fontSize": 10,
+      "height": 24
+    },
+    "m": {
+      "fontSize": 12,
+      "height": 30
+    },
+    "l": {
+      "fontSize": 14,
+      "height": 40
+    },
+    "xl": {
+      "fontSize": 14,
+      "height": 40
+    },
+    "2xl": {
+      "fontSize": 14,
+      "height": 40
+    },
+    "3xl": {
+      "fontSize": 14,
+      "height": 40
+    }
+  }
+}

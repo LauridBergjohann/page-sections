@@ -1,0 +1,11 @@
+Page Sections includes code extracted and adapted from Spatial Elements Beta.8,
+Copyright Laurid Bergjohann, licensed under the Mozilla Public License 2.0.
+Source: https://github.com/LauridBergjohann/spatial-elements
+Reference commit: c20fcd9a82daa8cce7a87de4cd0815f5a9985233
+
+Derived files: responsiveLayout.ts, layoutTokens.json, sectionBackground.ts,
+SectionSurfaceRegistry.ts, SectionRegistry.ts, ContentGrid.svelte,
+ContentBlock.svelte, SectionSurfaceGroup.svelte, generate-layout-css.mjs.
+Changes remove Spatial rendering and SvelteKit dependencies, rename public
+symbols/CSS properties and add standalone content/navigation support.
+The corresponding source is available in this repository under MPL-2.0.

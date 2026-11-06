@@ -1,0 +1,13 @@
+{
+  "name": "@page-sections/svelte", "version": "0.1.0", "type": "module", "license": "MPL-2.0",
+  "description": "SSR-first Svelte 5 pages, content grids, sections and navigation.",
+  "repository": { "type": "git", "url": "https://github.com/LauridBergjohann/page-sections.git", "directory": "packages/svelte" },
+  "files": ["dist", "LICENSE", "README.md", "NOTICE"], "sideEffects": ["**/*.css"],
+  "exports": { ".": { "types": "./dist/index.d.ts", "svelte": "./dist/index.js", "default": "./dist/index.js" }, "./styles.css": "./dist/styles.css" },
+  "types": "./dist/index.d.ts", "engines": { "node": ">=22.12.0" },
+  "scripts": { "build": "svelte-package -i src -o dist", "prepack": "npm run build" },
+  "dependencies": { "@page-sections/core": "0.1.0", "markdown-it": "^14.1.0" },
+  "devDependencies": { "@types/markdown-it": "^14.1.2" },
+  "peerDependencies": { "svelte": "^5.56.4" },
+  "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" }
+}

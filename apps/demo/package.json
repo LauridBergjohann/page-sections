@@ -1,0 +1,5 @@
+{
+  "name": "@page-sections/demo", "private": true, "version": "0.0.0", "type": "module",
+  "scripts": { "build": "vite build && vite build --ssr src/entry-server.ts --outDir dist/server && node prerender.mjs", "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort" },
+  "dependencies": { "@page-sections/core": "*", "@page-sections/svelte": "*" }
+}
