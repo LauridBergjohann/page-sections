@@ -20,7 +20,7 @@ The package is ESM and declares Node `>=22.12.0`. All public exports are availab
 | --- | --- |
 | Content data | `ContentPageData`, `PageData`, `SectionDefinition`, `SectionData` and section-specific models |
 | Shared collections | `CardItem`, `CardSize`, `CardGridSectionData`, `CarouselSectionData` |
-| Responsive layout | `resolveContentGrid`, `resolveContentSpan`, `contentSpanWidth`, `resolveViewportLayout`, `resolveCardLayout` |
+| Responsive layout | `resolveContentGrid`, `resolveContentSpan`, `contentSpanWidth`, `resolveViewportLayout`, `resolvePageLayout`, `resolveMenuOffset`, `resolveCardLayout` |
 | Layout constants | `layoutTokens`, `contentGridSizes`, `viewportLayoutSizes` |
 | Section indexing | `SectionRegistry`, `SECTION_REGISTRY` |
 | Backgrounds and surfaces | `normalizeSectionBackground`, `createSectionBackgroundNormalizer`, `SectionSurfaceRegistry`, `SECTION_SURFACES` |
@@ -38,9 +38,9 @@ const width = contentSpanWidth(840, span); // 293 CSS pixels
 console.log({ columns: grid.columns, span, width });
 ```
 
-Spans inherit from smaller grid sizes; invalid spans fill the row and oversized spans clamp. Svelte ContentGrid and ContentBlock use the same default tokens in generated CSS. CSS overrides do not modify these numeric functions. See [Responsive Layout and Breakpoints](https://github.com/LauridBergjohann/page-sections/wiki/Responsive-Layout-and-Breakpoints).
+Spans inherit from smaller grid sizes; invalid spans fill the row and oversized spans clamp. Svelte ContentGrid and ContentBlock use the same default tokens in generated CSS. Canonical geometry is shared with the components; colors and reading widths remain customizable. See [Responsive Layout and Breakpoints](https://github.com/LauridBergjohann/page-sections/wiki/Responsive-Layout-and-Breakpoints).
 
-`resolveCardLayout` returns a square layout calculation with text and media rectangles. It does not determine Svelte CardGridSection or CarouselSection dimensions, which use flexible content layouts.
+`resolveCardLayout` returns a square layout calculation with text and media rectangles. Svelte catalog cards consume the same tokens and match those dimensions; editorial cards grow with content.
 
 ## Describe a page and index its sections
 
@@ -56,7 +56,7 @@ const page: PageData = {
   title: 'Growing things',
   sections: [
     { type: 'richText', id: 'intro', title: 'Introduction', body: 'Start with **one small plot**.' },
-    { type: 'cardGrid', id: 'reading', title: 'Reading', headline: 'Keep reading', list }
+    { type: 'cardGrid', id: 'reading', title: 'Reading', headline: 'Keep reading', cardVariant: 'editorial', list }
   ]
 };
 const registry = new SectionRegistry();
@@ -85,7 +85,7 @@ For a new section discriminator, augment `SectionTypeMap` and provide a separate
 ```ts
 import { normalizeSectionBackground, themeStyle, type PageTheme } from '@page-sections/core';
 const background = normalizeSectionBackground({ color: 'standardToMuted', size: 'full' });
-const theme: PageTheme = { accent: '#8b4135', radius: '12px', contentMax: '1200px' };
+const theme: PageTheme = { accent: '#8b4135', radius: '12px', narrowMax: '720px' };
 console.log(background.cssBackground, themeStyle(theme));
 ```
 
@@ -99,3 +99,5 @@ Background normalization returns CSS and, where applicable, a diagnostic. Surfac
 - [Demo source](https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo)
 
 Licensed under MPL-2.0. See the package's LICENSE and NOTICE files.
+
+Structured content models include RichTextBlock, InlineText, ContentAction and PanelSectionData. See the [0.2 migration guide](https://github.com/LauridBergjohann/page-sections/wiki/Migrating-to-0.2).

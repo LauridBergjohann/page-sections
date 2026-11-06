@@ -32,11 +32,13 @@ npm run preview -w @page-sections/demo
 
 | File | Responsibility |
 | --- | --- |
-| `src/routes/+layout.svelte` | PageShell, Navigation, MainMenu, integrated logo, compact Settings disclosure, resource links and Light/Dark icon controls |
+| `src/routes/+layout.svelte` | PageShell, Navigation items, integrated logo, compact Settings disclosure, resource links and Light/Dark icon controls |
 | `src/routes/+layout.ts` | Prerender all routes and use trailing slashes |
 | `src/routes/+page.svelte` | Landing page with hero and links to both showcases |
 | `src/routes/components/+page.svelte` | Content sections, responsive grids, standalone Card/Image and data-driven Sections |
 | `src/routes/backgrounds/+page.svelte` | All solid/gradient backgrounds, both background widths and explicit surface grouping |
+| `src/routes/examples/` | Data-only portfolio, legal and catalog examples plus an integration contract fixture |
+| `src/lib/examples.ts` | Serializable website examples and repeated catalog occurrence keys |
 | `src/lib/content.ts` | Shared images, cards and serializable PageData |
 | `src/app.css` | Small demo-specific additions for masthead, footer and example labels |
 
@@ -50,7 +52,7 @@ ContentPage supplies titles, breadcrumbs on subpages and generated section navig
 
 `src/app.html` is SvelteKit's HTML template. `svelte.config.js` selects adapter-static; `+layout.ts` sets `prerender = true`. SvelteKit renders each route at build time and writes deployable HTML/assets to `apps/demo/build`. There is no SPA fallback or custom HTML injection script. SSR stays enabled, and SvelteKit hydrates the existing HTML in the browser.
 
-The static output includes `index.html`, `components/index.html` and `backgrounds/index.html`. A static host must serve directory indexes. Native links, breadcrumbs, section anchors and carousel keyboard scrolling work without JavaScript. Theme switching and carousel buttons enhance the page after hydration.
+The static output includes `index.html`, `components/index.html` `backgrounds/index.html` and the nested examples directory indexes. A static host must serve directory indexes. Native links, breadcrumbs, section anchors and carousel keyboard scrolling work without JavaScript. Theme switching and carousel buttons enhance the page after hydration.
 
 The two local SVG illustrations live in `static/`. The silent video clip is hosted by MDN and requires network access for playback; the poster and surrounding content remain local.
 
@@ -63,4 +65,4 @@ npm run verify
 npm run test:e2e
 ```
 
-`npm run verify` includes the static demo build and independent packed-package consumers. The plain Svelte consumer fixture lives in `tests/fixtures/plain-svelte`; it deliberately has no SvelteKit dependency. Browser tests visit all three routes without JavaScript at 375, 840 and 1600px, and check routing, breadcrumbs, themes, responsive columns, carousel scrolling, keyboard navigation, hydration and surface corners. See [testing](testing.md).
+`npm run verify` includes the static demo build and independent packed-package consumers. The plain Svelte consumer fixture lives in `tests/fixtures/plain-svelte`; it deliberately has no SvelteKit dependency. Browser tests visit the original routes without JavaScript at 375, 840 and 1600px, plus website examples at 320, 840 and 1920px, and check routing, breadcrumbs, themes, responsive columns, carousel scrolling, keyboard navigation, hydration and surface corners. See [testing](testing.md).

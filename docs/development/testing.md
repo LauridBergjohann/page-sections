@@ -23,7 +23,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Core/SSR tests cover grid thresholds, span inheritance, registry lifecycle, background grouping, initial HTML, custom renderers and unsafe text/links. Browser tests cover all three SvelteKit routes without JavaScript at 375/840/1600px, native carousel scrolling, responsive and narrow grids, client routing and history, breadcrumbs, persistent layout themes, surface corners/gradients, keyboard access and unavailable WebGPU.
+Core/SSR tests cover grid thresholds, span inheritance, registry lifecycle, background grouping, initial HTML, custom renderers and unsafe text/links. Browser tests cover the original three SvelteKit routes without JavaScript at 375/840/1600px, native carousel scrolling, responsive and narrow grids, client routing and history, breadcrumbs, persistent layout themes, surface corners/gradients, keyboard access and unavailable WebGPU.
 
 ## Documentation examples
 
@@ -48,3 +48,5 @@ The checker validates relative links and GitHub links to known local repository/
 ## Artifacts and CI
 
 The two consumer scripts report to `.artifacts/packed-consumer.json` or `.artifacts/published-consumer.json`. Browser screenshots live in `.artifacts/`; failed test output goes to test-results. The CI workflow runs verify and browser tests; it does not automatically clone or synchronize the independent Wiki. Documentation checking is an explicit review step when both checkouts are available.
+
+The website examples also run with and without JavaScript at 320/840/1920px. Catalog tests compare DOM rectangles with core calculations from 320 to 1920px, including nested containers. Integration tests cover occurrence attachment/cleanup, carousel selection, detail surfaces, compact dismissal and desktop submenus. Run build-producing commands sequentially: svelte-package replaces dist while building.

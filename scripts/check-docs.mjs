@@ -63,7 +63,7 @@ for (const file of files) {
 const sidebar = read(join(wiki, '_Sidebar.md'));
 for (const file of wikiFiles) {
   const name = file.slice(wiki.length + 1, -3);
-  if (!name.startsWith('_') && !sidebar.includes(`${wikiBase}/${name}`)) throw new Error(`Sidebar is missing ${name}.`);
+  if (!name.startsWith('_') && !sidebar.includes(`](${name}.md)`)) throw new Error(`Sidebar is missing relative link to ${name}.md.`);
 }
 const componentExports = [...read(join(root, 'packages/svelte/src/index.ts')).matchAll(/default as (\w+)/g)].map(match => match[1]);
 const svelteApi = read(join(wiki, 'Svelte-API.md'));

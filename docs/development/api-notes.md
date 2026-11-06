@@ -1,21 +1,21 @@
-# API observations for maintainers
+﻿# API observations for maintainers
 
-These observations were found while documenting 0.1.0. They describe the current implementation and possible follow-up work, not changes made by the documentation update. Public references state the actual behavior.
+Current contracts after the 0.2 layout/content work:
 
-| Area | Observation |
+| Area | Contract or remaining boundary |
 | --- | --- |
-| Page headings | Sections and heroes honor headingLevel (1, 2 or 3; default 2). ContentPage supports a custom header snippet, showHeader and manageDocumentTitle; hosts supplying their own heading should preserve one h1 and a labelled main landmark. |
-| Section variants | default/content/feature produce a data attribute only; there are no preset variant styles. |
+| Page headings | Sections, cards and panels inherit levels through h6. page.hero supplies the single h1; explicit headingLevel and custom headers remain available. |
+| Section variants | default/content/feature have built-in heading styles. Nested typography is scoped to its own section. |
 | Section navigation | Generated navigation follows content in DOM order while CSS places it before/beside content. |
-| Nested themes | A light PageShell inside a dark ancestor does not reset inherited palette variables. Image mode selection and CSS palette selection can therefore differ unless explicit values are supplied. |
-| Border inheritance | The default border variable is defined on :root using ink; descendant ink changes should not be advertised as automatically recomputing it. |
-| Card sizes | Per-item size only affects large grid spans; carousel ignores it. s/l sizing variables are assigned locally, limiting ancestor-only overrides. |
-| Layout token consumers | Core square-card and breadcrumb numeric tokens are not equivalent to the current Svelte component geometry. Navigation follows the reference menu/satellite dimensions in CSS, but does not react to numeric-token changes. |
-| CSS/numeric parity | CSS width/gap/column overrides do not update core calculations; ContentBlock still clamps to canonical columns. |
-| Span diagnostics | ContentBlock warnings run in a client effect without a development-only guard. |
-| Background diagnostics | With no pageKind, a diagnostic message may include undefined; Section does not report the diagnostic itself. |
-| Renderer typing | renderers is Record<string, Component<any>>; key-to-prop correspondence is not checked by the map type. |
-| Breadcrumb label | ContentPage does not forward a custom Breadcrumbs label. Standalone Breadcrumbs does support one. |
-| Controls | Carousel buttons are not disabled at endpoints. ButtonGroup does not update selected state or invoke onselect for links. |
+| Nested themes | A light PageShell does not reset inherited dark palette values automatically. |
+| Border inheritance | The root border color is computed from root ink; set border explicitly for descendant palette overrides if necessary. |
+| Card sizes | Catalog sizes and media/text rectangles match core; editorial cards use responsive spans and natural text height. |
+| Layout tokens | Generated grid/card/menu/satellite/breadcrumb metrics share layoutTokens. Geometry overrides are unsupported; narrowMax controls reading width. |
+| Span diagnostics | ContentBlock warnings run in a client effect. |
+| Background diagnostics | Section forwards inherited pageKind and optionally reports deduplicated normalization diagnostics. |
+| Renderer typing | renderers is Record<string, Component<any>>; applications validate external data and type each renderer. |
+| Breadcrumb labels | ContentPage's default header does not forward a custom breadcrumb label; standalone Breadcrumbs does. |
+| Controls | Native-carousel arrows remain enabled at endpoints. Selection reports the nearest leading occurrence after scrollend; this is not Spatial Elements' selection engine. |
+| Host ownership | Routing, localization, SEO policy, persistence, virtual scrolling, stage/camera state and GPU rendering stay in consuming applications. |
 
-Any implementation change should be a separate, tested task with the associated public API and behavior documentation updated together.
+See [release preparation](release-0.2.md) and the Wiki migration guide for changed public behavior.

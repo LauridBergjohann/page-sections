@@ -143,7 +143,7 @@ Use native HTML5 video with controls and optional caption tracks, or a YouTube I
 
 ### CardGridSection
 
-Display related pages in a responsive collection. The title is the link; the whole card is not an interactive link. Text is free to grow.
+Choose editorial cards for descriptions, footers and independent actions. The default catalog variant is a square full-card link with canonical S/M/L geometry.
 
 ```svelte
 <script lang="ts">
@@ -154,7 +154,7 @@ Display related pages in a responsive collection. The title is the link; the who
     { id: 'tools', title: 'Useful tools', href: '/guides/tools' }
   ];
 </script>
-<CardGridSection section={{ id: 'guides', title: 'Guides', headline: 'Practical guides' }} {list} cardSize="m" />
+<CardGridSection section={{ id: 'guides', title: 'Guides', headline: 'Practical guides' }} {list} cardVariant="editorial" itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }} />
 ```
 
 `cardSize` accepts `s`, `m` or `l`. `media(item)` and `itemContent(item)` snippets customize cards. [CardGridSection reference](https://github.com/LauridBergjohann/page-sections/wiki/CardGridSection).
@@ -190,11 +190,17 @@ Use the general wrapper when content does not fit a predefined section. It has t
 </Section>
 ```
 
-There are six specialized content-section components plus the general Section wrapper. The data renderer also supports a `grid` discriminator; there is no exported `GridSection` component.
+There are seven specialized content-section components plus the general Section wrapper. The data renderer also supports a `grid` discriminator; there is no exported `GridSection` component.
+
+## Structured website content
+
+RichTextSection accepts either Markdown/plain body or structured blocks: paragraphs, addresses, inline links, lists and nested panels. PanelSection supplies a standalone panel. ContentPage accepts page.hero for an automatic h1 artwork hero and bodyLayout="narrow" for complete documents. Combine these through Sections and grid data to build portfolio, biography and legal content without custom renderers.
+
+See [structured text](https://github.com/LauridBergjohann/page-sections/wiki/RichTextSection), [panels](https://github.com/LauridBergjohann/page-sections/wiki/PanelSection) and [migration](https://github.com/LauridBergjohann/page-sections/wiki/Migrating-to-0.2).
 
 ## Navigation
 
-Navigation is independent of ContentPage. Its `menu` snippet holds the central menu; `left` and `right` hold optional satellites, such as language links and theme buttons. Below 1600px, the controls are available through the Settings disclosure in the header. At XL and above they appear as outside satellites. Add a `brand` snippet for your logo and a `settingsIcon` snippet for an application-supplied icon; no icon library is required.
+Navigation is independent of ContentPage. Pass items for a built-in responsive menu, or use the menu snippet for a custom menu; `left` and `right` hold optional satellites, such as language links and theme buttons. Below 1600px, the controls are available through the Settings disclosure in the header. At XL and above they appear as outside satellites. Add a `brand` snippet for your logo and a `settingsIcon` snippet for an application-supplied icon; no icon library is required.
 
 ```svelte
 <script lang="ts">
@@ -224,6 +230,8 @@ MainMenu supports nested groups through native details/summary. ButtonGroup rend
 
 Breadcrumbs describe a page's place in the site. Set `page.breadcrumbs` to render them automatically, or use Breadcrumbs directly. SectionNavigation links to the current page's anchors; ContentPage generates it when `sectionNavigation` is enabled. See [Breadcrumbs and Section Navigation](https://github.com/LauridBergjohann/page-sections/wiki/Breadcrumbs-and-Section-Navigation).
 
+Bind Navigation.closeKey to the host route to close disclosures on programmatic navigation. scrollBehavior selects static, delayed (112px threshold) or fixed behavior. The wide header is 1536px at 2XL, including padding and borders.
+
 ## Data-driven pages
 
 Use serializable models for CMS or database content. Sections chooses a renderer using each section's `type`.
@@ -248,7 +256,7 @@ ContentPage does not automatically render `page.sections`: include Sections expl
 
 ## Styling and themes
 
-Use PageShell's `theme` prop for shared colors, fonts, radii and widths, or set CSS variables on an ancestor. `mode="dark"` enables the built-in dark palette; the host decides when to change it.
+Use PageShell's `theme` prop for shared colors, fonts, radii and reading widths, or set CSS variables on an ancestor. `mode="dark"` enables the built-in dark palette; the host decides when to change it.
 
 ```css
 .garden-theme {
@@ -256,7 +264,7 @@ Use PageShell's `theme` prop for shared colors, fonts, radii and widths, or set 
   --ps-section-muted: #eef3ed;
   --ps-radius: 12px;
   --ps-font-family: Georgia, serif;
-  --ps-content-max: 1200px;
+  --ps-narrow-max: 720px;
 }
 ```
 

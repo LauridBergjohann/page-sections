@@ -8,7 +8,7 @@ If needed, clone it from the parent directory:
 git clone https://github.com/LauridBergjohann/page-sections.wiki.git
 ```
 
-Home.md is the landing page; _Sidebar.md contains the navigation; _Footer.md provides repository links. Page filenames are their URL slugs. Use ordinary Markdown links to full Wiki URLs, which work from npm READMEs as well. Keep the sidebar and related-page links current when renaming files.
+Home.md is the landing page; _Sidebar.md contains the navigation; _Footer.md provides repository links. Use relative Markdown links with the `.md` extension within the Wiki, so the checkout remains readable in VS Code and portable. Repository/npm READMEs may link to the public Wiki URL. Keep the sidebar and related-page links current when renaming files.
 
 ## Review the prepared changes
 
