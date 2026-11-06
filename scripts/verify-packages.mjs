@@ -37,7 +37,7 @@ for (const name of ['core', 'svelte']) {
 const consumer = mkdtempSync(join(tmpdir(), 'page-sections-consumer-'));
 writeFileSync(join(consumer, 'package.json'), JSON.stringify({ name: 'page-sections-artifact-consumer', private: true, type: 'module', scripts: { build: 'vite build && vite build --ssr src/entry-server.ts --outDir dist/server && node prerender.mjs', check: 'svelte-check --tsconfig tsconfig.json' } }, null, 2));
 run(['install', ...specs, 'svelte@5.56.4', '@sveltejs/vite-plugin-svelte@7.2.0', 'vite@8.1.4', 'typescript@6.0.3', 'svelte-check@4.7.2', '@types/node@24', '--ignore-scripts', '--no-audit', '--no-fund'], consumer);
-for (const file of ['src', 'public', 'index.html', 'vite.config.ts', 'prerender.mjs']) cpSync(join(root, 'apps/demo', file), join(consumer, file), { recursive: true });
+for (const file of ['src', 'index.html', 'vite.config.ts', 'prerender.mjs']) cpSync(join(root, 'tests/fixtures/plain-svelte', file), join(consumer, file), { recursive: true });
 writeFileSync(join(consumer, 'tsconfig.json'), JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'ESNext', moduleResolution: 'Bundler', strict: true, skipLibCheck: true, allowJs: true, resolveJsonModule: true }, include: ['src/**/*'] }));
 run(['run', 'check'], consumer); run(['run', 'build'], consumer);
 const html = readFileSync(join(consumer, 'dist/index.html'), 'utf8');
