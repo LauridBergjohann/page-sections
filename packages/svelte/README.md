@@ -64,9 +64,26 @@ Section supplies outer gutters once; ContentGrid adds internal gaps. Spans inher
 
 Each example below is an independent Svelte component. Put its section inside ContentPage to include it in automatic navigation, or render it alone. Replace sample media paths with assets in your application's public/static directory.
 
+### Custom page headers and host metadata
+
+ContentPage keeps its default title area unless `showHeader={false}` is set or a `header` snippet replaces it. The snippet receives `(page, titleId)`; assign `titleId` to its heading to label main. `showHeader={false}` also suppresses a supplied header snippet. Use `manageDocumentTitle={false}` when the host route manages its document title. Standard HTML attributes such as `id`, `lang`, `aria-label` and `aria-labelledby` are forwarded to main; styling remains controlled through `theme` and `class`.
+
+```svelte
+<script>
+  import { ContentPage, HeroSection } from '@page-sections/svelte';
+</script>
+<svelte:head><title>Our garden | Journal</title></svelte:head>
+<ContentPage page={{ title: 'Our garden' }} showHeader={false} manageDocumentTitle={false}
+  id="content" lang="en" aria-labelledby="welcome-title">
+  <HeroSection section={{ id: 'welcome', title: 'Our garden', headingLevel: 1 }} />
+</ContentPage>
+```
+
+Hero headings use the ID `${section.id}-title`. Without a visible page header or explicit accessible label, ContentPage labels main with `page.title`. Provide exactly one page-level h1 in your own header or content. Section navigation remains available in all header modes.
+
 ### HeroSection
 
-Introduce a page area with a headline, optional image, supporting copy and actions. The hero renders an `h2`; ContentPage supplies the page's `h1`.
+Introduce a page area with a headline, optional image, supporting copy and actions. The hero defaults to `h2`. Set `section.headingLevel` to `1`, `2` or `3`; use `1` when the hero owns the page heading.
 
 ```svelte
 <script>

@@ -9,7 +9,7 @@ export interface SectionDefinition {
   headline?: string;
   eyebrow?: string;
   introduction?: string;
-  headingLevel?: 2 | 3;
+  headingLevel?: 1 | 2 | 3;
   background?: SectionBackground;
   layout?: 'full' | 'wide' | 'narrow' | 'inherit';
   spacing?: 'none' | 'tight' | 'normal' | 'loose' | 'spacious';

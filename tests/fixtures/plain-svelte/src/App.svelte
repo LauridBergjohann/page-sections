@@ -4,6 +4,7 @@
   const cards: CardItem[] = [{ id: 'one', title: 'Independent consumer', href: '#collection' }];
 </script>
 <ContentPage page={{ title: 'Plain Svelte consumer' }} sectionNavigation>
+  {#snippet header(page, titleId)}<header><h1 id={titleId}>{page.title}</h1></header>{/snippet}
   <CardGridSection section={{ id: 'collection', title: 'Collection' }} list={cards} />
   <CarouselSection section={{ id: 'browse', title: 'Browse' }} list={cards} />
 </ContentPage>

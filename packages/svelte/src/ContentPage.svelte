@@ -1,12 +1,14 @@
 <script lang="ts">
   import { setContext, onMount, type Snippet } from 'svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
   import { SECTION_REGISTRY, SectionRegistry, themeStyle, type ContentPageData, type PageTheme } from '@page-sections/core';
   import SectionSurfaceGroup from './SectionSurfaceGroup.svelte';
   import Breadcrumbs from './Breadcrumbs.svelte';
   import SectionNavigation from './SectionNavigation.svelte';
   import './styles.css';
-  let { page, children, sectionNavigation = false, navigationLabel, theme, class: className = '' }: {
+  let { page, children, header, showHeader = true, manageDocumentTitle = true, sectionNavigation = false, navigationLabel, theme, class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children' | 'class' | 'style'> & {
     page: ContentPageData; children?: Snippet; sectionNavigation?: boolean | 'horizontal' | 'sidebar'; navigationLabel?: string; theme?: PageTheme; class?: string;
+    header?: Snippet<[ContentPageData, string]>; showHeader?: boolean; manageDocumentTitle?: boolean;
   } = $props();
   let revision = $state(0);
   let host: HTMLElement;
@@ -21,16 +23,22 @@
     return () => observer.disconnect();
   });
 </script>
-<svelte:head><title>{page.pageTitle ?? page.title}</title></svelte:head>
-<main bind:this={host} class={['ps-page', className]} style={themeStyle(theme)} aria-labelledby={titleId}>
+<svelte:head>{#if manageDocumentTitle}<title>{page.pageTitle ?? page.title}</title>{/if}</svelte:head>
+<main {...rest} bind:this={host} class={['ps-page', className]} style={themeStyle(theme)}
+  aria-labelledby={rest['aria-labelledby'] ?? (showHeader && !rest['aria-label'] ? titleId : undefined)}
+  aria-label={rest['aria-label'] ?? (!showHeader && !rest['aria-labelledby'] ? page.title : undefined)}>
   <div class="ps-content-width ps-content-container">
+    {#if showHeader}
+    {#if header}{@render header(page, titleId)}{:else}
     <header class="ps-grid-scope">
       {#if page.breadcrumbs?.length}<Breadcrumbs items={page.breadcrumbs} />{/if}
       {#if page.eyebrow}<p class="eyebrow">{page.eyebrow}</p>{/if}
       <h1 id={titleId}>{page.title}</h1>
       {#if page.intro}<p class="intro">{page.intro}</p>{/if}
     </header>
-    <div class:with-sidebar={sectionNavigation === 'sidebar'}>
+    {/if}
+    {/if}
+    <div class="page-body" class:with-sidebar={sectionNavigation === 'sidebar'}>
       <div class="sections"><SectionSurfaceGroup>{@render children?.()}</SectionSurfaceGroup></div>
       <!-- Render after registration on the server; CSS places navigation before the sections. -->
       {#if sectionNavigation}<div class="section-navigation"><SectionNavigation items={sections()} label={navigationLabel} variant={sectionNavigation === 'sidebar' ? 'sidebar' : 'horizontal'} /></div>{/if}
@@ -43,6 +51,6 @@
   h1 { font-size: clamp(2rem, 5vw, 4.5rem); line-height: 1.08; letter-spacing: -.04em; margin: .5rem 0; }
   .eyebrow { color: var(--ps-accent); text-transform: uppercase; letter-spacing: .12em; }
   .intro { max-width: 64ch; color: var(--ps-body); line-height: 1.6; }
-  header + div { display: grid; } .sections { min-width: 0; grid-row: 2; } .section-navigation { grid-row: 1; }
+  .page-body { display: grid; } .sections { min-width: 0; grid-row: 2; } .section-navigation { grid-row: 1; }
   @media (min-width: 1000px) { .with-sidebar { grid-template-columns: 14rem minmax(0, 1fr); } .with-sidebar .sections { grid-column: 2; grid-row: 1; container: ps-content / inline-size; } .with-sidebar .section-navigation { grid-column: 1; grid-row: 1; } }
 </style>

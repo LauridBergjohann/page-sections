@@ -4,7 +4,7 @@ These observations were found while documenting 0.1.0. They describe the current
 
 | Area | Observation |
 | --- | --- |
-| Hero heading | HeroSection accepts the shared headingLevel field but always renders h2. |
+| Page headings | Sections and heroes honor headingLevel (1, 2 or 3; default 2). ContentPage supports a custom header snippet, showHeader and manageDocumentTitle; hosts supplying their own heading should preserve one h1 and a labelled main landmark. |
 | Section variants | default/content/feature produce a data attribute only; there are no preset variant styles. |
 | Section navigation | Generated navigation follows content in DOM order while CSS places it before/beside content. |
 | Nested themes | A light PageShell inside a dark ancestor does not reset inherited palette variables. Image mode selection and CSS palette selection can therefore differ unless explicit values are supplied. |

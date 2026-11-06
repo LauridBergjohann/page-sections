@@ -7,3 +7,6 @@ test-results/
 playwright-report/
 apps/demo/.svelte-kit/
 apps/demo/build/
+
+# Generated package staging files
+packages/svelte/.svelte-kit/

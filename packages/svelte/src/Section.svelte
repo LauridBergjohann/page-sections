@@ -25,7 +25,7 @@
   <span class="ps-section-surface" style:background={background.cssBackground} aria-hidden="true"></span>
   <div class="ps-section-content ps-grid-scope">
   {#if section.eyebrow}<p class="eyebrow">{section.eyebrow}</p>{/if}
-  {#if section.headline}<svelte:element this={section.headingLevel === 3 ? 'h3' : 'h2'} id={`${section.id}-title`} class="headline">{section.headline}</svelte:element>{/if}
+  {#if section.headline}<svelte:element this={`h${section.headingLevel ?? 2}`} id={`${section.id}-title`} class="headline">{section.headline}</svelte:element>{/if}
   {#if section.introduction}<p class="introduction">{section.introduction}</p>{/if}
   {@render children?.()}
   </div>
