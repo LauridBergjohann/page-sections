@@ -1,50 +1,98 @@
+<img src="assets/page-sections-logo.svg" alt="Page Sections logo" width="64" height="64" />
+
 # Page Sections
 
-SSR-first Svelte 5 pages, responsive content grids, sections and standalone navigation. Extracted from the general layout system of Spatial Elements Beta.8. No Three.js, WebGPU, Tailwind or SvelteKit runtime dependency.
+Page Sections is a simple, extensible toolkit for building content-driven websites from reusable sections and layouts.
 
-**Release status:** implementation and local verification are tracked in [Phase 1 status](docs/phase-1-status.md). A package tarball is not proof of an npm publication. Phase 2 remains gated on verified registry installation.
+Compose a portfolio, publication, product page or company website from ordinary content. Start with ready-made sections, combine them with responsive grids, and add your own components where the content calls for them. Shared data models support hand-authored pages and content supplied by a CMS.
 
-```sh
-npm install @page-sections/svelte svelte
+The components work with Svelte 5 and SvelteKit. SvelteKit, Tailwind and specialized rendering technologies are not required.
+
+## Features
+
+- Composable pages, sections and responsive content grids.
+- Hero, Markdown, image and video sections.
+- Responsive card grids and native scroll-snap carousels.
+- Independent navigation with optional left and right controls, called satellites.
+- Breadcrumbs and automatically generated section navigation.
+- CSS custom properties and shared themes.
+- Serializable content models and custom section renderers.
+- Server-renderable content, with optional interactions after hydration.
+
+## Packages
+
+| Package | Use it for |
+| --- | --- |
+| [@page-sections/core](https://www.npmjs.com/package/@page-sections/core) | Framework-independent content models, layout calculations, tokens, registries and utilities. |
+| [@page-sections/svelte](https://www.npmjs.com/package/@page-sections/svelte) | Svelte 5 components for pages, sections, grids and navigation. Installs core as a dependency. |
+
+For a Svelte website, start with the Svelte package. Install core directly when importing its runtime functions or using the models without Svelte. The Svelte package also re-exports core's TypeScript types.
+
+## Quick start
+
+In an existing Svelte 5 or SvelteKit application:
+
+```bash
+npm install @page-sections/svelte
 ```
+
+Place this in `App.svelte`, or a SvelteKit `+page.svelte`:
 
 ```svelte
 <script lang="ts">
-  import { ContentPage, CardGridSection } from '@page-sections/svelte';
-  const page = { title: 'Projects', breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Projects' }] };
-  const section = { id: 'projects', title: 'Projects', headline: 'Selected work' };
-  const list = [{ id: 'one', title: 'My project', href: '/projects/one' }];
+  import { ContentPage, RichTextSection, CardGridSection } from '@page-sections/svelte';
 </script>
-
-<ContentPage {page} sectionNavigation>
-  <CardGridSection {section} {list} />
+<ContentPage page={{ title: 'Field notes', intro: 'Ideas, projects and things worth sharing.' }} sectionNavigation>
+  <RichTextSection section={{ id: 'about', title: 'About', headline: 'A place to begin',
+    body: 'Welcome to my **collection of work**.' }} />
+  <CardGridSection section={{ id: 'projects', title: 'Projects', headline: 'Selected projects' }}
+    list={[
+      { id: 'garden', title: 'A community garden', href: '/projects/garden' },
+      { id: 'journal', title: 'A walking journal', href: '/projects/journal' }
+    ]} />
 </ContentPage>
 ```
 
-Components include their CSS. Import `@page-sections/svelte/styles.css` explicitly when using only low-level components. Use Svelte-aware tooling such as Vite's Svelte plugin; SvelteKit also supports the package exports directly.
+The components load their styles. For content to remain available without JavaScript, enable SSR or prerendering in the host application; the library does not turn a client-only app into an SSR app.
 
-## Development
+## Components
 
-Node 24 and npm 11 are used in CI.
+| Area | Components |
+| --- | --- |
+| Page composition | `PageShell`, `ContentPage`, `Section`, `SectionSurfaceGroup` |
+| Content layout | `ContentGrid`, `ContentBlock` |
+| Content sections | `HeroSection`, `RichTextSection`, `ImageSection`, `VideoSection` |
+| Collections | `CardGridSection`, `CarouselSection`, `Card`, `Image` |
+| Navigation | `Navigation`, `MainMenu`, `ButtonGroup`, `Breadcrumbs`, `SectionNavigation` |
+| Data-driven rendering | `Sections` |
 
-```sh
+See the [Svelte package guide](packages/svelte/README.md) for practical examples and the [Svelte API](https://github.com/LauridBergjohann/page-sections/wiki/Svelte-API) for the complete index.
+
+## Demo
+
+The [demo source](apps/demo) contains a complete Svelte 5 application with sections, responsive blocks, navigation, themes and data-driven content. From this repository, using Node 24 and npm 11:
+
+```bash
 npm ci
-npm run verify
-npx playwright install chromium
-npm run test:e2e
 npm run demo
 ```
 
-`demo` builds and serves a prerendered plain Svelte/Vite application at http://127.0.0.1:4173. Disable JavaScript to inspect the same HTML. The demo is a static build, not a development server requiring client rendering.
+This builds both packages and the SvelteKit demo, prerenders its three routes with adapter-static, and starts a preview server at **http://127.0.0.1:4173**. Explore the landing page, `/components/` and `/backgrounds/`. Disable JavaScript to inspect their initial HTML. For development with hot reload, use `npm run dev:demo` at **http://127.0.0.1:5173**; see the [demo guide](docs/development/demo.md).
 
 ## Documentation
 
-- [Architecture and extraction provenance](docs/architecture.md)
-- [Pages, grids, sections and backgrounds](docs/layout.md)
-- [Components, navigation and themes](docs/components.md)
-- [Serializable models and custom renderers](docs/data-models.md)
-- [Progressive enhancement contract](docs/progressive-enhancement.md)
-- [bergjohann.com migration assessment](docs/bergjohann-migration.md)
-- [Release and npm setup](docs/releasing.md)
+The [GitHub Wiki](https://github.com/LauridBergjohann/page-sections/wiki) is the full user guide and API reference.
 
-Licensed under MPL-2.0. See [NOTICE](NOTICE) for upstream attribution.
+- [Installation](https://github.com/LauridBergjohann/page-sections/wiki/Installation) and [Quick Start](https://github.com/LauridBergjohann/page-sections/wiki/Quick-Start)
+- [Svelte package guide](packages/svelte/README.md)
+- [Core package guide](packages/core/README.md)
+- [Themes and Styling](https://github.com/LauridBergjohann/page-sections/wiki/Themes-and-Styling)
+- [Data Models and Custom Sections](https://github.com/LauridBergjohann/page-sections/wiki/Data-Models-and-Custom-Sections)
+
+## Development
+
+Interested in contributing or working on the project? See the [development guide](docs/development/README.md).
+
+## License
+
+[Mozilla Public License 2.0](LICENSE). Attribution information is retained in [NOTICE](NOTICE).

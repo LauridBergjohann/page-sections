@@ -51,7 +51,7 @@ jobs:
       - name: Check trusted publishing setup
         run: |
           if [ '${{ vars.NPM_TRUSTED_PUBLISHING_ENABLED }}' != 'true' ]; then
-            echo '::error::Configure npm trusted publishers and the npm environment first. See docs/releasing.md.'
+            echo '::error::Configure npm trusted publishers and the npm environment first. See docs/development/releasing.md.'
             exit 1
           fi
       - run: npm install --global npm@11

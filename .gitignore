@@ -5,3 +5,5 @@ dist/
 .npm-cache/
 test-results/
 playwright-report/
+apps/demo/.svelte-kit/
+apps/demo/build/

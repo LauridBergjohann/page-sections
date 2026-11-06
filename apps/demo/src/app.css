@@ -1,0 +1,28 @@
+body { margin: 0; }
+.ps-shell { min-height: 100vh; background: var(--ps-background); color-scheme: light; }
+.ps-shell[data-ps-theme='dark'] { color-scheme: dark; }
+.demo-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1.5rem clamp(1rem, 3vw, 3rem); font-size: .85rem; color: var(--ps-body); }
+.demo-brand { display: flex; align-items: center; gap: .6rem; color: var(--ps-ink) !important; font-weight: 750; text-decoration: none; white-space: nowrap; }
+.brand-mark { display: block; width: 28px; height: 28px; flex-shrink: 0; }
+.footer-brand { display: flex; align-items: center; gap: .6rem; }
+.footer-brand img { flex-shrink: 0; }
+.brand-name { display: none; }
+.demo-menu ul { justify-content: center; }
+.ps-navigation .demo-menu a { font-size: .75rem; padding: .65rem .25rem; text-decoration: none; }
+.demo-icon-group { display: flex; gap: 0; }
+.demo-icon-group a, .demo-icon-group button { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--ps-ink); cursor: pointer; }
+.demo-icon-group [aria-pressed='true'], .demo-icon-group a:hover { background: var(--ps-section-muted); color: var(--ps-accent); }
+.demo-icon-group button:disabled { opacity: .5; cursor: default; }
+@media (min-width: 360px) { .ps-navigation .demo-menu a { font-size: .8rem; padding-inline: .35rem; } }
+@media (min-width: 600px) { .brand-name { display: inline; } .ps-navigation .demo-menu a { font-size: .9rem; padding-inline: .85rem; } }
+.demo-footer { border-top: 1px solid var(--ps-border); }
+.demo-footer a, .skip-link { color: var(--ps-accent); }
+.skip-link { position: absolute; top: .5rem; left: 1rem; transform: translateY(-200%); z-index: 10; padding: .75rem; background: var(--ps-section-standard); }
+.skip-link:focus { transform: translateY(0); }
+.demo-sample { height: 100%; padding: clamp(1rem, 3vw, 2rem); border: 1px dashed var(--ps-accent); border-radius: var(--ps-radius); }
+.demo-sample h3 { margin-top: 0; }
+.demo-sample p, .demo-copy { line-height: 1.7; max-width: 65ch; }
+.demo-label { display: inline-block; font: .75rem/1.5 ui-monospace, monospace; color: var(--ps-accent); margin-bottom: .75rem; }
+.demo-code { white-space: pre-wrap; overflow-wrap: anywhere; padding: 1rem; border: 1px solid var(--ps-border); border-radius: .5rem; font-size: .8rem; }
+figure { margin: 0; }
+figcaption { margin-top: .75rem; color: var(--ps-body); font-size: .85rem; }

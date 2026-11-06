@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const npm = process.env.npm_execpath;
 if (!npm) throw new Error('Use npm run release:publish.');
-if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL) throw new Error('Publishing requires the configured GitHub Actions OIDC environment. See docs/releasing.md.');
+if (!process.env.ACTIONS_ID_TOKEN_REQUEST_URL) throw new Error('Publishing requires the configured GitHub Actions OIDC environment. See docs/development/releasing.md.');
 for (const name of ['core', 'svelte']) {
   const cwd = resolve(root, 'packages', name);
   const pkg = JSON.parse(readFileSync(resolve(cwd, 'package.json'), 'utf8'));

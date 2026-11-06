@@ -1,20 +1,17 @@
 import { expect, it } from 'vitest';
 import { render } from 'svelte/server';
-import App from '../apps/demo/src/App.svelte';
+import App from './fixtures/plain-svelte/src/App.svelte';
 import { CarouselSection, RichTextSection, Navigation, Sections } from '../packages/svelte/src/index.js';
 import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
-it('ships every section, native link and generated navigation in the first HTML response', () => {
+it('renders native links and generated navigation without a SvelteKit host', () => {
   const { body, head } = render(App);
-  expect(head).toContain('Layout collection');
+  expect(head).toContain('Plain Svelte consumer');
   expect(body).toContain('aria-label="On this page"');
   expect(body).toContain('href="#browse"');
-  expect(body).toContain('href="#layout"');
   expect(body).toContain('data-ps-section="collection"');
-  expect(body).toContain('<video');
-  expect(body).toContain('<strong>content and presentation</strong>');
-  expect(body).toContain('--ps-section-top-radius:var(--ps-radius)');
+  expect(body).toContain('Independent consumer');
   expect(body).not.toContain('<canvas');
 });
 it('renders a standalone carousel once without JavaScript-only controls', () => {
