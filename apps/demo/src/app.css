@@ -9,6 +9,12 @@ body { margin: 0; }
 .brand-name { display: none; }
 .demo-menu ul { justify-content: center; }
 .ps-navigation .demo-menu a { font-size: .75rem; padding: .65rem .25rem; text-decoration: none; }
+/* Leave room for wider system fonts on narrow phones without clipping or shrinking text. */
+@media (max-width: 359px) {
+  .ps-navigation .header { gap: .25rem; }
+  .ps-navigation .demo-menu > ul { column-gap: .125rem; }
+  .ps-navigation .demo-menu a { padding-inline: .125rem; }
+}
 .demo-icon-group { display: flex; gap: 0; }
 .demo-icon-group a, .demo-icon-group button { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--ps-ink); cursor: pointer; }
 .demo-icon-group [aria-pressed='true'], .demo-icon-group a:hover { background: var(--ps-section-muted); color: var(--ps-accent); }

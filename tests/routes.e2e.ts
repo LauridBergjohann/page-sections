@@ -123,6 +123,31 @@ test('skip link and navigation are keyboard accessible', async ({ page }) => {
   await expect(page).toHaveTitle('Components — Page Sections');
 });
 
+test('compact navigation fits wider font metrics on every route at 320px', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  for (const route of routes) {
+    await page.goto(route.path);
+    // Verdana reproduces the wrap on Windows; the generic fallback also runs on Linux.
+    // Letter spacing adds a deterministic width stress even when Verdana is unavailable.
+    await page.addStyleTag({ content: '.ps-navigation { font-family: Verdana, sans-serif !important; letter-spacing: .1px; }' });
+    const nav = page.getByRole('navigation', { name: 'Main navigation' });
+    const header = (await nav.locator('.header').boundingBox())!;
+    expect(header.height).toBe(66);
+    const links = await nav.locator('.menu a').evaluateAll(elements => elements.map(element => {
+      const { x, y, right, bottom } = element.getBoundingClientRect();
+      return { x, y, right, bottom };
+    }));
+    expect(links).toHaveLength(3);
+    for (const link of links) {
+      expect(link.y).toBe(links[0].y);
+      expect(link.x).toBeGreaterThanOrEqual(header.x);
+      expect(link.right).toBeLessThanOrEqual(header.x + header.width);
+      expect(link.bottom).toBeLessThanOrEqual(header.y + header.height);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+});
+
 for (const width of [320, 600, 840, 1200, 1599, 1600, 1809, 2300]) {
   test('navigation follows the reference at ' + width + 'px', async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
