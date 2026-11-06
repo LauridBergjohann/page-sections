@@ -10,7 +10,7 @@ ContentPage establishes a request-local SectionRegistry. Section registers seman
 
 Generated section navigation also renders after registrations, then CSS places it above/beside the content. DOM reading order remains after the sections. Preserve this behavior in documentation unless a separately tested implementation change replaces it.
 
-The seven specialized content sections delegate ordinary section metadata to Section. CardGridSection and CarouselSection share CardItem and Card. Catalog geometry matches core square-card calculations; editorial cards intentionally grow with copy. Data-driven Sections dispatches the discriminated models and accepts a renderer map; it does not fetch or validate content.
+The seven specialized content sections delegate ordinary section metadata to Section. CardGridSection and CarouselSection share CardItem and Card. Catalog geometry matches core media-plus-text calculations; editorial cards intentionally grow with copy. Data-driven Sections dispatches the discriminated models and accepts a renderer map; it does not fetch or validate content.
 
 ## Layout source of truth
 

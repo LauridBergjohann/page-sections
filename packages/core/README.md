@@ -40,7 +40,7 @@ console.log({ columns: grid.columns, span, width });
 
 Spans inherit from smaller grid sizes; invalid spans fill the row and oversized spans clamp. Svelte ContentGrid and ContentBlock use the same default tokens in generated CSS. Canonical geometry is shared with the components; colors and reading widths remain customizable. See [Responsive Layout and Breakpoints](https://github.com/LauridBergjohann/page-sections/wiki/Responsive-Layout-and-Breakpoints).
 
-`resolveCardLayout` returns a square layout calculation with text and media rectangles. Svelte catalog cards consume the same tokens and match those dimensions; editorial cards grow with content.
+`resolveCardLayout` returns a media-plus-text layout calculation with separate frame and fitting rectangles. Svelte catalog cards consume the same tokens and match those dimensions; editorial cards grow with content.
 
 ## Describe a page and index its sections
 
@@ -92,6 +92,8 @@ console.log(background.cssBackground, themeStyle(theme));
 Background normalization returns CSS and, where applicable, a diagnostic. Surface grouping determines which adjacent sections receive outer corners. Core describes this presentation but does not apply it to DOM elements.
 
 ## Documentation
+
+`resolveCardLayout(containerWidth, cardSize, { mediaAspect, mediaFit, reserveEyebrow })` describes catalog cards with independent media/text areas. Supported media ratios are `3/2`, `4/3` and `1/1`; derive eyebrow reservation from the entire collection. The result includes the complete card height, outer `mediaFrame` and inner `media` fitting rectangle for posters or host geometry.
 
 - [Core API](https://github.com/LauridBergjohann/page-sections/wiki/Core-API)
 - [CSS Variables and Layout Tokens](https://github.com/LauridBergjohann/page-sections/wiki/CSS-Variables-and-Layout-Tokens)

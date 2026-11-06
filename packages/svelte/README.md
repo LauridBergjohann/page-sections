@@ -143,7 +143,7 @@ Use native HTML5 video with controls and optional caption tracks, or a YouTube I
 
 ### CardGridSection
 
-Choose editorial cards for descriptions, footers and independent actions. The default catalog variant is a square full-card link with canonical S/M/L geometry.
+Choose editorial cards for descriptions, footers and independent actions. The default catalog variant is a full-card link with configurable media proportions, independent text space and canonical S/M/L geometry.
 
 ```svelte
 <script lang="ts">
@@ -255,6 +255,8 @@ Use serializable models for CMS or database content. Sections chooses a renderer
 ContentPage does not automatically render `page.sections`: include Sections explicitly. Extend SectionTypeMap and pass `renderers` for your own types. See [Data Models and Custom Sections](https://github.com/LauridBergjohann/page-sections/wiki/Data-Models-and-Custom-Sections).
 
 ## Styling and themes
+
+Card collections share equal heights and accept `mediaAspect="3/2"` (default), `"4/3"` or `"1/1"`. The ratio applies to media only; titles and optional labels have independent space below it. Use `mediaFit="contain"` for complete objects or `"cover"` for cropped photos. Catalog defaults to contain; editorial defaults to cover. These collection settings take precedence over per-image aspect/fit. See [CardGridSection](https://github.com/LauridBergjohann/page-sections/wiki/CardGridSection).
 
 Use PageShell's `theme` prop for shared colors, fonts, radii and reading widths, or set CSS variables on an ancestor. `mode="dark"` enables the built-in dark palette; the host decides when to change it.
 

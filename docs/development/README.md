@@ -38,6 +38,7 @@ The Wiki is a separate repository, normally checked out as sibling `page-section
 - [Running and developing the demo](demo.md)
 - [Versioning and releases](releasing.md)
 - [0.2 release preparation](release-0.2.md)
+- [Spatial Elements adoption contract](spatial-elements-adoption.md)
 - [Editing and publishing the Wiki](wiki.md)
 - [API observations](api-notes.md)
 
