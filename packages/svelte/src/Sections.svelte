@@ -3,6 +3,7 @@
   import type { SectionData } from '@page-sections/core';
   import HeroSection from './HeroSection.svelte';
   import RichTextSection from './RichTextSection.svelte';
+  import PanelSection from './PanelSection.svelte';
   import ImageSection from './ImageSection.svelte';
   import VideoSection from './VideoSection.svelte';
   import CardGridSection from './CardGridSection.svelte';
@@ -20,10 +21,11 @@
   {#if Custom}<Custom {section} />
   {:else if section.type === 'hero'}<HeroSection {section} />
   {:else if section.type === 'richText'}<RichTextSection {section} />
+  {:else if section.type === 'panel'}<PanelSection {section} />
   {:else if section.type === 'image'}<ImageSection {section} />
   {:else if section.type === 'video'}<VideoSection {section} />
-  {:else if section.type === 'cardGrid'}<CardGridSection {section} list={section.list} cardSize={section.cardSize} />
-  {:else if section.type === 'carousel'}<CarouselSection {section} list={section.list} cardSize={section.cardSize} controls={section.controls} />
-  {:else if section.type === 'grid'}<Section {section}><ContentGrid>{#each section.blocks as block (block.id)}<ContentBlock span={block.span}><Sections sections={block.sections} {renderers} /></ContentBlock>{/each}</ContentGrid></Section>
+  {:else if section.type === 'cardGrid'}<CardGridSection {section} list={section.list} cardSize={section.cardSize} cardVariant={section.cardVariant} itemSpan={section.itemSpan} textAlign={section.textAlign} />
+  {:else if section.type === 'carousel'}<CarouselSection {section} list={section.list} cardSize={section.cardSize} cardVariant={section.cardVariant} textAlign={section.textAlign} controls={section.controls} initialItemKey={section.initialItemKey} />
+  {:else if section.type === 'grid'}<Section {section} inset><ContentGrid>{#each section.blocks as block (block.id)}<ContentBlock span={block.span}><Sections sections={block.sections} {renderers} /></ContentBlock>{/each}</ContentGrid></Section>
   {:else}{missing(section)}{/if}
 {/each}

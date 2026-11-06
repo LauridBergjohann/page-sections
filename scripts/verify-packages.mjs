@@ -19,7 +19,7 @@ for (const name of ['core', 'svelte']) {
   const pkg = JSON.parse(readFileSync(join(root, `packages/${name}/package.json`), 'utf8'));
   assert.equal(pkg.private, undefined); assert.equal(pkg.license, 'MPL-2.0');
   for (const dependency of Object.keys({ ...pkg.dependencies, ...pkg.peerDependencies })) {
-    assert(!/spatial-elements|three|@sveltejs\/kit/.test(dependency), `Forbidden runtime dependency: ${dependency}`);
+    assert(!/spatial-elements|three|@sveltejs\/kit|lucide/.test(dependency), `Forbidden runtime dependency: ${dependency}`);
     if (name === 'core') assert(!/svelte/.test(dependency));
   }
   if (published) {
@@ -41,7 +41,7 @@ for (const file of ['src', 'index.html', 'vite.config.ts', 'prerender.mjs']) cpS
 writeFileSync(join(consumer, 'tsconfig.json'), JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'ESNext', moduleResolution: 'Bundler', strict: true, skipLibCheck: true, allowJs: true, resolveJsonModule: true }, include: ['src/**/*'] }));
 run(['run', 'check'], consumer); run(['run', 'build'], consumer);
 const html = readFileSync(join(consumer, 'dist/index.html'), 'utf8');
-for (const text of ['href="#browse"', 'data-ps-section="collection"', 'data-ps-section="browse"', 'aria-label="On this page"']) assert(html.includes(text), `Consumer SSR missing ${text}`);
+for (const text of ['href="#browse"', 'data-ps-section="collection"', 'data-ps-section="browse"', 'aria-label="On this page"', 'Independent studio', 'mailto:hello@example.com', 'data-card-variant="editorial"']) assert(html.includes(text), `Consumer SSR missing ${text}`);
 assert(existsSync(join(consumer, 'node_modules/@page-sections/core/dist/index.js')));
 // Verify the same installed artifacts in a genuine SvelteKit production build as well.
 const kit = join(consumer, 'kit'); mkdirSync(join(kit, 'src/routes'), { recursive: true });

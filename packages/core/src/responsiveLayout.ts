@@ -27,6 +27,27 @@ export function resolveViewportLayout(width: number): ViewportLayoutSize {
 	return [...viewportLayoutSizes].reverse().find((name) => w >= tokens.layoutMinWidths[name]) ?? 'xs';
 }
 
+/** Canonical page/menu rectangles in CSS pixels. Reading widths do not change this geometry. */
+export function resolvePageLayout(input: ResponsiveLayoutInput) {
+  const viewport = size(input.width);
+  const available = Math.max(0, viewport - size(input.scrollbarWidth));
+  const left = Math.min(available, size(input.safeArea?.left));
+  const right = Math.min(available - left, size(input.safeArea?.right));
+  const width = available - left - right;
+  const layout = resolveViewportLayout(viewport);
+  const wide = viewport >= tokens.layoutMinWidths.xl;
+  const contentWidth = Math.min(tokens.contentMax, Math.max(0, width - (layout === 'xl' ? 2 * tokens.xlContentInset : 0)));
+  const content = { x: left + (width - contentWidth) / 2, width: contentWidth };
+  return { layout, content, menu: { x: wide ? content.x : left, width: wide ? content.width : width,
+    y: size(input.safeArea?.top) + (wide ? tokens.menu.wideTop : 0), height: wide ? tokens.menu.wideHeight : tokens.menu.height } };
+}
+
+/** Offset shared by native and enhanced navigation shells. */
+export function resolveMenuOffset(scrollY: number, fixed = false): number {
+  const delta = size(scrollY) - tokens.menu.scrollThreshold;
+  return fixed || delta <= 0 ? 0 : -delta;
+}
+
 /** Width includes the grid's two outer margins, implemented once as section padding. */
 export function resolveContentGrid(width: number) {
 	const w = Math.min(size(width), tokens.contentMax);

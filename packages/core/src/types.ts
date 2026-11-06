@@ -1,5 +1,24 @@
 import type { ContentSpan } from './responsiveLayout.js';
 
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+export type PageKind = 'content' | 'detail';
+export type CardVariant = 'catalog' | 'editorial';
+export type InlineText = string | InlineRun[];
+export type InlineRun =
+  | { type: 'text' | 'strong' | 'emphasis' | 'code'; text: string }
+  | { type: 'link'; text: string; href: string }
+  | { type: 'break' };
+export interface ContentAction { label: string; href: string; variant?: 'primary' | 'secondary' | 'text' }
+export type RichTextBlock =
+  | { type: 'paragraph'; text: InlineText; variant?: 'default' | 'lead' | 'muted' }
+  | { type: 'address'; name: string; lines: InlineText[] }
+  | { type: 'list'; items: InlineText[]; ordered?: boolean }
+  | { type: 'panel'; title?: string; blocks: RichTextBlock[]; tone?: 'standard' | 'muted'; actions?: ContentAction[] };
+/** Exactly one source; Markdown keeps raw HTML disabled. */
+export type RichTextContentData =
+  | { body: string; format?: 'markdown' | 'text'; blocks?: never }
+  | { blocks: RichTextBlock[]; body?: never; format?: never };
+
 export type SectionBackgroundColor = 'transparent' | 'standard' | 'muted' | 'transparentToStandard' | 'transparentToMuted' | 'standardToTransparent' | 'standardToMuted' | 'mutedToTransparent' | 'mutedToStandard';
 export interface SectionBackground { color: SectionBackgroundColor; size?: 'standard' | 'full' }
 export interface SectionDefinition {
@@ -9,7 +28,7 @@ export interface SectionDefinition {
   headline?: string;
   eyebrow?: string;
   introduction?: string;
-  headingLevel?: 1 | 2 | 3;
+  headingLevel?: HeadingLevel;
   background?: SectionBackground;
   layout?: 'full' | 'wide' | 'narrow' | 'inherit';
   spacing?: 'none' | 'tight' | 'normal' | 'loose' | 'spacious';
@@ -19,23 +38,24 @@ export interface SectionDefinition {
 }
 export type SectionNavigationItem = Pick<SectionDefinition, 'id' | 'title'>;
 export interface Breadcrumb { label: string; href?: string }
-export interface ContentPageData { title: string; pageTitle?: string; eyebrow?: string; intro?: string; breadcrumbs?: Breadcrumb[] }
+export interface ContentPageData { title: string; pageTitle?: string; eyebrow?: string; intro?: string; breadcrumbs?: Breadcrumb[]; hero?: HeroSectionData; bodyLayout?: 'wide' | 'narrow'; bodySpacing?: SectionDefinition['spacing'] }
 export type ImageAspect = 'none' | '4/3' | '16/9' | '2/1' | 'square';
 export interface ImageData { src: string; srcDark?: string; alt: string; width?: number; height?: number; aspect?: ImageAspect; objectFit?: 'cover' | 'contain'; srcset?: string; sizes?: string }
-export interface CardItem { id: string; itemKey?: string; title: string; href?: string; eyebrow?: string; description?: string; subtitle?: string; image?: ImageData; size?: CardSize }
+export interface CardItem { id: string; itemKey?: string; title: string; href?: string; eyebrow?: string; description?: string; subtitle?: string; image?: ImageData; footer?: InlineText; actions?: ContentAction[] }
 export type CardSize = 's' | 'm' | 'l';
 export interface VideoData { src: string; provider: 'html5' | 'youtube'; poster?: string; captions?: { src: string; language: string; label: string }[] }
-export interface HeroSectionData extends SectionDefinition { type: 'hero'; image?: ImageData; size?: CardSize; textBackground?: boolean; actions?: { label: string; href: string }[] }
-export interface RichTextSectionData extends SectionDefinition { type: 'richText'; body: string; format?: 'markdown' | 'text' }
+export interface HeroSectionData extends SectionDefinition { type: 'hero'; image?: ImageData; size?: CardSize; textBackground?: boolean; actions?: ContentAction[]; composition?: 'overlay' | 'artwork'; imageSide?: 'left' | 'right' }
+export type RichTextSectionData = SectionDefinition & RichTextContentData & { type: 'richText' };
+export interface PanelSectionData extends SectionDefinition { type: 'panel'; blocks: RichTextBlock[]; tone?: 'standard' | 'muted'; actions?: ContentAction[] }
 export interface ImageSectionData extends SectionDefinition { type: 'image'; image: ImageData; description?: string; imageSide?: 'left' | 'right' }
 export interface VideoSectionData extends SectionDefinition { type: 'video'; video: VideoData; description?: string; videoSide?: 'left' | 'right' }
-export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid'; list: CardItem[]; cardSize?: CardSize }
-export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; controls?: boolean }
+export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid'; list: CardItem[]; cardSize?: CardSize; variant?: SectionDefinition['variant']; cardVariant?: CardVariant; itemSpan?: ContentSpan; textAlign?: 'start' | 'center' }
+export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; cardVariant?: CardVariant; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string }
 export interface GridSectionData extends SectionDefinition { type: 'grid'; blocks: { id: string; span?: ContentSpan; sections: SectionData[] }[] }
 /** Extend this map by module augmentation. Models remain JSON data; renderers are separate. */
-export interface SectionTypeMap { hero: HeroSectionData; richText: RichTextSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData }
+export interface SectionTypeMap { hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData }
 export type SectionData = SectionTypeMap[keyof SectionTypeMap];
 export interface PageData extends ContentPageData { sections: SectionData[] }
 export interface MenuItem { id: string; label: string; href?: string; current?: boolean; children?: MenuItem[] }
 export interface ButtonGroupItem { id: string; label: string; href?: string; selected?: boolean; disabled?: boolean }
-export interface PageTheme { background?: string; ink?: string; body?: string; accent?: string; standard?: string; muted?: string; radius?: string; contentMax?: string; narrowMax?: string; fontFamily?: string }
+export interface PageTheme { background?: string; ink?: string; body?: string; accent?: string; onAccent?: string; standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string }

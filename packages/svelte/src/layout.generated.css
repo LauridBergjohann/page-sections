@@ -1,61 +1,99 @@
 /* Generated from core layoutTokens.json; extracted from Beta.8. Do not edit. */
 
-.ps-content-width { width: min(100%, var(--ps-content-max, 1536px)); margin-inline: auto; }
+:root { --ps-content-max: 1536px; --ps-menu-height: 66px; --ps-menu-top: 0px; --ps-nav-height: 66px; --ps-sticky-range: 112px; --ps-satellite-width: 80px; --ps-satellite-height: 40px; --ps-satellite-inset: 28px; --ps-satellite-top: 28px; }
+
+.ps-content-width { width: min(100%, 1536px); margin-inline: auto; }
 
 .ps-content-container { container: ps-content / inline-size; min-width: 0; }
 
-@media (min-width: 1600px) { .ps-content-width { width: min(var(--ps-content-max, 1536px), max(0px, calc(100% - 272px))); } }
+@media (min-width: 1600px) { :root { --ps-menu-height: 64px; --ps-menu-top: 16px; --ps-nav-height: 80px; } .ps-content-width { width: min(1536px, max(0px, calc(100% - 272px))); } }
 
-@media (min-width: 1809px) { .ps-content-width { width: min(100%, var(--ps-content-max, 1536px)); } }
+@media (min-width: 1809px) { .ps-content-width { width: min(100%, 1536px); } }
+
+:root { --ps-breadcrumb-font-size: 10px; --ps-breadcrumb-height: 24px; }
+
+@media (min-width: 600px) { :root { --ps-breadcrumb-font-size: 10px; --ps-breadcrumb-height: 24px; } }
+
+@media (min-width: 840px) { :root { --ps-breadcrumb-font-size: 12px; --ps-breadcrumb-height: 30px; } }
+
+@media (min-width: 1200px) { :root { --ps-breadcrumb-font-size: 14px; --ps-breadcrumb-height: 40px; } }
+
+@media (min-width: 1600px) { :root { --ps-breadcrumb-font-size: 14px; --ps-breadcrumb-height: 40px; } }
+
+@media (min-width: 1809px) { :root { --ps-breadcrumb-font-size: 14px; --ps-breadcrumb-height: 40px; } }
+
+@media (min-width: 2300px) { :root { --ps-breadcrumb-font-size: 14px; --ps-breadcrumb-height: 40px; } }
 
 .ps-grid-scope {
-  --ps-grid-columns: var(--ps-xs-columns, 4);
-  --ps-grid-gap: var(--ps-xs-gap, 12px);
-  --ps-grid-headline-size: var(--ps-xs-headline-size, 18px);
-  --ps-grid-headline-line-height: var(--ps-xs-headline-line-height, 28px);
-  --ps-grid-body-size: var(--ps-xs-body-size, 14px);
-  --ps-grid-body-line-height: var(--ps-xs-body-line-height, 20px);
-  --ps-grid-headline-gap: var(--ps-xs-headline-gap, 8px);
+  --ps-grid-columns: 4;
+  --ps-grid-gap: 12px;
+  --ps-grid-headline-size: 18px;
+  --ps-grid-headline-line-height: 28px;
+  --ps-grid-body-size: 14px;
+  --ps-grid-body-line-height: 20px;
+  --ps-grid-headline-gap: 8px;
+  --ps-card-large-span: 4;
 }
 .ps-content-block { --ps-content-block-span: var(--ps-content-block-span-xs); }
 
 @container ps-content (min-width: 600px) {
 .ps-grid-scope {
-  --ps-grid-columns: var(--ps-s-columns, 6);
-  --ps-grid-gap: var(--ps-s-gap, 16px);
-  --ps-grid-headline-size: var(--ps-s-headline-size, 18px);
-  --ps-grid-headline-line-height: var(--ps-s-headline-line-height, 28px);
-  --ps-grid-body-size: var(--ps-s-body-size, 14px);
-  --ps-grid-body-line-height: var(--ps-s-body-line-height, 20px);
-  --ps-grid-headline-gap: var(--ps-s-headline-gap, 8px);
+  --ps-grid-columns: 6;
+  --ps-grid-gap: 16px;
+  --ps-grid-headline-size: 18px;
+  --ps-grid-headline-line-height: 28px;
+  --ps-grid-body-size: 14px;
+  --ps-grid-body-line-height: 20px;
+  --ps-grid-headline-gap: 8px;
+  --ps-card-large-span: 3;
 }
 .ps-content-block { --ps-content-block-span: var(--ps-content-block-span-s); }
 }
 
 @container ps-content (min-width: 840px) {
 .ps-grid-scope {
-  --ps-grid-columns: var(--ps-m-columns, 8);
-  --ps-grid-gap: var(--ps-m-gap, 16px);
-  --ps-grid-headline-size: var(--ps-m-headline-size, 20px);
-  --ps-grid-headline-line-height: var(--ps-m-headline-line-height, 32px);
-  --ps-grid-body-size: var(--ps-m-body-size, 14px);
-  --ps-grid-body-line-height: var(--ps-m-body-line-height, 20px);
-  --ps-grid-headline-gap: var(--ps-m-headline-gap, 12px);
+  --ps-grid-columns: 8;
+  --ps-grid-gap: 16px;
+  --ps-grid-headline-size: 20px;
+  --ps-grid-headline-line-height: 32px;
+  --ps-grid-body-size: 14px;
+  --ps-grid-body-line-height: 20px;
+  --ps-grid-headline-gap: 12px;
+  --ps-card-large-span: 4;
 }
 .ps-content-block { --ps-content-block-span: var(--ps-content-block-span-m); }
 }
 
 @container ps-content (min-width: 1200px) {
 .ps-grid-scope {
-  --ps-grid-columns: var(--ps-l-columns, 12);
-  --ps-grid-gap: var(--ps-l-gap, 24px);
-  --ps-grid-headline-size: var(--ps-l-headline-size, 24px);
-  --ps-grid-headline-line-height: var(--ps-l-headline-line-height, 40px);
-  --ps-grid-body-size: var(--ps-l-body-size, 16px);
-  --ps-grid-body-line-height: var(--ps-l-body-line-height, 24px);
-  --ps-grid-headline-gap: var(--ps-l-headline-gap, 16px);
+  --ps-grid-columns: 12;
+  --ps-grid-gap: 24px;
+  --ps-grid-headline-size: 24px;
+  --ps-grid-headline-line-height: 40px;
+  --ps-grid-body-size: 16px;
+  --ps-grid-body-line-height: 24px;
+  --ps-grid-headline-gap: 16px;
+  --ps-card-large-span: 4;
 }
 .ps-content-block { --ps-content-block-span: var(--ps-content-block-span-l); }
 }
+
+[data-ps-card-size='s'] { --ps-card-span: 1; --ps-card-title-size: 9px; --ps-card-title-weight: 500; --ps-card-eyebrow-size: 0px; --ps-card-eyebrow-weight: 400; --ps-card-line-height: 18px; --ps-card-text-rows: 1; }
+
+[data-ps-card-size='m'] { --ps-card-span: 2; --ps-card-title-size: 12px; --ps-card-title-weight: 500; --ps-card-eyebrow-size: 10px; --ps-card-eyebrow-weight: 400; --ps-card-line-height: 20px; --ps-card-text-rows: 2; }
+
+[data-ps-card-size='l'] { --ps-card-span: var(--ps-card-large-span); --ps-card-title-size: 18px; --ps-card-title-weight: 500; --ps-card-eyebrow-size: 14px; --ps-card-eyebrow-weight: 400; --ps-card-line-height: 24px; --ps-card-text-rows: 3; }
+
+:root { --ps-card-text-inset-inline: 4px; --ps-card-text-inset-block: 2px; }
+
+[data-spacing='none'] { --ps-spacing-factor: 0; }
+
+[data-spacing='tight'] { --ps-spacing-factor: 0.5; }
+
+[data-spacing='normal'] { --ps-spacing-factor: 1; }
+
+[data-spacing='loose'] { --ps-spacing-factor: 2; }
+
+[data-spacing='spacious'] { --ps-spacing-factor: 4; }
 
 .ps-section-surface { border-radius: var(--ps-section-top-radius, 0px) var(--ps-section-top-radius, 0px) var(--ps-section-bottom-radius, 0px) var(--ps-section-bottom-radius, 0px); }

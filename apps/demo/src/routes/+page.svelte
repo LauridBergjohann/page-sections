@@ -10,5 +10,5 @@
   <CardGridSection section={{ id: 'explore', title: 'Explore the library', headline: 'Two ways to explore', background: { color: 'muted' }, spacing: 'loose' }} list={[
     { id: 'components', eyebrow: '01 / The building blocks', title: 'From a single image to a complete page', description: 'Explore sections, grids, cards, carousels and a data-driven story.', href: '/components/', image: landscape },
     { id: 'backgrounds', eyebrow: '02 / The atmosphere', title: 'Surfaces that belong together', description: 'Compare solid backgrounds, flowing gradients and automatic surface grouping.', href: '/backgrounds/', image: { ...landscape, src: '/coast.svg', alt: 'Sunlit sandstone cliffs beside the sea' } }
-  ]} />
+  ]} cardVariant="editorial" itemSpan={{ xs: 4, s: 3, m: 4, l: 6 }} />
 </ContentPage>
