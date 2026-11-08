@@ -3,11 +3,15 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, cpSync, existsSync
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import assert from 'node:assert/strict';
+import { waitForPublishedVersion } from './registry-readiness.mjs';
 const root = resolve(import.meta.dirname, '..');
 const npm = process.env.npm_execpath;
 if (!npm) throw new Error('Run this verifier through npm run verify:packages.');
+function execute(args, cwd = root) {
+  return spawnSync(process.execPath, [npm, ...args], { cwd, encoding: 'utf8', env: { ...process.env, npm_config_cache: join(root, '.npm-cache') }, maxBuffer: 16 * 1024 * 1024 });
+}
 function run(args, cwd = root) {
-  const result = spawnSync(process.execPath, [npm, ...args], { cwd, encoding: 'utf8', env: { ...process.env, npm_config_cache: join(root, '.npm-cache') }, maxBuffer: 16 * 1024 * 1024 });
+  const result = execute(args, cwd);
   if (result.status !== 0) throw new Error(`${args.join(' ')}\n${result.stdout}\n${result.stderr}`);
   return result.stdout.trim();
 }
@@ -23,8 +27,9 @@ for (const name of ['core', 'svelte']) {
     if (name === 'core') assert(!/svelte/.test(dependency));
   }
   if (published) {
-    const version = JSON.parse(run(['view', `${pkg.name}@${pkg.version}`, 'version', '--json', '--registry=https://registry.npmjs.org/']));
-    assert.equal(version, pkg.version); specs.push(`${pkg.name}@${pkg.version}`);
+    specs.push(await waitForPublishedVersion(pkg.name, pkg.version, spec => execute([
+      'view', spec, 'version', '--json', '--prefer-online', '--fetch-retries=0', '--fetch-timeout=15000', '--registry=https://registry.npmjs.org/'
+    ])));
   } else {
     const [pack] = JSON.parse(run(['pack', '--ignore-scripts', '--json', '--pack-destination', artifacts], join(root, `packages/${name}`)));
     assert(pack.files.some(f => f.path === 'dist/index.js')); assert(pack.files.some(f => f.path === 'dist/index.d.ts'));
@@ -36,7 +41,8 @@ for (const name of ['core', 'svelte']) {
 // os.tmpdir is deliberately outside every workspace: no alias, symlink or parent node_modules.
 const consumer = mkdtempSync(join(tmpdir(), 'page-sections-consumer-'));
 writeFileSync(join(consumer, 'package.json'), JSON.stringify({ name: 'page-sections-artifact-consumer', private: true, type: 'module', scripts: { build: 'vite build && vite build --ssr src/entry-server.ts --outDir dist/server && node prerender.mjs', check: 'svelte-check --tsconfig tsconfig.json' } }, null, 2));
-run(['install', ...specs, 'svelte@5.56.4', '@sveltejs/vite-plugin-svelte@7.2.0', 'vite@8.1.4', 'typescript@6.0.3', 'svelte-check@4.7.2', '@types/node@24', '--ignore-scripts', '--no-audit', '--no-fund'], consumer);
+const registryOptions = published ? ['--prefer-online', '--registry=https://registry.npmjs.org/'] : [];
+run(['install', ...specs, 'svelte@5.56.4', '@sveltejs/vite-plugin-svelte@7.2.0', 'vite@8.1.4', 'typescript@6.0.3', 'svelte-check@4.7.2', '@types/node@24', '--ignore-scripts', '--no-audit', '--no-fund', ...registryOptions], consumer);
 for (const file of ['src', 'index.html', 'vite.config.ts', 'prerender.mjs']) cpSync(join(root, 'tests/fixtures/plain-svelte', file), join(consumer, file), { recursive: true });
 writeFileSync(join(consumer, 'tsconfig.json'), JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'ESNext', moduleResolution: 'Bundler', strict: true, skipLibCheck: true, allowJs: true, resolveJsonModule: true }, include: ['src/**/*'] }));
 run(['run', 'check'], consumer); run(['run', 'build'], consumer);
@@ -46,7 +52,7 @@ assert(existsSync(join(consumer, 'node_modules/@page-sections/core/dist/index.js
 // Verify the same installed artifacts in a genuine SvelteKit production build as well.
 const kit = join(consumer, 'kit'); mkdirSync(join(kit, 'src/routes'), { recursive: true });
 writeFileSync(join(kit, 'package.json'), JSON.stringify({ name: 'page-sections-kit-consumer', private: true, type: 'module', scripts: { build: 'svelte-kit sync && vite build' } }));
-run(['install', ...specs, 'svelte@5.56.4', '@sveltejs/kit@2.70.3', '@sveltejs/adapter-auto@7.0.1', '@sveltejs/vite-plugin-svelte@7.2.0', 'vite@8.1.4', '--ignore-scripts', '--no-audit', '--no-fund'], kit);
+run(['install', ...specs, 'svelte@5.56.4', '@sveltejs/kit@2.70.3', '@sveltejs/adapter-auto@7.0.1', '@sveltejs/vite-plugin-svelte@7.2.0', 'vite@8.1.4', '--ignore-scripts', '--no-audit', '--no-fund', ...registryOptions], kit);
 writeFileSync(join(kit, 'svelte.config.js'), "import adapter from '@sveltejs/adapter-auto'; export default { kit: { adapter: adapter() } };\n");
 writeFileSync(join(kit, 'vite.config.js'), "import { sveltekit } from '@sveltejs/kit/vite'; export default { plugins: [sveltekit()] };\n");
 writeFileSync(join(kit, 'src/app.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8">%sveltekit.head%</head><body><div>%sveltekit.body%</div></body></html>');

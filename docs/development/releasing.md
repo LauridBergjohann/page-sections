@@ -44,4 +44,8 @@ npm run verify:published
 
 verify:packages packs the actual outputs and installs both together outside the monorepo. verify:published instead queries npm for package.json's exact versions and installs those registry artifacts. Both validate plain Svelte types/client/SSR/prerender output and a separate SvelteKit build. Reports are saved under .artifacts.
 
+npm may accept a publish while the version is still being processed. The published verifier therefore queries exact-version metadata up to 21 times, with 15-second pauses and fresh registry revalidation. Each query has a 15-second fetch timeout and no nested npm retries. Only missing-version, throttling and selected temporary server/network failures are retried; authentication errors, mismatched versions and consumer build failures still fail immediately. Registry installs also prefer fresh metadata. A successful publish command alone is not proof that the package is ready for installation.
+
+If verification failed immediately after npm reported processing, first run `npm run verify:published` again once the versions are available. No new version is needed for that verification. After confirming availability, the failed GitHub publish job can also be rerun: the publisher skips versions already present in npm and then verifies them. Do not bump a package version solely to recover from delayed registry visibility.
+
 If one package publishes and the other fails, fix the external cause and rerun the workflow; the script skips the published version. Do not claim successful release solely from a publish command: retain the registry consumer report. Wiki publishing is separate and is described in [wiki.md](wiki.md).

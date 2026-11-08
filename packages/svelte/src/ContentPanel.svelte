@@ -1,10 +1,10 @@
 <script lang="ts">
   import { getContext, setContext, type Snippet } from 'svelte';
-  import type { ContentAction, HeadingLevel } from '@page-sections/core';
+  import type { ContentAction, HeadingLevel, SurfaceTone } from '@page-sections/core';
   import { SECTION_CONTEXT, defaultSectionContext, nextHeading, type ReadSectionContext } from './sectionContext.js';
   import Actions from './Actions.svelte';
   let { title, titleId, headingLevel, tone = 'muted', actions, children }: {
-    title?: string; titleId?: string; headingLevel?: HeadingLevel; tone?: 'standard' | 'muted'; actions?: ContentAction[]; children?: Snippet;
+    title?: string; titleId?: string; headingLevel?: HeadingLevel; tone?: SurfaceTone; actions?: ContentAction[]; children?: Snippet;
   } = $props();
   const readContext = getContext<ReadSectionContext | undefined>(SECTION_CONTEXT);
   const level = $derived(headingLevel ?? readContext?.().headingLevel ?? defaultSectionContext.headingLevel);
