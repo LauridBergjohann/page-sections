@@ -1,6 +1,6 @@
 {
   "name": "@page-sections/svelte",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "license": "MPL-2.0",
   "description": "SSR-first Svelte 5 pages, content grids, sections and navigation.",
@@ -35,7 +35,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@page-sections/core": "0.2.0",
+    "@page-sections/core": "0.3.0",
     "markdown-it": "^14.1.0"
   },
   "devDependencies": {
