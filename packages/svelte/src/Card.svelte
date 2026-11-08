@@ -1,14 +1,14 @@
 <script lang="ts" generics="T extends CardItem">
   import { getContext, untrack, type Snippet } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { safeHref, type CardItem, type CardSize, type CardVariant, type CardMediaAspect, type CardMediaFit, type HeadingLevel } from '@page-sections/core';
+  import { safeHref, type CardItem, type CardSize, type CardVariant, type SurfaceTone, type CardMediaAspect, type CardMediaFit, type HeadingLevel } from '@page-sections/core';
   import type { CardElements } from './card.js';
   import { SECTION_CONTEXT, defaultSectionContext, type ReadSectionContext } from './sectionContext.js';
   import Image from './Image.svelte';
   import InlineText from './InlineText.svelte';
   import Actions from './Actions.svelte';
-  let { item, cardSize = 'm', variant = 'catalog', mediaAspect = '3/2', mediaFit = variant === 'catalog' ? 'contain' : 'cover', reserveEyebrow, textAlign = 'start', headingLevel, children, media, surface, onready, class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
-    item: T; cardSize?: CardSize; variant?: CardVariant; textAlign?: 'start' | 'center'; headingLevel?: HeadingLevel;
+  let { item, cardSize = 'm', variant = 'catalog', tone = 'standard', mediaAspect = '3/2', mediaFit = variant === 'catalog' ? 'contain' : 'cover', reserveEyebrow, textAlign = 'start', headingLevel, children, media, surface, onready, class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
+    item: T; cardSize?: CardSize; variant?: CardVariant; tone?: SurfaceTone; textAlign?: 'start' | 'center'; headingLevel?: HeadingLevel;
     mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; reserveEyebrow?: boolean;
     children?: Snippet<[T]>; media?: Snippet<[T]>; surface?: Snippet<[T]>; onready?: (parts: CardElements<T>) => void | (() => void);
   } = $props();
@@ -34,7 +34,7 @@
 </script>
 <svelte:element this={wholeLink ? 'a' : 'article'} {...rest} bind:this={root} href={wholeLink ? href : undefined}
   aria-labelledby={wholeLink ? titleId : undefined} class={['ps-card', className]} data-card-id={item.itemKey ?? item.id}
-  data-ps-card-size={cardSize} data-card-variant={variant} data-media-fit={mediaFit} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
+  data-ps-card-size={cardSize} data-card-variant={variant} data-tone={tone} data-media-fit={mediaFit} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
   <div class="surface" bind:this={surfaceElement} data-ps-card-part="surface" aria-hidden="true">{@render surface?.(item)}</div>
   <div class="media-frame" class:no-media={!media && !item.image} data-ps-card-part="media-frame">
     <div class="media" bind:this={mediaElement} data-ps-card-part="media">
@@ -57,6 +57,7 @@
 <style>
   .ps-card { position: relative; isolation: isolate; display: grid; width: 100%; min-width: 0; height: 100%; color: var(--ps-ink); text-decoration: none; border-radius: var(--ps-radius); }
   .surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; background: var(--ps-section-standard); }
+  [data-tone='muted'] .surface { background: var(--ps-section-muted); }
   .media, .text { min-width: 0; min-height: 0; }
   .title { margin: 0; overflow-wrap: anywhere; }
   .eyebrow { margin: 0; color: var(--ps-accent); }

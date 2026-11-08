@@ -1,10 +1,10 @@
 <script lang="ts" generics="T extends CardItem">
   import { onMount, type Snippet } from 'svelte';
-  import type { SectionDefinition, CardItem, CardSize, CardVariant, CardMediaAspect, CardMediaFit } from '@page-sections/core';
+  import type { SectionDefinition, CardItem, CardSize, CardVariant, SurfaceTone, CardMediaAspect, CardMediaFit } from '@page-sections/core';
   import type { CardElements } from './card.js';
   import Section from './Section.svelte';
   import Card from './Card.svelte';
-  let { section, list, cardSize = 'm', cardVariant = 'catalog', mediaAspect = '3/2', mediaFit = cardVariant === 'catalog' ? 'contain' : 'cover', textAlign = 'start', controls = true, previousLabel = 'Previous cards', nextLabel = 'Next cards', initialItemKey, onselectionchange, itemContent, media, oncardready }: { section: SectionDefinition; list: T[]; cardSize?: CardSize; cardVariant?: CardVariant; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; textAlign?: 'start' | 'center'; controls?: boolean; previousLabel?: string; nextLabel?: string; initialItemKey?: string; onselectionchange?: (key: string) => void; itemContent?: Snippet<[T]>; media?: Snippet<[T]>; oncardready?: (parts: CardElements<T>) => void | (() => void) } = $props();
+  let { section, list, cardSize = 'm', cardVariant = 'catalog', cardTone = 'standard', mediaAspect = '3/2', mediaFit = cardVariant === 'catalog' ? 'contain' : 'cover', textAlign = 'start', controls = true, previousLabel = 'Previous cards', nextLabel = 'Next cards', initialItemKey, onselectionchange, itemContent, media, oncardready }: { section: SectionDefinition; list: T[]; cardSize?: CardSize; cardVariant?: CardVariant; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; textAlign?: 'start' | 'center'; controls?: boolean; previousLabel?: string; nextLabel?: string; initialItemKey?: string; onselectionchange?: (key: string) => void; itemContent?: Snippet<[T]>; media?: Snippet<[T]>; oncardready?: (parts: CardElements<T>) => void | (() => void) } = $props();
   const reserveEyebrow = $derived((cardVariant !== 'catalog' || cardSize !== 's') && list.some(item => Boolean(item.eyebrow?.trim())));
   let track: HTMLDivElement;
   let mounted = $state(false);
@@ -36,7 +36,7 @@
 <Section {section} inset>
   <!-- svelte-ignore a11y_no_noninteractive_tabindex (Native scroll containers need keyboard focus, including without JavaScript.) -->
   <div bind:this={track} id={`${section.id}-track`} class="track" data-ps-card-size={cardSize} tabindex="0" role="region" aria-label={section.title} onscrollend={selectVisible}>
-    {#each list as item (item.itemKey ?? item.id)}<div class="slide" data-item-key={item.itemKey ?? item.id}><Card {item} {mediaAspect} {mediaFit} {reserveEyebrow} {media} {cardSize} {textAlign} variant={cardVariant} children={itemContent} onready={oncardready} /></div>{/each}
+    {#each list as item (item.itemKey ?? item.id)}<div class="slide" data-item-key={item.itemKey ?? item.id}><Card {item} {mediaAspect} {mediaFit} {reserveEyebrow} {media} {cardSize} {textAlign} variant={cardVariant} tone={cardTone} children={itemContent} onready={oncardready} /></div>{/each}
   </div>
   {#if controls && mounted && list.length > 1}<div class="controls"><button type="button" aria-controls={`${section.id}-track`} aria-label={previousLabel} onclick={() => move(-1)}>←</button><button type="button" aria-controls={`${section.id}-track`} aria-label={nextLabel} onclick={() => move(1)}>→</button></div>{/if}
 </Section>

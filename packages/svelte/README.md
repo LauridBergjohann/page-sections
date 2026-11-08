@@ -256,6 +256,12 @@ ContentPage does not automatically render `page.sections`: include Sections expl
 
 ## Styling and themes
 
+Cards accept `tone="standard"` (default) or `"muted"`; CardGridSection and CarouselSection expose this as `cardTone`, including in JSON section data. PanelSection, ContentPanel and structured panel blocks use `tone`, defaulting to `"muted"`. These surfaces use `--ps-section-standard` and `--ps-section-muted` independently of the surrounding section background, in both themes.
+
+Navigation links use the neutral ink color. Headers and satellites share `--ps-navigation-shadow` (default `0 4px 8px rgb(0 0 0 / 12%)`); set it to `none` to disable elevation. If host controls paint their own satellite surface, apply the shadow to those controls and leave the satellite wrapper unpainted to avoid duplicate outlines.
+
+Hero eyebrows use the accent color, uppercase lettering and an explicit gap before the heading. Introduction and action spacing are explicit, so CSS resets such as Tailwind Preflight do not collapse them.
+
 Card collections share equal heights and accept `mediaAspect="3/2"` (default), `"4/3"` or `"1/1"`. The ratio applies to media only; titles and optional labels have independent space below it. Use `mediaFit="contain"` for complete objects or `"cover"` for cropped photos. Catalog defaults to contain; editorial defaults to cover. These collection settings take precedence over per-image aspect/fit. See [CardGridSection](https://github.com/LauridBergjohann/page-sections/wiki/CardGridSection).
 
 Use PageShell's `theme` prop for shared colors, fonts, radii and reading widths, or set CSS variables on an ancestor. `mode="dark"` enables the built-in dark palette; the host decides when to change it.

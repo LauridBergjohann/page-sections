@@ -7,6 +7,17 @@ import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
 import StructuredPage from './StructuredPage.svelte';
+it.each(['cardGrid', 'carousel'] as const)('forwards %s surface tone from serialized data', (type) => {
+  for (const tone of [undefined, 'standard', 'muted'] as const) {
+    const sections: SectionData[] = JSON.parse(JSON.stringify([{ type, id: 'cards', title: 'Cards', cardTone: tone, list: [{ id: 'one', title: 'One' }] }]));
+    expect(render(Sections, { props: { sections } }).body).toContain(`data-tone="${tone ?? 'standard'}"`);
+  }
+});
+it.each([undefined, 'standard', 'muted'] as const)('preserves panel surface tone %s', (tone) => {
+  const sections: SectionData[] = [{ type: 'panel', id: 'panel', title: 'Panel', tone, blocks: [{ type: 'panel', tone, blocks: [] }] }];
+  const { body } = render(Sections, { props: { sections } });
+  expect(body.match(new RegExp(`data-tone="${tone ?? 'muted'}"`, 'g'))).toHaveLength(2);
+});
 it('preserves the default page heading and document title', () => {
   const { body, head } = render(ContentPage, { props: { page: { title: 'Page heading', pageTitle: 'Browser title' } } });
   expect(body).toMatch(/<h1[^>]*>Page heading<\/h1>/);

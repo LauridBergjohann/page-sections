@@ -10,7 +10,7 @@ export const portfolio: PageData = {
     actions: [{ label: 'Explore projects', href: '#projects', variant: 'primary' }, { label: 'About me', href: '#about' }]
   },
   sections: [
-    { type: 'cardGrid', id: 'projects', title: 'Projects', headline: 'Selected work', cardVariant: 'editorial',
+    { type: 'cardGrid', id: 'projects', title: 'Projects', headline: 'Selected work', cardVariant: 'editorial', cardTone: 'muted',
       itemSpan: { xs: 4, s: 3, m: 4, l: 4 }, background: { color: 'standard' },
       list: [
         { id: 'spatial', title: 'Spatial experiences', eyebrow: 'Design & technology', image: landscape,
@@ -62,7 +62,7 @@ export const legal: PageData = {
       ] },
       { type: 'list', ordered: true, items: ['Identify the relevant document.', 'Describe your question.', 'Provide a way to reply.'] }
     ] },
-    { type: 'panel', id: 'related', title: 'Related pages', headline: 'Continue exploring', blocks: [
+    { type: 'panel', id: 'related', title: 'Related pages', headline: 'Continue exploring', tone: 'standard', blocks: [
       { type: 'paragraph', text: 'Panels share the same typography, spacing and heading hierarchy as other sections.' }
     ], actions: [{ label: 'Back to the portfolio', href: '/examples/', variant: 'text' }] }
   ]
@@ -88,7 +88,7 @@ export const catalog: PageData = {
       headline: `Size ${cardSize.toUpperCase()}`, cardSize, list: catalogItems, background: { color: 'standard' as const }
     })),
     { type: 'carousel', id: 'catalog-carousel', title: 'Carousel', headline: 'The same card geometry in a carousel',
-      cardSize: 'm', mediaAspect: '1/1', list: catalogItems, initialItemKey: 'occurrence-2' },
+      cardSize: 'm', cardTone: 'muted', mediaAspect: '1/1', list: catalogItems, initialItemKey: 'occurrence-2' },
     { type: 'cardGrid', id: 'catalog-cover', title: 'Photo crop', headline: '4:3 photos with an edge-to-edge crop',
       cardSize: 'l', mediaAspect: '4/3', mediaFit: 'cover', list: catalogItems.slice(0, 6) },
     { type: 'grid', id: 'nested-catalog', title: 'Nested catalog', headline: 'A smaller container', blocks: [

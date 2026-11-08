@@ -24,8 +24,8 @@
   {:else if section.type === 'panel'}<PanelSection {section} />
   {:else if section.type === 'image'}<ImageSection {section} />
   {:else if section.type === 'video'}<VideoSection {section} />
-  {:else if section.type === 'cardGrid'}<CardGridSection {section} list={section.list} cardSize={section.cardSize} cardVariant={section.cardVariant} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} itemSpan={section.itemSpan} textAlign={section.textAlign} />
-  {:else if section.type === 'carousel'}<CarouselSection {section} list={section.list} cardSize={section.cardSize} cardVariant={section.cardVariant} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} textAlign={section.textAlign} controls={section.controls} initialItemKey={section.initialItemKey} />
+  {:else if section.type === 'cardGrid'}<CardGridSection {section} list={section.list} cardSize={section.cardSize} cardVariant={section.cardVariant} cardTone={section.cardTone} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} itemSpan={section.itemSpan} textAlign={section.textAlign} />
+  {:else if section.type === 'carousel'}<CarouselSection {section} list={section.list} cardSize={section.cardSize} cardVariant={section.cardVariant} cardTone={section.cardTone} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} textAlign={section.textAlign} controls={section.controls} initialItemKey={section.initialItemKey} />
   {:else if section.type === 'grid'}<Section {section} inset><ContentGrid>{#each section.blocks as block (block.id)}<ContentBlock span={block.span}><Sections sections={block.sections} {renderers} /></ContentBlock>{/each}</ContentGrid></Section>
   {:else}{missing(section)}{/if}
 {/each}
