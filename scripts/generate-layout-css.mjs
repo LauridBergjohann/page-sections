@@ -20,5 +20,5 @@ const css = [
   ...Object.entries({ none: 0, tight: .5, normal: 1, loose: 2, spacious: 4 }).map(([name, factor]) => `[data-spacing='${name}'] { --ps-spacing-factor: ${factor}; }`),
   '.ps-section-surface { border-radius: var(--ps-section-top-radius, 0px) var(--ps-section-top-radius, 0px) var(--ps-section-bottom-radius, 0px) var(--ps-section-bottom-radius, 0px); }'
 ].join('\n\n') + '\n';
-if (process.argv.includes('--check')) { if (readFileSync(destination, 'utf8') !== css) throw new Error('Run npm run layout:generate.'); }
+if (process.argv.includes('--check')) { if (readFileSync(destination, 'utf8').replaceAll('\r\n', '\n') !== css) throw new Error('Run npm run layout:generate.'); }
 else writeFileSync(destination, css);

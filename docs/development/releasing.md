@@ -4,7 +4,7 @@ Both packages are published on npm. Release verification is based on exact regis
 
 ## Versioning
 
-The npm workspaces are `@page-sections/core` and `@page-sections/svelte`; the demo is private. Changesets versions both public packages together through its fixed group.
+The npm workspaces are `@page-sections/core` and `@page-sections/svelte`; all three applications are private. Changesets versions both public packages together through its fixed group.
 
 ```bash
 npm run changeset
@@ -48,4 +48,4 @@ npm may accept a publish while the version is still being processed. The publish
 
 If verification failed immediately after npm reported processing, first run `npm run verify:published` again once the versions are available. No new version is needed for that verification. After confirming availability, the failed GitHub publish job can also be rerun: the publisher skips versions already present in npm and then verifies them. Do not bump a package version solely to recover from delayed registry visibility.
 
-If one package publishes and the other fails, fix the external cause and rerun the workflow; the script skips the published version. Do not claim successful release solely from a publish command: retain the registry consumer report. Wiki publishing is separate and is described in [wiki.md](wiki.md).
+If one package publishes and the other fails, fix the external cause and rerun the workflow; the script skips the published version. Do not claim successful release solely from a publish command: retain the registry consumer report. Website deployment is separate from npm publishing; see [documentation hosting](documentation.md).

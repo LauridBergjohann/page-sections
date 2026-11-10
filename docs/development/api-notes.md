@@ -18,4 +18,4 @@ Current contracts after the 0.2 layout/content work:
 | Controls | Native-carousel arrows remain enabled at endpoints. Selection reports the nearest leading occurrence after scrollend; this is not Spatial Elements' selection engine. |
 | Host ownership | Routing, localization, SEO policy, persistence, virtual scrolling, stage/camera state and GPU rendering stay in consuming applications. |
 
-See [release preparation](release-0.2.md) and the Wiki migration guide for changed public behavior.
+The public migration reference lives in apps/website/src/routes/docs/migration. Code presentation is documented alongside the other components on the website.

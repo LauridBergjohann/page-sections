@@ -1,28 +1,56 @@
 {
-  "name": "page-sections", "private": true, "version": "0.0.0", "type": "module", "license": "MPL-2.0",
-  "engines": { "node": ">=22.12.0" },
-  "workspaces": ["packages/*", "apps/*"],
+  "name": "page-sections",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MPL-2.0",
+  "engines": {
+    "node": "24.x"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "layout:generate": "node scripts/generate-layout-css.mjs",
     "check:layout": "node scripts/generate-layout-css.mjs --check",
     "check:docs": "npm run build && node scripts/check-docs.mjs",
     "build": "npm run build -w @page-sections/core && npm run build -w @page-sections/svelte",
-    "check": "npm run build && svelte-check --tsconfig tsconfig.json && npm run check -w @page-sections/demo",
+    "check": "npm run build && svelte-check --tsconfig tsconfig.json && npm run check -w @page-sections/demo -w @page-sections/website -w @page-sections/tests",
     "test": "vitest run",
     "build:demo": "npm run build && npm run build -w @page-sections/demo",
     "demo": "npm run build:demo && npm run preview -w @page-sections/demo",
     "dev:demo": "npm run build && npm run dev -w @page-sections/demo",
     "test:e2e": "playwright test",
     "verify:packages": "node scripts/verify-packages.mjs",
-    "verify": "npm run check:layout && npm run check && npm test && npm run build:demo && npm run verify:packages",
+    "verify": "npm run check:layout && npm run check:format && npm run check && npm test && npm run check:docs && npm run build:apps && npm run verify:packages",
     "changeset": "changeset",
     "release:version": "changeset version && npm install --package-lock-only --ignore-scripts --no-audit --no-fund",
     "release:publish": "node scripts/publish-release.mjs",
-    "verify:published": "node scripts/verify-packages.mjs --published"
+    "verify:published": "node scripts/verify-packages.mjs --published",
+    "dev:website": "npm run build && npm run dev -w @page-sections/website",
+    "build:website": "npm run build && npm run build -w @page-sections/website",
+    "preview:website": "npm run preview -w @page-sections/website",
+    "dev:tests": "npm run build && npm run dev -w @page-sections/tests",
+    "build:tests": "npm run build && npm run build -w @page-sections/tests",
+    "build:apps": "npm run build && npm run build -w @page-sections/demo -w @page-sections/website -w @page-sections/tests",
+    "format:apps": "prettier --write \"apps/*/src/**/*.{svelte,ts,js,css}\"",
+    "check:format": "prettier --check \"apps/*/src/**/*.{svelte,ts,js,css}\"",
+    "test:website": "playwright test --config playwright.website.config.ts"
   },
   "devDependencies": {
-    "@changesets/cli": "2.31.1", "@playwright/test": "^1.60.0", "@sveltejs/package": "2.5.8",
-    "@sveltejs/vite-plugin-svelte": "7.2.0", "@types/node": "^24", "svelte": "5.56.4",
-    "svelte-check": "4.7.2", "typescript": "6.0.3", "vite": "8.1.4", "vitest": "^4.1.8"
+    "@changesets/cli": "2.31.1",
+    "@playwright/test": "^1.60.0",
+    "@sveltejs/package": "2.5.8",
+    "@sveltejs/vite-plugin-svelte": "7.2.0",
+    "@types/node": "^24",
+    "prettier": "^3.9.10",
+    "prettier-plugin-svelte": "^4.1.1",
+    "shiki": "^4.6.0",
+    "svelte": "5.56.4",
+    "svelte-check": "4.7.2",
+    "typescript": "6.0.3",
+    "vite": "8.1.4",
+    "vitest": "^4.1.8"
   }
 }

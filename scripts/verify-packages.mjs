@@ -49,6 +49,8 @@ run(['run', 'check'], consumer); run(['run', 'build'], consumer);
 const html = readFileSync(join(consumer, 'dist/index.html'), 'utf8');
 for (const text of ['href="#browse"', 'data-ps-section="collection"', 'data-ps-section="browse"', 'aria-label="On this page"', 'Independent studio', 'mailto:hello@example.com', 'data-card-variant="editorial"']) assert(html.includes(text), `Consumer SSR missing ${text}`);
 assert(existsSync(join(consumer, 'node_modules/@page-sections/core/dist/index.js')));
+assert(html.includes('const independent = true;'), 'Consumer SSR missing code section');
+assert(!existsSync(join(consumer, 'node_modules/shiki')), 'Plain code must not require the optional highlighting engine');
 // Verify the same installed artifacts in a genuine SvelteKit production build as well.
 const kit = join(consumer, 'kit'); mkdirSync(join(kit, 'src/routes'), { recursive: true });
 writeFileSync(join(kit, 'package.json'), JSON.stringify({ name: 'page-sections-kit-consumer', private: true, type: 'module', scripts: { build: 'svelte-kit sync && vite build' } }));

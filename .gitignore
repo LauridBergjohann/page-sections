@@ -10,3 +10,8 @@ apps/demo/build/
 
 # Generated package staging files
 packages/svelte/.svelte-kit/
+
+apps/*/.svelte-kit/
+apps/*/build/
+apps/*/.vercel/
+.vercel/

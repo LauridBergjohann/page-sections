@@ -59,6 +59,7 @@ jobs:
       - run: npm run verify
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      - run: npm run test:website
       - run: npm run release:publish
       - run: npm run verify:published
       - uses: actions/upload-artifact@v4

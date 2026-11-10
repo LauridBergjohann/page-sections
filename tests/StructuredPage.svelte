@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ContentPage, Sections, SectionSurfaceGroup } from '../packages/svelte/src/index.js';
-  import { portfolio, legal } from '../apps/demo/src/lib/examples.js';
+  import { portfolio, legal } from '../apps/tests/src/lib/examples.js';
   let { kind = 'portfolio' }: { kind?: 'portfolio' | 'legal' | 'detail' } = $props();
   const page = $derived(kind === 'legal' ? legal : portfolio);
 </script>

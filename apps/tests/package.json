@@ -1,0 +1,21 @@
+{
+  "name": "@page-sections/tests",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --host 127.0.0.1 --port 5175 --strictPort",
+    "check": "svelte-kit sync && svelte-check --tsconfig tsconfig.json",
+    "build": "svelte-kit sync && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4175 --strictPort"
+  },
+  "dependencies": {
+    "@lucide/svelte": "^1.70.0",
+    "@page-sections/core": "*",
+    "@page-sections/svelte": "*"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.11",
+    "@sveltejs/kit": "^2.70.4"
+  }
+}

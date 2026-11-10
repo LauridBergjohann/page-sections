@@ -24,4 +24,6 @@ export { default as Card } from './Card.svelte';
 export type { CardElements } from './card.js';
 export { default as Image } from './Image.svelte';
 export { default as Sections } from './Sections.svelte';
+export { default as CodeBlock } from './CodeBlock.svelte';
+export { default as CodeSection } from './CodeSection.svelte';
 export type * from '@page-sections/core';

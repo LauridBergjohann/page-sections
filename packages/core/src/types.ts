@@ -47,6 +47,20 @@ export interface ImageData { src: string; srcDark?: string; alt: string; width?:
 export interface CardItem { id: string; itemKey?: string; title: string; href?: string; eyebrow?: string; description?: string; subtitle?: string; image?: ImageData; footer?: InlineText; actions?: ContentAction[] }
 export type CardSize = 's' | 'm' | 'l';
 export interface VideoData { src: string; provider: 'html5' | 'youtube'; poster?: string; captions?: { src: string; language: string; label: string }[] }
+/** Source remains plain text; syntax tokens are an optional, derived presentation. */
+export interface CodeData {
+  code: string;
+  language?: string;
+  filename?: string;
+  lineNumbers?: boolean;
+  /** One-based line numbers. Invalid and out-of-range entries are ignored. */
+  highlightLines?: number[];
+  wrap?: boolean;
+  tone?: SurfaceTone;
+}
+export interface CodeToken { content: string; color?: string; darkColor?: string; fontStyle?: number }
+export interface HighlightedCode { code: string; language: string; lines: CodeToken[][] }
+export interface CodeSectionData extends SectionDefinition, CodeData { type: 'code' }
 export interface HeroSectionData extends SectionDefinition { type: 'hero'; image?: ImageData; size?: CardSize; textBackground?: boolean; actions?: ContentAction[]; composition?: 'overlay' | 'artwork'; imageSide?: 'left' | 'right' }
 export type RichTextSectionData = SectionDefinition & RichTextContentData & { type: 'richText' };
 export interface PanelSectionData extends SectionDefinition { type: 'panel'; blocks: RichTextBlock[]; tone?: SurfaceTone; actions?: ContentAction[] }
@@ -56,7 +70,7 @@ export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid
 export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; cardVariant?: CardVariant; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string }
 export interface GridSectionData extends SectionDefinition { type: 'grid'; blocks: { id: string; span?: ContentSpan; sections: SectionData[] }[] }
 /** Extend this map by module augmentation. Models remain JSON data; renderers are separate. */
-export interface SectionTypeMap { hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData }
+export interface SectionTypeMap { hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData; code: CodeSectionData }
 export type SectionData = SectionTypeMap[keyof SectionTypeMap];
 export interface PageData extends ContentPageData { sections: SectionData[] }
 export interface MenuItem { id: string; label: string; href?: string; current?: boolean; children?: MenuItem[] }
