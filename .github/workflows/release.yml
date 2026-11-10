@@ -9,34 +9,8 @@ concurrency:
   group: npm-release
   cancel-in-progress: false
 jobs:
-  version:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    outputs:
-      has_changesets: ${{ steps.changesets.outputs.hasChangesets }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d
-        id: changesets
-        with:
-          version: npm run release:version
-          title: 'chore: release Page Sections'
-          commit: 'chore: version Page Sections'
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_PR_TOKEN || github.token }}
   publish:
-    needs: version
-    if: needs.version.outputs.has_changesets == 'false'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: npm
     permissions:
@@ -63,6 +37,9 @@ jobs:
       - run: npm run release:publish
       - run: npm run verify:published
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: published-consumer
-          path: .artifacts/
+          path: |
+            .artifacts/
+            test-results/
