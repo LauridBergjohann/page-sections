@@ -21,7 +21,7 @@
       composition: 'artwork',
       size: 'l',
       introduction:
-        'A thoughtful set of building blocks for content-driven websites. Compose a page, try a layout, make it your own.',
+        'A Svelte 5 component library for content-driven websites. Build portfolios, product pages and documentation from reusable sections that share one responsive layout system.',
       image: {
         src: base + '/landscape.svg',
         alt: 'Layered green hills beneath a quiet sky',
@@ -35,6 +35,83 @@
     }
   }}
 >
+  <Section
+    section={{
+      id: 'what-is-page-sections',
+      title: 'What is Page Sections?',
+      headline: 'From content to a complete page.',
+      layout: 'narrow',
+      spacing: 'loose'
+    }}
+  >
+    <div class="prose">
+      <p>
+        Page Sections brings the structure of a website into a small set of composable components: a
+        page contains sections, sections arrange text, images, cards and code. Navigation, spacing,
+        surfaces and responsive grids follow the same layout rules.
+      </p>
+      <p>
+        Write your content directly in Svelte and HTML, or pass structured data from JSON files and
+        your own CMS. Use it in Svelte or SvelteKit, from a single landing page to a growing
+        publication. You choose the content and visual identity; the components handle the layout.
+      </p>
+    </div>
+  </Section>
+  <CardGridSection
+    section={{
+      id: 'features',
+      title: 'Why Page Sections?',
+      headline: 'The common work, already connected.',
+      introduction: 'A consistent foundation with room for your own design.',
+      spacing: 'loose'
+    }}
+    cardVariant="editorial"
+    cardTone="muted"
+    list={[
+      {
+        id: 'layout',
+        title: 'One responsive layout system',
+        description:
+          'Pages, grids and cards share content widths and spacing. Layouts adapt to their containers, including narrow columns on wide screens.',
+        href: base + '/docs/responsive-layout/'
+      },
+      {
+        id: 'sections',
+        title: 'Sections that work together',
+        description:
+          'Compose heroes, rich text, panels, images, video, card grids, carousels and code examples. Combine them without rebuilding the page structure.',
+        href: base + '/docs/svelte-api/'
+      },
+      {
+        id: 'content',
+        title: 'Your content, your source',
+        description:
+          'Start with ordinary Svelte and HTML. Use serializable models when your content comes from JSON or a CMS, and add custom sections when you need them.',
+        href: base + '/docs/data-and-custom-sections/'
+      },
+      {
+        id: 'html',
+        title: 'Content before JavaScript',
+        description:
+          'With SSR or prerendering, text, links and native navigation arrive as HTML. JavaScript adds interactions to an already readable page.',
+        href: base + '/docs/ssr/'
+      },
+      {
+        id: 'theme',
+        title: 'A foundation for your brand',
+        description:
+          'Use light and dark themes, standard and muted surfaces, and shared CSS variables to make the same components feel at home in your design.',
+        href: base + '/docs/themes/'
+      },
+      {
+        id: 'independent',
+        title: 'Bring your own application',
+        description:
+          'Use the library in plain Svelte or SvelteKit. No required CSS framework, CMS or router; syntax highlighting is an optional addition.',
+        href: base + '/getting-started/installation/'
+      }
+    ]}
+  />
   <CardGridSection
     section={{
       id: 'explore',

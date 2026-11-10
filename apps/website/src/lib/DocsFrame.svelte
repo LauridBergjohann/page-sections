@@ -3,13 +3,10 @@
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { base } from '$app/paths';
-  import { documents } from './catalog';
+  import { chapterGroups, documents } from './catalog';
   let { children }: { children: Snippet } = $props();
-  let query = $state('');
-  let ready = $state(false);
   let expanded = $state(true);
   onMount(() => {
-    ready = true;
     const desktop = matchMedia('(min-width: 1000px)');
     const update = () => {
       expanded = desktop.matches;
@@ -18,12 +15,6 @@
     desktop.addEventListener('change', update);
     return () => desktop.removeEventListener('change', update);
   });
-  const groups = ['Getting started', 'Guides', 'Reference'];
-  const matches = $derived(
-    documents.filter((item) =>
-      `${item.title} ${item.description}`.toLowerCase().includes(query.toLowerCase())
-    )
-  );
 </script>
 
 <div class="docs-frame">
@@ -31,31 +22,27 @@
     <details bind:open={expanded}>
       <summary>Browse documentation</summary>
       <nav aria-label="Documentation chapters">
-        <label class="search"
-          >Find a topic<input
-            type="search"
-            bind:value={query}
-            disabled={!ready}
-            placeholder="Cards, themes, SSR…"
-          /></label
-        >
         <div class="chapters">
-          {#each groups as group}
-            {@const items = matches.filter((item) => item.group === group)}
-            {#if items.length}
-              <p class="group-label">{group}</p>
-              <ul>
-                {#each items as item}<li>
-                    <a
-                      href={base + item.href}
-                      aria-current={page.url.pathname === base + item.href ? 'page' : undefined}
-                      >{item.title}</a
-                    >
-                  </li>{/each}
-              </ul>
-            {/if}
+          {#each chapterGroups as group}
+            {@const items = documents.filter((item) => item.group === group)}
+            <p class="group-label">{group}</p>
+            <ul>
+              {#each [...new Set(items.map((item) => item.category))] as category}
+                <li>
+                  {#if category}<p class="category-label">{category}</p>{/if}
+                  <ul class:subchapters={!!category}>
+                    {#each items.filter((item) => item.category === category) as item}<li>
+                        <a
+                          href={base + item.href}
+                          aria-current={page.url.pathname === base + item.href ? 'page' : undefined}
+                          >{item.title}</a
+                        >
+                      </li>{/each}
+                  </ul>
+                </li>
+              {/each}
+            </ul>
           {/each}
-          {#if !matches.length}<p role="status">No matching topics.</p>{/if}
         </div>
       </nav>
     </details>
@@ -82,22 +69,6 @@
     padding-block: 0.5rem;
     font-weight: 600;
   }
-  .search {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-weight: 600;
-  }
-  input {
-    min-width: 0;
-    width: 100%;
-    font: inherit;
-    padding: 0.65rem;
-    border: 1px solid var(--ps-border);
-    border-radius: 0.4rem;
-    background: var(--ps-section-standard);
-    color: var(--ps-ink);
-  }
   .chapters {
     max-height: 14rem;
     overflow: auto;
@@ -118,6 +89,15 @@
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+  .category-label {
+    margin: 0.8rem 0 0.2rem;
+    padding-inline: 0.6rem;
+    font-weight: 600;
+  }
+  .subchapters {
+    margin-inline-start: 0.7rem;
+    border-inline-start: 1px solid var(--ps-border);
   }
   a {
     display: block;
@@ -153,7 +133,7 @@
       top: 6rem;
     }
     .chapters {
-      max-height: calc(100vh - 13rem);
+      max-height: calc(100dvh - 8rem);
     }
   }
 </style>

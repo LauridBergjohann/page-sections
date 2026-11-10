@@ -8,7 +8,9 @@ for (const width of [390, 1600]) {
       const response = await page.goto('http://127.0.0.1:4174' + route);
       expect(response?.status()).toBe(200);
       await expect(page.locator('main h1')).toHaveCount(1);
-      await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toBeVisible();
+      const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
+      if (route.startsWith('/docs/')) await expect(chapters).toBeVisible();
+      else await expect(chapters).toHaveCount(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const code = page.locator('.ps-code-block');
       expect(await code.count()).toBeGreaterThan(0);
@@ -64,17 +66,84 @@ test('code composition supports languages, side order, wrapping and dark mode', 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('chapter search and public navigation discover the examples', async ({ page }) => {
+test('global search supports shortcuts, keyboard navigation and empty results', async ({ page }) => {
   await page.goto('/docs/');
-  await page.getByLabel('Find a topic', { exact: true }).fill('CodeBlock');
-  const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
-  await expect(chapters.getByRole('link', { name: 'Code', exact: true })).toBeVisible();
-  await chapters.getByRole('link', { name: 'Code', exact: true }).click();
+  const input = page.getByRole('combobox', { name: 'Search documentation' });
+  await expect(input).toBeVisible();
+  await page.keyboard.press('Control+k');
+  await expect(input).toBeFocused();
+  await input.fill('CodeBlock');
+  await expect(page.getByRole('option')).toHaveCount(1);
+  await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', 'site-search-result-0');
+  await input.press('Enter');
   await expect(page).toHaveURL(/\/docs\/code\/$/);
-  await page.getByLabel('Find a topic', { exact: true }).fill('');
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await page.keyboard.press('Meta+k');
+  await expect(input).toBeFocused();
+  await input.fill('no-matching-topic-123');
+  await expect(page.getByText('No matching topics.', { exact: false })).toBeVisible();
+  await input.press('Escape');
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await input.fill('portfolio');
+  await page.getByRole('listbox', { name: 'Search results' }).getByRole('option').click();
+  await expect(page).toHaveURL(/\/showcase\/portfolio\/$/);
   await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Showcase', exact: true }).click();
   await expect(page.getByRole('link', { name: 'A personal portfolio', exact: true })).toBeVisible();
 });
+
+test('home explains the library and getting started stays focused', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#what-is-page-sections')).toContainText('Svelte and HTML');
+  await expect(page.locator('#features .ps-card')).toHaveCount(6);
+  await page.goto('/getting-started/');
+  await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
+  await page.locator('#start').getByRole('link', { name: 'Install the package' }).click();
+  await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
+  await page.getByRole('navigation', { name: 'Getting started steps' }).getByRole('link', { name: 'Build your first page' }).click();
+  await expect(page).toHaveURL(/\/getting-started\/first-page\/$/);
+  await page.goto('/docs/');
+  const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
+  await expect(chapters.getByRole('link').first()).toHaveText('Overview');
+  await expect(chapters.getByRole('searchbox')).toHaveCount(0);
+  const titles = await chapters.getByRole('link').allTextContents();
+  expect(titles.indexOf('Page shell')).toBeLessThan(titles.indexOf('Hero'));
+  expect(titles.indexOf('Hero')).toBeLessThan(titles.indexOf('Code'));
+  expect(titles.indexOf('Code')).toBeLessThan(titles.indexOf('Card and Image'));
+});
+
+for (const width of [320, 600, 840, 1200, 1700]) {
+  test(`header search and GitHub link fit at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const github = page.getByRole('link', { name: 'Page Sections on GitHub' });
+    await expect(github).toBeVisible();
+    await expect(github).toHaveAttribute('href', 'https://github.com/LauridBergjohann/page-sections');
+    const header = await page.locator('.website-header .header').boundingBox();
+    expect(header!.height).toBe(width < 1600 ? 66 : 64);
+    const input = page.getByRole('combobox', { name: 'Search documentation' });
+    if (width < 800) {
+      await page.getByRole('button', { name: 'Open search', exact: true }).click();
+    } else await input.click();
+    await expect(input).toBeFocused();
+    await input.fill('card grid');
+    await expect(page.getByRole('option').first()).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await input.press('Escape');
+    await expect(page.getByRole('listbox')).toHaveCount(0);
+    if (width < 800) await expect(page.getByRole('button', { name: 'Open search', exact: true })).toBeFocused();
+    await page.keyboard.press('Control+k');
+    await expect(input).toBeFocused();
+    await input.fill('CodeBlock');
+    await input.press('Enter');
+    await expect(page).toHaveURL(/\/docs\/code\/$/);
+    if (width >= 1200) {
+      const brand = await page.getByRole('link', { name: 'Page Sections home', exact: true }).boundingBox();
+      const showcase = await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Showcase', exact: true }).boundingBox();
+      expect(showcase!.x - brand!.x - brand!.width).toBeGreaterThan(24);
+    }
+  });
+}
 
 test('minimal demo renders a complete page without documentation infrastructure', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });

@@ -6,11 +6,15 @@
 <ContentPage
   page={{
     title: 'Getting started',
-    intro: 'From your first section to a complete content-driven website.'
+    intro: 'Start with one package and one page. You only need a Svelte 5 or SvelteKit application.'
   }}
 >
   <Section section={{ id: 'start', title: 'Start here', headline: 'Three small steps' }}>
     <div class="prose">
+      <p>
+        New to Page Sections? Follow these three steps in order. Start with the Svelte package; you
+        can explore the layout options and data models after your first page is running.
+      </p>
       <ol>
         <li>
           <a href={base + '/getting-started/installation/'}>Install the package</a> in a Svelte 5 or SvelteKit

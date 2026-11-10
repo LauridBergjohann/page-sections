@@ -4,7 +4,7 @@ Public explanations live directly in Svelte/HTML under apps/website/src/routes. 
 
 ## Add or change a page
 
-1. Edit its +page.svelte and add its route/title/description to src/lib/catalog.ts.
+1. Edit its +page.svelte and add its route/title/description to src/lib/catalog.ts. Keep the reading order from basics through sections and building blocks to advanced topics and references. Section categories form the nested chapter navigation. The same catalog powers the header's local topic search; showcase search entries live in SiteSearch.svelte. Search terms stay in browser memory. Getting Started uses a short learning path instead of the documentation sidebar.
 2. Compose content with ContentPage and Section. Keep paragraphs near 68 characters per line visually; wrap wide reference tables in a keyboard-scrollable region.
 3. Own static code snippets in that page's exported literal examples array. Use language, code and optional filename/group fields. The companion +page.server.ts highlights them during prerendering; CodeBlock displays the same source. These snippets are checked by npm run check:docs.
 4. Interactive examples use one reactive configuration for both preview and source output. The client highlighter loads lazily and includes only the five languages used by playgrounds. Static references use the optional server highlighting entry, whose engine is not shipped to browsers.
