@@ -1,0 +1,95 @@
+<script module lang="ts">
+  export const examples: { language: string; code: string; filename?: string; group?: string }[] = [
+    {
+      language: 'svelte',
+      code: `<script lang="ts">
+  import { ContentPage, HeadingSection, RichTextSection, CardGridSection, type ContentPageData } from '@page-sections/svelte';
+
+  const page: ContentPageData = {
+    title: 'The reading room',
+    breadcrumbs: [{ label: 'Reading room' }]
+  };
+<\/script>
+
+<ContentPage {page} showContentMenu>
+  <HeadingSection section={{ id: 'title', title: page.title, introduction: 'Guides for curious people.', headingLevel: 1 }} />
+  <RichTextSection
+    section={{
+      id: 'start',
+      title: 'Start here',
+      headline: 'Make yourself at home',
+      body: 'Choose a guide, or explore the **whole collection**.'
+    }}
+  />
+  <CardGridSection
+    section={{
+      id: 'guides',
+      title: 'Guides',
+      headline: 'Your next read',
+      background: { color: 'muted' }
+    }}
+    list={[
+      { id: 'design', title: 'Designing a small garden', href: '/guides/design' },
+      { id: 'seasons', title: 'Understanding the seasons', href: '/guides/seasons' }
+    ]}
+  />
+</ContentPage>`
+    }
+  ];
+</script>
+
+<script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
+  import { base } from '$app/paths';
+  import ContentPage from '$lib/WebsitePage.svelte';
+
+  import type { PageData } from './$types';
+  let { data }: { data: PageData } = $props();
+</script>
+
+<ContentPage
+  page={{ title: 'Your first page', pageTitle: 'Your first page · Page Sections' }}
+  showContentMenu
+>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Your first page',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
+    ><div class="prose">
+      <p>
+        After <a href={base + '/docs/foundations/installation/'}>installation</a>, add a page with a
+        text introduction and a collection of links:
+      </p>
+      <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
+      <p>
+        ContentPage creates the document title, breadcrumbs and a page-local section registry.
+        HeadingSection supplies the visible h1 as ordinary content. Sections at h2/h3 contribute
+        their <code>id</code> and <code>title</code> to the optional index. <code>headline</code> controls
+        the visible section heading, so navigation labels can remain short.
+      </p>
+      <p>
+        Inspect the result with JavaScript disabled <strong
+          >after enabling SSR/prerendering in your application</strong
+        >. Text and links should already be in the HTML response.
+      </p>
+      <p>
+        Next, <a href={base + '/docs/foundations/content-grid/'}>arrange content in columns</a>,
+        <a href={base + '/docs/building-blocks/navigation/'}>add standalone navigation</a>, or
+        <a href={base + '/docs/advanced/data-and-custom-sections/'}>describe the page as data</a>.
+      </p>
+    </div></Section
+  >
+</ContentPage>

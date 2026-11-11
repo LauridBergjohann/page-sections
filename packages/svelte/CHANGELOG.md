@@ -1,5 +1,26 @@
 # @page-sections/svelte
 
+## 0.4.0
+
+### Minor Changes
+
+- Add shared Heading and HeadingSection components, use them for section and page headings, and compose page titles as ordinary content sections. Content menus include h2/h3, with indented h3 entries. Compact code tools into the top-right corner. Nest documentation URLs under their chapters and apply the website's green-teal theme and Lucide disclosure icons. Use down/up disclosure chevrons, keep sidebar scrolling inside the initial viewport, and place the mobile menu before the logo.
+
+- Add the responsive ContentPage sidebar frame, automatic active content menu, hierarchical page-link navigation and shared navigation/geometry resolvers. The documentation uses one navigation tree, linked chapter pages, Lucide icons and previous/next reading links. Replace the former sectionNavigation option with showContentMenu and leftSidebar.
+
+- Add reusable CodeBlock and CodeSection components with serializable source models, optional server-side syntax highlighting, copy feedback, line numbers, line emphasis and responsive grid composition. The optional Shiki adapter is available through the separate `@page-sections/svelte/highlight` entry; ordinary components do not load a highlighting engine.
+
+  Move public documentation into the repository's Svelte website with interactive layout examples, executable code and complete API references. Separate the public website, minimal demo and regression application, and remove the build-time dependency on a separate GitHub Wiki checkout.
+
+### Patch Changes
+
+- Automatically detach content menus beside transparent or full-width page surfaces, including page headers; harmonize panel widths and gaps with the updated layout reference. Align current-page and ancestor navigation states. Consolidate Getting started, add the About/imprint/privacy page and label the component showcase.
+
+- Anchor desktop submenus directly beneath their parent links, keep active navigation backgrounds visible, reopen the current sidebar branch on navigation and reserve breadcrumb space on every content page. Use accent-colored selected button groups and standard surfaces for content menus and website documentation sections.
+
+- Updated dependencies
+  - @page-sections/core@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

@@ -10,7 +10,6 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort"
   },
   "dependencies": {
-    "@lucide/svelte": "^1.70.0",
     "@page-sections/core": "*",
     "@page-sections/svelte": "*"
   },

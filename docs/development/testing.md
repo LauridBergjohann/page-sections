@@ -1,52 +1,25 @@
 # Tests and verification
 
-Run the checks appropriate to the change. Keep examples executable and avoid claims based only on source inspection when runtime behavior matters.
-
 | Command | Scope |
 | --- | --- |
-| `npm run build` | Core and Svelte package builds |
-| `npm run check` | Builds plus Svelte/TypeScript diagnostics |
-| `npm run check:layout` | Generated CSS matches layoutTokens.json |
-| `npm test` | Vitest core and SSR regressions |
-| `npm run test:e2e` | Playwright Chromium tests; configured server runs npm run demo |
-| `npm run verify:packages` | Fresh build, tarballs, independent Svelte and SvelteKit consumers |
-| `npm run verify` | Layout parity, check, tests, static demo build and packed-consumer verification |
-| `npm run verify:published` | Exact registry versions installed and built in independent consumers |
-| `npm run check:docs` | README/Wiki links, export coverage, CSS variables, token tables and extracted examples |
+| npm run check | Package builds and all Svelte/TypeScript checks |
+| npm run check:ci | Pinned Playwright dependency, lockfile and both CI container images agree |
+| npm run check:layout | Generated CSS matches canonical tokens |
+| npm run check:format | Readable source formatting across all apps |
+| npm test | Core and SSR regressions, including code presentation |
+| npm run check:docs | Website routes, API/token coverage and executable snippets |
+| npm run test:e2e | Existing regressions against apps/tests on port 4175 |
+| npm run test:website | Production website and minimal demo on ports 4174/4173 |
+| npm run verify:packages | Independent plain-Svelte and SvelteKit tarball consumers |
+| npm run verify | All non-browser release checks and application builds |
+| npm run verify:published | Exact registry versions in independent consumers |
 
-Set `PAGE_SECTIONS_TEST_PORT` to run browser tests on a dedicated port with a fresh build when another preview is already running. Without this override, local tests may reuse port 4173; CI always starts its own server.
+Local browser tests use Chrome. CI and release jobs run inside the official Playwright Noble container, which already contains Chromium and its OS dependencies; no apt/browser installation step is needed. Node 24 is configured separately by setup-node. When updating Playwright, update the exact @playwright/test version, lockfile and both workflow image tags together; check:ci catches mismatches before building. See [Playwright containers](https://playwright.dev/docs/docker). PAGE_SECTIONS_TEST_PORT can override the regression app port. Test servers do not reuse unrelated local servers. Run build-producing suites sequentially.
 
-Install the browser before running browser tests:
+Documentation examples are literal exports named examples in their owning Svelte page. The checker parses them without executing them, writes temporary files in .artifacts/docs-examples and runs svelte-check. Optional group and filename fields keep multi-file examples together. CSS examples are parsed by the Svelte compiler. Shell commands are displayed but not executed.
 
-```bash
-npx playwright install chromium
-npm run test:e2e
-```
+The checker compares API indexes and CSS-variable/token tables against the packages. It checks internal documentation links and chapter navigation. No sibling Wiki repository is required. Public browser checks exercise settings, synchronized code, copy, mobile layout, dark mode, chapter search and content without JavaScript.
 
-Core/SSR tests cover grid thresholds, span inheritance, registry lifecycle, background grouping, initial HTML, custom renderers and unsafe text/links. Browser tests cover the original three SvelteKit routes without JavaScript at 375/840/1600px, native carousel scrolling, responsive and narrow grids, client routing and history, breadcrumbs, persistent layout themes, surface corners/gradients, keyboard access and unavailable WebGPU.
+Reports and screenshots live under .artifacts; failures also retain traces under test-results. CI builds all apps, verifies package consumers and runs both browser suites.
 
-## Documentation examples
-
-Check out the Wiki beside the main repository, then run:
-
-```bash
-npm run check:docs
-```
-
-For another location:
-
-```bash
-npm run check:docs -- --wiki /path/to/page-sections.wiki
-```
-
-The checker reads the actual Markdown fences from the three READMEs, developer guides and Wiki. It writes temporary examples under `.artifacts/docs-examples`, builds package declarations, and runs the existing svelte-check tool against those examples. `ts`, `typescript` and `svelte` fences are checked. CSS fences are syntax-checked through Svelte's compiler. Shell commands and prose are reviewed separately.
-
-Each ordinary fence is isolated. Multi-file examples use fence metadata such as `file=Quote.svelte group=custom`; files in the same document/group compile together. Use complete imports and data rather than undeclared placeholders. A small ambient declaration permits CSS imports.
-
-The checker validates relative links and GitHub links to known local repository/Wiki targets, sidebar coverage, and the public export indexes. It also checks CSS variable coverage and compares grid, card, breadcrumb and viewport token tables with layoutTokens.json. It does not claim that unpublished Wiki pages already exist remotely, or validate example image files and application routes. It does not execute arbitrary code from documentation. Review media/route conventions and SSR behavior separately.
-
-## Artifacts and CI
-
-The two consumer scripts report to `.artifacts/packed-consumer.json` or `.artifacts/published-consumer.json`. Browser screenshots live in `.artifacts/`; failed test output goes to test-results. The CI workflow runs verify and browser tests; it does not automatically clone or synchronize the independent Wiki. Documentation checking is an explicit review step when both checkouts are available.
-
-The website examples also run with and without JavaScript at 320/840/1920px. Catalog tests compare DOM rectangles with core calculations from 320 to 1920px, including nested containers, all three media ratios and contain/cover fitting. They check equal heights across rows, aligned titles with missing eyebrows, separate title/label budgets, larger typography before hydration and format changes without adapter reattachment. Integration tests also cover occurrence cleanup, carousel selection, detail surfaces, compact dismissal and desktop submenus. Run build-producing commands sequentially: svelte-package replaces dist while building.
+Workflow uploads include only .artifacts/*-consumer.json and test-results/, with hidden-file support enabled. Temporary documentation consumers and their dependencies are not uploaded. If a job fails before producing any report, the upload step is skipped; the job log remains available.

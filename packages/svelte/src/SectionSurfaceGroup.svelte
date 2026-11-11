@@ -29,9 +29,11 @@
 		const corners = surfaces.corners.map(({ id, top, bottom }) =>
 			`[data-ps-surface-owner="${scope}"][data-ps-section-surface="${id}"] {` +
 			`--ps-section-top-radius:${top ? 'var(--ps-radius)' : '0px'};` +
+			`--ps-shadow-top-clip:${top ? '-12px' : '0px'};--ps-shadow-bottom-clip:${bottom ? '-12px' : '0px'};` +
 			`--ps-section-bottom-radius:${bottom ? 'var(--ps-radius)' : '0px'};}`
 		).join('\n');
-		return `@media (min-width:${layoutTokens.layoutMinWidths.xl}px) {${corners}}` +
+		const shadows = surfaces.corners.map(({ id, top, bottom }) => `[data-ps-surface-owner="${scope}"][data-ps-section-surface="${id}"] { --ps-shadow-top-clip:${top ? '-12px' : '0px'}; --ps-shadow-bottom-clip:${bottom ? '-12px' : '0px'}; }`).join('\n');
+		return shadows + `@media (min-width:${layoutTokens.layoutMinWidths.xl}px) {${corners}}` +
 			((pageKind ?? context.pageKind) === 'detail' ? `@media (min-width:${layoutTokens.layoutMinWidths['3xl']}px) { [data-ps-surface-owner="${scope}"][data-ps-section-surface] { --ps-section-top-radius:0px; --ps-section-bottom-radius:0px; } }` : '');
 	});
 </script>

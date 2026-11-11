@@ -3,6 +3,7 @@
   import type { HeroSectionData } from '@page-sections/core';
   import { SECTION_CONTEXT, defaultSectionContext, type ReadSectionContext } from './sectionContext.js';
   import Section from './Section.svelte';
+  import Heading from './Heading.svelte';
   import Image from './Image.svelte';
   import Actions from './Actions.svelte';
   let { section, children }: { section: Omit<HeroSectionData, 'type'>; children?: Snippet } = $props();
@@ -13,9 +14,7 @@
   <div class="hero" data-size={section.size ?? 'm'} data-composition={section.composition ?? 'overlay'} data-image-side={section.imageSide ?? 'right'}>
     {#if section.image}<div class="image"><Image image={section.image} eager /></div>{/if}
     <div class="copy" class:panel={section.textBackground !== false}>
-      {#if section.eyebrow}<p class="eyebrow">{section.eyebrow}</p>{/if}
-      <svelte:element this={`h${level}`} id={`${section.id}-title`} class="headline">{section.headline ?? section.title}</svelte:element>
-      {#if section.introduction}<p class="introduction">{section.introduction}</p>{/if}
+      <Heading text={section.headline ?? section.title} level={level} size={section.headingSize ?? 'xl'} id={section.id + '-title'} eyebrow={section.eyebrow} introduction={section.introduction} />
       <Actions actions={section.actions} />
       {@render children?.()}
     </div>
@@ -26,9 +25,6 @@
   .image { position: absolute; inset: 0; } .image :global(picture), .image :global(img) { height: 100%; }
   .copy { min-width: 0; position: relative; margin: clamp(1rem, 4cqw, 4rem); padding: clamp(1rem, 3cqw, 3rem); max-width: 44rem; border-radius: var(--ps-radius); }
   .panel { background: color-mix(in srgb, var(--ps-section-standard) 92%, transparent); }
-  .headline { font-size: clamp(2rem, 5cqw, 4.5rem); line-height: 1.05; letter-spacing: -.04em; margin: 0; overflow-wrap: anywhere; }
-  .eyebrow { margin: 0 0 1.5rem; color: var(--ps-accent); font-size: .75rem; font-weight: 600; line-height: 1.5; letter-spacing: .14em; text-transform: uppercase; }
-  .introduction { margin: 1.75rem 0 0; font-size: clamp(1rem, 1.5cqw, 1.25rem); line-height: 1.75; }
   .copy > :global(.ps-actions) { margin-top: 2rem; }
   [data-size='s'] { min-height: 18rem; } [data-size='l'] { min-height: 36rem; }
   [data-composition='artwork'] { padding: var(--ps-grid-gap); gap: var(--ps-grid-gap); }

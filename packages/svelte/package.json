@@ -1,6 +1,6 @@
 {
   "name": "@page-sections/svelte",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "license": "MPL-2.0",
   "description": "SSR-first Svelte 5 pages, content grids, sections and navigation.",
@@ -24,7 +24,11 @@
       "svelte": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/styles.css",
+    "./highlight": {
+      "types": "./dist/highlight.d.ts",
+      "default": "./dist/highlight.js"
+    }
   },
   "types": "./dist/index.d.ts",
   "engines": {
@@ -35,17 +39,23 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@page-sections/core": "0.3.0",
+    "@page-sections/core": "0.4.0",
     "markdown-it": "^14.1.0"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2"
   },
   "peerDependencies": {
-    "svelte": "^5.56.4"
+    "svelte": "^5.56.4",
+    "shiki": "^3.0.0 || ^4.0.0"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "peerDependenciesMeta": {
+    "shiki": {
+      "optional": true
+    }
   }
 }

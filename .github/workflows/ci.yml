@@ -4,21 +4,26 @@ permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    container:
+      # Keep aligned with @playwright/test and package-lock.json (check:ci).
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --ipc=host
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run verify
-      - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
-        if: always()
+      - run: npm run test:website
+      - uses: actions/upload-artifact@v6
+        if: always() && (hashFiles('.artifacts/*-consumer.json') != '' || hashFiles('test-results/**') != '')
         with:
           name: verification
+          include-hidden-files: true
           path: |
-            .artifacts/
+            .artifacts/*-consumer.json
             test-results/

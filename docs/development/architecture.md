@@ -6,11 +6,11 @@ Svelte owns DOM rendering, context, snippets, CSS, hydration-time observation an
 
 ## Composition and state
 
-ContentPage establishes a request-local SectionRegistry. Section registers semantic id/title metadata during initialization, updates it reactively and unregisters on destruction. SectionSurfaceGroup maintains a separate presentation registry and scope so nested surface groups cannot override each other's corner rules. Server rules are emitted after children register.
+ContentPage establishes a request-local SectionRegistry. Section registers semantic id/title and resolved heading-level metadata during initialization, updates it reactively and unregisters on destruction. ContentPage lists only sections with visible h2/h3 headings; h3 entries are indented. Page titles are ordinary HeadingSection or HeroSection children with headingLevel: 1, independent of the page metadata. SectionSurfaceGroup maintains a separate presentation registry and scope so nested surface groups cannot override each other's corner rules. Server rules are emitted after children register.
 
 Generated section navigation also renders after registrations, then CSS places it above/beside the content. DOM reading order remains after the sections. Preserve this behavior in documentation unless a separately tested implementation change replaces it.
 
-The seven specialized content sections delegate ordinary section metadata to Section. CardGridSection and CarouselSection share CardItem and Card. Catalog geometry matches core media-plus-text calculations; editorial cards intentionally grow with copy. Data-driven Sections dispatches the discriminated models and accepts a renderer map; it does not fetch or validate content.
+Specialized content sections delegate ordinary section metadata to Section. CardGridSection and CarouselSection share CardItem and Card. Catalog geometry matches core media-plus-text calculations; editorial cards intentionally grow with copy. Data-driven Sections dispatches the discriminated models and accepts a renderer map; it does not fetch or validate content.
 
 ## Layout source of truth
 
@@ -26,7 +26,7 @@ npm test
 npm run test:e2e
 ```
 
-Update the Wiki's token tables and breakpoint explanations in the same review. Catalog cards, Navigation and Breadcrumbs consume generated token metrics. Do not promise runtime breakpoint configuration through CSS.
+Update the website's token tables and breakpoint explanations in the same review. Catalog cards, Navigation and Breadcrumbs consume generated token metrics. Do not promise runtime breakpoint configuration through CSS.
 
 ## Package output
 
@@ -35,3 +35,5 @@ Core uses tsc to emit JavaScript/declarations. Svelte uses svelte-package to pre
 Some foundational layout code carries upstream attribution. The legal and provenance record remains in [NOTICE](../../NOTICE) and [LICENSE](../../LICENSE); user documentation does not require that history to explain the product.
 
 Structured blocks and panels share RichTextContent/InlineText/Actions. A private section context carries heading level, nesting and page kind; it is request-local and not a public deep import. CardElements callbacks provide external attachment boundaries without a GPU or application dependency.
+
+The optional @page-sections/svelte/highlight entry uses the Shiki peer. It is not imported by the main component entry. CodeBlock accepts derived tokens and always renders source as escaped text; CodeSection and JSON code records use the same implementation.

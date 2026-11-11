@@ -11,8 +11,8 @@ export class SectionRegistry {
       if (!/^[a-z][a-z0-9-]*$/.test(next.id) || !next.title.trim()) throw new Error('Sections require a lowercase anchor and non-empty title.');
       for (const [key, item] of this.entries) if (key !== token && item.id === next.id) throw new Error(`Duplicate section id "${next.id}".`);
       const previous = this.entries.get(token);
-      if (previous?.id === next.id && previous.title === next.title) return;
-      this.entries.set(token, { id: next.id, title: next.title });
+      if (previous?.id === next.id && previous.title === next.title && previous.headingLevel === next.headingLevel) return;
+      this.entries.set(token, { id: next.id, title: next.title, headingLevel: next.headingLevel });
       this.changed();
     };
     update(section);

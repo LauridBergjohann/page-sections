@@ -4,7 +4,7 @@ Current contracts after the 0.2 layout/content work:
 
 | Area | Contract or remaining boundary |
 | --- | --- |
-| Page headings | Sections, cards and panels inherit levels through h6. page.hero supplies the single h1; explicit headingLevel and custom headers remain available. |
+| Page headings | Sections, cards and panels inherit levels through h6. Place HeadingSection or HeroSection directly in the content with headingLevel: 1. The content menu lists h2/h3 sections and indents h3. |
 | Section variants | default/content/feature have built-in heading styles. Nested typography is scoped to its own section. |
 | Section navigation | Generated navigation follows content in DOM order while CSS places it before/beside content. |
 | Nested themes | A light PageShell does not reset inherited dark palette values automatically. |
@@ -18,4 +18,4 @@ Current contracts after the 0.2 layout/content work:
 | Controls | Native-carousel arrows remain enabled at endpoints. Selection reports the nearest leading occurrence after scrollend; this is not Spatial Elements' selection engine. |
 | Host ownership | Routing, localization, SEO policy, persistence, virtual scrolling, stage/camera state and GPU rendering stay in consuming applications. |
 
-See [release preparation](release-0.2.md) and the Wiki migration guide for changed public behavior.
+The public API reference lives in apps/website/src/routes/docs. Document the current API directly; historical migration guides are not maintained.

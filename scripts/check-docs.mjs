@@ -1,134 +1,85 @@
 import { readFileSync, readdirSync, existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
-import { resolve, dirname, join, relative, extname } from 'node:path';
+import { resolve, dirname, join, relative } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import MarkdownIt from 'markdown-it';
 import ts from 'typescript';
 import { compile } from 'svelte/compiler';
+import { examplesFrom } from './documentation-examples.mjs';
 
 const root = resolve(import.meta.dirname, '..');
-const wikiIndex = process.argv.indexOf('--wiki');
-const wiki = resolve(wikiIndex < 0 ? join(root, '../page-sections.wiki') : process.argv[wikiIndex + 1] ?? '');
-if (!existsSync(join(wiki, 'Home.md'))) throw new Error('Wiki checkout missing. Clone page-sections.wiki beside the main repository, or pass --wiki PATH.');
-const require = createRequire(import.meta.url);
-const markdown = new MarkdownIt({ html: true });
-const wikiBase = 'https://github.com/LauridBergjohann/page-sections/wiki';
-const repoBase = 'https://github.com/LauridBergjohann/page-sections/';
-const read = path => readFileSync(path, 'utf8');
-function mdFiles(directory) {
-  return readdirSync(directory, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? mdFiles(join(directory, entry.name)) : entry.name.endsWith('.md') ? [join(directory, entry.name)] : []);
-}
-const wikiFiles = readdirSync(wiki).filter(name => name.endsWith('.md')).map(name => join(wiki, name));
-const files = [join(root, 'README.md'), join(root, 'packages/core/README.md'), join(root, 'packages/svelte/README.md'), ...mdFiles(join(root, 'docs')), join(root, '.changeset/README.md'), ...wikiFiles];
+const routes = join(root, 'apps/website/src/routes');
+const read = file => readFileSync(file, 'utf8');
+const walk = directory => readdirSync(directory, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(join(directory, entry.name)) : [join(directory, entry.name)]);
+const pages = walk(routes).filter(file => file.endsWith('+page.svelte'));
+const routeOf = file => '/' + relative(routes, dirname(file)).replaceAll('\\', '/') + (dirname(file) === routes ? '' : '/');
+const routeSources = new Map(pages.map(file => [routeOf(file), read(file)]));
+const catalog = read(join(root, 'apps/website/src/lib/catalog.ts'));
+const allDocs = pages.filter(file => /[\\/](docs|getting-started)[\\/]/.test(file));
 let links = 0;
-const headings = new Map();
-function slugs(file) {
-  if (headings.has(file)) return headings.get(file);
-  const tokens = markdown.parse(read(file), {});
-  const result = new Set(); const counts = new Map();
-  for (let i = 0; i < tokens.length; i++) if (tokens[i].type === 'heading_open') {
-    const base = tokens[i + 1].content.toLowerCase().replace(/[^\p{L}\p{N}_\-\s]/gu, '').replace(/ /g, '-');
-    const count = counts.get(base) ?? 0; counts.set(base, count + 1);
-    result.add(count ? `${base}-${count}` : base);
-  }
-  headings.set(file, result); return result;
-}
-function checkLink(href, source) {
-  let target; let anchor;
-  const decoded = decodeURIComponent(href);
-  if (decoded === wikiBase || decoded.startsWith(wikiBase + '/') || decoded.startsWith(wikiBase + '#')) {
-    const [slug, hash] = decoded.slice(wikiBase.length).replace(/^\//, '').split('#');
-    target = join(wiki, `${slug || 'Home'}.md`); anchor = hash;
-  } else if (decoded.startsWith(repoBase + 'blob/main/') || decoded.startsWith(repoBase + 'tree/main/')) {
-    const [path, hash] = decoded.replace(repoBase, '').replace(/^(blob|tree)\/main\//, '').split('#');
-    target = resolve(root, path); anchor = hash;
-  } else if (!/^[a-z][a-z\d+.-]*:/i.test(decoded) && !decoded.startsWith('//')) {
-    const [path, hash] = decoded.split('#');
-    target = path ? resolve(dirname(source), path) : source; anchor = hash;
-    if (path && wikiFiles.includes(source)) {
-      if (wikiFiles.includes(target)) throw new Error(`${relative(root, source)}: Wiki page links must omit .md: ${href}`);
-      // GitHub uses page slugs; VS Code also resolves these to Markdown files.
-      if (wikiFiles.includes(`${target}.md`)) target += '.md';
-    }
-  }
-  if (!target) return; // External URL availability is a separate online review.
-  if (!existsSync(target)) throw new Error(`${relative(root, source)}: missing link target ${href}`);
-  if (anchor && extname(target) === '.md' && !slugs(target).has(anchor)) throw new Error(`${source}: missing heading ${href}`);
-  links++;
-}
-const fences = [];
-for (const file of files) {
-  const tokens = markdown.parse(read(file), {});
-  let index = 0;
-  for (const token of tokens) {
-    for (const child of token.children ?? []) if (child.type === 'link_open') checkLink(child.attrGet('href'), file);
-    for (const html of [token, ...(token.children ?? [])].filter(item => item.type === 'html_block' || item.type === 'html_inline')) {
-      for (const match of html.content.matchAll(/\bhref\s*=\s*(["'])(.*?)\1/gi)) checkLink(match[2], file);
-    }
-    if (token.type === 'fence') fences.push({ file, index: index++, info: token.info.trim(), content: token.content });
+for (const [route, source] of routeSources) {
+  if (/^\/(docs|getting-started)\/.+/.test(route) && !catalog.includes(route)) throw new Error(`Missing navigation entry: ${route}`);
+  if (source.includes('github.com/LauridBergjohann/page-sections/wiki')) throw new Error(`Old Wiki link in ${route}`);
+  for (const match of source.matchAll(/href=\{base\s*\+\s*['"]([^'"]+)['"]\}/g)) {
+    const [path, hash] = match[1].split('#');
+    const target = routeSources.get(path || route);
+    if (!target) throw new Error(`${route}: missing route ${match[1]}`);
+    if (hash && !new RegExp(`(?:id:\\s*['"]|id=['"])${hash}['"]`).test(target)) throw new Error(`${route}: missing anchor ${match[1]}`);
+    links++;
   }
 }
-const sidebar = read(join(wiki, '_Sidebar.md'));
-for (const file of wikiFiles) {
-  const name = file.slice(wiki.length + 1, -3);
-  if (!name.startsWith('_') && !sidebar.includes(`](${name})`)) throw new Error(`Sidebar is missing relative page link to ${name}.`);
-}
-const componentExports = [...read(join(root, 'packages/svelte/src/index.ts')).matchAll(/default as (\w+)/g)].map(match => match[1]);
-const svelteApi = read(join(wiki, 'Svelte-API.md'));
-for (const name of componentExports) if (!svelteApi.includes('`' + name + '`')) throw new Error(`Undocumented Svelte export: ${name}`);
+
+const svelteIndex = read(join(root, 'packages/svelte/src/index.ts'));
+const svelteReference = routeSources.get('/docs/reference/svelte-api/');
+const components = [...svelteIndex.matchAll(/default as (\w+)/g)].map(match => match[1]);
+for (const name of components) if (!svelteReference.includes(`<code>${name}</code>`)) throw new Error(`Undocumented Svelte export: ${name}`);
 const coreIndex = join(root, 'packages/core/src/index.ts');
 const program = ts.createProgram([coreIndex], { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext, resolveJsonModule: true, skipLibCheck: true });
 const checker = program.getTypeChecker();
-const symbol = checker.getSymbolAtLocation(program.getSourceFile(coreIndex));
-const coreExports = checker.getExportsOfModule(symbol).map(value => value.name);
-const coreApi = read(join(wiki, 'Core-API.md'));
-for (const name of coreExports) if (!new RegExp(`\\b${name}\\b`).test(coreApi)) throw new Error(`Undocumented core export: ${name}`);
+const exports = checker.getExportsOfModule(checker.getSymbolAtLocation(program.getSourceFile(coreIndex))).map(value => value.name);
+const coreReference = routeSources.get('/docs/reference/core-api/');
+for (const name of exports) if (!new RegExp(`\\b${name}\\b`).test(coreReference)) throw new Error(`Undocumented core export: ${name}`);
 
-const tokenReference = read(join(wiki, 'CSS-Variables-and-Layout-Tokens.md'));
+const tokenReference = routeSources.get('/docs/reference/tokens/');
+const rows = [...tokenReference.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(match => [...match[1].matchAll(/<td>([\s\S]*?)<\/td>/g)].map(cell => cell[1].replace(/<[^>]+>/g, '').trim()).join('|'));
 const tokens = JSON.parse(read(join(root, 'packages/core/src/layoutTokens.json')));
 for (const [name, grid] of Object.entries(tokens.grid)) {
   const fields = ['minWidth', 'columns', 'gap', 'headlineSize', 'headlineLineHeight', 'bodySize', 'bodyLineHeight', 'headlineGap'];
-  const row = `| ${name} | ${fields.map(field => grid[field]).join(' | ')} |`;
-  if (!tokenReference.includes(row)) throw new Error(`Grid token documentation is stale: ${name}`);
+  if (!rows.includes([name, ...fields.map(field => grid[field])].join('|'))) throw new Error(`Stale grid tokens: ${name}`);
 }
 for (const [name, card] of Object.entries(tokens.cards)) {
   const fields = ['span', 'titleSize', 'titleWeight', 'eyebrowSize', 'eyebrowWeight', 'lineHeight', 'rows'];
-  const row = `| ${name} | ${fields.map(field => card[field]).join(' | ')} | ${card.gridSSpan ?? 'Absent'} |`;
-  if (!tokenReference.includes(row)) throw new Error(`Card token documentation is stale: ${name}`);
+  if (!rows.includes([name, ...fields.map(field => card[field]), card.gridSSpan ?? 'Absent'].join('|'))) throw new Error(`Stale card tokens: ${name}`);
 }
-for (const [name, value] of Object.entries(tokens.breadcrumb)) {
-  if (!tokenReference.includes(`| ${name} | ${value.fontSize} | ${value.height} |`)) throw new Error(`Breadcrumb token documentation is stale: ${name}`);
-}
-for (const [name, value] of Object.entries(tokens.layoutMinWidths)) {
-  if (!tokenReference.includes(`${name}=${value}`)) throw new Error(`Viewport token documentation is stale: ${name}`);
-}
+for (const [name, value] of Object.entries(tokens.breadcrumb)) if (!rows.includes(`${name}|${value.fontSize}|${value.height}`)) throw new Error(`Stale breadcrumb tokens: ${name}`);
+for (const [name, value] of Object.entries(tokens.layoutMinWidths)) if (!tokenReference.includes(`${name}=${value}`)) throw new Error(`Stale viewport tokens: ${name}`);
 const styleFiles = readdirSync(join(root, 'packages/svelte/src')).filter(file => /\.(svelte|css)$/.test(file));
 const variables = new Set(styleFiles.flatMap(file => [...read(join(root, 'packages/svelte/src', file)).matchAll(/--ps-[\w-]+/g)].map(match => match[0])));
-const expandedReference = tokenReference + ['xs', 's', 'm', 'l'].map(size => tokenReference.replaceAll('{size}', size)).join('\n');
-for (const variable of variables) if (!expandedReference.includes(variable)) throw new Error(`Undocumented CSS variable: ${variable}`);
+const expanded = tokenReference + ['xs', 's', 'm', 'l'].map(size => tokenReference.replaceAll('&#123;size&#125;', size)).join('\n');
+for (const variable of variables) if (!expanded.includes(variable)) throw new Error(`Undocumented CSS variable: ${variable}`);
 
 const artifacts = join(root, '.artifacts/docs-examples'); mkdirSync(artifacts, { recursive: true });
-const output = mkdtempSync(join(artifacts, 'run-'));
-const manifest = []; let css = 0;
-for (const fence of fences) {
-  const [language] = fence.info.split(/\s+/);
-  if (language === 'css') { compile(`<style>${fence.content}</style>`, { generate: false }); css++; continue; }
-  if (!['svelte', 'ts', 'typescript'].includes(language)) continue;
-  const group = /\bgroup=([\w-]+)/.exec(fence.info)?.[1] ?? `example-${fence.index}`;
-  const fileName = /\bfile=([\w.-]+)/.exec(fence.info)?.[1] ?? (language === 'svelte' ? 'Example.svelte' : 'example.ts');
-  const documentName = relative(root, fence.file).replace(/[^\w-]/g, '_');
-  const directory = join(output, documentName, group); mkdirSync(directory, { recursive: true });
-  const target = join(directory, fileName);
-  if (existsSync(target)) throw new Error(`Duplicate example file: ${target}`);
-  writeFileSync(target, fence.content + (language !== 'svelte' ? '\nexport {};\n' : ''));
-  manifest.push({ document: relative(root, fence.file), fence: fence.index + 1, example: relative(root, target) });
+const output = mkdtempSync(join(artifacts, 'run-')); const manifest = [];
+for (const file of allDocs) {
+  const examples = examplesFrom(read(file), file);
+  for (const [index, example] of examples.entries()) {
+    if (example.language === 'css') { compile(`<style>${example.code}</style>`, { generate: false }); continue; }
+    if (!['svelte', 'ts', 'typescript'].includes(example.language)) continue;
+    const group = example.group ?? `example-${index}`;
+    const filename = example.filename ?? (example.language === 'svelte' ? 'Example.svelte' : 'example.ts');
+    if (!/^[\w-]+$/.test(group) || !/^[\w.-]+$/.test(filename)) throw new Error(`Invalid example path in ${file}`);
+    const directory = join(output, relative(routes, dirname(file)), group); mkdirSync(directory, { recursive: true });
+    const target = join(directory, filename);
+    if (existsSync(target)) throw new Error(`Duplicate example: ${target}`);
+    writeFileSync(target, example.code + (example.language !== 'svelte' ? '\nexport {};\n' : ''));
+    manifest.push({ page: routeOf(file), example: filename });
+  }
 }
 writeFileSync(join(output, 'env.d.ts'), "declare module '*.css';\n");
 writeFileSync(join(output, 'tsconfig.json'), JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'ESNext', moduleResolution: 'Bundler', strict: true, allowJs: true, checkJs: false, resolveJsonModule: true, esModuleInterop: true, skipLibCheck: true, verbatimModuleSyntax: true, noEmit: true, lib: ['ES2022', 'DOM', 'DOM.Iterable'] }, include: ['**/*.ts', '**/*.svelte'] }, null, 2));
-writeFileSync(join(output, 'manifest.json'), JSON.stringify(manifest, null, 2));
+const require = createRequire(import.meta.url);
 const cli = join(dirname(require.resolve('svelte-check/package.json')), 'bin/svelte-check');
 const result = spawnSync(process.execPath, [cli, '--workspace', output, '--tsconfig', join(output, 'tsconfig.json'), '--fail-on-warnings'], { cwd: root, stdio: 'inherit' });
 if (result.status !== 0) process.exit(result.status ?? 1);
-const report = { wiki, documents: files.length, wikiPages: wikiFiles.filter(file => !file.split(/[\\/]/).pop().startsWith('_')).length, links, svelteExports: componentExports.length, coreExports: coreExports.length, cssVariables: variables.size, examples: manifest.length, cssExamples: css, generatedExamples: output, checkedAt: new Date().toISOString() };
+const report = { pages: pages.length, documentationPages: allDocs.length, links, components: components.length, coreExports: exports.length, cssVariables: variables.size, examples: manifest.length, manifest };
 writeFileSync(join(root, '.artifacts/docs-verification.json'), JSON.stringify(report, null, 2));
-console.log(JSON.stringify(report, null, 2));
+console.log(`Checked ${report.documentationPages} documentation pages, ${links} links, ${manifest.length} executable examples and public API/token coverage.`);

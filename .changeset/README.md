@@ -2,4 +2,4 @@
 
 # Changesets
 
-Run `npm run changeset` for public changes. Both packages version together through a version PR on main. See the [release guide](../docs/development/releasing.md).
+For public package changes, run `npm run changeset` and then `npm run release:version` on the feature branch. Commit the generated package versions, changelogs and lockfile in the same PR. Both packages version together; merging into main verifies and publishes them without a second PR. See the [release guide](../docs/development/releasing.md).

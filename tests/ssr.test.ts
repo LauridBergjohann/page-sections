@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
 import { render } from 'svelte/server';
 import App from './fixtures/plain-svelte/src/App.svelte';
-import { CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection } from '../packages/svelte/src/index.js';
+import { CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation, Heading } from '../packages/svelte/src/index.js';
 import PageHeaders from './PageHeaders.svelte';
 import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
@@ -18,10 +18,55 @@ it.each([undefined, 'standard', 'muted'] as const)('preserves panel surface tone
   const { body } = render(Sections, { props: { sections } });
   expect(body.match(new RegExp(`data-tone="${tone ?? 'muted'}"`, 'g'))).toHaveLength(2);
 });
-it('preserves the default page heading and document title', () => {
+it('keeps page metadata separate from visible content', () => {
   const { body, head } = render(ContentPage, { props: { page: { title: 'Page heading', pageTitle: 'Browser title' } } });
-  expect(body).toMatch(/<h1[^>]*>Page heading<\/h1>/);
+  expect(body).not.toContain('<h1');
+  expect(body).toContain('aria-label="Page heading"');
   expect(head).toContain('<title>Browser title</title>');
+});
+it('omits empty content menus and single-entry breadcrumbs on the server', () => {
+  expect(render(ContentPage, { props: { page: { title: 'Empty' }, showContentMenu: true } }).body).not.toContain('class="ps-content-menu-slot');
+  expect(render(Breadcrumbs, { props: { items: [{ label: 'Docs', href: '/docs/' }] } }).body).not.toContain('<nav');
+});
+it('decouples heading size from semantics and renders heading sections from JSON', () => {
+  for (const level of [1, 2, 3] as const) for (const size of ['m', 'l', 'xl'] as const) {
+    const { body } = render(Heading, { props: { text: 'A heading', level, size } });
+    expect(body).toContain(`<h${level}`);
+    expect(body).toContain(`data-size="${size}"`);
+  }
+  const sections: SectionData[] = JSON.parse(JSON.stringify([{ type: 'heading', id: 'chapter', title: 'Chapter', headingSize: 'xl', headingLevel: 3, background: { color: 'muted', size: 'standard' } }]));
+  const { body } = render(Sections, { props: { sections } });
+  expect(body).toMatch(/<h3[^>]*id="chapter-title"/);
+  expect(body).toContain('data-background-color="muted"');
+});
+it('composes a heading section directly in the page body without adding it to the content menu', () => {
+  const { body } = render(PageHeaders, { props: { custom: true } });
+  expect(body.match(/<h1\b/g)).toHaveLength(1);
+  expect(body).toContain('data-background-size="full"');
+  expect(body).toContain('data-size="m"');
+  expect(body).not.toContain('href="#custom"');
+  expect(body).not.toContain('href="#deep"');
+  expect(body).not.toContain('href="#unheaded"');
+  expect(body).toContain('href="#nested"');
+  expect(body).toContain('data-heading-level="3"');
+  expect(body).toContain('href="#details"');
+});
+it('renders breadcrumbs without creating visible title content', () => {
+  const { body } = render(ContentPage, { props: { page: { title: 'Hero page',
+    breadcrumbs: [{ label: 'Docs', href: '/docs/' }, { label: 'Hero page' }]
+  } } });
+  expect(body.match(/aria-label="Breadcrumb"/g)).toHaveLength(1);
+  expect(body).not.toContain('<h1');
+});
+it('opens the active sidebar branch during SSR and retains real parent links', () => {
+  const { body } = render(SidebarNavigation, { props: { activeId: 'hero', items: [
+    { id: 'sections', label: 'Sections', href: '/sections/', children: [
+      { id: 'hero', label: 'Hero', href: '/hero/' }
+    ] }
+  ] } });
+  expect(body).toMatch(/<details[^>]*open/);
+  expect(body).toContain('href="/sections/"');
+  expect(body).toMatch(/href="\/hero\/"[^>]*aria-current="page"/);
 });
 it('lets the hero own the h1 while the host owns SEO and main attributes', () => {
   const { body, head } = render(PageHeaders);
@@ -37,12 +82,12 @@ it('connects a custom page header to the main landmark', () => {
   const { body } = render(PageHeaders, { props: { custom: true } });
   const label = body.match(/<main[^>]*aria-labelledby="([^"]+)"/)?.[1];
   expect(label).toBeTruthy();
-  expect(body).toContain(`<h1 id="${label}">Custom page header</h1>`);
+  expect(body.replace(/<!--.*?-->/g, '')).toMatch(new RegExp(`<h1[^>]*id="${label}"[^>]*>Custom page header</h1>`));
   expect(body.match(/<h1\b/g)).toHaveLength(1);
   expect(body).toContain('href="#details"');
 });
 it('labels a headerless main without a dangling heading reference', () => {
-  const { body } = render(ContentPage, { props: { page: { title: 'Accessible page' }, showHeader: false } });
+  const { body } = render(ContentPage, { props: { page: { title: 'Accessible page' } } });
   expect(body).toContain('aria-label="Accessible page"');
   expect(body).not.toContain('aria-labelledby=');
   expect(body).not.toContain('<h1');
