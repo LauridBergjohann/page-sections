@@ -3,6 +3,8 @@
   let left = $state(true);
   let right = $state(true);
   let full = $state(false);
+  let transparent = $state(false);
+  let transparentHeader = $state(false);
   const items = Array.from({ length: 35 }, (_, i) => ({
     id: `page-${i}`,
     label: `Page ${i + 1}`,
@@ -16,6 +18,8 @@
   <label><input type="checkbox" bind:checked={left} /> Left sidebar</label>
   <label><input type="checkbox" bind:checked={right} /> Content menu</label>
   <label><input type="checkbox" bind:checked={full} /> Full background</label>
+  <label><input type="checkbox" bind:checked={transparent} /> Transparent section</label>
+  <label><input type="checkbox" bind:checked={transparentHeader} /> Transparent heading</label>
 </fieldset>
 {#snippet navigation()}<SidebarNavigation {items} />{/snippet}
 <ContentPage
@@ -27,13 +31,28 @@
   leftSidebar={left ? navigation : undefined}
   showContentMenu={right}
 >
+  {#snippet header(page, titleId)}
+    <Section
+      section={{
+        id: 'page-heading',
+        title: 'Page heading',
+        background: { color: transparentHeader ? 'transparent' : 'standard', size: 'standard' }
+      }}
+      renderHeader={false}
+    >
+      <h1 id={titleId}>{page.title}</h1>
+    </Section>
+  {/snippet}
   {#each [0, 1, 2] as index}
     <Section
       section={{
         id: `section-${index}`,
         title: `Chapter ${index + 1}`,
         headline: `Chapter ${index + 1}`,
-        background: { color: index === 1 ? 'muted' : 'standard', size: full ? 'full' : 'standard' }
+        background: {
+          color: index === 1 ? (transparent ? 'transparent' : 'muted') : 'standard',
+          size: full ? 'full' : 'standard'
+        }
       }}
     >
       <div class="long-section">

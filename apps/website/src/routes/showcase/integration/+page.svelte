@@ -86,7 +86,7 @@
         id: 'nested',
         href: base + '/showcase/',
         label: 'More pages',
-        children: [{ id: 'legal', label: 'Legal example', href: base + '/showcase/legal/' }]
+        children: [{ id: 'legal', label: 'About the project', href: base + '/about/' }]
       }
     ]}
   />

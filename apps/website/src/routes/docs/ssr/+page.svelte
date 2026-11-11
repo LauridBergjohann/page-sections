@@ -176,7 +176,7 @@ export const prerender = true;`
       </p>
       <p>
         Related: <a href={base + '/docs/carousel/'}>CarouselSection</a>,
-        <a href={base + '/getting-started/installation/'}>Installation</a>,
+        <a href={base + '/docs/installation/'}>Installation</a>,
         <a
           href="https://github.com/LauridBergjohann/page-sections/blob/main/docs/development/demo.md"
           >demo development guide</a

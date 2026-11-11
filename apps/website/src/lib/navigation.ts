@@ -25,7 +25,6 @@ export const navigationTree: MenuItem[] = [
         href: base + '/showcase/portfolio/',
         icon: 'briefcase'
       },
-      { id: 'legal', label: 'Legal page', href: base + '/showcase/legal/', icon: 'file' },
       {
         id: 'components',
         label: 'Component collection',
@@ -49,12 +48,7 @@ export const navigationTree: MenuItem[] = [
   {
     id: 'start',
     label: 'Getting started',
-    href: base + '/getting-started/',
-    children: [
-      entry('/getting-started/installation/', 'download'),
-      entry('/getting-started/first-page/', 'file'),
-      entry('/getting-started/pages-and-sections/', 'layers')
-    ]
+    href: base + '/getting-started/'
   },
   {
     id: 'docs',
@@ -64,12 +58,15 @@ export const navigationTree: MenuItem[] = [
       ...entry(`/docs/${slug}/`, icon),
       children: documents.filter((item) => item.group === group).map((item) => entry(item.href))
     }))
-  }
+  },
+  { id: 'about', label: 'About', href: base + '/about/' }
 ];
 
 const flatten = (items: MenuItem[]): MenuItem[] =>
   items.flatMap((item) => [item, ...flatten(item.children ?? [])]);
-export const readingOrder = flatten(navigationTree.slice(1));
+export const readingOrder = flatten(
+  navigationTree.filter((item) => item.id === 'start' || item.id === 'docs')
+);
 export function readingNeighbors(pathname: string) {
   const index = readingOrder.findIndex((item) => item.href === pathname);
   return index < 0 ? {} : { previous: readingOrder[index - 1], next: readingOrder[index + 1] };

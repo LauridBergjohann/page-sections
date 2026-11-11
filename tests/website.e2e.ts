@@ -16,6 +16,10 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
     node.remove(); return result;
   }, palette);
   await expect(docs).toHaveCSS('background-color', colors.muted);
+  await expect(docs).toHaveCSS('font-weight', '400');
+  await expect(docs).toHaveCSS('border-radius', '0px');
+  const headerBox = (await page.locator('.website-header .header').boundingBox())!;
+  expect((await docs.boundingBox())!.height).toBe(headerBox.height - 2);
   await expect(page.locator('.satellite.right [aria-pressed="true"]')).toHaveCSS('color', colors.accent);
   await docs.hover();
   const overlay = page.locator('.ps-submenu:visible');
@@ -32,6 +36,9 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   const sidebar = page.locator('.ps-left-sidebar');
   const initialTop = (await sidebar.boundingBox())!.y;
   await expect(sidebar.locator('[aria-current="page"]')).toHaveCSS('background-color', colors.muted);
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveCSS('font-weight', '650');
+  await expect(sidebar.getByRole('link', { name: 'Sections', exact: true })).toHaveCSS('background-color', colors.muted);
+  await expect(sidebar.getByRole('link', { name: 'Sections', exact: true })).toHaveCSS('font-weight', '400');
   await sidebar.getByRole('button', { name: 'Show pages in Sections', exact: true }).click();
   await expect(sidebar.getByRole('link', { name: 'Hero', exact: true })).toBeHidden();
   await page.locator('.reading-path [rel="next"]').click();
@@ -39,7 +46,7 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await expect(sidebar.getByRole('link', { name: 'Rich text', exact: true })).toBeVisible();
   await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Rich text');
   await expect(page.locator('.ps-content-menu-slot .desktop')).toHaveCSS('background-color', colors.standard);
-  const sections = page.locator('.sections > [data-ps-section-group] > [data-ps-section]');
+  const sections = page.locator('.sections > [data-ps-section]');
   expect(await sections.count()).toBeGreaterThan(0);
   for (const section of await sections.all()) {
     await expect(section).toHaveAttribute('data-background-color', 'standard');
@@ -47,8 +54,33 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   }
   await docs.click();
   await expect(page).toHaveURL(/\/docs\/$/);
+  await expect(docs).toHaveCSS('font-weight', '650');
   await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
   expect((await sidebar.boundingBox())!.y).toBe(initialTop);
+});
+
+test('single-page entry points and legal footer links lead to actual project content', async ({ page }) => {
+  await page.setViewportSize({ width: 1809, height: 1000 });
+  await page.goto('/getting-started/');
+  const menu = page.locator('.desktop-menu');
+  await expect(menu.locator('.ps-main-menu > li')).toHaveCount(4);
+  const start = menu.getByRole('link', { name: 'Getting started', exact: true });
+  await expect(start).not.toHaveAttribute('aria-expanded');
+  await expect(page.locator('.child-pages')).toHaveCount(0);
+  await expect(page.locator('#first-page')).toContainText('ContentPage');
+  await page.locator('.site-footer').getByRole('link', { name: 'Imprint', exact: true }).click();
+  await expect(page).toHaveURL(/\/about\/#impressum$/);
+  await expect(page.locator('#impressum')).toContainText('Laurid Bergjohann');
+  await expect(menu.getByRole('link', { name: 'About', exact: true })).not.toHaveAttribute('aria-expanded');
+  await page.locator('.site-footer').getByRole('link', { name: 'Privacy', exact: true }).click();
+  await expect(page).toHaveURL(/\/about\/#datenschutz$/);
+  await expect(page.locator('#datenschutz')).toContainText('page-sections-theme');
+  await page.goto('/showcase/');
+  await expect(page.locator('a[href*="/showcase/legal/"]')).toHaveCount(0);
+  await page.goto('/showcase/components/');
+  for (const name of ['HeroSection', 'RichTextSection', 'ImageSection', 'VideoSection', 'CardGridSection', 'CarouselSection', 'ContentGrid']) {
+    await expect(page.getByRole('heading', { name: new RegExp(name) }).first()).toBeVisible();
+  }
 });
 
 test('desktop page links reveal only the second level and retain native navigation', async ({ page }) => {
@@ -115,7 +147,7 @@ for (const width of [390, 1600]) {
   test(`documentation is readable and linked without JavaScript at ${width}px`, async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height: 900 } });
     const page = await context.newPage();
-    for (const route of ['/docs/card-grid/', '/docs/code/', '/docs/core-api/', '/getting-started/installation/']) {
+    for (const route of ['/docs/card-grid/', '/docs/code/', '/docs/core-api/', '/docs/installation/']) {
       const response = await page.goto('http://127.0.0.1:4174' + route);
       expect(response?.status()).toBe(200);
       await expect(page.locator('main h1')).toHaveCount(1);
@@ -209,10 +241,10 @@ test('home explains the library and getting started stays focused', async ({ pag
   await expect(page.locator('#features .ps-card')).toHaveCount(6);
   await page.goto('/getting-started/');
   await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
-  await page.locator('#start').getByRole('link', { name: 'Install the package' }).click();
-  await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
+  await expect(page.locator('#install')).toContainText('npm install @page-sections/svelte');
+  await expect(page.locator('#first-page')).toContainText('ContentPage');
   await page.getByRole('navigation', { name: 'Reading order' }).locator('[rel=next]').click();
-  await expect(page).toHaveURL(/\/getting-started\/first-page\/$/);
+  await expect(page).toHaveURL(/\/docs\/$/);
   await page.setViewportSize({ width: 1809, height: 900 });
   await page.goto('/docs/');
   const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });

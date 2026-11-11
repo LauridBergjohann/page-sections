@@ -90,28 +90,32 @@
         <div class="sidebar-panel">{@render leftSidebar()}</div>
       </aside>{/if}
     <div class="ps-page-content">
-      {#if showHeader}
-        {#if header}{@render header(page, titleId)}{:else if page.hero}<HeroSection
-            section={{ ...page.hero, headingLevel: 1 }}
-          />{:else}
-          <div class="ps-content-container">
-            <header class="ps-grid-scope">
-              {#if page.eyebrow}<p class="eyebrow">{page.eyebrow}</p>{/if}
-              <h1 id={titleId}>{page.title}</h1>
-              {#if page.intro}<p class="intro">{page.intro}</p>{/if}
-            </header>
-          </div>
+      <SectionSurfaceGroup>
+        {#if showHeader}
+          {#if header}<div class="ps-custom-header">
+              {@render header(page, titleId)}
+            </div>{:else if page.hero}<HeroSection
+              section={{ ...page.hero, headingLevel: 1 }}
+            />{:else}
+            <div class="ps-content-container ps-default-header">
+              <header class="ps-grid-scope">
+                {#if page.eyebrow}<p class="eyebrow">{page.eyebrow}</p>{/if}
+                <h1 id={titleId}>{page.title}</h1>
+                {#if page.intro}<p class="intro">{page.intro}</p>{/if}
+              </header>
+            </div>
+          {/if}
         {/if}
-      {/if}
-      <div class="page-body">
-        <div
-          class="sections ps-grid-scope"
-          data-body-layout={page.bodyLayout ?? 'wide'}
-          data-spacing={page.bodySpacing ?? 'none'}
-        >
-          <SectionSurfaceGroup>{@render children?.()}</SectionSurfaceGroup>
+        <div class="page-body">
+          <div
+            class="sections ps-grid-scope"
+            data-body-layout={page.bodyLayout ?? 'wide'}
+            data-spacing={page.bodySpacing ?? 'none'}
+          >
+            {@render children?.()}
+          </div>
         </div>
-      </div>
+      </SectionSurfaceGroup>
       {@render footer?.()}
     </div>
     <!-- After sections register, including during SSR. -->

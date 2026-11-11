@@ -9,26 +9,26 @@ export const documents = [
   },
   {
     title: 'Installation',
-    href: '/getting-started/installation/',
+    href: '/docs/installation/',
     description:
       'Choose @page-sections/svelte for a Svelte website, or @page-sections/core for framework-independent data and calculations.',
-    group: 'Start here',
+    group: 'Foundations',
     category: ''
   },
   {
     title: 'Your first page',
-    href: '/getting-started/first-page/',
+    href: '/docs/first-page/',
     description:
       'After installation, add a page with a text introduction and a collection of links:',
-    group: 'Start here',
+    group: 'Foundations',
     category: ''
   },
   {
     title: 'Pages and sections',
-    href: '/getting-started/pages-and-sections/',
+    href: '/docs/pages-and-sections/',
     description:
       'Use a small set of composable containers rather than a separate page format for every layout.',
-    group: 'Start here',
+    group: 'Foundations',
     category: ''
   },
   {

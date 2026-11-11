@@ -34,7 +34,7 @@
     section={{
       id: 'hero',
       title: 'Hero',
-      headline: 'A strong opening.',
+      headline: 'HeroSection: a strong opening',
       introduction:
         'A headline, a landscape and a clear next step. The medium hero leaves room for the story below.',
       background: { color: 'standard' },
@@ -47,7 +47,7 @@
     section={{
       id: 'text',
       title: 'Rich text',
-      headline: 'Words with room to breathe',
+      headline: 'RichTextSection: words with room to breathe',
       layout: 'narrow',
       spacing: 'loose',
       body: `## A small field journal\n\nThe best pages begin with **something worth sharing**. Markdown supports headings, lists and ordinary links.\n\n- Keep the structure clear.\n- Let the content set the pace.\n- [Explore surfaces](${base}/showcase/backgrounds/) when the story changes.`
@@ -57,7 +57,7 @@
     section={{
       id: 'images',
       title: 'Images',
-      headline: 'Two views of the same world',
+      headline: 'ImageSection: image on the left',
       background: { color: 'muted' },
       image: { ...landscape, aspect: '16/9' },
       description:
@@ -68,7 +68,7 @@
     section={{
       id: 'image-right',
       title: 'Image on the right',
-      headline: 'A closer look',
+      headline: 'ImageSection: image on the right',
       background: { color: 'muted' },
       image: { ...coast, aspect: 'square' },
       imageSide: 'right',
@@ -80,7 +80,7 @@
     section={{
       id: 'video',
       title: 'Video',
-      headline: 'A moment in motion',
+      headline: 'VideoSection: native video playback',
       background: { color: 'standard' },
       video: {
         provider: 'html5',
@@ -95,7 +95,7 @@
     section={{
       id: 'cards',
       title: 'Card grid',
-      headline: 'A collection with variety',
+      headline: 'CardGridSection: a responsive collection',
       background: { color: 'muted' },
       spacing: 'loose'
     }}
@@ -106,7 +106,7 @@
     section={{
       id: 'carousel',
       title: 'Carousel',
-      headline: 'Follow your curiosity',
+      headline: 'CarouselSection: horizontal browsing',
       background: { color: 'standard' },
       spacing: 'loose'
     }}
@@ -117,7 +117,7 @@
     section={{
       id: 'layout',
       title: 'Responsive grid',
-      headline: 'One grid. Different rhythms.',
+      headline: 'ContentGrid and ContentBlock: responsive columns',
       spacing: 'loose'
     }}
   >
@@ -146,7 +146,7 @@
     section={{
       id: 'narrow',
       title: 'Narrow content',
-      headline: 'A quieter reading width',
+      headline: 'Section: narrow reading layout',
       layout: 'narrow',
       background: { color: 'standard' }
     }}
@@ -166,7 +166,7 @@
     section={{
       id: 'wide',
       title: 'Wide content',
-      headline: 'Room for individual pieces',
+      headline: 'Card, Image and ButtonGroup: standalone blocks',
       layout: 'wide',
       spacing: 'loose',
       background: { color: 'muted' }
@@ -174,7 +174,8 @@
   >
     <ContentGrid>
       <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
-        ><Card
+        ><h3>Card</h3>
+        <Card
           variant="editorial"
           item={{
             id: 'standalone',
@@ -186,10 +187,12 @@
         /></ContentBlock
       >
       <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
-        ><figure>
+        ><h3>Image</h3>
+        <figure>
           <Image image={{ ...landscape, aspect: '2/1' }} />
           <figcaption>A standalone Image with a 2:1 crop and a native figure caption.</figcaption>
         </figure>
+        <h3>ButtonGroup</h3>
         <p class="demo-copy">ButtonGroup can contain ordinary links, too.</p>
         <ButtonGroup
           label="Continue exploring"
@@ -205,7 +208,7 @@
     section={{
       id: 'full',
       title: 'Full width',
-      headline: 'A section beyond the content column',
+      headline: 'Section: full-width background',
       layout: 'full',
       background: { color: 'standard', size: 'full' },
       spacing: 'loose'
@@ -219,7 +222,7 @@
     section={{
       id: 'data',
       title: 'From data',
-      headline: 'The same components, driven by content',
+      headline: 'Sections: rendering content from data',
       spacing: 'loose'
     }}
     ><p class="demo-copy">

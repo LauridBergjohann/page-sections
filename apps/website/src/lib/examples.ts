@@ -140,106 +140,12 @@ export const portfolio: PageData = {
       blocks: [
         {
           type: 'paragraph',
-          text: 'Explore a narrow legal document and the catalog card sizes used by the layout system.'
+          text: 'Read about the project or explore the catalog card sizes used by the layout system.'
         }
       ],
       actions: [
-        { label: 'Legal example', href: base + '/showcase/legal/' },
+        { label: 'About the project', href: base + '/about/' },
         { label: 'Catalog cards', href: base + '/docs/card-grid/' }
-      ]
-    }
-  ]
-};
-
-// Representative website content structures, with fictional contact information.
-export const legal: PageData = {
-  title: 'Legal information',
-  pageTitle: 'Legal example — Page Sections',
-  bodyLayout: 'narrow',
-  bodySpacing: 'loose',
-  breadcrumbs: [
-    { label: 'Home', href: base + '/' },
-    { label: 'Examples', href: base + '/showcase/portfolio/' },
-    { label: 'Legal' }
-  ],
-  intro: 'An example of addresses, contact links, paragraphs and notes in a readable document.',
-  sections: [
-    {
-      type: 'richText',
-      id: 'publisher',
-      title: 'Publisher',
-      headline: 'Publisher',
-      variant: 'content',
-      blocks: [
-        {
-          type: 'address',
-          name: 'Example Studio',
-          lines: ['Sample Street 12', '12345 Example City', 'Germany']
-        },
-        {
-          type: 'paragraph',
-          text: [
-            { type: 'strong', text: 'Email: ' },
-            { type: 'link', text: 'hello@example.com', href: 'mailto:hello@example.com' }
-          ]
-        }
-      ]
-    },
-    {
-      type: 'richText',
-      id: 'privacy',
-      title: 'Privacy',
-      headline: 'Information and contact',
-      variant: 'content',
-      blocks: [
-        {
-          type: 'paragraph',
-          text: 'A document may need several paragraphs, emphasized phrases, ordinary links and a contact address. These remain structured data and render without application-specific section components.'
-        },
-        {
-          type: 'paragraph',
-          text: [
-            { type: 'text', text: 'For questions about this example, use the ' },
-            { type: 'link', text: 'contact address', href: 'mailto:hello@example.com' },
-            { type: 'text', text: ' above.' }
-          ]
-        },
-        {
-          type: 'panel',
-          title: 'Document note',
-          tone: 'muted',
-          blocks: [
-            {
-              type: 'paragraph',
-              text: 'This page demonstrates content structure with fictional information.'
-            }
-          ]
-        },
-        {
-          type: 'list',
-          ordered: true,
-          items: [
-            'Identify the relevant document.',
-            'Describe your question.',
-            'Provide a way to reply.'
-          ]
-        }
-      ]
-    },
-    {
-      type: 'panel',
-      id: 'related',
-      title: 'Related pages',
-      headline: 'Continue exploring',
-      tone: 'standard',
-      blocks: [
-        {
-          type: 'paragraph',
-          text: 'Panels share the same typography, spacing and heading hierarchy as other sections.'
-        }
-      ],
-      actions: [
-        { label: 'Back to the portfolio', href: base + '/showcase/portfolio/', variant: 'text' }
       ]
     }
   ]

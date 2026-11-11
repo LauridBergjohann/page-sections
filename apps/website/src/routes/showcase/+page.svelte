@@ -27,17 +27,9 @@
         image: { src: base + '/landscape.svg', alt: 'Layered green mountains' }
       },
       {
-        id: 'legal',
-        title: 'A quieter reading layout',
-        eyebrow: '02 / Everyday content',
-        description: 'A narrow legal page with structured paragraphs, lists, addresses and panels.',
-        href: base + '/showcase/legal/',
-        image: { src: base + '/coast.svg', alt: 'A quiet coastline' }
-      },
-      {
         id: 'components',
         title: 'The building blocks',
-        eyebrow: '03 / Composition',
+        eyebrow: '02 / Composition',
         description: 'Images, video, responsive grids and a native carousel on one page.',
         href: base + '/showcase/components/',
         image: { src: base + '/landscape.svg', alt: 'Layers of green hills' }
@@ -45,7 +37,7 @@
       {
         id: 'surfaces',
         title: 'A sense of continuity',
-        eyebrow: '04 / Surfaces',
+        eyebrow: '03 / Surfaces',
         description:
           'Compare adjacent surfaces, gradients, rounded groups and full-width backgrounds.',
         href: base + '/showcase/backgrounds/',
@@ -54,7 +46,7 @@
       {
         id: 'integration',
         title: 'Enhance without replacing',
-        eyebrow: '05 / Integration',
+        eyebrow: '04 / Integration',
         description:
           'Observe card attachment and cleanup while changing formats and reordering a collection.',
         href: base + '/showcase/integration/'

@@ -221,7 +221,8 @@
       overflow: auto;
       overscroll-behavior: contain;
       background: var(--ps-section-standard);
-      border-radius: 0 var(--ps-radius) var(--ps-radius) 0;
+      border-radius: var(--ps-content-menu-radius, 0 var(--ps-radius) var(--ps-radius) 0);
+      box-shadow: var(--ps-content-menu-shadow, none);
     }
   }
 </style>

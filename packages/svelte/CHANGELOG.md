@@ -12,6 +12,8 @@
 
 ### Patch Changes
 
+- Automatically detach content menus beside transparent or full-width page surfaces, including page headers; harmonize panel widths and gaps with the updated layout reference. Align current-page and ancestor navigation states. Consolidate Getting started, add the About/imprint/privacy page and label the component showcase.
+
 - Anchor desktop submenus directly beneath their parent links, keep active navigation backgrounds visible, reopen the current sidebar branch on navigation and reserve breadcrumb space on every content page. Use accent-colored selected button groups and standard surfaces for content menus and website documentation sections.
 
 - Updated dependencies

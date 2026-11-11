@@ -109,7 +109,7 @@
         title: 'Bring your own application',
         description:
           'Use the library in plain Svelte or SvelteKit. No required CSS framework, CMS or router; syntax highlighting is an optional addition.',
-        href: base + '/getting-started/installation/'
+        href: base + '/docs/installation/'
       }
     ]}
   />

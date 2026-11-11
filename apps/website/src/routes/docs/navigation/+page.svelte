@@ -245,10 +245,13 @@
         the token to the actual group to avoid duplicate edges.
       </p>
       <p>
-        Active menu and sidebar links retain a muted background. Sidebar branches reopen along the
-        current page path after navigation. Desktop submenus connect directly to their parent link
-        and are centered beneath it. Selected ButtonGroup items use a muted background and accent
-        text; icons that inherit the text color follow the same selection treatment.
+        The current page and its ancestors retain a muted background in both menus. Only the current
+        page is bold. The main menu marks the top-level ancestor with an accent line; the sidebar
+        marks the actual page. Top-level menu backgrounds fill the menu height with square corners.
+        Sidebar branches reopen along the current page path after navigation. Desktop submenus
+        connect directly to their parent link and are centered beneath it. Selected ButtonGroup
+        items use a muted background and accent text; icons that inherit the text color follow the
+        same selection treatment.
       </p>
     </div></Section
   >

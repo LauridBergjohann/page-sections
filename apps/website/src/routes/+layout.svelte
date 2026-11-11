@@ -91,6 +91,8 @@
       <span class="version">v{version}</span></a
     >
     <span>Made with Page Sections.</span>
+    <a href={base + '/about/#impressum'}>Imprint</a>
+    <a href={base + '/about/#datenschutz'}>Privacy</a>
     <a href="https://github.com/LauridBergjohann/page-sections">Source on GitHub ↗</a>
   </footer>
 </PageShell>

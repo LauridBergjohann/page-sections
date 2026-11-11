@@ -26,7 +26,13 @@ console.log(page.title, cards, resolveContentGrid(840));`
   page={{ title: 'Installation', pageTitle: 'Installation · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Choose <code>@page-sections/svelte</code> for a Svelte website, or
@@ -36,6 +42,7 @@ console.log(page.title, cards, resolveContentGrid(840));`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'svelte-and-sveltekit',
       title: 'Svelte and SvelteKit',
       headline: 'Svelte and SvelteKit',
@@ -51,7 +58,7 @@ console.log(page.title, cards, resolveContentGrid(840));`
         uses Node 24/npm 11 for development.
       </p>
       <p>
-        In plain Svelte, put the <a href={base + '/getting-started/first-page/'}>Quick Start</a>
+        In plain Svelte, put the <a href={base + '/docs/first-page/'}>Quick Start</a>
         component in <code>App.svelte</code> and use your existing Svelte-aware bundler. In
         SvelteKit, use it in <code>src/routes/+page.svelte</code>; shared navigation can live in
         your application layout. No library-specific routing configuration is needed.
@@ -63,7 +70,14 @@ console.log(page.title, cards, resolveContentGrid(840));`
       </p>
     </div></Section
   >
-  <Section section={{ id: 'styling', title: 'Styling', headline: 'Styling', variant: 'content' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'styling',
+      title: 'Styling',
+      headline: 'Styling',
+      variant: 'content'
+    }}
     ><div class="prose">
       <p>
         PageShell, ContentPage, Navigation, Section and Breadcrumbs import the shared stylesheet.
@@ -85,6 +99,7 @@ console.log(page.title, cards, resolveContentGrid(840));`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'core-utilities',
       title: 'Core utilities',
       headline: 'Core utilities',
@@ -101,6 +116,7 @@ console.log(page.title, cards, resolveContentGrid(840));`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'example-conventions',
       title: 'Example conventions',
       headline: 'Example conventions',

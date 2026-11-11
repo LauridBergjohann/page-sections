@@ -54,7 +54,7 @@ describe('sidebar geometry', () => {
             expect(result.content.x).toBe((width - result.content.width) / 2);
           }
           if (result.leftSidebar)
-            expect(result.leftSidebar.x + result.leftSidebar.width + 24).toBe(result.content.x);
+            expect(result.leftSidebar.x + result.leftSidebar.width + (width < 1809 ? 12 : 28)).toBe(result.content.x);
           if (result.contentMenu)
             expect(result.contentMenu.x).toBe(result.content.x + result.content.width);
         });
@@ -74,6 +74,18 @@ describe('sidebar geometry', () => {
     });
     expect(result.leftSidebar!.x).toBe(38);
     expect(result.contentMenu!.x + result.contentMenu!.width).toBe(1920 - 15 - 20 - 28);
+  });
+  it('keeps content stable while detaching the content menu at each desktop size', () => {
+    for (const [width, panelWidth, gap] of [[1600, 248, 12], [1920, 248, 28], [2300, 300, 28]]) {
+      const input = { width, height: 900, leftSidebar: true, showContentMenu: true };
+      const docked = resolveContentPageLayout(input);
+      const detached = resolveContentPageLayout({ ...input, contentMenuDetached: true });
+      expect(detached.content).toEqual(docked.content);
+      expect(detached.leftSidebar!.width).toBe(panelWidth);
+      expect(detached.contentMenu!.width).toBe(panelWidth);
+      expect(docked.contentMenu!.width).toBe(panelWidth + gap);
+      expect(detached.contentMenu!.x).toBe(docked.contentMenu!.x + gap);
+    }
   });
 });
 it('tracks the reading line and selects a short final section at the real document end', () => {

@@ -261,10 +261,11 @@
     ><div class="prose">
       <p>
         <code>resolveContentPageLayout</code> keeps the main-menu geometry independent. Below 1600px no
-        desktop rail is reserved. XL uses 236px + 24px on the left and 260px on the right, with 12px outer
-        margins. The unoccupied side keeps 136px. At 2XL the occupied reserves are 28px + 274px; an unoccupied
-        side follows the centered menu edge. At 3XL content stays centered at 1536px with the sidebars
-        outside it.
+        desktop rail is reserved. XL uses 248px panels with 12px gaps and outer margins. The unoccupied
+        side keeps 136px. At 2XL panels remain 248px, with 28px gaps and outer margins; an unoccupied
+        side follows the centered menu edge. At 3XL panels grow to 300px and the content stays centered
+        at 1536px. A docked content menu includes the gap in its surface; set contentMenuDetached to true
+        for the freestanding rectangle.
       </p>
     </div></Section
   >

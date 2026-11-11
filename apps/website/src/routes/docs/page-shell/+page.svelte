@@ -191,15 +191,18 @@
     ><div class="prose">
       <p>
         Sections never exceed 1536px. At XS–L (below 1600px), both desktop sidebars are hidden. The
-        right contents menu remains available in a sticky popup. At XL the left sidebar is 236px
-        wide with a 24px gap, and the right sidebar occupies 260px. At 2XL these widths become 250px
-        plus 24px and 274px. At 3XL the 1536px content column is centered regardless of sidebar
-        occupancy.
+        right contents menu remains available in a sticky popup. Both panels are 248px wide at XL
+        and 2XL, with a 12px gap at XL and a 28px gap at 2XL. At 3XL panels are 300px wide with a
+        28px gap, and the 1536px content column stays centered regardless of sidebar occupancy.
       </p>
       <p>
         Both panels stick 16px from the viewport top and scroll internally when necessary. The right
-        panel starts slightly lower and has no shadow. The left panel and contained standard/muted
-        section surfaces use a subtle shadow. The main menu keeps its own centered geometry.
+        panel docks only when every page-level section, including the heading, has a standard-width
+        standard or muted background. It then fills the gap, starts 16px lower and has no shadow. A
+        transparent or full-width surface makes it freestanding, with the same rounded corners, gap
+        and shadow as the left panel. An ordinary unpainted page header also makes it freestanding.
+        Nested blocks inside an opaque section do not break that section's surface. This updates
+        automatically, including without JavaScript. The main menu keeps its own centered geometry.
       </p>
       <p>
         The registry renders anchor links during SSR. JavaScript adds active-section tracking,

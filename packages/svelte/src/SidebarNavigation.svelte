@@ -29,7 +29,11 @@
   <ul>
     {#each list as item (item.id)}
       <li class:branch={!!item.children?.length}>
-        <a href={safeHref(item.href)} aria-current={current(item) ? 'page' : undefined}>
+        <a
+          href={safeHref(item.href)}
+          class:active={active(item)}
+          aria-current={current(item) ? 'page' : undefined}
+        >
           {#if icon && item.icon}<span class="icon" aria-hidden="true">{@render icon(item)}</span
             >{/if}
           <span>{item.label}</span>
@@ -77,8 +81,10 @@
   a:hover {
     background: var(--ps-section-muted);
   }
-  a[aria-current='page'] {
+  a.active {
     background: var(--ps-section-muted);
+  }
+  a[aria-current='page'] {
     border-inline-start-color: var(--ps-accent);
     font-weight: 650;
   }

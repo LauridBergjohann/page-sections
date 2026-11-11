@@ -14,7 +14,8 @@ Open http://127.0.0.1:5174. `npm run build:website` creates static HTML in `apps
 Routes:
 
 - `/showcase/`: composed pages and focused examples.
-- `/getting-started/`: installation, a first page and the content model.
+- `/getting-started/`: one concise introduction; detailed setup and composition live under /docs/.
+- `/about/`: project motivation, imprint and privacy information, linked from the footer.
 - `/docs/`: interactive guides and complete API references.
 
 See [documentation authoring](../../docs/development/documentation.md) for adding pages, executable snippets and navigation entries. Hosting setup is documented there too.

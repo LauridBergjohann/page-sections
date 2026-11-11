@@ -10,6 +10,19 @@
 [data-ps-theme='dark'] { --ps-background: #151d27; --ps-ink: #f2f5fa; --ps-body: #bdcbdc; --ps-accent: #91baff; --ps-on-accent: #151d27; --ps-section-standard: #202d3b; --ps-section-muted: #28384a; }
 .ps-page, .ps-navigation, .ps-shell { font-family: var(--ps-font-family); color: var(--ps-ink); }
 .ps-page { background: var(--ps-background); }
+/* A content menu only docks to a continuous column of contained, opaque surfaces.
+   Evaluate rendered surfaces in CSS so SSR, no-JS and live background changes agree. */
+@media (min-width: 1600px) {
+  .ps-page-frame:has(.ps-default-header, .ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot,
+  .ps-page-frame:has(.ps-custom-header):not(:has(.ps-custom-header .ps-section)) > .ps-content-menu-slot {
+    --ps-content-menu-radius: var(--ps-radius);
+    --ps-content-menu-shadow: var(--ps-surface-shadow);
+    margin-inline-start: var(--ps-sidebar-gap);
+    width: calc(var(--ps-sidebar-right-width) - var(--ps-sidebar-gap));
+    padding-top: 0;
+    z-index: 2;
+  }
+}
 .ps-page *, .ps-navigation *, .ps-shell * { box-sizing: border-box; }
 .ps-section, .ps-section *, .ps-card, .ps-card *, .ps-panel, .ps-panel * { box-sizing: border-box; }
 .ps-page a { color: var(--ps-accent); }

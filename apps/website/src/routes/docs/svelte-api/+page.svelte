@@ -235,8 +235,8 @@
         optional <code>@page-sections/svelte/highlight</code> entry exports
         <code>highlightCode</code>; install its Shiki peer to use it, preferably at build/server
         time. No internal component file, context symbol or generated CSS path is a supported deep
-        import. See <a href={base + '/getting-started/installation/'}>Installation</a> for which components
-        load shared CSS themselves.
+        import. See <a href={base + '/docs/installation/'}>Installation</a> for which components load
+        shared CSS themselves.
       </p>
     </div></Section
   >

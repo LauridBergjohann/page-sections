@@ -26,10 +26,10 @@
       description: 'A hero, cards, biography and contact panel rendered from data.'
     },
     {
-      title: 'A quieter reading layout',
-      href: '/showcase/legal/',
-      group: 'Examples',
-      description: 'Legal content, addresses and panels in a narrow reading layout.'
+      title: 'About',
+      href: '/about/',
+      group: 'Project',
+      description: 'Motivation, imprint and privacy information.'
     },
     {
       title: 'The building blocks',

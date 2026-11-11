@@ -44,20 +44,20 @@ export function resolvePageLayout(input: ResponsiveLayoutInput) {
 }
 
 /** Sidebar geometry does not change the independent main-menu rectangle. */
-export function resolveContentPageLayout(input: ResponsiveLayoutInput & { leftSidebar?: boolean; showContentMenu?: boolean }) {
+export function resolveContentPageLayout(input: ResponsiveLayoutInput & { leftSidebar?: boolean; showContentMenu?: boolean; contentMenuDetached?: boolean }) {
   const page = resolvePageLayout(input);
   const available = Math.max(0, size(input.width) - size(input.scrollbarWidth));
   const start = Math.min(available, size(input.safeArea?.left));
   const end = available - Math.min(available - start, size(input.safeArea?.right));
   const visible = input.width >= tokens.layoutMinWidths.xl;
-  const spec = page.layout === 'xl' ? tokens.sidebars.xl : tokens.sidebars.wide;
+  const spec = page.layout === 'xl' ? tokens.sidebars.xl : page.layout === '3xl' ? tokens.sidebars.extraWide : tokens.sidebars.wide;
   const floating = page.layout === '3xl';
-  const leftEdge = visible && input.leftSidebar && !floating ? Math.max(page.content.x, start + spec.outer + spec.leftWidth + tokens.sidebars.gap) : page.content.x;
-  const rightEdge = visible && input.showContentMenu && !floating ? Math.min(page.content.x + page.content.width, end - spec.outer - spec.rightWidth) : page.content.x + page.content.width;
+  const leftEdge = visible && input.leftSidebar && !floating ? Math.max(page.content.x, start + spec.outer + spec.panelWidth + spec.gap) : page.content.x;
+  const rightEdge = visible && input.showContentMenu && !floating ? Math.min(page.content.x + page.content.width, end - spec.outer - spec.panelWidth - spec.gap) : page.content.x + page.content.width;
   const content = { x: leftEdge, width: Math.max(0, rightEdge - leftEdge) };
   return { ...page, content,
-    leftSidebar: visible && input.leftSidebar ? { x: content.x - tokens.sidebars.gap - spec.leftWidth, width: spec.leftWidth } : undefined,
-    contentMenu: visible && input.showContentMenu ? { x: content.x + content.width, width: spec.rightWidth } : undefined
+    leftSidebar: visible && input.leftSidebar ? { x: content.x - spec.gap - spec.panelWidth, width: spec.panelWidth } : undefined,
+    contentMenu: visible && input.showContentMenu ? { x: content.x + content.width + (input.contentMenuDetached ? spec.gap : 0), width: spec.panelWidth + (input.contentMenuDetached ? 0 : spec.gap) } : undefined
   };
 }
 

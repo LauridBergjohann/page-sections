@@ -40,7 +40,13 @@
   page={{ title: 'Pages and sections', pageTitle: 'Pages and sections · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Use a small set of composable containers rather than a separate page format for every

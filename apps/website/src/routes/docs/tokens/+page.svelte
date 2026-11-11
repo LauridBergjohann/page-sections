@@ -550,8 +550,9 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
     }}
     ><div class="prose">
       <p>
-        <code>layoutTokens.sidebars</code> defines gap (24), stickyTop (16), contentMenuOffset (16), xl
-        (outer 12, leftWidth 236, rightWidth 260) and wide (outer 28, leftWidth 250, rightWidth 274).
+        <code>layoutTokens.sidebars</code> defines stickyTop (16), contentMenuOffset (16), xl (outer 12,
+        gap 12, panelWidth 248), wide (outer 28, gap 28, panelWidth 248) and extraWide (outer 28, gap
+        28, panelWidth 300). Docked content menus additionally fill the gap.
       </p>
       <p>
         Generated internal geometry variables: <code>--ps-sidebar-gap</code>,
@@ -565,6 +566,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         <code>--ps-surface-shadow</code> controls the subtle left-sidebar and contained section
         shadow. Internal <code>--ps-shadow-top-clip</code> and <code>--ps-shadow-bottom-clip</code> prevent
         seams between connected section surfaces.
+      </p>
+      <p>
+        Internal <code>--ps-content-menu-radius</code> and <code>--ps-content-menu-shadow</code>
+        switch the right panel between docked and freestanding surfaces.
       </p>
     </div></Section
   >

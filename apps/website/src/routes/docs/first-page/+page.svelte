@@ -50,11 +50,17 @@
   page={{ title: 'Your first page', pageTitle: 'Your first page · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
-        After <a href={base + '/getting-started/installation/'}>installation</a>, add a page with a
-        text introduction and a collection of links:
+        After <a href={base + '/docs/installation/'}>installation</a>, add a page with a text
+        introduction and a collection of links:
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>

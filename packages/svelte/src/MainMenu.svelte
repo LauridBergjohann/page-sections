@@ -124,6 +124,18 @@
   .ps-main-menu > li {
     position: relative;
   }
+  .ps-main-menu > li > a {
+    min-height: calc(var(--ps-menu-height) - 1px);
+    border-radius: 0;
+  }
+  a[aria-current='page'] {
+    font-weight: 650;
+  }
+  @media (min-width: 1600px) {
+    .ps-main-menu > li > a {
+      min-height: calc(var(--ps-menu-height) - 2px);
+    }
+  }
   a {
     display: flex;
     align-items: center;
@@ -171,9 +183,6 @@
   .ps-submenu a {
     height: 100%;
     min-height: 48px;
-  }
-  .ps-submenu [aria-current='page'] {
-    color: var(--ps-accent);
   }
   .icon {
     display: flex;

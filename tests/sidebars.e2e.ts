@@ -25,6 +25,29 @@ for (const width of [390, 1599, 1600, 1808, 1809, 2299, 2300, 2800]) {
       }
     await page.getByLabel('Left sidebar', { exact: true }).check();
     await page.getByLabel('Content menu', { exact: true }).check();
+    if (width >= 1600) {
+      const content = root.locator('.ps-page-content');
+      const menu = root.locator('.ps-content-menu-slot .desktop');
+      const left = root.locator('.sidebar-panel');
+      const gap = width < 1809 ? 12 : 28;
+      const panelWidth = width < 2300 ? 248 : 300;
+      await expect(menu).toHaveCSS('box-shadow', 'none');
+      expect((await menu.boundingBox())!.width).toBe(panelWidth + gap);
+      expect((await menu.boundingBox())!.y - (await left.boundingBox())!.y).toBe(16);
+      for (const label of ['Full background', 'Transparent section', 'Transparent heading']) {
+        await page.getByLabel(label, { exact: true }).check();
+        const c = (await content.boundingBox())!;
+        const m = (await menu.boundingBox())!;
+        expect(m.x - c.x - c.width).toBe(gap);
+        expect(m.width).toBe(panelWidth);
+        expect(m.y).toBe((await left.boundingBox())!.y);
+        await expect(menu).toHaveCSS('border-top-left-radius', '18px');
+        await expect(menu).toHaveCSS('box-shadow', await left.evaluate(el => getComputedStyle(el).boxShadow));
+        await page.getByLabel(label, { exact: true }).uncheck();
+        await expect(menu).toHaveCSS('box-shadow', 'none');
+        expect((await menu.boundingBox())!.x).toBe(c.x + c.width);
+      }
+    }
     await page.evaluate(() => scrollTo(0, 1000));
     if (width >= 1600) {
       const panel = root.locator('.sidebar-panel');

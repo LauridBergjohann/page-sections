@@ -46,10 +46,10 @@
     }}
     ><div class="prose">
       <ol>
-        <li><a href={base + '/getting-started/installation/'}>Install the packages</a>.</li>
-        <li><a href={base + '/getting-started/first-page/'}>Build your first page</a>.</li>
+        <li><a href={base + '/docs/installation/'}>Install the packages</a>.</li>
+        <li><a href={base + '/docs/first-page/'}>Build your first page</a>.</li>
         <li>
-          Learn how <a href={base + '/getting-started/pages-and-sections/'}
+          Learn how <a href={base + '/docs/pages-and-sections/'}
             >pages, sections and blocks fit together</a
           >.
         </li>

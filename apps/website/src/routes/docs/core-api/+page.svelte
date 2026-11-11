@@ -557,9 +557,9 @@ console.log(background.cssBackground);`
         or currentId. MenuItem requires href; optional icon is an application-owned key.
       </p>
       <p>
-        <code>resolveContentPageLayout(input)</code> extends ResponsiveLayoutInput with leftSidebar and
-        showContentMenu booleans. It returns the independent menu rectangle, content rectangle and optional
-        sidebar rectangles. Safe-area and scrollbar insets are included.
+        <code>resolveContentPageLayout(input)</code> extends ResponsiveLayoutInput with leftSidebar, showContentMenu
+        and contentMenuDetached booleans (default false). It returns the independent menu rectangle, content
+        rectangle and optional sidebar rectangles. Safe-area and scrollbar insets are included.
       </p>
       <p>
         <code

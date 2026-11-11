@@ -25,7 +25,7 @@ In a Svelte 5 application:
 npm install @page-sections/svelte
 ```
 
-Start with the [minimal application](apps/demo/src/routes/+page.svelte), or the website's [installation page](apps/website/src/routes/getting-started/installation/+page.svelte). Components work in plain Svelte as well as SvelteKit; no Tailwind, router or rendering engine is required.
+Start with the [minimal application](apps/demo/src/routes/+page.svelte), or the website's [installation page](apps/website/src/routes/docs/installation/+page.svelte). Components work in plain Svelte as well as SvelteKit; no Tailwind, router or rendering engine is required.
 
 | Package | Responsibility |
 | --- | --- |
