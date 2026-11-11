@@ -25,7 +25,7 @@
         introduction:
           'A Svelte 5 component library for content-driven websites. Build portfolios, product pages and documentation from reusable sections that share one responsive layout system.',
         image: {
-          src: base + '/landscape.svg',
+          src: base + '/hero.png',
           alt: 'Layered green hills beneath a quiet sky',
           width: 1200,
           height: 750

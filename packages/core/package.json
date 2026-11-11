@@ -1,6 +1,6 @@
 {
   "name": "@page-sections/core",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "license": "MPL-2.0",
   "description": "Framework-independent content models, responsive layouts and section registries.",

@@ -2,20 +2,16 @@
 
 # Page Sections
 
-Composable pages, responsive layouts and reusable content sections for Svelte 5 and SvelteKit. Build a portfolio, publication or product website using ordinary HTML or serializable content models.
+Page Sections is a component library for content-driven websites built with Svelte 5 and SvelteKit. This repository contains the framework-independent core, Svelte components, documentation website and example applications.
 
-## Documentation and examples
+- **One layout system:** pages, sections, grids and cards share responsive sizing, spacing and content widths.
+- **Composable content:** combine heroes, text, panels, images, video, card grids, carousels and code examples.
+- **Your content source:** write Svelte and HTML directly, or render serializable models from JSON or your own CMS.
+- **Connected navigation:** build menus, sidebars and breadcrumbs from one page tree, with an automatic page contents menu.
+- **Your visual identity:** adapt light and dark themes, surfaces and shared CSS variables without requiring a CSS framework.
+- **HTML first:** SSR and prerendering deliver readable content and links before client-side interactions load.
 
-The [Page Sections website](apps/website) is the source of public documentation: getting started, interactive guides, API references and a showcase. Its pages live in this repository and are maintained together with the library. The former GitHub Wiki has been migrated; no separate checkout is required.
-
-Run the website locally:
-
-```sh
-npm ci
-npm run dev:website
-```
-
-Open http://127.0.0.1:5174. Try card sizes and tones, media ratios, responsive grids, surfaces, code presentation and the sidebar frame on `/docs/foundations/page-shell/`. Preview and source stay together.
+**[Visit the Page Sections website — documentation, interactive examples and showcase](https://page-sections.bergjohann.com/)**
 
 ## Installation
 
@@ -25,7 +21,7 @@ In a Svelte 5 application:
 npm install @page-sections/svelte
 ```
 
-Start with the [minimal application](apps/demo/src/routes/+page.svelte), or the website's [installation page](apps/website/src/routes/docs/foundations/installation/+page.svelte). Components work in plain Svelte as well as SvelteKit; no Tailwind, router or rendering engine is required.
+Follow [Getting started](https://page-sections.bergjohann.com/getting-started/) to build your first page. Components work in plain Svelte as well as SvelteKit; no Tailwind, router or rendering engine is required.
 
 | Package | Responsibility |
 | --- | --- |
@@ -34,9 +30,24 @@ Start with the [minimal application](apps/demo/src/routes/+page.svelte), or the 
 
 Code highlighting is optional: install Shiki and use the separate `@page-sections/svelte/highlight` entry at build/server time. Ordinary pages and plain CodeBlock do not load the engine.
 
+## Documentation and examples
+
+The [documentation](https://page-sections.bergjohann.com/docs/) covers page composition, responsive layouts, navigation, themes and the full API. Interactive examples let you change options and see the result alongside the source. Explore the [showcase](https://page-sections.bergjohann.com/showcase/) for complete examples.
+
+For a small starting point, see the [minimal application](apps/demo/src/routes/+page.svelte). The [documentation website source](apps/website) lives alongside the packages and uses Page Sections itself.
+
 ## Development
 
 Use Node 24 and npm 11. [Application commands](apps/README.md) cover the public website, minimal demo and test application. Contributor instructions live in [docs/development](docs/development/README.md).
+
+Run the documentation website locally:
+
+```sh
+npm ci
+npm run dev:website
+```
+
+Open http://127.0.0.1:5174. To validate changes:
 
 ```sh
 npm run verify

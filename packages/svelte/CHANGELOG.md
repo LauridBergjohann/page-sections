@@ -1,5 +1,13 @@
 # @page-sections/svelte
 
+## 0.4.1
+
+### Patch Changes
+
+- Update package READMEs with feature summaries and links to the published documentation website.
+- Updated dependencies
+  - @page-sections/core@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

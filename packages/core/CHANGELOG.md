@@ -1,5 +1,11 @@
 # @page-sections/core
 
+## 0.4.1
+
+### Patch Changes
+
+- Update package READMEs with feature summaries and links to the published documentation website.
+
 ## 0.4.0
 
 ### Minor Changes

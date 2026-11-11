@@ -2,22 +2,29 @@
 
 # @page-sections/svelte
 
-SSR-first Svelte 5 components for pages, responsive grids, sections and navigation. Works with plain Svelte and SvelteKit.
+Composable Svelte 5 components for content-driven websites, from portfolios and product pages to documentation. Works with plain Svelte and SvelteKit.
+
+- **Consistent layouts:** pages, sections, grids and cards share responsive sizing and spacing.
+- **Reusable sections:** compose heroes, text, panels, media, card grids, carousels and code examples.
+- **Flexible content:** use Svelte snippets and HTML, or render serializable content from JSON or a CMS.
+- **Connected navigation:** menus, sidebars, breadcrumbs and automatic page contents work together.
+- **Adaptable styling:** light and dark themes, surface options and CSS variables support your visual identity.
+- **HTML first:** supports SSR and prerendering, with optional syntax highlighting through a separate entry point.
+
+## Installation
 
 ```sh
 npm install @page-sections/svelte
 ```
 
-Import components from `@page-sections/svelte`. PageShell, ContentPage, Navigation, Section and CodeBlock load shared CSS. For standalone primitives, import `@page-sections/svelte/styles.css` once. Core types are re-exported; runtime core helpers are imported from `@page-sections/core`.
+Requires Svelte `^5.56.4` and Node `>=22.12.0`. No SvelteKit, CSS framework, icon library or rendering engine is required. The core package is installed automatically and its types are re-exported.
 
-The [documentation website source and local preview instructions](https://github.com/LauridBergjohann/page-sections/tree/main/apps/website) include installation, interactive examples and full API references. See the [minimal application](https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo) for a copyable starting point.
+## Documentation and examples
 
-ContentPage accepts a `leftSidebar` snippet and `showContentMenu` for an automatic right-hand contents menu. Navigation and SidebarNavigation share a tree of real page links, with responsive disclosures and application-owned icons.
+**[Visit the Page Sections website — documentation, interactive examples and showcase](https://page-sections.bergjohann.com/)**
 
-## Code presentation
+Start with [Getting started](https://page-sections.bergjohann.com/getting-started/), explore the [documentation](https://page-sections.bergjohann.com/docs/), or look up components in the [Svelte API reference](https://page-sections.bergjohann.com/docs/reference/svelte-api/).
 
-CodeBlock presents escaped source with optional filename, line numbers, line markers, wrapping and copy feedback. CodeSection adds section metadata; Sections also renders JSON records with `type: 'code'`.
+## License
 
-Syntax highlighting is optional. Install `shiki` and call `highlightCode` from `@page-sections/svelte/highlight`, preferably in server/build code. Pass its result as `highlighted`; data-driven Sections accepts `codeHighlights` keyed by section ID. This entry is separate so the engine is not imported by ordinary components. Plain source needs no Shiki dependency.
-
-Requires Svelte `^5.56.4` and Node `>=22.12.0`. No SvelteKit, icon library or rendering engine is installed as a runtime dependency. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+[Mozilla Public License 2.0](LICENSE). Attribution is retained in [NOTICE](NOTICE).

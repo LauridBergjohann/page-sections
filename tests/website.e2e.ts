@@ -1,4 +1,16 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
+
+// Resolve the website's theme tokens through CSS rather than pinning its palette.
+async function themeColor(shell: Locator, token: `--ps-${string}`) {
+  return shell.evaluate((element, token) => {
+    const probe = document.createElement('span');
+    probe.style.color = `var(${token})`;
+    element.append(probe);
+    const color = getComputedStyle(probe).color;
+    probe.remove();
+    return color;
+  }, token);
+}
 
 test('headings, compact code tools and nested routes use the website design system', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1000 });
@@ -21,8 +33,11 @@ test('headings, compact code tools and nested routes use the website design syst
   const source = (await copy.locator('pre').boundingBox())!;
   expect(source.x + source.width).toBeLessThanOrEqual(tools.x + 1);
   expect(Math.abs(tools.y - source.y)).toBeLessThan(1);
-  await expect(page.locator('.desktop-menu a.active').first()).toHaveCSS('background-color', 'rgb(238, 238, 238)');
-  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', 'rgb(0, 123, 94)');
+  const shell = page.locator('.ps-shell');
+  await expect(shell).toHaveAttribute('data-ps-theme', 'light');
+  const lightAccent = await themeColor(shell, '--ps-accent');
+  await expect(page.locator('.desktop-menu a.active').first()).toHaveCSS('background-color', await themeColor(shell, '--ps-selection'));
+  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', lightAccent);
   await page.goto('/docs/sections/headings/');
   const preview = page.locator('#heading-preview');
   await page.getByRole('combobox', { name: 'Heading size', exact: true }).selectOption('xl');
@@ -39,7 +54,10 @@ test('headings, compact code tools and nested routes use the website design syst
   await page.getByRole('combobox', { name: 'Surface', exact: true }).selectOption('standard');
   await expect(preview).toHaveAttribute('data-background-color', 'standard');
   await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
-  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', 'rgb(114, 223, 198)');
+  await expect(shell).toHaveAttribute('data-ps-theme', 'dark');
+  const darkAccent = await themeColor(shell, '--ps-accent');
+  expect(darkAccent).not.toBe(lightAccent);
+  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', darkAccent);
   await page.setViewportSize({ width: 320, height: 800 });
   await page.goto('/getting-started/');
   const burger = (await page.locator('.mobile-menu > summary').boundingBox())!;
