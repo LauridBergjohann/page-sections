@@ -8,6 +8,7 @@
   const page: PageData = {
     title: 'Garden notebook',
     sections: [
+      { type: 'heading', id: 'page-title', title: 'Garden notebook', headingLevel: 1 },
       {
         type: 'richText',
         id: 'intro',
@@ -94,6 +95,7 @@ declare module '@page-sections/core' {
   const page: PageData = {
     title: 'Shared wisdom',
     sections: [
+      { type: 'heading', id: 'page-title', title: 'Shared wisdom', headingLevel: 1 },
       {
         type: 'quote',
         id: 'advice',
@@ -115,9 +117,11 @@ declare module '@page-sections/core' {
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -129,6 +133,15 @@ declare module '@page-sections/core' {
   }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Data and custom sections',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -155,9 +168,8 @@ declare module '@page-sections/core' {
     }}
     ><div class="prose">
       <p>
-        <code>ContentPageData</code> has required title and optional pageTitle, eyebrow, intro,
-        breadcrumbs, header (HeadingSectionData or HeroSectionData), bodyLayout (wide/narrow) and
-        bodySpacing. <code>PageData</code> extends it with required
+        <code>ContentPageData</code> has required title and optional pageTitle, breadcrumbs,
+        bodyLayout (wide/narrow) and bodySpacing. <code>PageData</code> extends it with required
         <code>sections: SectionData[]</code>. ContentPage itself does not read page.sections; render
         Sections explicitly.
       </p>

@@ -9,9 +9,11 @@ export const prerender = true;`
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -20,6 +22,15 @@ export const prerender = true;`
   page={{ title: 'SSR and enhancement', pageTitle: 'SSR and enhancement · Page Sections' }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'SSR and enhancement',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },

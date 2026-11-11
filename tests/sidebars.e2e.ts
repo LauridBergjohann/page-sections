@@ -29,6 +29,11 @@ for (const width of [390, 1599, 1600, 1808, 1809, 2299, 2300, 2800]) {
       const content = root.locator('.ps-page-content');
       const menu = root.locator('.ps-content-menu-slot .desktop');
       const left = root.locator('.sidebar-panel');
+      await expect.poll(async () => {
+        const box = (await left.boundingBox())!;
+        return box.y + box.height;
+      }).toBeLessThanOrEqual(884);
+      await expect(left).toHaveCSS('scrollbar-width', 'thin');
       const gap = width < 1809 ? 12 : 28;
       const panelWidth = width < 2300 ? 248 : 300;
       await expect(menu).toHaveCSS('box-shadow', 'none');

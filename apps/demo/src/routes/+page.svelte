@@ -1,11 +1,17 @@
 <script lang="ts">
-  import { ContentPage, Section, CardGridSection } from '@page-sections/svelte';
+  import { HeadingSection, ContentPage, Section, CardGridSection } from '@page-sections/svelte';
 </script>
 
-<ContentPage
-  page={{ title: 'Field notes', intro: 'A minimal Page Sections application.' }}
-  showContentMenu
->
+<ContentPage page={{ title: 'Field notes' }} showContentMenu>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Field notes',
+      introduction: 'A minimal Page Sections application.',
+      headingLevel: 1,
+      headingSize: 'l'
+    }}
+  />
   <Section section={{ id: 'about', title: 'About', headline: 'A place to begin' }}>
     <p>Compose ordinary HTML and reusable sections. This entire example lives in one page.</p>
   </Section>

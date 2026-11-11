@@ -1,15 +1,20 @@
 <script lang="ts">
+  import { HeadingSection, Section } from '@page-sections/svelte';
+
   import WebsitePage from '$lib/WebsitePage.svelte';
-  import { Section } from '@page-sections/svelte';
 </script>
 
-<WebsitePage
-  page={{
-    title: 'Building blocks',
-    intro: 'Combine navigation and smaller components into your own layouts.'
-  }}
-  showContentMenu={false}
->
+<WebsitePage page={{ title: 'Building blocks' }} showContentMenu={false}>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Building blocks',
+      introduction: 'Combine navigation and smaller components into your own layouts.',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       id: 'overview',

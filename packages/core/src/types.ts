@@ -41,9 +41,9 @@ export interface SectionDefinition {
   variant?: 'default' | 'content' | 'feature';
   style?: { width?: string; color?: string };
 }
-export type SectionNavigationItem = Pick<SectionDefinition, 'id' | 'title'>;
+export type SectionNavigationItem = Pick<SectionDefinition, 'id' | 'title' | 'headingLevel'>;
 export interface Breadcrumb { label: string; href?: string }
-export interface ContentPageData { title: string; pageTitle?: string; eyebrow?: string; intro?: string; breadcrumbs?: Breadcrumb[]; header?: HeadingSectionData | HeroSectionData; bodyLayout?: 'wide' | 'narrow'; bodySpacing?: SectionDefinition['spacing'] }
+export interface ContentPageData { title: string; pageTitle?: string; breadcrumbs?: Breadcrumb[]; bodyLayout?: 'wide' | 'narrow'; bodySpacing?: SectionDefinition['spacing'] }
 export type ImageAspect = 'none' | '4/3' | '16/9' | '2/1' | 'square';
 export interface ImageData { src: string; srcDark?: string; alt: string; width?: number; height?: number; aspect?: ImageAspect; objectFit?: 'cover' | 'contain'; srcset?: string; sizes?: string }
 export interface CardItem { id: string; itemKey?: string; title: string; href?: string; eyebrow?: string; description?: string; subtitle?: string; image?: ImageData; footer?: InlineText; actions?: ContentAction[] }

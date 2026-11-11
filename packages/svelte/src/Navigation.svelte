@@ -50,13 +50,13 @@
   <nav bind:this={root} class="ps-navigation" aria-label={label}>
     {#if left}<div class="satellite left">{@render left()}</div>{/if}
     <div class="header ps-content-width">
-      {#if brand}<div class="brand">{@render brand()}</div>{/if}
       {#if items}
         <details bind:this={mobile} class="mobile-menu">
           <summary aria-label={menuLabel}>{#if menuIcon}{@render menuIcon()}{:else}<span aria-hidden="true">&#9776;</span>{/if}</summary>
           <div class="mobile-panel"><MainMenu {items} variant="mobile" icon={itemIcon} /></div>
         </details>
       {/if}
+      {#if brand}<div class="brand">{@render brand()}</div>{/if}
       <div class="menu">{#if menu}{@render menu()}{:else if items}<div class="desktop-menu"><MainMenu {items} icon={itemIcon} closeKey={menuRevision} onOpenChange={(open) => dropdownOpen = open} /></div>{/if}</div>
       {#if tools}<div class="tools">{@render tools()}</div>{/if}
       {#if left || right}

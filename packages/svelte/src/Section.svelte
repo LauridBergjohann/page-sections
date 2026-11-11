@@ -18,11 +18,11 @@
   const surfaceScope = getContext<string | undefined>(SURFACE_SCOPE);
   const background = $derived(normalizeSectionBackground(section.background, { pageKind: context.pageKind }));
   $effect(() => { report(section.background, { pageKind: context.pageKind }); });
-  function register() { return registry?.register(section); }
+  function register() { return registry?.register({ ...section, headingLevel: section.headline ? heading : undefined }); }
   function registerSurface() { return surfaces?.register(background); }
   const registration = register();
   const surface = registerSurface();
-  $effect(() => { registration?.update(section); surface?.update(background); });
+  $effect(() => { registration?.update({ ...section, headingLevel: section.headline ? heading : undefined }); surface?.update(background); });
   onDestroy(() => { registration?.unregister(); surface?.unregister(); });
 </script>
 <section {...rest} id={section.id} class={['ps-section', className]} data-ps-section={section.id}

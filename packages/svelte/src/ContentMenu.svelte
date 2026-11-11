@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fitSidebar } from './fitSidebar.js';
   import { onMount } from 'svelte';
   import { resolveActiveContentSection, type SectionNavigationItem } from '@page-sections/core';
   let {
@@ -80,7 +81,7 @@
     <p>{label}</p>
     <ul>
       {#each items as item (item.id)}
-        <li>
+        <li data-heading-level={item.headingLevel}>
           <a
             href={`#${item.id}`}
             aria-current={activeId === item.id ? 'location' : undefined}
@@ -95,7 +96,7 @@
   </nav>
 {/snippet}
 
-<div class="desktop">{@render links()}</div>
+<div class="desktop ps-sidebar-scroll" use:fitSidebar>{@render links()}</div>
 <details bind:this={popup} class="mobile" data-enhanced={ready}>
   <!-- svelte-ignore a11y_no_redundant_roles (Keep styled disclosures exposed as buttons in browser accessibility trees.) -->
   <summary role="button" aria-label={label} title={label}
@@ -109,7 +110,7 @@
       stroke-width="2"><path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1" /></svg
     ></summary
   >
-  <div class="popup">
+  <div class="popup ps-sidebar-scroll">
     {#if ready}<button
         class="close"
         type="button"
@@ -137,6 +138,7 @@
     padding: 0;
     margin: 0;
   }
+  li[data-heading-level='3'] { margin-inline-start: 1rem; }
   nav a {
     display: flex;
     gap: 0.65rem;
@@ -217,7 +219,7 @@
       display: block;
       position: sticky;
       top: var(--ps-sidebar-sticky-top);
-      max-height: calc(100dvh - 2 * var(--ps-sidebar-sticky-top));
+      max-height: var(--ps-sidebar-available-height, calc(100dvh - var(--ps-nav-height) - var(--ps-breadcrumb-height) - var(--ps-content-menu-offset) - var(--ps-sidebar-sticky-top)));
       overflow: auto;
       overscroll-behavior: contain;
       background: var(--ps-section-standard);

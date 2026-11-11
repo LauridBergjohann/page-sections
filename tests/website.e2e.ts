@@ -9,6 +9,12 @@ test('headings, compact code tools and nested routes use the website design syst
   await expect(breadcrumb.locator('[aria-current="page"]')).toHaveText('Installation');
   await expect(page.locator('main h1')).toHaveCSS('font-size', '32px');
   await expect(page.locator('.ps-left-sidebar summary svg').first()).toHaveClass(/lucide/);
+  const disclosure = page.locator('.ps-left-sidebar summary').first();
+  await expect(disclosure.locator('svg')).toHaveClass(/lucide-chevron-down/);
+  await expect(disclosure.locator('span')).toHaveCSS('transform', 'matrix(-1, 0, 0, -1, 0, 0)');
+  await disclosure.click();
+  await expect(disclosure.locator('span')).toHaveCSS('transform', 'none');
+  await disclosure.click();
   const copy = page.locator('.ps-code-block').first();
   expect((await copy.boundingBox())!.height).toBeLessThan(80);
   const tools = (await copy.locator('.tools').boundingBox())!;
@@ -22,6 +28,13 @@ test('headings, compact code tools and nested routes use the website design syst
   await page.getByRole('combobox', { name: 'Heading size', exact: true }).selectOption('xl');
   await page.getByRole('combobox', { name: 'Heading level', exact: true }).selectOption('3');
   await expect(preview.locator('h3')).toHaveText('A new perspective');
+  const contentMenu = page.locator('.ps-content-menu-slot .desktop');
+  await expect(contentMenu.locator('a[href="#page-heading"]')).toHaveCount(0);
+  await expect(contentMenu.locator('li[data-heading-level="3"]')).toHaveCSS('margin-inline-start', '16px');
+  await page.getByRole('combobox', { name: 'Heading level', exact: true }).selectOption('1');
+  await expect(contentMenu.locator('a[href="#heading-preview"]')).toHaveCount(0);
+  await page.getByRole('combobox', { name: 'Heading level', exact: true }).selectOption('2');
+  await expect(contentMenu.locator('a[href="#heading-preview"]')).toBeVisible();
   await expect(preview.locator('.ps-heading')).toHaveAttribute('data-size', 'xl');
   await page.getByRole('combobox', { name: 'Surface', exact: true }).selectOption('standard');
   await expect(preview).toHaveAttribute('data-background-color', 'standard');
@@ -29,6 +42,9 @@ test('headings, compact code tools and nested routes use the website design syst
   await expect(page.locator('.site-footer a').last()).toHaveCSS('color', 'rgb(114, 223, 198)');
   await page.setViewportSize({ width: 320, height: 800 });
   await page.goto('/getting-started/');
+  const burger = (await page.locator('.mobile-menu > summary').boundingBox())!;
+  const brand = (await page.locator('.website-header .brand').boundingBox())!;
+  expect(burger.x + burger.width).toBeLessThanOrEqual(brand.x);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
   const mobileCode = page.locator('.ps-code-block').first();
   expect((await mobileCode.boundingBox())!.height).toBeLessThan(80);

@@ -9,9 +9,11 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -23,6 +25,15 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'CSS variables and tokens',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -587,6 +598,22 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       <code>--ps-selection</code> optionally customizes the selected navigation and button-group surface.
       When absent, it falls back to --ps-section-muted. The website uses bergjohann-com's neutral grey
       selection and green-teal accent palette; the package's default theme remains independent.
+    </p>
+  </Section>
+  <Section
+    section={{
+      id: 'sidebar-viewport',
+      title: 'Sidebar viewport',
+      headline: 'Sidebar viewport',
+      background: { color: 'standard', size: 'standard' },
+      variant: 'content'
+    }}
+  >
+    <p>
+      <code>--ps-sidebar-available-height</code> is computed internally for each scroll panel from
+      its current viewport position. It updates on scrolling and resizing, leaving the sticky inset
+      below the panel. Native sidebar scrollbars use a thin thumb derived from
+      <code>--ps-body</code> and a transparent track.
     </p>
   </Section>
 </ContentPage>

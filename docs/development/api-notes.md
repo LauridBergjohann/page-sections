@@ -4,7 +4,7 @@ Current contracts after the 0.2 layout/content work:
 
 | Area | Contract or remaining boundary |
 | --- | --- |
-| Page headings | Sections, cards and panels inherit levels through h6. page.header supplies the single h1; explicit headingLevel and custom headers remain available. |
+| Page headings | Sections, cards and panels inherit levels through h6. Place HeadingSection or HeroSection directly in the content with headingLevel: 1. The content menu lists h2/h3 sections and indents h3. |
 | Section variants | default/content/feature have built-in heading styles. Nested typography is scoped to its own section. |
 | Section navigation | Generated navigation follows content in DOM order while CSS places it before/beside content. |
 | Nested themes | A light PageShell does not reset inherited dark palette values automatically. |

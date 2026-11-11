@@ -12,14 +12,11 @@
   import SectionSurfaceGroup from './SectionSurfaceGroup.svelte';
   import Breadcrumbs from './Breadcrumbs.svelte';
   import ContentMenu from './ContentMenu.svelte';
-  import HeroSection from './HeroSection.svelte';
-  import HeadingSection from './HeadingSection.svelte';
+  import { fitSidebar } from './fitSidebar.js';
   import './styles.css';
   let {
     page,
     children,
-    header,
-    showHeader = true,
     manageDocumentTitle = true,
     leftSidebar,
     footer,
@@ -37,14 +34,10 @@
     contentMenuLabel?: string;
     theme?: PageTheme;
     class?: string;
-    header?: Snippet<[ContentPageData, string]>;
-    showHeader?: boolean;
     manageDocumentTitle?: boolean;
   } = $props();
   let revision = $state(0);
   let host = $state<HTMLElement>();
-  const titleId = $props.id();
-  const labelId = $derived(header ? titleId : `${page.header?.id ?? 'page-heading'}-title`);
   setContext<ReadSectionContext>(SECTION_CONTEXT, () => ({
     pageKind: 'content',
     headingLevel: 2,
@@ -56,7 +49,7 @@
   setContext(SECTION_REGISTRY, registry);
   function sections() {
     void revision;
-    return registry.sections;
+    return registry.sections.filter(item => item.headingLevel === 2 || item.headingLevel === 3);
   }
   onMount(() => {
     const reorder = () =>
@@ -78,44 +71,17 @@
   bind:this={host}
   class={['ps-page', className]}
   style={themeStyle(theme)}
-  aria-labelledby={rest['aria-labelledby'] ??
-    (showHeader && !rest['aria-label'] ? labelId : undefined)}
-  aria-label={rest['aria-label'] ??
-    (!showHeader && !rest['aria-labelledby'] ? page.title : undefined)}
+  aria-label={rest['aria-label'] ?? (!rest['aria-labelledby'] ? page.title : undefined)}
 >
   <div class="ps-page-frame">
     <div class="breadcrumbs">
       <Breadcrumbs items={page.breadcrumbs ?? []} />
     </div>
     {#if leftSidebar}<aside class="ps-left-sidebar">
-        <div class="sidebar-panel">{@render leftSidebar()}</div>
+        <div class="sidebar-panel ps-sidebar-scroll" use:fitSidebar>{@render leftSidebar()}</div>
       </aside>{/if}
     <div class="ps-page-content">
       <SectionSurfaceGroup>
-        {#if showHeader}
-          {#if header}<div class="ps-custom-header">
-              {@render header(page, titleId)}
-            </div>{:else if page.header?.type === 'hero'}<HeroSection
-              section={{
-                ...page.header,
-                headline: page.header.headline ?? page.title,
-                headingLevel: 1
-              }}
-            />{:else}
-            <HeadingSection
-              section={{
-                id: 'page-heading',
-                title: page.title,
-                headline: page.title,
-                eyebrow: page.eyebrow,
-                introduction: page.intro,
-                headingSize: 'l',
-                ...page.header,
-                headingLevel: 1
-              }}
-            />
-          {/if}
-        {/if}
         <div class="page-body">
           <div
             class="sections ps-grid-scope"
@@ -194,7 +160,7 @@
     .sidebar-panel {
       position: sticky;
       top: var(--ps-sidebar-sticky-top);
-      max-height: calc(100dvh - 2 * var(--ps-sidebar-sticky-top));
+      max-height: var(--ps-sidebar-available-height, calc(100dvh - var(--ps-nav-height) - var(--ps-breadcrumb-height) - var(--ps-sidebar-sticky-top)));
       overflow: auto;
       overscroll-behavior: contain;
       padding-block: 0.75rem;

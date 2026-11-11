@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ContentPage, Section, SidebarNavigation } from '@page-sections/svelte';
+  import { ContentPage, HeadingSection, Section, SidebarNavigation } from '@page-sections/svelte';
   let left = $state(true);
   let right = $state(true);
   let full = $state(false);
@@ -31,18 +31,14 @@
   leftSidebar={left ? navigation : undefined}
   showContentMenu={right}
 >
-  {#snippet header(page, titleId)}
-    <Section
-      section={{
-        id: 'page-heading',
-        title: 'Page heading',
-        background: { color: transparentHeader ? 'transparent' : 'standard', size: 'standard' }
-      }}
-      renderHeader={false}
-    >
-      <h1 id={titleId}>{page.title}</h1>
-    </Section>
-  {/snippet}
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Sidebar layout',
+      headingLevel: 1,
+      background: { color: transparentHeader ? 'transparent' : 'standard', size: 'standard' }
+    }}
+  />
   {#each [0, 1, 2] as index}
     <Section
       section={{

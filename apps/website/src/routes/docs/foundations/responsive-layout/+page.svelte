@@ -24,9 +24,11 @@
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -35,6 +37,15 @@
   page={{ title: 'Responsive layout', pageTitle: 'Responsive layout · Page Sections' }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Responsive layout',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },

@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- Add shared Heading and HeadingSection components, use them for section and page headings, and render configurable heading/hero page headers. Compact code tools into the top-right corner. Nest documentation URLs under their chapters and apply the website's green-teal theme and Lucide disclosure icons.
+- Add shared Heading and HeadingSection components, use them for section and page headings, and compose page titles as ordinary content sections. Content menus include h2/h3, with indented h3 entries. Compact code tools into the top-right corner. Nest documentation URLs under their chapters and apply the website's green-teal theme and Lucide disclosure icons. Use down/up disclosure chevrons, keep sidebar scrolling inside the initial viewport, and place the mobile menu before the logo.
 
 - Add the responsive ContentPage sidebar frame, automatic active content menu, hierarchical page-link navigation and shared navigation/geometry resolvers. The documentation uses one navigation tree, linked chapter pages, Lucide icons and previous/next reading links. Replace the former sectionNavigation option with showContentMenu and leftSidebar.
 

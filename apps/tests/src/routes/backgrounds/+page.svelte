@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { ContentPage, Section, SectionSurfaceGroup } from '@page-sections/svelte';
+  import { HeadingSection, ContentPage, Section, SectionSurfaceGroup } from '@page-sections/svelte';
+
   import type { SectionBackgroundColor } from '@page-sections/core';
   const solids = ['transparent', 'standard', 'muted'] as const;
   const sizes = ['standard', 'full'] as const;
@@ -17,13 +18,21 @@
   page={{
     title: 'A sense of continuity.',
     pageTitle: 'Backgrounds — Page Sections',
-    eyebrow: '02 / Backgrounds & surfaces',
-    intro:
-      'Solid surfaces, full-width transitions and corners that know their neighbours. Use Light and Dark above to compare the same configuration in both themes.',
     breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Backgrounds' }]
   }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'A sense of continuity.',
+      eyebrow: '02 / Backgrounds & surfaces',
+      introduction:
+        'Solid surfaces, full-width transitions and corners that know their neighbours. Use Light and Dark above to compare the same configuration in both themes.',
+      headingLevel: 1,
+      headingSize: 'l'
+    }}
+  />
   <Section
     section={{
       id: 'solids',

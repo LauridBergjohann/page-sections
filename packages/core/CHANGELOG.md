@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- Add HeadingSize and HeadingSectionData, independent headingSize on sections, and a unified ContentPageData.header for heading or hero sections.
+- Add HeadingSize and HeadingSectionData, independent headingSize on sections, and heading-level metadata for hierarchical content menus. Page titles are ordinary heading or hero records within the sections array.
 
 - Update responsive sidebar geometry to 248px panels with 12/28px gaps and 300px panels at 3XL. Support freestanding content-menu rectangles through contentMenuDetached.
 

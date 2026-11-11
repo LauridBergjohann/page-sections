@@ -5,9 +5,11 @@
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -16,6 +18,15 @@
   page={{ title: 'Svelte API', pageTitle: 'Svelte API · Page Sections' }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Svelte API',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -297,9 +308,9 @@
       See <a href={base + '/docs/sections/headings/'}>Headings</a>.
     </p>
     <p>
-      ContentPage's page.header selects HeadingSectionData or HeroSectionData; the default is a
-      HeadingSection. The header snippet remains available for custom markup. SidebarNavigation
-      accepts a disclosureIcon snippet for its disclosure chevron; the website supplies Lucide.
+      ContentPage renders the sections supplied as children. Place HeadingSection or HeroSection
+      directly in that content and set headingLevel: 1 for the page title. SidebarNavigation accepts
+      a disclosureIcon snippet for its disclosure chevron; the website supplies Lucide.
     </p>
   </Section>
 </ContentPage>

@@ -6,10 +6,9 @@
   import { ContentPage, HeadingSection, CarouselSection } from '@page-sections/svelte';
 <\/script>
 
-<ContentPage page={{ title: 'Field notes', header: {
-  type: 'heading', id: 'page-heading', title: 'Field notes',
-  headingSize: 'l', background: { color: 'standard', size: 'standard' }
-} }}>
+<ContentPage page={{ title: 'Field notes' }}>
+  <HeadingSection section={{ id: 'page-heading', title: 'Field notes', headingLevel: 1,
+    headingSize: 'l', background: { color: 'standard', size: 'standard' } }} />
   <HeadingSection section={{ id: 'chapter', title: 'A new chapter',
     headingLevel: 2, headingSize: 'xl', background: { color: 'muted' } }} />
   <CarouselSection section={{ id: 'projects', title: 'Projects',
@@ -31,6 +30,15 @@
 </script>
 
 <ContentPage page={{ title: 'Headings' }} showContentMenu>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Headings',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       id: 'try',
@@ -101,18 +109,14 @@
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
-        ContentPage renders its title as a HeadingSection by default (l, h1, transparent
-        background). Configure <code>page.header</code> with a heading or hero record to control its
-        surface and layout. ContentPage supplies h1 for either header type and falls back to the
-        page title when the hero has no headline. Set <code>showHeader=false</code> when composing the
-        page title yourself.
+        Place HeadingSection directly inside ContentPage, just like any other section. Choose its
+        background, position and headingLevel explicitly. The page title property is metadata; it
+        does not insert visible content. Use one h1 per page. Only sections at h2 or h3 appear in
+        the right content menu; h3 entries are indented.
       </p>
       <p>
-        For a hero header, use <code
-          >header: &#123; type: 'hero', id: 'welcome', title: 'Field notes', size: 's', headingSize:
-          'xl', background: &#123; color: 'standard' &#125; &#125;</code
-        >. Hero <code>size</code> controls the composition height; <code>headingSize</code> controls the
-        text.
+        Alternatively, place a HeroSection in the same position with headingLevel: 1. Hero size
+        controls the composition height; headingSize controls the text.
       </p>
       <p>
         Sizes respond to the available container width: m spans 18–24px, l spans 24–32px and xl

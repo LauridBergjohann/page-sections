@@ -6,7 +6,7 @@ Svelte owns DOM rendering, context, snippets, CSS, hydration-time observation an
 
 ## Composition and state
 
-ContentPage establishes a request-local SectionRegistry. Section registers semantic id/title metadata during initialization, updates it reactively and unregisters on destruction. SectionSurfaceGroup maintains a separate presentation registry and scope so nested surface groups cannot override each other's corner rules. Server rules are emitted after children register.
+ContentPage establishes a request-local SectionRegistry. Section registers semantic id/title and resolved heading-level metadata during initialization, updates it reactively and unregisters on destruction. ContentPage lists only sections with visible h2/h3 headings; h3 entries are indented. Page titles are ordinary HeadingSection or HeroSection children with headingLevel: 1, independent of the page metadata. SectionSurfaceGroup maintains a separate presentation registry and scope so nested surface groups cannot override each other's corner rules. Server rules are emitted after children register.
 
 Generated section navigation also renders after registrations, then CSS places it above/beside the content. DOM reading order remains after the sections. Preserve this behavior in documentation unless a separately tested implementation change replaces it.
 

@@ -33,14 +33,25 @@
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage page={{ title: 'Hero', pageTitle: 'Hero · Page Sections' }} showContentMenu>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Hero',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -148,7 +159,10 @@
             <tr>
               <td><code>headingLevel</code></td>
               <td><code>HeadingLevel</code> (1-6)</td>
-              <td>Inherits the surrounding level; standalone h2; page.header supplies h1</td>
+              <td
+                >Inherits the surrounding level; standalone h2; set headingLevel: 1 for the page
+                title</td
+              >
             </tr>
           </tbody>
         </table>
@@ -170,9 +184,12 @@
     ><div class="prose">
       <p>
         Copy uses responsive padding/margins and a maximum width of 44rem. The heading scales from
-        2rem to 4.5rem. The optional panel mixes <code>--ps-section-standard</code> with
-        transparency; corners use <code>--ps-radius</code>. The image fills the hero's background
-        area, respecting ImageData's fit choice. Content can grow beyond the minimum height.
+        2rem to 2.75rem at the default xl size. The optional panel mixes <code
+          >--ps-section-standard</code
+        >
+        with transparency; corners use <code>--ps-radius</code>. The image fills the hero's
+        background area, respecting ImageData's fit choice. Content can grow beyond the minimum
+        height.
       </p>
       <p>
         Provide appropriate image alt text, or <code>alt: ''</code> for decorative imagery. Actions
@@ -186,8 +203,8 @@
       </p>
       <p>
         Artwork composition stacks text and media below an 840px container, then uses two columns.
-        The image is contained rather than used as a background. Use page.header to produce the
-        single page-level h1 without a custom header snippet.
+        The image is contained rather than used as a background. Place HeroSection directly in
+        ContentPage with headingLevel: 1 for the page title.
       </p>
       <p>
         Hero uses the shared Heading component: accent-colored eyebrow, a 12px gap around supporting

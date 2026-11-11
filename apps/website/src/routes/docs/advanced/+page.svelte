@@ -1,15 +1,20 @@
 <script lang="ts">
+  import { HeadingSection, Section } from '@page-sections/svelte';
+
   import WebsitePage from '$lib/WebsitePage.svelte';
-  import { Section } from '@page-sections/svelte';
 </script>
 
-<WebsitePage
-  page={{
-    title: 'Advanced',
-    intro: 'Connect data sources, add custom sections and render on the server.'
-  }}
-  showContentMenu={false}
->
+<WebsitePage page={{ title: 'Advanced' }} showContentMenu={false}>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Advanced',
+      introduction: 'Connect data sources, add custom sections and render on the server.',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       id: 'overview',

@@ -34,10 +34,12 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import SurfacePlayground from '$lib/SurfacePlayground.svelte';
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -46,6 +48,15 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
   page={{ title: 'Backgrounds and groups', pageTitle: 'Backgrounds and groups · Page Sections' }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Backgrounds and groups',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },

@@ -1,16 +1,21 @@
 <script lang="ts">
+  import { HeadingSection, Section } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section } from '@page-sections/svelte';
 </script>
 
-<ContentPage
-  page={{
-    title: 'About Page Sections',
-    intro: 'A shared foundation for content, from a personal website to spatial experiences.'
-  }}
-  showContentMenu
->
+<ContentPage page={{ title: 'About Page Sections' }} showContentMenu>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'About Page Sections',
+      introduction:
+        'A shared foundation for content, from a personal website to spatial experiences.',
+      headingLevel: 1,
+      headingSize: 'l'
+    }}
+  />
   <Section
     section={{
       id: 'motivation',

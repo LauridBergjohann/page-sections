@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
   import {
+    HeadingSection,
     HeroSection,
     RichTextSection,
     ImageSection,
@@ -16,6 +15,10 @@
     ButtonGroup,
     Sections
   } from '@page-sections/svelte';
+
+  import { base } from '$app/paths';
+  import ContentPage from '$lib/WebsitePage.svelte';
+
   import { cards, landscape, coast, editorial } from '$lib/content';
 </script>
 
@@ -23,13 +26,21 @@
   page={{
     title: 'The building blocks.',
     pageTitle: 'Components — Page Sections',
-    eyebrow: '01 / Components',
-    intro:
-      'Real content, composed in different ways. Resize the window to see each layout respond.',
     breadcrumbs: [{ label: 'Components' }]
   }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'The building blocks.',
+      eyebrow: '01 / Components',
+      introduction:
+        'Real content, composed in different ways. Resize the window to see each layout respond.',
+      headingLevel: 1,
+      headingSize: 'l'
+    }}
+  />
   <HeroSection
     section={{
       id: 'hero',

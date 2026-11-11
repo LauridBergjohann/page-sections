@@ -1,15 +1,20 @@
 <script lang="ts">
+  import { HeadingSection, Section } from '@page-sections/svelte';
+
   import WebsitePage from '$lib/WebsitePage.svelte';
-  import { Section } from '@page-sections/svelte';
 </script>
 
-<WebsitePage
-  page={{
-    title: 'Sections',
-    intro: 'Choose the right section for text, media, code and collections.'
-  }}
-  showContentMenu={false}
->
+<WebsitePage page={{ title: 'Sections' }} showContentMenu={false}>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Sections',
+      introduction: 'Choose the right section for text, media, code and collections.',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       id: 'overview',

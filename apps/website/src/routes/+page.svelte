@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { HeroSection, Section, CardGridSection } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CardGridSection } from '@page-sections/svelte';
 </script>
 
 <svelte:head
@@ -10,32 +11,33 @@
     content="Build content-driven websites with Page Sections. Explore live examples, learn the basics and try every layout."
   /></svelte:head
 >
-<ContentPage
-  page={{
-    title: 'Give your ideas a place.',
-    header: {
-      type: 'hero',
-      id: 'welcome',
-      title: 'Page Sections',
-      headline: 'Give your ideas a place.',
-      eyebrow: 'Page Sections · Svelte 5',
-      composition: 'artwork',
-      size: 'l',
-      introduction:
-        'A Svelte 5 component library for content-driven websites. Build portfolios, product pages and documentation from reusable sections that share one responsive layout system.',
-      image: {
-        src: base + '/landscape.svg',
-        alt: 'Layered green hills beneath a quiet sky',
-        width: 1200,
-        height: 750
+<ContentPage page={{ title: 'Give your ideas a place.' }}>
+  <HeroSection
+    section={{
+      ...{
+        type: 'hero',
+        id: 'welcome',
+        title: 'Page Sections',
+        headline: 'Give your ideas a place.',
+        eyebrow: 'Page Sections · Svelte 5',
+        composition: 'artwork',
+        size: 'l',
+        introduction:
+          'A Svelte 5 component library for content-driven websites. Build portfolios, product pages and documentation from reusable sections that share one responsive layout system.',
+        image: {
+          src: base + '/landscape.svg',
+          alt: 'Layered green hills beneath a quiet sky',
+          width: 1200,
+          height: 750
+        },
+        actions: [
+          { label: 'Get started', href: base + '/getting-started/', variant: 'primary' },
+          { label: 'Explore the showcase', href: base + '/showcase/', variant: 'text' }
+        ]
       },
-      actions: [
-        { label: 'Get started', href: base + '/getting-started/', variant: 'primary' },
-        { label: 'Explore the showcase', href: base + '/showcase/', variant: 'text' }
-      ]
-    }
-  }}
->
+      headingLevel: 1
+    }}
+  />
   <Section
     section={{
       id: 'what-is-page-sections',

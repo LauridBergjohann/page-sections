@@ -1,10 +1,12 @@
 <script lang="ts">
   import {
+    HeadingSection,
     ContentPage,
     HeroSection,
     RichTextSection,
     CardGridSection
   } from '@page-sections/svelte';
+
   import { landscape } from '$lib/content';
 </script>
 
@@ -15,13 +17,18 @@
   /></svelte:head
 >
 <ContentPage
-  page={{
-    title: 'Space for your ideas.',
-    pageTitle: 'Page Sections — A place for your content',
-    eyebrow: 'Simple pieces. Thoughtful pages.',
-    intro: 'A composable toolkit for content-driven websites, built with Svelte 5.'
-  }}
+  page={{ title: 'Space for your ideas.', pageTitle: 'Page Sections — A place for your content' }}
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Space for your ideas.',
+      eyebrow: 'Simple pieces. Thoughtful pages.',
+      introduction: 'A composable toolkit for content-driven websites, built with Svelte 5.',
+      headingLevel: 1,
+      headingSize: 'l'
+    }}
+  />
   <HeroSection
     section={{
       id: 'welcome',

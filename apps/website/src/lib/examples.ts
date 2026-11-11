@@ -5,22 +5,25 @@ import { coast, landscape } from './content';
 export const portfolio: PageData = {
   title: 'Ideas, made tangible.',
   pageTitle: 'Portfolio example — Page Sections',
-  header: {
-    type: 'hero',
-    id: 'welcome',
-    title: 'Welcome',
-    headline: 'Ideas, made tangible.',
-    eyebrow: 'Design · Development · Making',
-    composition: 'artwork',
-    size: 'm',
-    introduction: 'A personal website composed entirely from Page Sections data.',
-    image: landscape,
-    actions: [
-      { label: 'Explore projects', href: '#projects', variant: 'primary' },
-      { label: 'About me', href: '#about' }
-    ]
-  },
   sections: [
+    {
+      ...{
+        type: 'hero',
+        id: 'welcome',
+        title: 'Welcome',
+        headline: 'Ideas, made tangible.',
+        eyebrow: 'Design · Development · Making',
+        composition: 'artwork',
+        size: 'm',
+        introduction: 'A personal website composed entirely from Page Sections data.',
+        image: landscape,
+        actions: [
+          { label: 'Explore projects', href: '#projects', variant: 'primary' },
+          { label: 'About me', href: '#about' }
+        ]
+      },
+      headingLevel: 1
+    },
     {
       type: 'cardGrid',
       id: 'projects',
@@ -164,9 +167,16 @@ export const catalogItems: CardItem[] = Array.from({ length: 12 }, (_, index) =>
 export const catalog: PageData = {
   title: 'Catalog geometry',
   pageTitle: 'Catalog example — Page Sections',
-  intro:
-    'Choose a media format without sacrificing text space. Cards within each collection share a height, including short titles and missing labels.',
   sections: [
+    {
+      type: 'heading',
+      introduction:
+        'Choose a media format without sacrificing text space. Cards within each collection share a height, including short titles and missing labels.',
+      id: 'page-heading',
+      title: 'Catalog geometry',
+      headingLevel: 1,
+      headingSize: 'l'
+    },
     {
       type: 'grid',
       id: 'media-comparison',

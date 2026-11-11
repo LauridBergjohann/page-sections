@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
   import {
+    HeadingSection,
     CardGridSection,
     CarouselSection,
     Navigation,
@@ -10,6 +9,10 @@
     RichTextSection,
     type CardElements
   } from '@page-sections/svelte';
+
+  import { base } from '$app/paths';
+  import ContentPage from '$lib/WebsitePage.svelte';
+
   import { catalogItems } from '$lib/examples';
   import type { CardMediaAspect } from '@page-sections/core';
   let mediaAspect: CardMediaAspect = $state('1/1');
@@ -34,6 +37,14 @@
 </script>
 
 <ContentPage page={{ title: 'Integration contracts' }}>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Integration contracts',
+      headingLevel: 1,
+      headingSize: 'l'
+    }}
+  />
   <p>Native card content remains available when an enhancement attaches to its elements.</p>
   <button onclick={() => (items = items.toReversed())}>Reverse items</button>
   <button onclick={() => (items = items.slice(1))}>Remove item</button>

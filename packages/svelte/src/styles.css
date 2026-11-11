@@ -13,8 +13,7 @@
 /* A content menu only docks to a continuous column of contained, opaque surfaces.
    Evaluate rendered surfaces in CSS so SSR, no-JS and live background changes agree. */
 @media (min-width: 1600px) {
-  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot,
-  .ps-page-frame:has(.ps-custom-header):not(:has(.ps-custom-header .ps-section)) > .ps-content-menu-slot {
+  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot {
     --ps-content-menu-radius: var(--ps-radius);
     --ps-content-menu-shadow: var(--ps-surface-shadow);
     margin-inline-start: var(--ps-sidebar-gap);
@@ -50,3 +49,10 @@
   .ps-shell:has(.ps-navigation-track:is([data-scroll='fixed'], [data-scroll='delayed'])) .ps-content-menu-slot { top: calc(var(--ps-nav-height) + var(--ps-sidebar-sticky-top)); }
   .ps-shell:has(.ps-navigation-track:is([data-scroll='fixed'], [data-scroll='delayed'])) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }
 }
+
+/* Native scrollbars retain keyboard and pointer behavior with a quieter appearance. */
+.ps-sidebar-scroll { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--ps-body) 35%, transparent) transparent; }
+.ps-sidebar-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.ps-sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+.ps-sidebar-scroll::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ps-body) 35%, transparent); border-radius: 999px; }
+.ps-sidebar-scroll::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--ps-body) 60%, transparent); }

@@ -5,13 +5,12 @@
   import { resolveNavigation, type MenuItem } from '@page-sections/core';
   import { navigationTree, readingNeighbors } from './navigation';
   import NavigationIcon from './NavigationIcon.svelte';
-  import ChevronRight from '@lucide/svelte/icons/chevron-right';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
   let {
     page,
     children,
     showContentMenu = false,
     showSidebar,
-    header,
     ...rest
   }: ComponentProps<typeof ContentPage> & { showSidebar?: boolean } = $props();
   const navigation = $derived(resolveNavigation(navigationTree, { pathname: route.url.pathname }));
@@ -34,7 +33,7 @@
     label="Documentation chapters"
   >
     {#snippet icon(item)}<NavigationIcon name={item.icon} />{/snippet}
-    {#snippet disclosureIcon()}<ChevronRight size={16} />{/snippet}
+    {#snippet disclosureIcon()}<ChevronDown size={16} />{/snippet}
   </SidebarNavigation>
 {/snippet}
 
@@ -42,25 +41,10 @@
   {...rest}
   page={{
     ...page,
-    breadcrumbs: navigation.breadcrumbs,
-    header:
-      navigation.root?.id === 'docs'
-        ? {
-            type: 'heading',
-            id: 'page-heading',
-            title: page.title,
-            headline: page.title,
-            eyebrow: page.eyebrow,
-            introduction: page.intro,
-            headingSize: 'l',
-            ...page.header,
-            background: { color: 'standard', size: 'standard' }
-          }
-        : page.header
+    breadcrumbs: navigation.breadcrumbs
   }}
   {showContentMenu}
   leftSidebar={sidebar ? sidebarContent : undefined}
-  {header}
 >
   {@render children?.()}
   {#snippet footer()}

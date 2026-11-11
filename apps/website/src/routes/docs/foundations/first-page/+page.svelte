@@ -3,16 +3,16 @@
     {
       language: 'svelte',
       code: `<script lang="ts">
-  import { ContentPage } from '@page-sections/svelte';
-  import { RichTextSection, CardGridSection, type ContentPageData } from '@page-sections/svelte';
+  import { ContentPage, HeadingSection, RichTextSection, CardGridSection, type ContentPageData } from '@page-sections/svelte';
+
   const page: ContentPageData = {
     title: 'The reading room',
-    intro: 'Guides for curious people.',
     breadcrumbs: [{ label: 'Reading room' }]
   };
 <\/script>
 
 <ContentPage {page} showContentMenu>
+  <HeadingSection section={{ id: 'title', title: page.title, introduction: 'Guides for curious people.', headingLevel: 1 }} />
   <RichTextSection
     section={{
       id: 'start',
@@ -39,9 +39,11 @@
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -50,6 +52,15 @@
   page={{ title: 'Your first page', pageTitle: 'Your first page · Page Sections' }}
   showContentMenu
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Your first page',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -64,10 +75,10 @@
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
-        ContentPage creates the document title, an <code>h1</code>, breadcrumbs and a page-local
-        section registry. Each Section contributes its <code>id</code> and <code>title</code> to the
-        optional index. <code>headline</code> controls the visible section heading, so navigation labels
-        can remain short.
+        ContentPage creates the document title, breadcrumbs and a page-local section registry.
+        HeadingSection supplies the visible h1 as ordinary content. Sections at h2/h3 contribute
+        their <code>id</code> and <code>title</code> to the optional index. <code>headline</code> controls
+        the visible section heading, so navigation labels can remain short.
       </p>
       <p>
         Inspect the result with JavaScript disabled <strong

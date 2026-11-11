@@ -51,7 +51,7 @@
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"><path d="m9 6 6 6-6 6" /></svg
+                    stroke-width="2"><path d="m6 9 6 6 6-6" /></svg
                   >{/if}</span
               ></summary
             >
@@ -125,7 +125,7 @@
     background: var(--ps-selection, var(--ps-section-muted));
   }
   details[open] > summary span {
-    transform: rotate(90deg);
+    transform: rotate(180deg);
   }
   summary span {
     display: flex;

@@ -7,5 +7,5 @@
 {#if kind === 'detail'}
   <SectionSurfaceGroup pageKind="detail"><Sections sections={[{ type: 'richText', id: 'detail', title: 'Detail', body: 'Detail', background: { color: 'standardToMuted', size: 'full' } }]} /></SectionSurfaceGroup>
 {:else}
-  <ContentPage {page}><Sections sections={page.sections} /></ContentPage>
+  <ContentPage {page} aria-labelledby={page.sections[0].id + '-title'}><Sections sections={page.sections} /></ContentPage>
 {/if}

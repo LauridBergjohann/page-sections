@@ -3,7 +3,7 @@
     {
       language: 'svelte',
       code: `<script lang="ts">
-  import { ContentPage, SidebarNavigation, Section } from '@page-sections/svelte';
+  import { ContentPage, HeadingSection, SidebarNavigation, Section } from '@page-sections/svelte';
   import { resolveNavigation } from '@page-sections/core';
   const navigation = resolveNavigation(
     [
@@ -22,6 +22,7 @@
   page={{ title: 'Planting', breadcrumbs: navigation.breadcrumbs }}
   showContentMenu
 >
+  <HeadingSection section={{ id: 'title', title: 'Planting', headingLevel: 1, background: { color: 'standard' } }} />
   {#snippet leftSidebar()}
     <SidebarNavigation items={navigation.sidebarItems} activeId={navigation.activeId} />
   {/snippet}
@@ -52,8 +53,10 @@
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
   let left = $state(true);
@@ -65,6 +68,15 @@
   showSidebar={left}
   showContentMenu={right}
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Page shell and sidebars',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       id: 'try-layout',
@@ -112,7 +124,7 @@
     ><div class="prose">
       <p>
         <code>page: ContentPageData</code> is required. It supplies the title, optional pageTitle,
-        eyebrow, intro, breadcrumbs and header. <code>children</code> contains the sections.
+        and breadcrumbs. <code>children</code> contains the sections.
         <code>bodyLayout</code>
         is wide or narrow; <code>bodySpacing</code> controls vertical body spacing.
       </p>
@@ -123,7 +135,8 @@
         </li>
         <li>
           <code>showContentMenu?: boolean</code> defaults to false. It builds the right-hand contents
-          menu from registered sections. An empty page reserves no right rail.
+          menu from registered h2/h3 sections. H1 and h4�h6 are excluded; h3 entries are indented. A page
+          without eligible sections reserves no right rail.
         </li>
         <li><code>contentMenuLabel?: string</code> defaults to “On this page”.</li>
         <li>
@@ -131,12 +144,8 @@
           previous/next links.
         </li>
         <li>
-          <code>header?: Snippet&lt;[ContentPageData, string]&gt;</code> replaces the title header; use
-          the supplied ID on its heading.
-        </li>
-        <li>
-          <code>showHeader</code> and <code>manageDocumentTitle</code> default to true. Turn them off
-          when the host owns the h1 or document title.
+          <code>manageDocumentTitle</code> defaults to true. Turn it off when the host owns the document
+          title.
         </li>
         <li>
           <code>theme</code>, <code>class</code> and standard main-element attributes are supported.
@@ -153,17 +162,16 @@
     }}
     ><div class="prose">
       <p>
-        The header snippet takes priority over page.header. Without either, ContentPage renders its
-        title using HeadingSection, with size l and a transparent surface. Configure page.header as
-        a heading or hero record. Both receive h1. Breadcrumbs sit outside that choice and remain
-        available with a hero or a hidden header. Supply the path from the first main-menu entry
-        through the current page; exclude Home. A one-entry breadcrumb is hidden. Its row remains
-        reserved, including on pages without breadcrumbs, so the content and sidebars keep their
-        vertical position. The logo links to Home.
+        Place a HeadingSection or HeroSection with headingLevel: 1 directly in the page content. It
+        controls its own background, position and typography, like every other section. Breadcrumbs
+        remain separate. Supply the path from the first main-menu entry through the current page;
+        exclude Home. A one-entry breadcrumb is hidden. Its row remains reserved, including on pages
+        without breadcrumbs, so the content and sidebars keep their vertical position. The logo
+        links to Home.
       </p>
       <p>
-        Supply exactly one h1. When showHeader is false, main falls back to page.title as its
-        accessible label, unless aria-label or aria-labelledby is provided.
+        Supply exactly one h1. The main landmark uses page.title as its accessible label, unless
+        aria-label or aria-labelledby is provided.
       </p>
     </div></Section
   >

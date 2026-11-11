@@ -74,22 +74,27 @@ const highlighted = await highlightCode(code, 'typescript');
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import CodePlayground from '$lib/CodePlayground.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
-<ContentPage
-  page={{
-    title: 'Code',
-    pageTitle: 'Code · Page Sections',
-    intro: 'Readable examples, on their own or alongside the story.'
-  }}
-  showContentMenu
->
+<ContentPage page={{ title: 'Code', pageTitle: 'Code · Page Sections' }} showContentMenu>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Code',
+      introduction: 'Readable examples, on their own or alongside the story.',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },

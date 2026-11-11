@@ -1,17 +1,24 @@
 <script lang="ts">
+  import { HeadingSection, CardGridSection } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { CardGridSection } from '@page-sections/svelte';
 </script>
 
 <ContentPage
-  page={{
-    title: 'Small pieces. Complete experiences.',
-    pageTitle: 'Showcase · Page Sections',
-    eyebrow: 'The showcase',
-    intro: 'Explore complete pages and focused compositions built from the public components.'
-  }}
+  page={{ title: 'Small pieces. Complete experiences.', pageTitle: 'Showcase · Page Sections' }}
 >
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Small pieces. Complete experiences.',
+      eyebrow: 'The showcase',
+      introduction:
+        'Explore complete pages and focused compositions built from the public components.',
+      headingLevel: 1,
+      headingSize: 'l'
+    }}
+  />
   <CardGridSection
     section={{ id: 'examples', title: 'Examples' }}
     cardVariant="editorial"

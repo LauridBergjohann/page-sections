@@ -1,12 +1,20 @@
 <script lang="ts">
+  import { HeadingSection, Section } from '@page-sections/svelte';
+
   import WebsitePage from '$lib/WebsitePage.svelte';
-  import { Section } from '@page-sections/svelte';
 </script>
 
-<WebsitePage
-  page={{ title: 'Reference', intro: 'Look up components, core functions and design tokens.' }}
-  showContentMenu={false}
->
+<WebsitePage page={{ title: 'Reference' }} showContentMenu={false}>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Reference',
+      introduction: 'Look up components, core functions and design tokens.',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       id: 'overview',

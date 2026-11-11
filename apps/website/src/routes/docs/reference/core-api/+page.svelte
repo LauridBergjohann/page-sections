@@ -37,14 +37,25 @@ console.log(background.cssBackground);`
 </script>
 
 <script lang="ts">
+  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { Section, CodeBlock } from '@page-sections/svelte';
+
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage page={{ title: 'Core API', pageTitle: 'Core API · Page Sections' }} showContentMenu>
+  <HeadingSection
+    section={{
+      id: 'page-heading',
+      title: 'Core API',
+      headingLevel: 1,
+      headingSize: 'l',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -589,8 +600,8 @@ console.log(background.cssBackground);`
     <p>
       <code>HeadingSize</code> is m | l | xl, independent of HeadingLevel.
       SectionDefinition.headingSize selects the visual size. <code>HeadingSectionData</code> extends SectionDefinition
-      with type: 'heading'. It is part of SectionTypeMap and renders through Sections. ContentPageData.header
-      accepts HeadingSectionData | HeroSectionData; ContentPage enforces h1 for the page header.
+      with type: 'heading'. It is part of SectionTypeMap and renders through Sections. Place it or a HeroSectionData
+      record directly in PageData.sections and set headingLevel: 1 for the page title.
     </p>
   </Section>
 </ContentPage>
