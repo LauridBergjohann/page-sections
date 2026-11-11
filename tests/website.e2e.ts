@@ -1,12 +1,46 @@
 import { expect, test } from '@playwright/test';
 
+test('headings, compact code tools and nested routes use the website design system', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/docs/foundations/installation/');
+  const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
+  await expect(breadcrumb.getByRole('link').nth(0)).toHaveAttribute('href', '/docs/');
+  await expect(breadcrumb.getByRole('link').nth(1)).toHaveAttribute('href', '/docs/foundations/');
+  await expect(breadcrumb.locator('[aria-current="page"]')).toHaveText('Installation');
+  await expect(page.locator('main h1')).toHaveCSS('font-size', '32px');
+  await expect(page.locator('.ps-left-sidebar summary svg').first()).toHaveClass(/lucide/);
+  const copy = page.locator('.ps-code-block').first();
+  expect((await copy.boundingBox())!.height).toBeLessThan(80);
+  const tools = (await copy.locator('.tools').boundingBox())!;
+  const source = (await copy.locator('pre').boundingBox())!;
+  expect(source.x + source.width).toBeLessThanOrEqual(tools.x + 1);
+  expect(Math.abs(tools.y - source.y)).toBeLessThan(1);
+  await expect(page.locator('.desktop-menu a.active').first()).toHaveCSS('background-color', 'rgb(238, 238, 238)');
+  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', 'rgb(0, 123, 94)');
+  await page.goto('/docs/sections/headings/');
+  const preview = page.locator('#heading-preview');
+  await page.getByRole('combobox', { name: 'Heading size', exact: true }).selectOption('xl');
+  await page.getByRole('combobox', { name: 'Heading level', exact: true }).selectOption('3');
+  await expect(preview.locator('h3')).toHaveText('A new perspective');
+  await expect(preview.locator('.ps-heading')).toHaveAttribute('data-size', 'xl');
+  await page.getByRole('combobox', { name: 'Surface', exact: true }).selectOption('standard');
+  await expect(preview).toHaveAttribute('data-background-color', 'standard');
+  await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
+  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', 'rgb(114, 223, 198)');
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto('/getting-started/');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  const mobileCode = page.locator('.ps-code-block').first();
+  expect((await mobileCode.boundingBox())!.height).toBeLessThan(80);
+});
+
 test('navigation surfaces, hover geometry and sidebar state stay consistent across pages', async ({ page }) => {
   await page.setViewportSize({ width: 1809, height: 1000 });
-  await page.goto('/docs/hero/');
+  await page.goto('/docs/sections/hero/');
   const docs = page.locator('.desktop-menu').getByRole('link', { name: 'Documentation', exact: true });
   const palette = await docs.evaluate(el => {
     const css = getComputedStyle(el);
-    return { muted: css.getPropertyValue('--ps-section-muted').trim(), standard: css.getPropertyValue('--ps-section-standard').trim(), accent: css.getPropertyValue('--ps-accent').trim() };
+    return { muted: css.getPropertyValue('--ps-selection').trim() || css.getPropertyValue('--ps-section-muted').trim(), standard: css.getPropertyValue('--ps-section-standard').trim(), accent: css.getPropertyValue('--ps-accent').trim() };
   });
   // Resolve theme tokens through CSS, independent of the palette's color notation.
   const colors = await page.evaluate(palette => {
@@ -42,7 +76,7 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await sidebar.getByRole('button', { name: 'Show pages in Sections', exact: true }).click();
   await expect(sidebar.getByRole('link', { name: 'Hero', exact: true })).toBeHidden();
   await page.locator('.reading-path [rel="next"]').click();
-  await expect(page).toHaveURL(/\/docs\/rich-text\/$/);
+  await expect(page).toHaveURL(/\/docs\/sections\/rich-text\/$/);
   await expect(sidebar.getByRole('link', { name: 'Rich text', exact: true })).toBeVisible();
   await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Rich text');
   await expect(page.locator('.ps-content-menu-slot .desktop')).toHaveCSS('background-color', colors.standard);
@@ -85,7 +119,7 @@ test('single-page entry points and legal footer links lead to actual project con
 
 test('desktop page links reveal only the second level and retain native navigation', async ({ page }) => {
   await page.setViewportSize({ width: 1809, height: 1000 });
-  await page.goto('/docs/hero/');
+  await page.goto('/docs/sections/hero/');
   const menu = page.locator('.website-header .desktop-menu');
   const docs = menu.getByRole('link', { name: 'Documentation', exact: true });
   await docs.hover();
@@ -113,7 +147,7 @@ test('desktop page links reveal only the second level and retain native navigati
   await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
   await page.locator('.child-pages').getByRole('link', { name: 'Sections' }).click();
   await page.locator('.child-pages').getByRole('link', { name: 'Hero' }).click();
-  await expect(page).toHaveURL(/\/docs\/hero\/$/);
+  await expect(page).toHaveURL(/\/docs\/sections\/hero\/$/);
   const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
   await expect(breadcrumb.locator('li')).toHaveCount(3);
   await expect(breadcrumb).not.toContainText('Home');
@@ -137,7 +171,7 @@ test('touch and mobile users can reach deep pages through real parent pages', as
       await page.locator('.child-pages').getByRole('link', { name: 'Sections' }).tap();
       await page.locator('.child-pages').getByRole('link', { name: 'Hero' }).tap();
     }
-    await expect(page).toHaveURL(/\/docs\/hero\/$/);
+    await expect(page).toHaveURL(/\/docs\/sections\/hero\/$/);
     await expect(page.locator('.ps-left-sidebar')).toBeHidden();
     await context.close();
   }
@@ -147,7 +181,7 @@ for (const width of [390, 1600]) {
   test(`documentation is readable and linked without JavaScript at ${width}px`, async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height: 900 } });
     const page = await context.newPage();
-    for (const route of ['/docs/card-grid/', '/docs/code/', '/docs/core-api/', '/docs/installation/']) {
+    for (const route of ['/docs/sections/card-grid/', '/docs/sections/code/', '/docs/reference/core-api/', '/docs/foundations/installation/']) {
       const response = await page.goto('http://127.0.0.1:4174' + route);
       expect(response?.status()).toBe(200);
       await expect(page.locator('main h1')).toHaveCount(1);
@@ -168,7 +202,7 @@ for (const width of [390, 1600]) {
 test('card settings update the preview and the copyable source together', async ({ page, context }) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-  await page.goto('/docs/card-grid/');
+  await page.goto('/docs/sections/card-grid/');
   await page.getByRole('combobox', { name: 'Card variant', exact: true }).selectOption('catalog');
   await page.getByRole('combobox', { name: 'Card tone', exact: true }).selectOption('standard');
   await page.getByRole('combobox', { name: 'Card size', exact: true }).selectOption('l');
@@ -190,7 +224,7 @@ test('card settings update the preview and the copyable source together', async 
 });
 
 test('code composition supports languages, side order, wrapping and dark mode', async ({ page }) => {
-  await page.goto('/docs/code/');
+  await page.goto('/docs/sections/code/');
   await page.getByRole('combobox', { name: 'Language', exact: true }).selectOption('json');
   await page.getByRole('combobox', { name: 'Code position', exact: true }).selectOption('left');
   await page.getByLabel('Wrap long lines', { exact: true }).check();
@@ -220,7 +254,7 @@ test('global search supports shortcuts, keyboard navigation and empty results', 
   await input.press('ArrowDown');
   await expect(input).toHaveAttribute('aria-activedescendant', 'site-search-result-0');
   await input.press('Enter');
-  await expect(page).toHaveURL(/\/docs\/code\/$/);
+  await expect(page).toHaveURL(/\/docs\/sections\/code\/$/);
   await expect(page.getByRole('listbox')).toHaveCount(0);
   await page.keyboard.press('Meta+k');
   await expect(input).toBeFocused();
@@ -281,7 +315,7 @@ for (const width of [320, 600, 840, 1200, 1700]) {
     await expect(input).toBeFocused();
     await input.fill('CodeBlock');
     await input.press('Enter');
-    await expect(page).toHaveURL(/\/docs\/code\/$/);
+    await expect(page).toHaveURL(/\/docs\/sections\/code\/$/);
     if (width >= 1200) {
       const brand = await page.getByRole('link', { name: 'Page Sections home', exact: true }).boundingBox();
       const showcase = await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Showcase', exact: true }).boundingBox();

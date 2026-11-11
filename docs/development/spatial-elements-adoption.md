@@ -24,7 +24,7 @@ The host continues to own the stage, GPU rendering, spatial selection, virtual s
 
 Update Spatial Elements' square-card appearance fixtures and numeric expectations deliberately. Compare native poster and enhanced geometry at 320, 600, 720, 840, 1200 and wide layouts, including nested containers. Cover all three media ratios, short/long titles, missing labels, repeated items, filtering, resizing, format changes, keyboard navigation and reduced motion. Verify virtual-scroll row offsets and transitions after each layout change.
 
-Use the Page Sections `/docs/card-grid/` format comparison and `/showcase/integration/` attachment example as references. Keep these expectations shared rather than adding another set of card dimensions in the host.
+Use the Page Sections `/docs/sections/card-grid/` format comparison and `/showcase/integration/` attachment example as references. Keep these expectations shared rather than adding another set of card dimensions in the host.
 ## Surface and navigation follow-up
 
 When adopting the next release, use `cardTone: 'standard' | 'muted'` for catalog and carousel collections. Custom CardGridSection card snippets receive `options.tone`; forward it to Card together with the existing media and size options. Geometry, equal heights and adapter attachment points are unchanged. Panel data continues to use `tone` with the same palette values. Navigation elevation is controlled by `--ps-navigation-shadow` and can be disabled with `none`.

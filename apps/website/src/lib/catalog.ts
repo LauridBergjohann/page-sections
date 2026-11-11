@@ -9,7 +9,7 @@ export const documents = [
   },
   {
     title: 'Installation',
-    href: '/docs/installation/',
+    href: '/docs/foundations/installation/',
     description:
       'Choose @page-sections/svelte for a Svelte website, or @page-sections/core for framework-independent data and calculations.',
     group: 'Foundations',
@@ -17,7 +17,7 @@ export const documents = [
   },
   {
     title: 'Your first page',
-    href: '/docs/first-page/',
+    href: '/docs/foundations/first-page/',
     description:
       'After installation, add a page with a text introduction and a collection of links:',
     group: 'Foundations',
@@ -25,7 +25,7 @@ export const documents = [
   },
   {
     title: 'Pages and sections',
-    href: '/docs/pages-and-sections/',
+    href: '/docs/foundations/pages-and-sections/',
     description:
       'Use a small set of composable containers rather than a separate page format for every layout.',
     group: 'Foundations',
@@ -33,7 +33,7 @@ export const documents = [
   },
   {
     title: 'Page shell',
-    href: '/docs/page-shell/',
+    href: '/docs/foundations/page-shell/',
     description:
       'ContentPage is the main content container. PageShell is an optional ancestor that shares a theme across the page and independent navigation.',
     group: 'Foundations',
@@ -41,7 +41,7 @@ export const documents = [
   },
   {
     title: 'Sections and grids',
-    href: '/docs/content-grid/',
+    href: '/docs/foundations/content-grid/',
     description:
       'Section, ContentGrid and ContentBlock: arrange content in columns and reading layouts.',
     group: 'Foundations',
@@ -49,7 +49,7 @@ export const documents = [
   },
   {
     title: 'Responsive layout',
-    href: '/docs/responsive-layout/',
+    href: '/docs/foundations/responsive-layout/',
     description:
       'Viewport breakpoints, container widths, card sizes and responsive layout calculations.',
     group: 'Foundations',
@@ -57,7 +57,7 @@ export const documents = [
   },
   {
     title: 'Themes and styling',
-    href: '/docs/themes/',
+    href: '/docs/foundations/themes/',
     description:
       'Page Sections provides CSS defaults without requiring a utility framework. Set shared variables on an ancestor, or use PageShell to scope a typed theme across navigation and page content.',
     group: 'Foundations',
@@ -65,15 +65,23 @@ export const documents = [
   },
   {
     title: 'Backgrounds and groups',
-    href: '/docs/backgrounds/',
+    href: '/docs/foundations/backgrounds/',
     description:
       "Backgrounds separate a section's content layout from its visual surface. Use a standard background for a contained panel and a full background for a page-wide transition.",
     group: 'Foundations',
     category: ''
   },
   {
+    title: 'Headings',
+    href: '/docs/sections/headings/',
+    description:
+      'Compose page titles and section headings with independent size, semantics and surfaces.',
+    group: 'Sections',
+    category: 'Introduction'
+  },
+  {
     title: 'Hero',
-    href: '/docs/hero/',
+    href: '/docs/sections/hero/',
     description:
       'Use HeroSection for a prominent introduction or call to action. It combines an optional image with a readable copy area; omit the image for a text-led hero.',
     group: 'Sections',
@@ -81,28 +89,28 @@ export const documents = [
   },
   {
     title: 'Rich text',
-    href: '/docs/rich-text/',
+    href: '/docs/sections/rich-text/',
     description: 'RichTextSection: readable paragraphs, headings, lists and structured content.',
     group: 'Sections',
     category: 'Text and code'
   },
   {
     title: 'Panels',
-    href: '/docs/panels/',
+    href: '/docs/sections/panels/',
     description: 'PanelSection: group related content on standard or muted surfaces.',
     group: 'Sections',
     category: 'Text and code'
   },
   {
     title: 'Code',
-    href: '/docs/code/',
+    href: '/docs/sections/code/',
     description: 'CodeBlock, CodeSection, syntax highlighting and text beside code.',
     group: 'Sections',
     category: 'Text and code'
   },
   {
     title: 'Images',
-    href: '/docs/images/',
+    href: '/docs/sections/images/',
     description:
       'Use ImageSection for an image on its own or paired with explanatory text. Children provide richer accompanying content without storing markup in the image data.',
     group: 'Sections',
@@ -110,7 +118,7 @@ export const documents = [
   },
   {
     title: 'Video',
-    href: '/docs/video/',
+    href: '/docs/sections/video/',
     description:
       'Use VideoSection for a native video player or YouTube embed, optionally paired with text.',
     group: 'Sections',
@@ -118,7 +126,7 @@ export const documents = [
   },
   {
     title: 'Card grid',
-    href: '/docs/card-grid/',
+    href: '/docs/sections/card-grid/',
     description:
       'CardGridSection: card sizes, tones, variants, image ratios and responsive collections.',
     group: 'Sections',
@@ -126,7 +134,7 @@ export const documents = [
   },
   {
     title: 'Carousel',
-    href: '/docs/carousel/',
+    href: '/docs/sections/carousel/',
     description:
       'CarouselSection: horizontal collections with native scrolling and shared card options.',
     group: 'Sections',
@@ -134,7 +142,7 @@ export const documents = [
   },
   {
     title: 'Card and Image',
-    href: '/docs/card-and-image/',
+    href: '/docs/building-blocks/card-and-image/',
     description:
       'These low-level building blocks are useful when composing a custom section. Card supplies the same article used by the two collection components; Image supplies shared responsive and theme-aware image rendering.',
     group: 'Building blocks',
@@ -142,14 +150,14 @@ export const documents = [
   },
   {
     title: 'Navigation and satellites',
-    href: '/docs/navigation/',
+    href: '/docs/building-blocks/navigation/',
     description: 'MainMenu, Navigation and satellites: menus, tools and responsive settings.',
     group: 'Building blocks',
     category: ''
   },
   {
     title: 'Breadcrumbs and anchors',
-    href: '/docs/breadcrumbs/',
+    href: '/docs/building-blocks/breadcrumbs/',
     description:
       'Keep breadcrumbs in sync with the site tree and follow the active section with an automatic content menu.',
     group: 'Building blocks',
@@ -157,7 +165,7 @@ export const documents = [
   },
   {
     title: 'Data and custom sections',
-    href: '/docs/data-and-custom-sections/',
+    href: '/docs/advanced/data-and-custom-sections/',
     description:
       'Keep content as JSON-compatible data and render it with components supplied by your application. This makes the same model usable for local files, a CMS or a future editing interface.',
     group: 'Advanced',
@@ -165,7 +173,7 @@ export const documents = [
   },
   {
     title: 'SSR and enhancement',
-    href: '/docs/ssr/',
+    href: '/docs/advanced/ssr/',
     description:
       'Page Sections components can render meaningful HTML on the server. The host application must enable SSR or prerendering; importing the library into a client-only application does not provide either automatically.',
     group: 'Advanced',
@@ -173,14 +181,14 @@ export const documents = [
   },
   {
     title: 'CSS variables and tokens',
-    href: '/docs/tokens/',
+    href: '/docs/reference/tokens/',
     description: 'Customize theme variables and understand the shared layout tokens.',
     group: 'Reference',
     category: ''
   },
   {
     title: 'Svelte API',
-    href: '/docs/svelte-api/',
+    href: '/docs/reference/svelte-api/',
     description:
       'Import components from @page-sections/svelte. The public components are listed below. Component props are documented on the linked pages; this index shows where to start, without duplicating the full reference.',
     group: 'Reference',
@@ -188,7 +196,7 @@ export const documents = [
   },
   {
     title: 'Core API',
-    href: '/docs/core-api/',
+    href: '/docs/reference/core-api/',
     description:
       'All runtime functions, constants, classes and types below are exported from @page-sections/core. The package has no runtime dependencies, DOM requirement or rendering implementation. Svelte re-exports its types only.',
     group: 'Reference',

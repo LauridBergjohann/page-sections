@@ -8,6 +8,31 @@ body {
   min-height: 100vh;
   background: var(--ps-background);
 }
+/* Match bergjohann-com's neutral surfaces and green-teal link palette. */
+.ps-shell[data-ps-theme='light'] {
+  --ps-background: #e0e4e3;
+  --ps-section-standard: #ffffff;
+  --ps-section-muted: #f2f2f2;
+  --ps-selection: #eeeeee;
+  --ps-ink: #141414;
+  --ps-body: #666666;
+  --ps-accent: #007b5e;
+  --ps-on-accent: #ffffff;
+  --ps-border: #d1d1d1;
+  --ps-radius: 12px;
+}
+.ps-shell[data-ps-theme='dark'] {
+  --ps-background: hsl(223.64, 8.8%, 24.51%);
+  --ps-section-standard: hsl(220, 10%, 12%);
+  --ps-section-muted: hsl(220, 14%, 16%);
+  --ps-selection: rgba(72, 77, 83, 0.5);
+  --ps-ink: hsl(220, 2%, 90%);
+  --ps-body: hsl(220, 5%, 65%);
+  --ps-accent: #72dfc6;
+  --ps-on-accent: hsl(220, 10%, 12%);
+  --ps-border: hsl(220, 15%, 32%);
+  --ps-radius: 12px;
+}
 .site-brand {
   display: inline-flex;
   align-items: center;

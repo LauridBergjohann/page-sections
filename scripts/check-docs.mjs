@@ -29,17 +29,17 @@ for (const [route, source] of routeSources) {
 }
 
 const svelteIndex = read(join(root, 'packages/svelte/src/index.ts'));
-const svelteReference = routeSources.get('/docs/svelte-api/');
+const svelteReference = routeSources.get('/docs/reference/svelte-api/');
 const components = [...svelteIndex.matchAll(/default as (\w+)/g)].map(match => match[1]);
 for (const name of components) if (!svelteReference.includes(`<code>${name}</code>`)) throw new Error(`Undocumented Svelte export: ${name}`);
 const coreIndex = join(root, 'packages/core/src/index.ts');
 const program = ts.createProgram([coreIndex], { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext, resolveJsonModule: true, skipLibCheck: true });
 const checker = program.getTypeChecker();
 const exports = checker.getExportsOfModule(checker.getSymbolAtLocation(program.getSourceFile(coreIndex))).map(value => value.name);
-const coreReference = routeSources.get('/docs/core-api/');
+const coreReference = routeSources.get('/docs/reference/core-api/');
 for (const name of exports) if (!new RegExp(`\\b${name}\\b`).test(coreReference)) throw new Error(`Undocumented core export: ${name}`);
 
-const tokenReference = routeSources.get('/docs/tokens/');
+const tokenReference = routeSources.get('/docs/reference/tokens/');
 const rows = [...tokenReference.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(match => [...match[1].matchAll(/<td>([\s\S]*?)<\/td>/g)].map(cell => cell[1].replace(/<[^>]+>/g, '').trim()).join('|'));
 const tokens = JSON.parse(read(join(root, 'packages/core/src/layoutTokens.json')));
 for (const [name, grid] of Object.entries(tokens.grid)) {

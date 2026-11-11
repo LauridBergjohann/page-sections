@@ -15,7 +15,7 @@
   let mediaAspect: CardMediaAspect = $state('1/1');
   const integrationItems = catalogItems.map((item) => ({
     ...item,
-    href: base + '/docs/card-grid/#playground'
+    href: base + '/docs/sections/card-grid/#playground'
   }));
   let items = $state(integrationItems.slice(0, 3));
   let attached = $state(0);

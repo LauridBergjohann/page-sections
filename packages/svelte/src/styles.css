@@ -13,7 +13,7 @@
 /* A content menu only docks to a continuous column of contained, opaque surfaces.
    Evaluate rendered surfaces in CSS so SSR, no-JS and live background changes agree. */
 @media (min-width: 1600px) {
-  .ps-page-frame:has(.ps-default-header, .ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot,
+  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot,
   .ps-page-frame:has(.ps-custom-header):not(:has(.ps-custom-header .ps-section)) > .ps-content-menu-slot {
     --ps-content-menu-radius: var(--ps-radius);
     --ps-content-menu-shadow: var(--ps-surface-shadow);

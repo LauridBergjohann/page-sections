@@ -5,7 +5,7 @@ import { coast, landscape } from './content';
 export const portfolio: PageData = {
   title: 'Ideas, made tangible.',
   pageTitle: 'Portfolio example — Page Sections',
-  hero: {
+  header: {
     type: 'hero',
     id: 'welcome',
     title: 'Welcome',
@@ -45,7 +45,7 @@ export const portfolio: PageData = {
           actions: [
             {
               label: 'View collection',
-              href: base + '/docs/card-grid/',
+              href: base + '/docs/sections/card-grid/',
               variant: 'primary'
             }
           ]
@@ -145,7 +145,7 @@ export const portfolio: PageData = {
       ],
       actions: [
         { label: 'About the project', href: base + '/about/' },
-        { label: 'Catalog cards', href: base + '/docs/card-grid/' }
+        { label: 'Catalog cards', href: base + '/docs/sections/card-grid/' }
       ]
     }
   ]

@@ -112,7 +112,7 @@
     color: var(--ps-ink);
   }
   .github-link:hover {
-    background: var(--ps-section-muted);
+    background: var(--ps-selection, var(--ps-section-muted));
   }
   @media (min-width: 1200px) {
     .website-header :global(.desktop-menu > ul) {
@@ -142,7 +142,7 @@
   }
   .appearance [aria-pressed='true'] {
     color: var(--ps-accent);
-    background: var(--ps-section-muted);
+    background: var(--ps-selection, var(--ps-section-muted));
   }
   .appearance button:disabled {
     opacity: 0.5;

@@ -66,12 +66,12 @@
   >
     <p>
       Add <a href={base + '/docs/sections/'}>sections</a>, configure your
-      <a href={base + '/docs/page-shell/'}>page layout</a>
-      and adapt the <a href={base + '/docs/themes/'}>theme</a>.
+      <a href={base + '/docs/foundations/page-shell/'}>page layout</a>
+      and adapt the <a href={base + '/docs/foundations/themes/'}>theme</a>.
     </p>
     <p>
-      The <a href={base + '/docs/installation/'}>installation reference</a> covers requirements and
-      framework setup. For a complete starting point, explore the
+      The <a href={base + '/docs/foundations/installation/'}>installation reference</a> covers
+      requirements and framework setup. For a complete starting point, explore the
       <a href="https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo"
         >minimal demo</a
       >.

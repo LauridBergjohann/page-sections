@@ -149,7 +149,7 @@
   a:hover,
   a.active,
   a:focus-visible {
-    background: var(--ps-section-muted);
+    background: var(--ps-selection, var(--ps-section-muted));
   }
   .ps-main-menu > li > a.active::after {
     content: '';

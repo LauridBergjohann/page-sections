@@ -40,7 +40,7 @@
   [aria-pressed='true'],
   [aria-current] {
     color: var(--ps-accent);
-    background: var(--ps-section-muted);
+    background: var(--ps-selection, var(--ps-section-muted));
     font-weight: 700;
   }
   button:disabled {

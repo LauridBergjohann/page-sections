@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
 import { render } from 'svelte/server';
 import App from './fixtures/plain-svelte/src/App.svelte';
-import { CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation } from '../packages/svelte/src/index.js';
+import { CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation, Heading } from '../packages/svelte/src/index.js';
 import PageHeaders from './PageHeaders.svelte';
 import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
@@ -20,17 +20,37 @@ it.each([undefined, 'standard', 'muted'] as const)('preserves panel surface tone
 });
 it('preserves the default page heading and document title', () => {
   const { body, head } = render(ContentPage, { props: { page: { title: 'Page heading', pageTitle: 'Browser title' } } });
-  expect(body).toMatch(/<h1[^>]*>Page heading<\/h1>/);
+  expect(body.replace(/<!--.*?-->/g, '')).toMatch(/<h1[^>]*>Page heading<\/h1>/);
+  expect(body).toContain('data-ps-section="page-heading"');
   expect(head).toContain('<title>Browser title</title>');
 });
 it('omits empty content menus and single-entry breadcrumbs on the server', () => {
-  expect(render(ContentPage, { props: { page: { title: 'Empty' }, showContentMenu: true } }).body).not.toContain('class="ps-content-menu-slot');
+  expect(render(ContentPage, { props: { page: { title: 'Empty' }, showHeader: false, showContentMenu: true } }).body).not.toContain('class="ps-content-menu-slot');
   expect(render(Breadcrumbs, { props: { items: [{ label: 'Docs', href: '/docs/' }] } }).body).not.toContain('<nav');
+});
+it('decouples heading size from semantics and renders heading sections from JSON', () => {
+  for (const level of [1, 2, 3] as const) for (const size of ['m', 'l', 'xl'] as const) {
+    const { body } = render(Heading, { props: { text: 'A heading', level, size } });
+    expect(body).toContain(`<h${level}`);
+    expect(body).toContain(`data-size="${size}"`);
+  }
+  const sections: SectionData[] = JSON.parse(JSON.stringify([{ type: 'heading', id: 'chapter', title: 'Chapter', headingSize: 'xl', headingLevel: 3, background: { color: 'muted', size: 'standard' } }]));
+  const { body } = render(Sections, { props: { sections } });
+  expect(body).toMatch(/<h3[^>]*id="chapter-title"/);
+  expect(body).toContain('data-background-color="muted"');
+});
+it('lets page data select the title surface while keeping exactly one h1', () => {
+  const { body } = render(ContentPage, { props: { page: { title: 'Page title', header: { type: 'heading', id: 'intro', title: 'Intro', headingSize: 'm', headingLevel: 3, background: { color: 'muted', size: 'full' } } }, showContentMenu: true } });
+  expect(body.match(/<h1\b/g)).toHaveLength(1);
+  expect(body).toContain('aria-labelledby="intro-title"');
+  expect(body).toContain('data-background-size="full"');
+  expect(body).toContain('data-size="m"');
+  expect(body).toContain('href="#intro"');
 });
 it('renders one breadcrumb independently of the hero header', () => {
   const { body } = render(ContentPage, { props: { page: { title: 'Hero page',
     breadcrumbs: [{ label: 'Docs', href: '/docs/' }, { label: 'Hero page' }],
-    hero: { type: 'hero', id: 'hero', title: 'Hero page', headline: 'Hello' }
+    header: { type: 'hero', id: 'hero', title: 'Hero page', headline: 'Hello' }
   } } });
   expect(body.match(/aria-label="Breadcrumb"/g)).toHaveLength(1);
   expect(body.match(/<h1\b/g)).toHaveLength(1);

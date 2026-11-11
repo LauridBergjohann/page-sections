@@ -3,6 +3,7 @@
   import type { SectionData, HighlightedCode } from '@page-sections/core';
   import CodeSection from './CodeSection.svelte';
   import HeroSection from './HeroSection.svelte';
+  import HeadingSection from './HeadingSection.svelte';
   import RichTextSection from './RichTextSection.svelte';
   import PanelSection from './PanelSection.svelte';
   import ImageSection from './ImageSection.svelte';
@@ -21,6 +22,7 @@
   {@const Custom = renderers[section.type]}
   {#if Custom}<Custom {section} />
   {:else if section.type === 'hero'}<HeroSection {section} />
+  {:else if section.type === 'heading'}<HeadingSection {section} />
   {:else if section.type === 'richText'}<RichTextSection {section} />
   {:else if section.type === 'panel'}<PanelSection {section} />
   {:else if section.type === 'code'}<CodeSection {section} highlighted={codeHighlights[section.id]} />

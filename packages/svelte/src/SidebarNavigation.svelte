@@ -5,12 +5,14 @@
     items,
     activeId,
     label = 'Page navigation',
-    icon
+    icon,
+    disclosureIcon
   }: {
     items: MenuItem[];
     activeId?: string;
     label?: string;
     icon?: Snippet<[MenuItem]>;
+    disclosureIcon?: Snippet;
   } = $props();
   const current = (item: MenuItem): boolean => (activeId ? item.id === activeId : !!item.current);
   const active = (item: MenuItem): boolean =>
@@ -42,7 +44,16 @@
           <details open={active(item)}>
             <!-- svelte-ignore a11y_no_redundant_roles (Keep styled disclosures exposed as buttons in browser accessibility trees.) -->
             <summary role="button" aria-label={`Show pages in ${item.label}`}
-              ><span aria-hidden="true">⌄</span></summary
+              ><span aria-hidden="true"
+                >{#if disclosureIcon}{@render disclosureIcon()}{:else}<svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"><path d="m9 6 6 6-6 6" /></svg
+                  >{/if}</span
+              ></summary
             >
             {@render entries(item.children)}
           </details>
@@ -79,10 +90,10 @@
     padding-inline-end: 2.75rem;
   }
   a:hover {
-    background: var(--ps-section-muted);
+    background: var(--ps-selection, var(--ps-section-muted));
   }
   a.active {
-    background: var(--ps-section-muted);
+    background: var(--ps-selection, var(--ps-section-muted));
   }
   a[aria-current='page'] {
     border-inline-start-color: var(--ps-accent);
@@ -111,9 +122,12 @@
     display: none;
   }
   summary:hover {
-    background: var(--ps-section-muted);
+    background: var(--ps-selection, var(--ps-section-muted));
   }
   details[open] > summary span {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
+  }
+  summary span {
+    display: flex;
   }
 </style>

@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Add shared Heading and HeadingSection components, use them for section and page headings, and render configurable heading/hero page headers. Compact code tools into the top-right corner. Nest documentation URLs under their chapters and apply the website's green-teal theme and Lucide disclosure icons.
+
 - Add the responsive ContentPage sidebar frame, automatic active content menu, hierarchical page-link navigation and shared navigation/geometry resolvers. The documentation uses one navigation tree, linked chapter pages, Lucide icons and previous/next reading links. Replace the former sectionNavigation option with showContentMenu and leftSidebar.
 
 - Add reusable CodeBlock and CodeSection components with serializable source models, optional server-side syntax highlighting, copy feedback, line numbers, line emphasis and responsive grid composition. The optional Shiki adapter is available through the separate `@page-sections/svelte/highlight` entry; ordinary components do not load a highlighting engine.

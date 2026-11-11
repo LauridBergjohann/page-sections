@@ -1,6 +1,8 @@
 export { default as ContentPage } from './ContentPage.svelte';
 export { default as PageShell } from './PageShell.svelte';
 export { default as Section } from './Section.svelte';
+export { default as Heading } from './Heading.svelte';
+export { default as HeadingSection } from './HeadingSection.svelte';
 export { default as SectionSurfaceGroup } from './SectionSurfaceGroup.svelte';
 export { default as ContentGrid } from './ContentGrid.svelte';
 export { default as ContentBlock } from './ContentBlock.svelte';

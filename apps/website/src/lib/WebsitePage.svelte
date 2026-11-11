@@ -1,10 +1,11 @@
 <script lang="ts">
   import { page as route } from '$app/state';
   import type { ComponentProps } from 'svelte';
-  import { ContentPage, SidebarNavigation, Section } from '@page-sections/svelte';
-  import { resolveNavigation, type MenuItem, type ContentPageData } from '@page-sections/core';
+  import { ContentPage, SidebarNavigation } from '@page-sections/svelte';
+  import { resolveNavigation, type MenuItem } from '@page-sections/core';
   import { navigationTree, readingNeighbors } from './navigation';
   import NavigationIcon from './NavigationIcon.svelte';
+  import ChevronRight from '@lucide/svelte/icons/chevron-right';
   let {
     page,
     children,
@@ -33,32 +34,33 @@
     label="Documentation chapters"
   >
     {#snippet icon(item)}<NavigationIcon name={item.icon} />{/snippet}
+    {#snippet disclosureIcon()}<ChevronRight size={16} />{/snippet}
   </SidebarNavigation>
-{/snippet}
-
-{#snippet documentationHeader(content: ContentPageData, titleId: string)}
-  <Section
-    section={{
-      id: 'page-heading',
-      title: content.title,
-      background: { color: 'standard', size: 'standard' }
-    }}
-    renderHeader={false}
-  >
-    <header class="documentation-heading">
-      {#if content.eyebrow}<p>{content.eyebrow}</p>{/if}
-      <h1 id={titleId}>{content.title}</h1>
-      {#if content.intro}<p>{content.intro}</p>{/if}
-    </header>
-  </Section>
 {/snippet}
 
 <ContentPage
   {...rest}
-  page={{ ...page, breadcrumbs: navigation.breadcrumbs }}
+  page={{
+    ...page,
+    breadcrumbs: navigation.breadcrumbs,
+    header:
+      navigation.root?.id === 'docs'
+        ? {
+            type: 'heading',
+            id: 'page-heading',
+            title: page.title,
+            headline: page.title,
+            eyebrow: page.eyebrow,
+            introduction: page.intro,
+            headingSize: 'l',
+            ...page.header,
+            background: { color: 'standard', size: 'standard' }
+          }
+        : page.header
+  }}
   {showContentMenu}
   leftSidebar={sidebar ? sidebarContent : undefined}
-  header={header ?? (navigation.root?.id === 'docs' ? documentationHeader : undefined)}
+  {header}
 >
   {@render children?.()}
   {#snippet footer()}
@@ -90,20 +92,6 @@
 </ContentPage>
 
 <style>
-  .documentation-heading {
-    padding-block: var(--ps-grid-gap);
-  }
-  .documentation-heading h1 {
-    font-size: clamp(2rem, 5vw, 4.5rem);
-    line-height: 1.08;
-    letter-spacing: -0.04em;
-    margin: 0.5rem 0;
-  }
-  .documentation-heading p {
-    max-width: 64ch;
-    line-height: 1.6;
-    color: var(--ps-body);
-  }
   .child-pages,
   .reading-path {
     padding: 1.5rem;

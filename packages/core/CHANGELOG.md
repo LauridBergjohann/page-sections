@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Add HeadingSize and HeadingSectionData, independent headingSize on sections, and a unified ContentPageData.header for heading or hero sections.
+
 - Update responsive sidebar geometry to 248px panels with 12/28px gaps and 300px panels at 3XL. Support freestanding content-menu rectangles through contentMenuDetached.
 
 - Add the responsive ContentPage sidebar frame, automatic active content menu, hierarchical page-link navigation and shared navigation/geometry resolvers. The documentation uses one navigation tree, linked chapter pages, Lucide icons and previous/next reading links. Replace the former sectionNavigation option with showContentMenu and leftSidebar.

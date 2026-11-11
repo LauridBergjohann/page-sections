@@ -4,7 +4,7 @@ import { coast, landscape } from './content';
 export const portfolio: PageData = {
   title: 'Ideas, made tangible.',
   pageTitle: 'Portfolio example — Page Sections',
-  hero: {
+  header: {
     type: 'hero',
     id: 'welcome',
     title: 'Welcome',

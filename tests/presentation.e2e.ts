@@ -18,8 +18,8 @@ for (const width of [375, 1920]) {
       await expect(nav.locator('.desktop-menu a').first()).toHaveCSS('color', ink);
       if (width >= 1600) await expect(nav.locator('.satellite').first()).toHaveCSS('box-shadow', /8px/);
       await expect(page.locator('#welcome .eyebrow')).toHaveCSS('color', accent);
-      await expect(page.locator('#welcome .eyebrow')).toHaveCSS('margin-bottom', '24px');
-      await expect(page.locator('#welcome .introduction')).toHaveCSS('margin-top', '28px');
+      await expect(page.locator('#welcome .eyebrow')).toHaveCSS('margin-bottom', '12px');
+      await expect(page.locator('#welcome .introduction')).toHaveCSS('margin-top', '12px');
       await expect(page.locator('#welcome .ps-actions')).toHaveCSS('margin-top', '32px');
       await expect(page.locator('#projects [data-ps-card-part="surface"]').first()).toHaveCSS('background-color', muted);
       await expect(page.locator('#continue .ps-panel')).toHaveCSS('background-color', standard);

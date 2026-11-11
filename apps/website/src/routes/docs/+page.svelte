@@ -46,10 +46,10 @@
     }}
     ><div class="prose">
       <ol>
-        <li><a href={base + '/docs/installation/'}>Install the packages</a>.</li>
-        <li><a href={base + '/docs/first-page/'}>Build your first page</a>.</li>
+        <li><a href={base + '/docs/foundations/installation/'}>Install the packages</a>.</li>
+        <li><a href={base + '/docs/foundations/first-page/'}>Build your first page</a>.</li>
         <li>
-          Learn how <a href={base + '/docs/pages-and-sections/'}
+          Learn how <a href={base + '/docs/foundations/pages-and-sections/'}
             >pages, sections and blocks fit together</a
           >.
         </li>
@@ -83,31 +83,33 @@
           <tbody>
             <tr>
               <td>Compose a page</td>
-              <td><a href={base + '/docs/page-shell/'}>ContentPage and PageShell</a></td>
+              <td><a href={base + '/docs/foundations/page-shell/'}>ContentPage and PageShell</a></td
+              >
             </tr>
             <tr>
               <td>Arrange different-width content</td>
-              <td><a href={base + '/docs/content-grid/'}>Section and ContentGrid</a></td>
+              <td><a href={base + '/docs/foundations/content-grid/'}>Section and ContentGrid</a></td
+              >
             </tr>
             <tr>
               <td>Browse reusable components</td>
-              <td><a href={base + '/docs/svelte-api/'}>Svelte API</a></td>
+              <td><a href={base + '/docs/reference/svelte-api/'}>Svelte API</a></td>
             </tr>
             <tr>
               <td>Integrate a design system</td>
-              <td><a href={base + '/docs/themes/'}>Themes and Styling</a></td>
+              <td><a href={base + '/docs/foundations/themes/'}>Themes and Styling</a></td>
             </tr>
             <tr>
               <td>Render CMS data or add a custom section</td>
               <td
-                ><a href={base + '/docs/data-and-custom-sections/'}
+                ><a href={base + '/docs/advanced/data-and-custom-sections/'}
                   >Data Models and Custom Sections</a
                 ></td
               >
             </tr>
             <tr>
               <td>Use models without Svelte</td>
-              <td><a href={base + '/docs/core-api/'}>Core API</a></td>
+              <td><a href={base + '/docs/reference/core-api/'}>Core API</a></td>
             </tr>
           </tbody>
         </table>

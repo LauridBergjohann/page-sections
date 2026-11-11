@@ -16,13 +16,13 @@ const tree: MenuItem[] = [
         id: 'sections',
         label: 'Sections',
         href: '/base/docs/sections/',
-        children: [{ id: 'hero', label: 'Hero', href: '/base/docs/hero/' }]
+        children: [{ id: 'hero', label: 'Hero', href: '/base/docs/sections/hero/' }]
       }
     ]
   }
 ];
 it('derives actual ancestry even when URL segments differ, without mutating the tree', () => {
-  const result = resolveNavigation(tree, { pathname: '/base/docs/hero/?mode=dark#intro' });
+  const result = resolveNavigation(tree, { pathname: '/base/docs/sections/hero/?mode=dark#intro' });
   expect(result.activeId).toBe('hero');
   expect(result.breadcrumbs.map((item) => item.label)).toEqual(['Docs', 'Sections', 'Hero']);
   expect(result.items[0].active).toBe(true);
@@ -33,7 +33,7 @@ it('derives actual ancestry even when URL segments differ, without mutating the 
 it('handles route boundaries, explicit IDs and unknown routes', () => {
   expect(resolveNavigation(tree, { pathname: '/base/docsmith/' }).breadcrumbs).toEqual([]);
   expect(resolveNavigation(tree, { pathname: '/' }).sidebarItems).toEqual([]);
-  expect(resolveNavigation(tree, { pathname: '/base/docs/hero/detail' }).activeId).toBe('hero');
+  expect(resolveNavigation(tree, { pathname: '/base/docs/sections/hero/detail' }).activeId).toBe('hero');
   expect(resolveNavigation(tree, { pathname: '/other', currentId: 'sections' }).activeId).toBe(
     'sections'
   );

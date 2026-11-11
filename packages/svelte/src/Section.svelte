@@ -3,6 +3,7 @@
   import type { HTMLAttributes } from 'svelte/elements';
   import { SECTION_REGISTRY, SECTION_SURFACES, normalizeSectionBackground, createSectionBackgroundNormalizer, type SectionBackgroundDiagnostic, type SectionDefinition, type SectionRegistry, type SectionSurfaceRegistry } from '@page-sections/core';
   import './styles.css';
+  import Heading from './Heading.svelte';
   import { SURFACE_SCOPE } from './surfaceContext.js';
   import { SECTION_CONTEXT, defaultSectionContext, nextHeading, type ReadSectionContext } from './sectionContext.js';
   type Props = Omit<HTMLAttributes<HTMLElement>, 'children' | 'id'> & { section: SectionDefinition; children?: Snippet; renderHeader?: boolean; inset?: boolean; onDiagnostic?: (diagnostic: SectionBackgroundDiagnostic) => void };
@@ -31,10 +32,10 @@
   style:--ps-section-width={section.style?.width} style:color={section.style?.color}>
   <span class="ps-section-surface" style:background={background.cssBackground} aria-hidden="true"></span>
   <div class="ps-section-content ps-grid-scope">
-  {#if renderHeader}
-  {#if section.eyebrow}<p class="eyebrow">{section.eyebrow}</p>{/if}
-  {#if section.headline}<svelte:element this={`h${heading}`} id={`${section.id}-title`} class="headline">{section.headline}</svelte:element>{/if}
-  {#if section.introduction}<p class="introduction">{section.introduction}</p>{/if}
+  {#if renderHeader && (section.headline || section.eyebrow || section.introduction)}
+    <div class="section-heading" class:with-content={!!children}>
+      <Heading text={section.headline} level={heading} size={section.headingSize ?? (section.variant === 'content' ? 'm' : 'l')} id={`${section.id}-title`} eyebrow={section.eyebrow} introduction={section.introduction} />
+    </div>
   {/if}
   {@render children?.()}
   </div>
@@ -50,9 +51,5 @@
   [data-layout='narrow'] { max-width: min(100%, var(--ps-narrow-max)); } [data-layout='wide'] { max-width: 1536px; }
   [data-layout='full'] { width: 100vw; margin-inline: calc(50% - 50vw); }
   [data-divider='top'], [data-divider='both'] { border-top: 1px solid var(--ps-border); } [data-divider='bottom'], [data-divider='both'] { border-bottom: 1px solid var(--ps-border); }
-  .headline { margin: 0 0 var(--ps-grid-headline-gap); font-size: var(--ps-grid-headline-size); line-height: var(--ps-grid-headline-line-height); font-weight: 600; }
-  .eyebrow { color: var(--ps-accent); text-transform: uppercase; letter-spacing: .08em; }
-  .introduction { max-width: 64ch; color: var(--ps-body); }
-  [data-variant='content'] > .ps-section-content > .headline { font-size: clamp(1.25rem, 3cqw, 1.5rem); line-height: 1.35; }
-  [data-variant='feature'] > .ps-section-content > .headline { font-size: clamp(1.875rem, 3cqw, 2.25rem); line-height: 1.2; letter-spacing: -.025em; }
+  .section-heading.with-content { margin-bottom: var(--ps-grid-headline-gap); }
 </style>

@@ -13,6 +13,7 @@
   import Breadcrumbs from './Breadcrumbs.svelte';
   import ContentMenu from './ContentMenu.svelte';
   import HeroSection from './HeroSection.svelte';
+  import HeadingSection from './HeadingSection.svelte';
   import './styles.css';
   let {
     page,
@@ -43,7 +44,7 @@
   let revision = $state(0);
   let host = $state<HTMLElement>();
   const titleId = $props.id();
-  const labelId = $derived(!header && page.hero ? `${page.hero.id}-title` : titleId);
+  const labelId = $derived(header ? titleId : `${page.header?.id ?? 'page-heading'}-title`);
   setContext<ReadSectionContext>(SECTION_CONTEXT, () => ({
     pageKind: 'content',
     headingLevel: 2,
@@ -94,16 +95,25 @@
         {#if showHeader}
           {#if header}<div class="ps-custom-header">
               {@render header(page, titleId)}
-            </div>{:else if page.hero}<HeroSection
-              section={{ ...page.hero, headingLevel: 1 }}
+            </div>{:else if page.header?.type === 'hero'}<HeroSection
+              section={{
+                ...page.header,
+                headline: page.header.headline ?? page.title,
+                headingLevel: 1
+              }}
             />{:else}
-            <div class="ps-content-container ps-default-header">
-              <header class="ps-grid-scope">
-                {#if page.eyebrow}<p class="eyebrow">{page.eyebrow}</p>{/if}
-                <h1 id={titleId}>{page.title}</h1>
-                {#if page.intro}<p class="intro">{page.intro}</p>{/if}
-              </header>
-            </div>
+            <HeadingSection
+              section={{
+                id: 'page-heading',
+                title: page.title,
+                headline: page.title,
+                eyebrow: page.eyebrow,
+                introduction: page.intro,
+                headingSize: 'l',
+                ...page.header,
+                headingLevel: 1
+              }}
+            />
           {/if}
         {/if}
         <div class="page-body">
@@ -132,25 +142,6 @@
     isolation: isolate;
     padding-bottom: 4rem;
     min-height: 60vh;
-  }
-  header {
-    padding: calc(var(--ps-grid-gap) * 2) var(--ps-grid-gap);
-  }
-  h1 {
-    font-size: clamp(2rem, 5vw, 4.5rem);
-    line-height: 1.08;
-    letter-spacing: -0.04em;
-    margin: 0.5rem 0;
-  }
-  .eyebrow {
-    color: var(--ps-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
-  .intro {
-    max-width: 64ch;
-    color: var(--ps-body);
-    line-height: 1.6;
   }
   .page-body {
     min-width: 0;
