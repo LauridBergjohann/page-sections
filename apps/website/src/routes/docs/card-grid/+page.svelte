@@ -28,15 +28,13 @@
 <script lang="ts">
   import CollectionPlayground from '$lib/CollectionPlayground.svelte';
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
-<ContentPage
-  page={{ title: 'Card grid', pageTitle: 'Card grid · Page Sections' }}
-  sectionNavigation
->
+<ContentPage page={{ title: 'Card grid', pageTitle: 'Card grid · Page Sections' }} showContentMenu>
   <Section
     section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
     ><CollectionPlayground /></Section
@@ -182,7 +180,7 @@
       </p>
       <p>
         Per-item size and the old auto-fit minimum widths were removed in 0.2. See <a
-          href={base + '/docs/migration/'}>migration</a
+          href={base + '/docs/responsive-layout/'}>shared layout reference</a
         >.
       </p>
     </div></Section

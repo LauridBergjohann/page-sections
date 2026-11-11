@@ -1,9 +1,9 @@
 <script lang="ts">
   import { base } from '$app/paths';
+  import ContentPage from '$lib/WebsitePage.svelte';
   import {
     CardGridSection,
     CarouselSection,
-    ContentPage,
     Navigation,
     Section,
     SectionSurfaceGroup,
@@ -84,6 +84,7 @@
     items={[
       {
         id: 'nested',
+        href: base + '/showcase/',
         label: 'More pages',
         children: [{ id: 'legal', label: 'Legal example', href: base + '/showcase/legal/' }]
       }

@@ -7,7 +7,7 @@
   const cardTone: SurfaceTone = 'muted';
   const layout = resolveCardLayout(320, 'm', { mediaAspect, reserveEyebrow: true });
 </script>
-<ContentPage page={{ title: 'Plain Svelte consumer' }} sectionNavigation>
+<ContentPage page={{ title: 'Plain Svelte consumer' }} showContentMenu>
   {#snippet header(page, titleId)}<header><h1 id={titleId}>{page.title}</h1></header>{/snippet}
   <CardGridSection section={{ id: 'collection', title: 'Collection' }} list={cards} {mediaAspect} {cardTone} mediaFit="contain" />
   <CarouselSection section={{ id: 'browse', title: 'Browse' }} list={cards} mediaAspect="4/3" mediaFit="cover" />

@@ -15,7 +15,7 @@ npm ci
 npm run dev:website
 ```
 
-Open http://127.0.0.1:5174. Try card sizes and tones, media ratios, responsive grids, surfaces and code presentation. Preview and source stay together.
+Open http://127.0.0.1:5174. Try card sizes and tones, media ratios, responsive grids, surfaces, code presentation and the sidebar frame on `/docs/page-shell/`. Preview and source stay together.
 
 ## Installation
 

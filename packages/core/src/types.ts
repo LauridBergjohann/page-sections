@@ -73,6 +73,6 @@ export interface GridSectionData extends SectionDefinition { type: 'grid'; block
 export interface SectionTypeMap { hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData; code: CodeSectionData }
 export type SectionData = SectionTypeMap[keyof SectionTypeMap];
 export interface PageData extends ContentPageData { sections: SectionData[] }
-export interface MenuItem { id: string; label: string; href?: string; current?: boolean; children?: MenuItem[] }
+export interface MenuItem { id: string; label: string; href: string; current?: boolean; active?: boolean; icon?: string; children?: MenuItem[] }
 export interface ButtonGroupItem { id: string; label: string; href?: string; selected?: boolean; disabled?: boolean }
 export interface PageTheme { background?: string; ink?: string; body?: string; accent?: string; onAccent?: string; standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string }

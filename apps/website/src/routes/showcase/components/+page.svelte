@@ -1,7 +1,7 @@
 <script lang="ts">
   import { base } from '$app/paths';
+  import ContentPage from '$lib/WebsitePage.svelte';
   import {
-    ContentPage,
     HeroSection,
     RichTextSection,
     ImageSection,
@@ -26,9 +26,9 @@
     eyebrow: '01 / Components',
     intro:
       'Real content, composed in different ways. Resize the window to see each layout respond.',
-    breadcrumbs: [{ label: 'Home', href: base + '/' }, { label: 'Components' }]
+    breadcrumbs: [{ label: 'Components' }]
   }}
-  sectionNavigation
+  showContentMenu
 >
   <HeroSection
     section={{

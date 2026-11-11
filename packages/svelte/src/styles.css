@@ -5,6 +5,7 @@
   --ps-font-family: system-ui, sans-serif; --ps-narrow-max: 780px;
   --ps-border: color-mix(in srgb, var(--ps-ink) 18%, transparent);
   --ps-navigation-shadow: 0 4px 8px rgb(0 0 0 / 12%);
+  --ps-surface-shadow: 0 3px 8px rgb(0 0 0 / 12%);
 }
 [data-ps-theme='dark'] { --ps-background: #151d27; --ps-ink: #f2f5fa; --ps-body: #bdcbdc; --ps-accent: #91baff; --ps-on-accent: #151d27; --ps-section-standard: #202d3b; --ps-section-muted: #28384a; }
 .ps-page, .ps-navigation, .ps-shell { font-family: var(--ps-font-family); color: var(--ps-ink); }
@@ -27,3 +28,12 @@
 
 .ps-prose > * { margin-block: 0 1rem; }
 .ps-hero-section > .ps-section-content { padding-inline: 0; }
+/* Bleed paints the viewport even when the page's content column is asymmetric. */
+.ps-page .ps-section[data-background-size='full'] > .ps-section-surface { left: -100vw; right: -100vw; width: auto; transform: none; }
+.ps-page .ps-section[data-layout='full'] { width: 100%; margin-inline: auto; }
+
+/* Keep the compact contents control reachable while a persistent header is visible. */
+@media (max-width: 1599.98px) {
+  .ps-shell:has(.ps-navigation-track:is([data-scroll='fixed'], [data-scroll='delayed'])) .ps-content-menu-slot { top: calc(var(--ps-nav-height) + var(--ps-sidebar-sticky-top)); }
+  .ps-shell:has(.ps-navigation-track:is([data-scroll='fixed'], [data-scroll='delayed'])) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }
+}

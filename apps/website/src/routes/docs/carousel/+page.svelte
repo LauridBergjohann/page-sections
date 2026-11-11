@@ -22,12 +22,13 @@
 <script lang="ts">
   import CollectionPlayground from '$lib/CollectionPlayground.svelte';
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
-<ContentPage page={{ title: 'Carousel', pageTitle: 'Carousel · Page Sections' }} sectionNavigation>
+<ContentPage page={{ title: 'Carousel', pageTitle: 'Carousel · Page Sections' }} showContentMenu>
   <Section
     section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
     ><CollectionPlayground kind="carousel" /></Section
@@ -107,7 +108,7 @@
       <p>
         Related: <a href={base + '/docs/card-grid/'}>CardGridSection</a>,
         <a href={base + '/docs/core-api/'}>Core API</a>,
-        <a href={base + '/docs/migration/'}>Migration</a>.
+        <a href={base + '/docs/responsive-layout/'}>shared layout reference</a>.
       </p>
     </div></Section
   >

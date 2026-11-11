@@ -12,6 +12,8 @@ Import components from `@page-sections/svelte`. PageShell, ContentPage, Navigati
 
 The [documentation website source and local preview instructions](https://github.com/LauridBergjohann/page-sections/tree/main/apps/website) include installation, interactive examples and full API references. See the [minimal application](https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo) for a copyable starting point.
 
+ContentPage accepts a `leftSidebar` snippet and `showContentMenu` for an automatic right-hand contents menu. Navigation and SidebarNavigation share a tree of real page links, with responsive disclosures and application-owned icons.
+
 ## Code presentation
 
 CodeBlock presents escaped source with optional filename, line numbers, line markers, wrapping and copy feedback. CodeSection adds section metadata; Sections also renders JSON records with `type: 'code'`.

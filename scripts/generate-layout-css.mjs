@@ -7,6 +7,22 @@ const css = [
   '/* Generated from core layoutTokens.json; extracted from Beta.8. Do not edit. */',
   `:root { --ps-content-max: ${tokens.contentMax}px; --ps-menu-height: ${tokens.menu.height}px; --ps-menu-top: 0px; --ps-nav-height: ${tokens.menu.height}px; --ps-sticky-range: ${tokens.menu.scrollThreshold}px; --ps-satellite-width: ${tokens.satellite.width}px; --ps-satellite-height: ${tokens.satellite.height}px; --ps-satellite-inset: ${tokens.satellite.inset}px; --ps-satellite-top: ${tokens.satellite.top}px; }`,
   `.ps-content-width { width: min(100%, ${tokens.contentMax}px); margin-inline: auto; }`,
+  `:root { --ps-sidebar-gap: ${tokens.sidebars.gap}px; --ps-sidebar-sticky-top: ${tokens.sidebars.stickyTop}px; --ps-content-menu-offset: ${tokens.sidebars.contentMenuOffset}px; }
+.ps-page-frame { display: grid; grid-template-columns: max(0px, calc((100% - ${tokens.contentMax}px) / 2)) minmax(0, 1fr) max(0px, calc((100% - ${tokens.contentMax}px) / 2)); }
+@media (min-width: ${tokens.layoutMinWidths.xl}px) {
+  .ps-page-frame { --ps-frame-left: ${tokens.xlContentInset}px; --ps-frame-right: ${tokens.xlContentInset}px; --ps-sidebar-left-width: ${tokens.sidebars.xl.leftWidth}px; --ps-sidebar-right-width: ${tokens.sidebars.xl.rightWidth}px; grid-template-columns: var(--ps-frame-left) minmax(0, 1fr) var(--ps-frame-right); }
+  .ps-page-frame:has(> .ps-left-sidebar) { --ps-frame-left: ${tokens.sidebars.xl.outer + tokens.sidebars.xl.leftWidth + tokens.sidebars.gap}px; }
+  .ps-page-frame:has(> .ps-content-menu-slot) { --ps-frame-right: ${tokens.sidebars.xl.outer + tokens.sidebars.xl.rightWidth}px; }
+}
+@media (min-width: ${tokens.layoutMinWidths['2xl']}px) {
+  .ps-page-frame { --ps-frame-left: max(0px, calc((100% - ${tokens.contentMax}px) / 2)); --ps-frame-right: max(0px, calc((100% - ${tokens.contentMax}px) / 2)); --ps-sidebar-left-width: ${tokens.sidebars.wide.leftWidth}px; --ps-sidebar-right-width: ${tokens.sidebars.wide.rightWidth}px; }
+  .ps-page-frame:has(> .ps-left-sidebar) { --ps-frame-left: max(${tokens.sidebars.wide.outer + tokens.sidebars.wide.leftWidth + tokens.sidebars.gap}px, calc((100% - ${tokens.contentMax}px) / 2)); }
+  .ps-page-frame:has(> .ps-content-menu-slot) { --ps-frame-right: max(${tokens.sidebars.wide.outer + tokens.sidebars.wide.rightWidth}px, calc((100% - ${tokens.contentMax}px) / 2)); }
+}
+@media (min-width: ${tokens.layoutMinWidths['3xl']}px) {
+  .ps-page-frame:has(> .ps-left-sidebar) { --ps-frame-left: calc((100% - ${tokens.contentMax}px) / 2); }
+  .ps-page-frame:has(> .ps-content-menu-slot) { --ps-frame-right: calc((100% - ${tokens.contentMax}px) / 2); }
+}`,
   '.ps-content-container { container: ps-content / inline-size; min-width: 0; }',
   `@media (min-width: ${tokens.layoutMinWidths.xl}px) { :root { --ps-menu-height: ${tokens.menu.wideHeight}px; --ps-menu-top: ${tokens.menu.wideTop}px; --ps-nav-height: ${tokens.menu.wideHeight + tokens.menu.wideTop}px; } .ps-content-width { width: min(${tokens.contentMax}px, max(0px, calc(100% - ${tokens.xlContentInset * 2}px))); } }`,
   `@media (min-width: ${tokens.layoutMinWidths['2xl']}px) { .ps-content-width { width: min(100%, ${tokens.contentMax}px); } }`,

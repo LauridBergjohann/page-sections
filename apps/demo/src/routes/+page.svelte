@@ -4,7 +4,7 @@
 
 <ContentPage
   page={{ title: 'Field notes', intro: 'A minimal Page Sections application.' }}
-  sectionNavigation
+  showContentMenu
 >
   <Section section={{ id: 'about', title: 'About', headline: 'A place to begin' }}>
     <p>Compose ordinary HTML and reusable sections. This entire example lives in one page.</p>

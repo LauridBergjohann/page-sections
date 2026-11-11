@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test';
 export default defineConfig({
-  testDir: 'tests', testMatch: 'website.e2e.ts', workers: 1,
+  outputDir: 'test-results/website', testDir: 'tests', testMatch: 'website.e2e.ts', workers: 1,
   use: { baseURL: 'http://127.0.0.1:4174', trace: 'retain-on-failure',
     ...(process.env.CI ? {} : { channel: 'chrome' }) },
   webServer: [

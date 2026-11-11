@@ -6,14 +6,15 @@
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage
   page={{ title: 'Svelte API', pageTitle: 'Svelte API · Page Sections' }}
-  sectionNavigation
+  showContentMenu
 >
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">
@@ -248,6 +249,21 @@
       <p>
         Related: <a href={base + '/docs/core-api/'}>Core API</a>,
         <a href={base + '/docs/ssr/'}>SSR and Progressive Enhancement</a>.
+      </p>
+    </div></Section
+  >
+  <Section
+    section={{
+      id: 'sidebar-navigation',
+      title: 'SidebarNavigation',
+      headline: 'SidebarNavigation'
+    }}
+    ><div class="prose">
+      <p>
+        <code>SidebarNavigation</code> renders a recursive site tree with current-page markers and expandable
+        ancestors. Pass it as ContentPage's leftSidebar snippet. ContentPage's showContentMenu flag supplies
+        the separate automatic right menu; footer provides a slot for reading-order links. Navigation's
+        itemIcon snippet supplies application-owned icons.
       </p>
     </div></Section
   >

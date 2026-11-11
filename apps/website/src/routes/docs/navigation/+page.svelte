@@ -1,56 +1,56 @@
 <script module lang="ts">
-  export const examples: { language: string; code: string; filename?: string; group?: string }[] = [
+  export const examples: { language: string; code: string }[] = [
     {
       language: 'svelte',
       code: `<script lang="ts">
-  import { PageShell, Navigation, ButtonGroup } from '@page-sections/svelte';
-  let mode = $state<'light' | 'dark'>('light');
+  import {
+    Navigation,
+    ContentPage,
+    SidebarNavigation,
+    Section,
+  } from '@page-sections/svelte';
+  import { resolveNavigation, type MenuItem } from '@page-sections/core';
+  const tree: MenuItem[] = [
+    {
+      id: 'guides',
+      label: 'Guides',
+      href: '/guides/',
+      children: [
+        {
+          id: 'garden',
+          label: 'Garden',
+          href: '/guides/garden/',
+          children: [
+            { id: 'planting', label: 'Planting', href: '/guides/garden/planting/' },
+          ],
+        },
+      ],
+    },
+  ];
+  const navigation = resolveNavigation(tree, { currentId: 'planting' });
 <\/script>
 
-<PageShell {mode}>
-  <Navigation
-    items={[
-      { id: 'home', label: 'Home', href: '/', current: true },
-      {
-        id: 'guides',
-        label: 'Guides',
-        href: '/guides',
-        children: [{ id: 'seeds', label: 'Seeds', href: '/guides/seeds' }]
-      }
-    ]}
-    scrollBehavior="delayed"
+<Navigation items={navigation.items}>
+  {#snippet brand()}<a href="/">Garden journal</a>{/snippet}
+</Navigation>
+<ContentPage
+  page={{ title: 'Planting', breadcrumbs: navigation.breadcrumbs }}
+  showContentMenu
+>
+  {#snippet leftSidebar()}<SidebarNavigation items={navigation.sidebarItems} />{/snippet}
+  <Section section={{ id: 'soil', title: 'Soil' }}
+    ><p>Start with healthy soil.</p></Section
   >
-    {#snippet brand()}<a href="/">Garden journal</a>{/snippet}
-    {#snippet left()}
-      <ButtonGroup
-        label="Language"
-        items={[
-          { id: 'en', label: 'EN', href: '/en', selected: true },
-          { id: 'de', label: 'DE', href: '/de' }
-        ]}
-      />
-    {/snippet}
-    {#snippet right()}
-      <ButtonGroup
-        label="Theme"
-        items={[
-          { id: 'light', label: 'Light', selected: mode === 'light' },
-          { id: 'dark', label: 'Dark', selected: mode === 'dark' }
-        ]}
-        onselect={(item) => {
-          mode = item.id === 'dark' ? 'dark' : 'light';
-        }}
-      />
-    {/snippet}
-  </Navigation>
-</PageShell>`
+</ContentPage>
+`
     }
   ];
 </script>
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -60,191 +60,82 @@
     title: 'Navigation and satellites',
     pageTitle: 'Navigation and satellites · Page Sections'
   }}
-  sectionNavigation
+  showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section section={{ id: 'overview', title: 'Overview', background: { color: 'standard' } }}>
+    <div class="prose"><CodeBlock {...examples[0]} highlighted={data.highlights[0]} /></div>
+  </Section>
+  <Section
+    section={{
+      id: 'navigation-props',
+      title: 'Navigation',
+      headline: 'Navigation',
+      background: { color: 'standard' }
+    }}
     ><div class="prose">
       <p>
-        Navigation arranges a central menu and optional left/right controls. These controls are
-        called satellites: they might select a language, change a theme or contain an
-        application-specific action. Navigation works without ContentPage, PageShell or a router.
+        <code>items: MenuItem[]</code> supplies the site tree. Every entry requires a stable id, label
+        and href; children are recursive. Optional current marks the current page, active marks an ancestor,
+        and icon is an application-defined key.
       </p>
-      <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
+      <p>
+        Navigation accepts brand, tools, left and right snippets, plus menuIcon and settingsIcon.
+        Satellites appear from XL and move into settings below XL. The optional menu snippet
+        replaces the desktop menu; items still supplies the mobile tree. <code>closeKey</code>
+        closes open menus when the host changes routes. <code>scrollBehavior</code> supports static (default),
+        delayed and fixed.
+      </p>
+      <p>
+        <code>itemIcon?: Snippet&lt;[MenuItem]&gt;</code> renders second-level icons. The website uses
+        Lucide; the library has no icon dependency.
+      </p>
     </div></Section
   >
   <Section
     section={{
-      id: 'navigation-props',
-      title: 'Navigation props',
-      headline: 'Navigation props',
-      variant: 'content'
+      id: 'mainmenu',
+      title: 'MainMenu and interaction',
+      headline: 'MainMenu and interaction',
+      background: { color: 'standard' }
     }}
     ><div class="prose">
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>Prop</th>
-              <th>Type</th>
-              <th>Default</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>items</code></td>
-              <td><code>MenuItem[]</code></td>
-              <td>Optional native responsive menu</td>
-            </tr>
-            <tr>
-              <td><code>menu</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional custom central content; takes precedence over desktop items</td>
-            </tr>
-            <tr>
-              <td><code>tools</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional header controls</td>
-            </tr>
-            <tr>
-              <td><code>menuIcon</code></td>
-              <td><code>Snippet</code></td>
-              <td>Decorative compact-menu icon</td>
-            </tr>
-            <tr>
-              <td><code>menuLabel</code></td>
-              <td><code>string</code></td>
-              <td>Open navigation</td>
-            </tr>
-            <tr>
-              <td><code>closeKey</code></td>
-              <td><code>unknown</code></td>
-              <td>A changed value closes all disclosures; bind the route path</td>
-            </tr>
-            <tr>
-              <td><code>scrollBehavior</code></td>
-              <td>static/delayed/fixed</td>
-              <td>static</td>
-            </tr>
-            <tr>
-              <td><code>left</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional; no left satellite when omitted</td>
-            </tr>
-            <tr>
-              <td><code>right</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional; no right satellite when omitted</td>
-            </tr>
-            <tr>
-              <td><code>brand</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional logo/header content</td>
-            </tr>
-            <tr>
-              <td><code>settingsIcon</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional decorative icon; defaults to a gear</td>
-            </tr>
-            <tr>
-              <td><code>settingsLabel</code></td>
-              <td><code>string</code></td>
-              <td>Settings; accessible disclosure label and panel heading</td>
-            </tr>
-            <tr>
-              <td><code>label</code></td>
-              <td><code>string</code></td>
-              <td>Main navigation</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <p>
-        Use named snippets for branded content and controls. With items, navigation is a native
-        details disclosure below 1200px and a desktop menu above it. Put the logo and skip link
-        inside brand. Custom menu snippets own their responsive behavior; omit items when supplying
-        a complete custom menu. Header tools remain visible at every size.
+        On XS–M, the burger contains every hierarchy level. A page link and a separate native
+        disclosure control keep navigation distinct from expanding children. On L and above, the
+        header shows the first level. Hover or keyboard focus reveals the second level in an
+        overlay, while the page behind it blurs. The overlay does not list deeper levels.
       </p>
       <p>
-        Below XL (1600px), the header spans available width and has a 66px minimum height. Its
-        Settings disclosure contains the left/right controls. At XL, the header has a 64px minimum
-        height and 16px top inset; its width is min(1536px, available width minus 272px). At 2XL
-        (1809px) it is exactly 1536px when space permits, including border and padding. Satellites
-        are 80 by 40px at 28px from the top and viewport edges. Keep brand, controls and desktop
-        item labels compact enough to fit; arbitrary oversized custom content can grow the header.
+        Clicking any menu link immediately navigates to its page. Links retain open-in-new-tab and
+        other browser behavior. Escape closes the overlay and restores focus when appropriate.
+        Parent pages must link to their children, so every level remains reachable on touchscreens
+        and without hover.
       </p>
       <p>
-        Static navigation scrolls with the document. Delayed navigation stays still for the first
-        112px, then moves with the document; fixed reserves its normal height and stays at the top.
-        Mount Navigation at the viewport level and avoid a scrolling/clipping ancestor when using
-        delayed/fixed. There is no window-scroll listener or application router dependency.
-      </p>
-      <p>
-        Links, item disclosures and Settings work without JavaScript. After hydration, Escape
-        returns focus to the active disclosure summary, clicks outside navigation close its
-        disclosures, and link activation closes them too. Bind closeKey to the host route for
-        programmatic navigation. Resizing closes compact menus/settings when their desktop
-        equivalents appear. Desktop nested item disclosures use overlays so they do not enlarge the
-        header.
-      </p>
-      <p>
-        Satellite controls render in both wide and compact containers; CSS exposes the appropriate
-        copy. Keep state in their parent and avoid hard-coded IDs in repeated snippets. Geometry
-        follows generated canonical tokens; colors, font and radius remain themeable.
+        Standalone <code>MainMenu</code> accepts items, icon, variant (desktop/mobile), closeKey and onOpenChange.
+        Use Navigation for the complete header, satellites and backdrop.
       </p>
     </div></Section
   >
-  <Section section={{ id: 'mainmenu', title: 'MainMenu', headline: 'MainMenu', variant: 'content' }}
+  <Section
+    section={{
+      id: 'sidebar-navigation',
+      title: 'SidebarNavigation',
+      headline: 'SidebarNavigation',
+      background: { color: 'standard' }
+    }}
     ><div class="prose">
       <p>
-        The only prop is required <code>items: MenuItem[]</code>. An empty list produces an empty
-        list element.
+        Supply items, optional activeId, an accessible label and an optional icon snippet. The
+        active page receives an accent line; its ancestors open automatically. The usual items are <code
+          >resolveNavigation(tree, location).sidebarItems</code
+        >, representing the second and subsequent levels of the selected main entry.
       </p>
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>MenuItem field</th>
-              <th>Type</th>
-              <th>Behavior</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>id</code></td>
-              <td><code>string</code>, required</td>
-              <td>Unique within its sibling list</td>
-            </tr>
-            <tr>
-              <td><code>label</code></td>
-              <td><code>string</code>, required</td>
-              <td>Visible text</td>
-            </tr>
-            <tr>
-              <td><code>href</code></td>
-              <td><code>string</code></td>
-              <td>Native URL; passed through safeHref</td>
-            </tr>
-            <tr>
-              <td><code>current</code></td>
-              <td><code>boolean</code></td>
-              <td>When true, linked item has aria-current=page</td>
-            </tr>
-            <tr>
-              <td><code>children</code></td>
-              <td><code>MenuItem[]</code></td>
-              <td>A nonempty list creates details/summary with nested entries</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <p>
-        A group with both children and href shows its label as a summary and its destination link
-        inside the disclosure. For a leaf, supply href to make it navigable. Groups open through
-        native click, touch, Enter or Space. MainMenu uses document list semantics rather than
-        application-menu keyboard conventions. On its own it does not detect routes or add
-        dismissal/overlay behavior. Navigation supplies those behaviors when given items.
+        <code>resolveNavigation</code> accepts pathname or currentId. Explicit IDs also support detail
+        routes. It returns items with current/active markers, activeId, root, sidebarItems and breadcrumbs
+        without changing the supplied tree. The tree starts at the main-menu entries; keep Home as the
+        brand link.
       </p>
     </div></Section
   >
@@ -331,8 +222,8 @@
         JavaScript for their callbacks; links remain functional in SSR HTML.
       </p>
       <p>
-        MainMenu and ButtonGroup do not import full shared theme styles on their own. Navigation
-        does, or import the stylesheet explicitly when using them elsewhere.
+        ButtonGroup does not import full shared theme styles on its own. Navigation does, or import
+        the stylesheet explicitly when using them elsewhere.
       </p>
       <p>
         Site navigation, <a href={base + '/docs/breadcrumbs/'}>breadcrumbs and section navigation</a

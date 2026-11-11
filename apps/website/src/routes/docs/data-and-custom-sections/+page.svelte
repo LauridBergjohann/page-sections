@@ -3,7 +3,8 @@
     {
       language: 'svelte',
       code: `<script lang="ts">
-  import { ContentPage, Sections, type PageData } from '@page-sections/svelte';
+  import { ContentPage } from '@page-sections/svelte';
+  import { Sections, type PageData } from '@page-sections/svelte';
   const page: PageData = {
     title: 'Garden notebook',
     sections: [
@@ -48,7 +49,7 @@
   };
 <\/script>
 
-<ContentPage {page} sectionNavigation><Sections sections={page.sections} /></ContentPage
+<ContentPage {page} showContentMenu><Sections sections={page.sections} /></ContentPage
 >`
     },
     {
@@ -104,7 +105,7 @@ declare module '@page-sections/core' {
   };
 <\/script>
 
-<ContentPage {page} sectionNavigation
+<ContentPage {page} showContentMenu
   ><Sections sections={page.sections} renderers={{ quote: Quote }} /></ContentPage
 >`,
       group: 'custom',
@@ -115,7 +116,8 @@ declare module '@page-sections/core' {
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -125,7 +127,7 @@ declare module '@page-sections/core' {
     title: 'Data and custom sections',
     pageTitle: 'Data and custom sections · Page Sections'
   }}
-  sectionNavigation
+  showContentMenu
 >
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">

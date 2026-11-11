@@ -10,7 +10,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -20,7 +21,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
     title: 'CSS variables and tokens',
     pageTitle: 'CSS variables and tokens · Page Sections'
   }}
-  sectionNavigation
+  showContentMenu
 >
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">
@@ -525,6 +526,27 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         <code>--ps-code-light</code> and <code>--ps-code-dark</code> are per-token values emitted by CodeBlock
         from its optional highlighted input. They are presentation internals, not global theme settings.
         Code surfaces use the existing standard/muted palette and border/radius tokens.
+      </p>
+    </div></Section
+  >
+  <Section section={{ id: 'sidebar-tokens', title: 'Sidebar tokens', headline: 'Sidebar tokens' }}
+    ><div class="prose">
+      <p>
+        <code>layoutTokens.sidebars</code> defines gap (24), stickyTop (16), contentMenuOffset (16), xl
+        (outer 12, leftWidth 236, rightWidth 260) and wide (outer 28, leftWidth 250, rightWidth 274).
+      </p>
+      <p>
+        Generated internal geometry variables: <code>--ps-sidebar-gap</code>,
+        <code>--ps-sidebar-sticky-top</code>, <code>--ps-content-menu-offset</code>,
+        <code>--ps-sidebar-left-width</code>, <code>--ps-sidebar-right-width</code>,
+        <code>--ps-frame-left</code>
+        and <code>--ps-frame-right</code>. Change canonical layout tokens and regenerate CSS when
+        changing geometry.
+      </p>
+      <p>
+        <code>--ps-surface-shadow</code> controls the subtle left-sidebar and contained section
+        shadow. Internal <code>--ps-shadow-top-clip</code> and <code>--ps-shadow-bottom-clip</code> prevent
+        seams between connected section surfaces.
       </p>
     </div></Section
   >

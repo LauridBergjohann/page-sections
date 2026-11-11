@@ -9,6 +9,9 @@
   import Moon from '@lucide/svelte/icons/moon';
   import Github from '$lib/GitHubMark.svelte';
   import SiteSearch from '$lib/SiteSearch.svelte';
+  import NavigationIcon from '$lib/NavigationIcon.svelte';
+  import { navigationTree } from '$lib/navigation';
+  import { resolveNavigation } from '@page-sections/core';
   import { version } from '../../../../packages/svelte/package.json';
   import '../app.css';
   let { children }: { children: Snippet } = $props();
@@ -32,31 +35,13 @@
       /* The choice still applies in memory. */
     }
   }
-  const items = $derived([
-    {
-      id: 'showcase',
-      label: 'Showcase',
-      href: base + '/showcase/',
-      current: page.url.pathname.startsWith(base + '/showcase')
-    },
-    {
-      id: 'start',
-      label: 'Getting started',
-      href: base + '/getting-started/',
-      current: page.url.pathname.startsWith(base + '/getting-started')
-    },
-    {
-      id: 'docs',
-      label: 'Documentation',
-      href: base + '/docs/',
-      current: page.url.pathname.startsWith(base + '/docs')
-    }
-  ]);
+  const items = $derived(resolveNavigation(navigationTree, { pathname: page.url.pathname }).items);
 </script>
 
 <PageShell {mode}>
   <header class="website-header">
     <Navigation {items} closeKey={page.url.pathname}>
+      {#snippet itemIcon(item)}<NavigationIcon name={item.icon} />{/snippet}
       {#snippet brand()}
         <a class="skip-link" href="#main-content">Skip to content</a>
         <a class="site-brand" href={base + '/'} aria-label="Page Sections home">

@@ -83,6 +83,7 @@
     items={[
       {
         id: 'nested',
+        href: '/examples/',
         label: 'More pages',
         children: [{ id: 'legal', label: 'Legal example', href: '/examples/legal/' }]
       }

@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
 import { render } from 'svelte/server';
 import App from './fixtures/plain-svelte/src/App.svelte';
-import { CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection } from '../packages/svelte/src/index.js';
+import { CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation } from '../packages/svelte/src/index.js';
 import PageHeaders from './PageHeaders.svelte';
 import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
@@ -22,6 +22,28 @@ it('preserves the default page heading and document title', () => {
   const { body, head } = render(ContentPage, { props: { page: { title: 'Page heading', pageTitle: 'Browser title' } } });
   expect(body).toMatch(/<h1[^>]*>Page heading<\/h1>/);
   expect(head).toContain('<title>Browser title</title>');
+});
+it('omits empty content menus and single-entry breadcrumbs on the server', () => {
+  expect(render(ContentPage, { props: { page: { title: 'Empty' }, showContentMenu: true } }).body).not.toContain('class="ps-content-menu-slot');
+  expect(render(Breadcrumbs, { props: { items: [{ label: 'Docs', href: '/docs/' }] } }).body).not.toContain('<nav');
+});
+it('renders one breadcrumb independently of the hero header', () => {
+  const { body } = render(ContentPage, { props: { page: { title: 'Hero page',
+    breadcrumbs: [{ label: 'Docs', href: '/docs/' }, { label: 'Hero page' }],
+    hero: { type: 'hero', id: 'hero', title: 'Hero page', headline: 'Hello' }
+  } } });
+  expect(body.match(/aria-label="Breadcrumb"/g)).toHaveLength(1);
+  expect(body.match(/<h1\b/g)).toHaveLength(1);
+});
+it('opens the active sidebar branch during SSR and retains real parent links', () => {
+  const { body } = render(SidebarNavigation, { props: { activeId: 'hero', items: [
+    { id: 'sections', label: 'Sections', href: '/sections/', children: [
+      { id: 'hero', label: 'Hero', href: '/hero/' }
+    ] }
+  ] } });
+  expect(body).toMatch(/<details[^>]*open/);
+  expect(body).toContain('href="/sections/"');
+  expect(body).toMatch(/href="\/hero\/"[^>]*aria-current="page"/);
 });
 it('lets the hero own the h1 while the host owns SEO and main attributes', () => {
   const { body, head } = render(PageHeaders);

@@ -1,4 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
+import { resolveContentGrid } from '../packages/core/src/index.js';
+
+async function openContentMenu(page: Page) {
+  const settings = page.locator('.ps-navigation .settings');
+  if (await settings.isVisible() && await settings.getAttribute('open') !== null) await settings.locator(':scope > summary').click();
+  const mainMenu = page.locator('.ps-navigation .mobile-menu');
+  if (await mainMenu.isVisible() && await mainMenu.getAttribute('open') !== null) await mainMenu.locator(':scope > summary').click();
+  const popup = page.locator('.ps-content-menu-slot .mobile');
+  if (await popup.isVisible() && await popup.getAttribute('open') === null) await popup.locator('summary').click();
+}
+
 
 async function openSettings(page: Page) {
   const settings = page.locator('.ps-navigation .settings');
@@ -34,6 +45,7 @@ for (const width of [375, 840, 1600]) {
       if (width < 1600) await page.locator('.settings summary').click();
       if (route.path !== '/') {
         await expect(page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link', { name: 'Home' })).toBeVisible();
+        await openContentMenu(page);
         await expect(page.getByRole('navigation', { name: 'On this page' })).toBeVisible();
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -42,6 +54,7 @@ for (const width of [375, 840, 1600]) {
     await openMenu(page);
     await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Components', exact: true }).click();
     await expect(page).toHaveURL(/\/components\/$/);
+    await openContentMenu(page);
     await page.getByRole('navigation', { name: 'On this page' }).getByRole('link', { name: 'Responsive grid', exact: true }).click();
     await expect(page).toHaveURL(/#layout$/);
     const primary = await page.getByTestId('primary-block').boundingBox();
@@ -49,7 +62,7 @@ for (const width of [375, 840, 1600]) {
     if (width === 375) expect(secondary!.y).toBeGreaterThan(primary!.y);
     else expect(Math.abs(primary!.y - secondary!.y)).toBeLessThan(1);
     const grid = page.locator('#layout .ps-content-grid');
-    expect(await grid.evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(width === 375 ? 4 : width === 840 ? 8 : 12);
+    expect(await grid.evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(resolveContentGrid((await page.locator('#layout').boundingBox())!.width).columns);
     await page.locator('#narrow').evaluate(el => el.style.width = '590px');
     expect(await page.locator('#narrow .ps-content-grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(4);
     await expect(page.locator('#carousel a')).toHaveCount(5);
@@ -94,7 +107,8 @@ test('client routing preserves the layout and theme, including browser history',
   await openSettings(page);
   await page.getByRole('button', { name: 'Light', exact: true }).click();
   await expect(shell).toHaveAttribute('data-ps-theme', 'light');
-  await page.getByRole('navigation', { name: 'On this page' }).getByRole('link', { name: 'Responsive grid', exact: true }).click();
+  await openContentMenu(page);
+    await page.getByRole('navigation', { name: 'On this page' }).getByRole('link', { name: 'Responsive grid', exact: true }).click();
   await expect(page).toHaveURL(/#layout$/);
   expect(errors.filter(error => !error.includes('Failed to load resource') && !error.includes('ERR_'))).toEqual([]);
 });

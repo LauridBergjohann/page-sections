@@ -17,7 +17,7 @@ Use Node 24 and npm 11, matching CI and hosting. On PowerShell with script restr
 - [Architecture and package boundaries](architecture.md)
 - [Tests and verification](testing.md)
 - [Application development](demo.md)
-- [Documentation authoring, migration and hosting](documentation.md)
+- [Documentation authoring and hosting](documentation.md)
 - [Versioning and releases](releasing.md)
 - [Spatial Elements integration contract](spatial-elements-adoption.md)
 - [API observations](api-notes.md)

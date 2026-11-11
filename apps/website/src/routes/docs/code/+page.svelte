@@ -75,7 +75,8 @@ const highlighted = await highlightCode(code, 'typescript');
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import CodePlayground from '$lib/CodePlayground.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -87,7 +88,7 @@ const highlighted = await highlightCode(code, 'typescript');
     pageTitle: 'Code · Page Sections',
     intro: 'Readable examples, on their own or alongside the story.'
   }}
-  sectionNavigation
+  showContentMenu
 >
   <Section
     section={{

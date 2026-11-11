@@ -8,6 +8,7 @@ export { default as Breadcrumbs } from './Breadcrumbs.svelte';
 export { default as SectionNavigation } from './SectionNavigation.svelte';
 export { default as Navigation } from './Navigation.svelte';
 export { default as MainMenu } from './MainMenu.svelte';
+export { default as SidebarNavigation } from './SidebarNavigation.svelte';
 export { default as ButtonGroup } from './ButtonGroup.svelte';
 export { default as HeroSection } from './HeroSection.svelte';
 export { default as RichTextSection } from './RichTextSection.svelte';

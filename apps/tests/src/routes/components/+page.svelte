@@ -27,7 +27,7 @@
       'Real content, composed in different ways. Resize the window to see each layout respond.',
     breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Components' }]
   }}
-  sectionNavigation
+  showContentMenu
 >
   <HeroSection
     section={{

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, CardGridSection } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { CardGridSection } from '@page-sections/svelte';
 </script>
 
 <ContentPage

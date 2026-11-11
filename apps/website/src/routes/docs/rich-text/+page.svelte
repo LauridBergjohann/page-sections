@@ -38,15 +38,13 @@
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
-<ContentPage
-  page={{ title: 'Rich text', pageTitle: 'Rich text · Page Sections' }}
-  sectionNavigation
->
+<ContentPage page={{ title: 'Rich text', pageTitle: 'Rich text · Page Sections' }} showContentMenu>
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">
       <p>﻿# RichTextSection</p>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, SectionSurfaceGroup } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, SectionSurfaceGroup } from '@page-sections/svelte';
   import type { SectionBackgroundColor } from '@page-sections/core';
   const solids = ['transparent', 'standard', 'muted'] as const;
   const sizes = ['standard', 'full'] as const;
@@ -21,9 +22,9 @@
     eyebrow: '02 / Backgrounds & surfaces',
     intro:
       'Solid surfaces, full-width transitions and corners that know their neighbours. Use Light and Dark above to compare the same configuration in both themes.',
-    breadcrumbs: [{ label: 'Home', href: base + '/' }, { label: 'Backgrounds' }]
+    breadcrumbs: [{ label: 'Backgrounds' }]
   }}
-  sectionNavigation
+  showContentMenu
 >
   <Section
     section={{

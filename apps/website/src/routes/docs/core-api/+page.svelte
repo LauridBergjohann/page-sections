@@ -38,12 +38,13 @@ console.log(background.cssBackground);`
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
-<ContentPage page={{ title: 'Core API', pageTitle: 'Core API · Page Sections' }} sectionNavigation>
+<ContentPage page={{ title: 'Core API', pageTitle: 'Core API · Page Sections' }} showContentMenu>
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">
       <p>
@@ -501,7 +502,7 @@ console.log(background.cssBackground);`
       <p>
         See <a href={base + '/docs/rich-text/'}>structured text</a>,
         <a href={base + '/docs/panels/'}>panels</a>
-        and <a href={base + '/docs/migration/'}>migration</a>.
+        and <a href={base + '/docs/responsive-layout/'}>shared layout reference</a>.
       </p>
       <p>
         <code>SurfaceTone</code> is the shared <code>standard | muted</code> surface selection for Card.tone,
@@ -524,6 +525,32 @@ console.log(background.cssBackground);`
         <code>HighlightedCode</code>
         describe optional derived syntax tokens. See the
         <a href={base + '/docs/code/'}>complete code reference</a> for fields, defaults and examples.
+      </p>
+    </div></Section
+  >
+  <Section
+    section={{
+      id: 'site-navigation',
+      title: 'Navigation and page frames',
+      headline: 'Navigation and page frames'
+    }}
+    ><div class="prose">
+      <p>
+        <code>resolveNavigation(tree, location: NavigationLocation)</code> derives active items, the current
+        root, sidebarItems and breadcrumbs from a tree of page links. NavigationLocation accepts pathname
+        or currentId. MenuItem requires href; optional icon is an application-owned key.
+      </p>
+      <p>
+        <code>resolveContentPageLayout(input)</code> extends ResponsiveLayoutInput with leftSidebar and
+        showContentMenu booleans. It returns the independent menu rectangle, content rectangle and optional
+        sidebar rectangles. Safe-area and scrollbar insets are included.
+      </p>
+      <p>
+        <code
+          >resolveActiveContentSection(sections: ContentSectionBounds[], readingTop, readingBottom,
+          scrollY, maxScrollY)</code
+        > returns the active ID or undefined. ContentSectionBounds contains id, top and bottom. Coordinates
+        are relative to the reading viewport; the function has no DOM dependency.
       </p>
     </div></Section
   >

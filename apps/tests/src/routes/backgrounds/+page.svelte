@@ -22,7 +22,7 @@
       'Solid surfaces, full-width transitions and corners that know their neighbours. Use Light and Dark above to compare the same configuration in both themes.',
     breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Backgrounds' }]
   }}
-  sectionNavigation
+  showContentMenu
 >
   <Section
     section={{

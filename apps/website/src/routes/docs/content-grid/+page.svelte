@@ -39,14 +39,15 @@
 <script lang="ts">
   import GridPlayground from '$lib/GridPlayground.svelte';
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage
   page={{ title: 'Sections and grids', pageTitle: 'Sections and grids · Page Sections' }}
-  sectionNavigation
+  showContentMenu
 >
   <Section
     section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
@@ -164,10 +165,12 @@
       </div>
       <p>
         <code>layout: 'narrow'</code> caps at <code>--ps-narrow-max</code> (780px); wide caps at the
-        canonical 1536px. Inherit fills the parent. Full uses <code>100vw</code> and centered
-        negative margins, while the inner content retains the 1536px cap; use it in a centered page,
-        not an off-center sidebar. <code>style.width</code> normally caps at 100%; full layout supplies
-        its own outer width.
+        canonical 1536px. Inherit fills the parent. Inside ContentPage, full layout also respects
+        the page's content column and its 1536px limit, including asymmetric sidebar layouts. Use
+        <code>background.size: 'full'</code>
+        to paint a viewport-wide background independently of content width. Outside ContentPage, full
+        layout uses <code>100vw</code> with centered negative margins. <code>style.width</code> normally
+        caps at the available width.
       </p>
       <p>
         Vertical padding is 0, 0.5, 1, 2 or 4 times the active grid gap for

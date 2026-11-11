@@ -1,103 +1,87 @@
 <script module lang="ts">
-  export const examples: { language: string; code: string; filename?: string; group?: string }[] = [
+  export const examples: { language: string; code: string }[] = [
     {
       language: 'svelte',
       code: `<script>
-  import { Breadcrumbs, SectionNavigation, Section } from '@page-sections/svelte';
-  import '@page-sections/svelte/styles.css';
+  import { ContentPage, Section } from '@page-sections/svelte';
 <\/script>
 
-<div class="ps-shell">
-  <Breadcrumbs
-    items={[
-      { label: 'Home', href: '/' },
-      { label: 'Guides', href: '/guides' },
-      { label: 'Planting' }
-    ]}
-  />
-  <SectionNavigation
-    label="In this guide"
-    items={[
-      { id: 'preparation', title: 'Preparation' },
-      { id: 'planting', title: 'Planting' }
-    ]}
-  />
+<ContentPage
+  page={{
+    title: 'Planting',
+    breadcrumbs: [
+      { label: 'Guides', href: '/guides/' },
+      { label: 'Garden', href: '/guides/garden/' },
+      { label: 'Planting', href: '/guides/garden/planting/' },
+    ],
+  }}
+  showContentMenu
+  contentMenuLabel="In this guide"
+>
   <Section
-    section={{ id: 'preparation', title: 'Preparation', headline: 'Prepare the soil' }}
-    ><p>Loosen the surface.</p></Section
+    section={{ id: 'soil', title: 'Prepare the soil', headline: 'Prepare the soil' }}
   >
-  <Section section={{ id: 'planting', title: 'Planting', headline: 'Sow the seeds' }}
-    ><p>Follow the packet instructions.</p></Section
-  >
-</div>`
+    <p>Loosen the surface.</p>
+  </Section>
+  <Section section={{ id: 'seeds', title: 'Sow the seeds', headline: 'Sow the seeds' }}>
+    <p>Follow the packet instructions.</p>
+  </Section>
+</ContentPage>
+`
     }
   ];
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage
-  page={{ title: 'Breadcrumbs and anchors', pageTitle: 'Breadcrumbs and anchors · Page Sections' }}
-  sectionNavigation
+  page={{
+    title: 'Breadcrumbs and content menu',
+    pageTitle: 'Breadcrumbs and content menu · Page Sections'
+  }}
+  showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
-    ><div class="prose">
-      <p>
-        Breadcrumbs show a page's location in the site hierarchy. SectionNavigation links to anchors
-        on one page. Neither component owns routing or watches scroll position.
-      </p>
-      <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+  <Section section={{ id: 'overview', title: 'Overview', background: { color: 'standard' } }}>
+    <div class="prose"><CodeBlock {...examples[0]} highlighted={data.highlights[0]} /></div>
+  </Section>
   <Section
     section={{
       id: 'breadcrumbs',
       title: 'Breadcrumbs',
       headline: 'Breadcrumbs',
-      variant: 'content'
+      background: { color: 'standard' }
     }}
     ><div class="prose">
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>Prop</th>
-              <th>Type</th>
-              <th>Default</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>items</code></td>
-              <td><code>Breadcrumb[]</code></td>
-              <td>Required</td>
-            </tr>
-            <tr>
-              <td><code>label</code></td>
-              <td><code>string</code></td>
-              <td>Breadcrumb</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <p>
-        Breadcrumb has required <code>label: string</code> and optional <code>href: string</code>.
-        Earlier items with href render links. The last item always renders text with
-        aria-current=page, even if it has href. Earlier items without href are plain text. A
-        labelled nav contains an ordered list; separators are CSS, and long paths wrap. An empty
-        array still renders the nav/list; ContentPage avoids rendering Breadcrumbs for an empty
-        array.
+        Use the same navigation tree for the menu, sidebar and breadcrumbs. The first breadcrumb is
+        the main-menu entry; Home is reachable through the logo. Breadcrumbs accepts items and an
+        optional label. It renders nothing with fewer than two items and marks the final entry with
+        aria-current="page".
+      </p>
+    </div></Section
+  >
+  <Section
+    section={{
+      id: 'automatic-navigation',
+      title: 'Automatic content menu',
+      headline: 'Automatic content menu',
+      background: { color: 'standard' }
+    }}
+    ><div class="prose">
+      <p>
+        <code>showContentMenu</code> registers section IDs and titles automatically. It displays a sticky
+        right sidebar from XL or a sticky button with a popup on XS–L. The active bullet follows the reading
+        position. Short last sections are selected at the end of the document. Reordered, added or removed
+        sections update the list.
       </p>
       <p>
-        Set <code>page.breadcrumbs</code> on ContentPage for automatic rendering. ContentPage does not
-        expose the Breadcrumbs label prop, so use a separately rendered Breadcrumbs component if a custom
-        landmark label is needed.
+        Native anchor links work without JavaScript. The enhanced menu adds active-state tracking
+        and Escape dismissal. No entries means no menu or reserved rail.
       </p>
     </div></Section
   >
@@ -106,71 +90,14 @@
       id: 'sectionnavigation',
       title: 'SectionNavigation',
       headline: 'SectionNavigation',
-      variant: 'content'
-    }}
-    ><div class="prose">
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>Prop</th>
-              <th>Type</th>
-              <th>Default</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>items</code></td>
-              <td><code>SectionNavigationItem[]</code></td>
-              <td>Required</td>
-            </tr>
-            <tr>
-              <td><code>label</code></td>
-              <td><code>string</code></td>
-              <td>On this page</td>
-            </tr>
-            <tr>
-              <td><code>variant</code></td>
-              <td><code>'horizontal'</code> or <code>'sidebar'</code></td>
-              <td>horizontal</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p>
-        SectionNavigationItem is <code>&#123; id: string; title: string &#125;</code>. Links use
-        <code>#id</code>; provide IDs matching real sections. Horizontal lists wrap; sidebar lists
-        stack vertically at all widths. An empty array renders nothing. It does not register
-        sections, validate IDs, track an active section, add aria-current, or make itself sticky.
-      </p>
-    </div></Section
-  >
-  <Section
-    section={{
-      id: 'automatic-section-navigation',
-      title: 'Automatic section navigation',
-      headline: 'Automatic section navigation',
-      variant: 'content'
+      background: { color: 'standard' }
     }}
     ><div class="prose">
       <p>
-        ContentPage's <code>sectionNavigation</code> prop builds items from descendant Section
-        registrations. True means horizontal; <code>'sidebar'</code> adds a page-level 14rem sidebar
-        at 1200px viewport width and above. Narrower pages place it above the content. Its
-        <code>navigationLabel</code> sets the landmark label.
-      </p>
-      <p>
-        Registration happens during server rendering, before the navigation is evaluated. To
-        accomplish this, the navigation follows sections in DOM order even when CSS positions it
-        above them. Keyboard and assistive-technology order follows the DOM. The links are native
-        and work without JavaScript; dynamic metadata and keyed reordering update after hydration.
-        Supply skip links separately if needed.
-      </p>
-      <p>
-        Related: <a href={base + '/docs/page-shell/'}>ContentPage and PageShell</a>,
-        <a href={base + '/docs/navigation/'}>Navigation and Satellites</a>,
-        <a href={base + '/docs/core-api/'}>Core API</a>.
+        For a manually supplied list, SectionNavigation remains a small stateless building block. It
+        accepts items (id and title), label (default “On this page”) and variant (horizontal or
+        sidebar). It does not observe scrolling. ContentPage owns the complete automatic
+        content-menu behavior.
       </p>
     </div></Section
   >

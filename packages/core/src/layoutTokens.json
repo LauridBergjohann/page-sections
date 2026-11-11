@@ -1,5 +1,12 @@
 {
   "contentMax": 1536,
+  "sidebars": {
+    "gap": 24,
+    "stickyTop": 16,
+    "contentMenuOffset": 16,
+    "xl": { "outer": 12, "leftWidth": 236, "rightWidth": 260 },
+    "wide": { "outer": 28, "leftWidth": 250, "rightWidth": 274 }
+  },
   "layoutMinWidths": {
     "xs": 0,
     "s": 600,

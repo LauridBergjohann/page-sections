@@ -3,20 +3,16 @@
     {
       language: 'svelte',
       code: `<script lang="ts">
-  import {
-    ContentPage,
-    RichTextSection,
-    CardGridSection,
-    type ContentPageData
-  } from '@page-sections/svelte';
+  import { ContentPage } from '@page-sections/svelte';
+  import { RichTextSection, CardGridSection, type ContentPageData } from '@page-sections/svelte';
   const page: ContentPageData = {
     title: 'The reading room',
     intro: 'Guides for curious people.',
-    breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Reading room' }]
+    breadcrumbs: [{ label: 'Reading room' }]
   };
 <\/script>
 
-<ContentPage {page} sectionNavigation>
+<ContentPage {page} showContentMenu>
   <RichTextSection
     section={{
       id: 'start',
@@ -44,14 +40,15 @@
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage
   page={{ title: 'Your first page', pageTitle: 'Your first page · Page Sections' }}
-  sectionNavigation
+  showContentMenu
 >
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">

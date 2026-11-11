@@ -1,5 +1,65 @@
 import { expect, test } from '@playwright/test';
 
+test('desktop page links reveal only the second level and retain native navigation', async ({ page }) => {
+  await page.setViewportSize({ width: 1809, height: 1000 });
+  await page.goto('/docs/hero/');
+  const menu = page.locator('.website-header .desktop-menu');
+  const docs = menu.getByRole('link', { name: 'Documentation', exact: true });
+  await docs.hover();
+  await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(5);
+  await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(5);
+  await expect(menu.getByRole('link', { name: 'Hero', exact: true })).toHaveCount(0);
+  await expect(page.locator('.menu-backdrop')).toBeVisible();
+  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.menu-backdrop')).toHaveCount(0);
+  await menu.getByRole('link', { name: 'Showcase', exact: true }).focus();
+  await docs.focus();
+  await expect(menu.getByRole('link', { name: 'Sections', exact: true })).toBeVisible();
+  await menu.getByRole('link', { name: 'Sections', exact: true }).focus();
+  await page.keyboard.press('Escape');
+  await expect(docs).toBeFocused();
+  await expect(page.locator('.menu-backdrop')).toHaveCount(0);
+  const opened = page.context().waitForEvent('page');
+  await docs.click({ modifiers: ['Control'] });
+  const newTab = await opened;
+  await newTab.waitForURL(/\/docs\/$/);
+  await newTab.close();
+  await docs.click();
+  await expect(page).toHaveURL(/\/docs\/$/);
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+  await page.locator('.child-pages').getByRole('link', { name: 'Sections' }).click();
+  await page.locator('.child-pages').getByRole('link', { name: 'Hero' }).click();
+  await expect(page).toHaveURL(/\/docs\/hero\/$/);
+  const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
+  await expect(breadcrumb.locator('li')).toHaveCount(3);
+  await expect(breadcrumb).not.toContainText('Home');
+  await expect(page.locator('.ps-left-sidebar [aria-current="page"]')).toHaveText('Hero');
+  await expect(page.locator('.reading-path [rel="next"]')).toContainText('Rich text');
+});
+
+test('touch and mobile users can reach deep pages through real parent pages', async ({ browser }) => {
+  for (const width of [390, 1200]) {
+    const context = await browser.newContext({ hasTouch: true, viewport: { width, height: 900 } });
+    const page = await context.newPage();
+    await page.goto('http://127.0.0.1:4174/');
+    if (width < 1200) {
+      await page.locator('.mobile-menu > summary').tap();
+      const mobile = page.locator('.mobile-panel');
+      await mobile.getByRole('button', { name: 'Show pages in Documentation', exact: true }).tap();
+      await mobile.getByRole('button', { name: 'Show pages in Sections', exact: true }).tap();
+      await mobile.getByRole('link', { name: 'Hero', exact: true }).tap();
+    } else {
+      await page.locator('.desktop-menu').getByRole('link', { name: 'Documentation', exact: true }).tap();
+      await page.locator('.child-pages').getByRole('link', { name: 'Sections' }).tap();
+      await page.locator('.child-pages').getByRole('link', { name: 'Hero' }).tap();
+    }
+    await expect(page).toHaveURL(/\/docs\/hero\/$/);
+    await expect(page.locator('.ps-left-sidebar')).toBeHidden();
+    await context.close();
+  }
+});
+
 for (const width of [390, 1600]) {
   test(`documentation is readable and linked without JavaScript at ${width}px`, async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height: 900 } });
@@ -9,7 +69,7 @@ for (const width of [390, 1600]) {
       expect(response?.status()).toBe(200);
       await expect(page.locator('main h1')).toHaveCount(1);
       const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
-      if (route.startsWith('/docs/')) await expect(chapters).toBeVisible();
+      if (route.startsWith('/docs/')) { if (width >= 1600) await expect(chapters).toBeVisible(); else await expect(chapters).toBeHidden(); }
       else await expect(chapters).toHaveCount(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const code = page.locator('.ps-code-block');
@@ -100,13 +160,15 @@ test('home explains the library and getting started stays focused', async ({ pag
   await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
   await page.locator('#start').getByRole('link', { name: 'Install the package' }).click();
   await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
-  await page.getByRole('navigation', { name: 'Getting started steps' }).getByRole('link', { name: 'Build your first page' }).click();
+  await page.getByRole('navigation', { name: 'Reading order' }).locator('[rel=next]').click();
   await expect(page).toHaveURL(/\/getting-started\/first-page\/$/);
+  await page.setViewportSize({ width: 1809, height: 900 });
   await page.goto('/docs/');
   const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
-  await expect(chapters.getByRole('link').first()).toHaveText('Overview');
+  await expect(chapters.getByRole('link').first()).toHaveText('Foundations');
+  for (const summary of await chapters.locator('summary').all()) await summary.click();
   await expect(chapters.getByRole('searchbox')).toHaveCount(0);
-  const titles = await chapters.getByRole('link').allTextContents();
+  const titles = (await chapters.getByRole('link').allTextContents()).map(title => title.trim());
   expect(titles.indexOf('Page shell')).toBeLessThan(titles.indexOf('Hero'));
   expect(titles.indexOf('Hero')).toBeLessThan(titles.indexOf('Code'));
   expect(titles.indexOf('Code')).toBeLessThan(titles.indexOf('Card and Image'));

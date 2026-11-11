@@ -36,14 +36,15 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
 <script lang="ts">
   import SurfacePlayground from '$lib/SurfacePlayground.svelte';
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage
   page={{ title: 'Backgrounds and groups', pageTitle: 'Backgrounds and groups · Page Sections' }}
-  sectionNavigation
+  showContentMenu
 >
   <Section
     section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
@@ -139,6 +140,21 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       <p>
         Related: <a href={base + '/docs/content-grid/'}>Section and ContentGrid</a>,
         <a href={base + '/docs/themes/'}>Themes and Styling</a>.
+      </p>
+    </div></Section
+  >
+  <Section
+    section={{
+      id: 'surface-shadows',
+      title: 'Contained surface shadows',
+      headline: 'Contained surface shadows'
+    }}
+    ><div class="prose">
+      <p>
+        Standard-width sections with standard or muted backgrounds receive a subtle shadow, whether
+        or not the page has sidebars. Joined surfaces clip internal shadow edges. Transparent and
+        full-width backgrounds do not receive this shadow. Full backgrounds still paint across the
+        viewport when a sidebar makes the content column asymmetric.
       </p>
     </div></Section
   >

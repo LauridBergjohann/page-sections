@@ -59,7 +59,7 @@ writeFileSync(join(kit, 'svelte.config.js'), "import adapter from '@sveltejs/ada
 writeFileSync(join(kit, 'vite.config.js'), "import { sveltekit } from '@sveltejs/kit/vite'; export default { plugins: [sveltekit()] };\n");
 writeFileSync(join(kit, 'src/app.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8">%sveltekit.head%</head><body><div>%sveltekit.body%</div></body></html>');
 writeFileSync(join(kit, 'src/routes/+page.js'), 'export const prerender = true;');
-writeFileSync(join(kit, 'src/routes/+page.svelte'), `<script>import { ContentPage, CarouselSection } from '@page-sections/svelte';</script><ContentPage page={{ title: 'Kit consumer' }} sectionNavigation><CarouselSection section={{ id: 'kit-cards', title: 'Kit cards' }} list={[{ id: 'one', title: 'Kit One', href: '/' }]} /></ContentPage>`);
+writeFileSync(join(kit, 'src/routes/+page.svelte'), `<script>import { ContentPage, CarouselSection } from '@page-sections/svelte';</script><ContentPage page={{ title: 'Kit consumer' }} showContentMenu><CarouselSection section={{ id: 'kit-cards', title: 'Kit cards' }} list={[{ id: 'one', title: 'Kit One', href: '/' }]} /></ContentPage>`);
 run(['run', 'build'], kit);
 const kitHtml = readFileSync(join(kit, '.svelte-kit/output/prerendered/pages/index.html'), 'utf8');
 assert(kitHtml.includes('href="/"')); assert(kitHtml.includes('href="#kit-cards"'));

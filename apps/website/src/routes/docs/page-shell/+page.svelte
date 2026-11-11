@@ -1,281 +1,202 @@
 <script module lang="ts">
-  export const examples: { language: string; code: string; filename?: string; group?: string }[] = [
+  export const examples: { language: string; code: string }[] = [
     {
       language: 'svelte',
       code: `<script lang="ts">
-  import {
-    PageShell,
-    ContentPage,
-    Section,
-    type ContentPageData
-  } from '@page-sections/svelte';
-  const page: ContentPageData = {
-    title: 'Growing together',
-    pageTitle: 'Growing together | Garden journal',
-    eyebrow: 'Our journal',
-    intro: 'Notes from a shared garden.',
-    breadcrumbs: [{ label: 'Home', href: '/' }, { label: 'Journal' }]
-  };
+  import { ContentPage, SidebarNavigation, Section } from '@page-sections/svelte';
+  import { resolveNavigation } from '@page-sections/core';
+  const navigation = resolveNavigation(
+    [
+      {
+        id: 'guides',
+        label: 'Guides',
+        href: '/guides/',
+        children: [{ id: 'planting', label: 'Planting', href: '/guides/planting/' }],
+      },
+    ],
+    { currentId: 'planting' },
+  );
 <\/script>
 
-<PageShell mode="light" theme={{ accent: '#286449', radius: '12px' }}>
-  <ContentPage {page} sectionNavigation="sidebar" navigationLabel="In this article">
-    <Section
-      section={{ id: 'spring', title: 'Spring', headline: 'Planting the first seeds' }}
-    >
-      <p>Choose a sunny patch and start small.</p>
-    </Section>
-    <Section
-      section={{ id: 'summer', title: 'Summer', headline: 'Caring for new growth' }}
-    >
-      <p>Water regularly and share what you learn.</p>
-    </Section>
-  </ContentPage>
-</PageShell>`
-    },
-    {
-      language: 'svelte',
-      code: `<script>
-  import { ContentPage, HeroSection } from '@page-sections/svelte';
-<\/script>
-
-<svelte:head><title>Our garden | Journal</title></svelte:head>
 <ContentPage
-  page={{ title: 'Our garden' }}
-  showHeader={false}
-  manageDocumentTitle={false}
-  id="content"
-  lang="en"
-  aria-labelledby="welcome-title"
+  page={{ title: 'Planting', breadcrumbs: navigation.breadcrumbs }}
+  showContentMenu
 >
-  <HeroSection section={{ id: 'welcome', title: 'Our garden', headingLevel: 1 }} />
-</ContentPage>`
+  {#snippet leftSidebar()}
+    <SidebarNavigation items={navigation.sidebarItems} activeId={navigation.activeId} />
+  {/snippet}
+  <Section
+    section={{
+      id: 'preparation',
+      title: 'Preparation',
+      headline: 'Prepare the soil',
+      background: { color: 'standard' },
+    }}
+  >
+    <p>Loosen the surface and choose a sunny patch.</p>
+  </Section>
+  <Section
+    section={{
+      id: 'planting',
+      title: 'Planting',
+      headline: 'Sow the seeds',
+      background: { color: 'muted' },
+    }}
+  >
+    <p>Follow the packet instructions and water regularly.</p>
+  </Section>
+</ContentPage>
+`
     }
   ];
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
+  let left = $state(true);
+  let right = $state(true);
 </script>
 
 <ContentPage
-  page={{ title: 'Page shell', pageTitle: 'Page shell · Page Sections' }}
-  sectionNavigation
+  page={{ title: 'Page shell and sidebars', pageTitle: 'Page shell and sidebars · Page Sections' }}
+  showSidebar={left}
+  showContentMenu={right}
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
-    ><div class="prose">
-      <p>
-        ContentPage is the main content container. PageShell is an optional ancestor that shares a
-        theme across the page and independent navigation.
-      </p>
-      <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
+  <Section
+    section={{
+      id: 'try-layout',
+      title: 'Try the layout',
+      headline: 'Try the page frame',
+      background: { color: 'standard' }
+    }}
   >
+    <div class="prose">
+      <p>
+        Change the sidebars of this page and resize the browser. Below 1600px the content menu moves
+        into a sticky popup.
+      </p>
+      <fieldset>
+        <legend>Visible sidebars</legend><label
+          ><input type="checkbox" bind:checked={left} /> Left sidebar</label
+        > <label><input type="checkbox" bind:checked={right} /> Content menu</label>
+      </fieldset>
+      <CodeBlock
+        language="svelte"
+        code={'<ContentPage showContentMenu={' +
+          right +
+          '}>' +
+          (left ? '\n  {#snippet leftSidebar()}...{/snippet}' : '') +
+          '\n  ...\n</ContentPage>'}
+      />
+    </div>
+  </Section>
+  <Section section={{ id: 'overview', title: 'Overview', background: { color: 'standard' } }}>
+    <div class="prose"><CodeBlock {...examples[0]} highlighted={data.highlights[0]} /></div>
+  </Section>
   <Section
     section={{
       id: 'contentpage-props',
       title: 'ContentPage props',
       headline: 'ContentPage props',
-      variant: 'content'
+      background: { color: 'standard' }
     }}
     ><div class="prose">
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>Prop</th>
-              <th>Type</th>
-              <th>Required / default</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>page</code></td>
-              <td><code>ContentPageData</code></td>
-              <td>Required</td>
-            </tr>
-            <tr>
-              <td><code>children</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional; no content by default</td>
-            </tr>
-            <tr>
-              <td><code>sectionNavigation</code></td>
-              <td><code>boolean</code> or <code>'horizontal'</code> or <code>'sidebar'</code></td>
-              <td><code>false</code>; true means horizontal</td>
-            </tr>
-            <tr>
-              <td><code>navigationLabel</code></td>
-              <td><code>string</code></td>
-              <td>Defaults through SectionNavigation to <code>On this page</code></td>
-            </tr>
-            <tr>
-              <td><code>theme</code></td>
-              <td><code>PageTheme</code></td>
-              <td>Optional; CSS overrides scoped to the main element</td>
-            </tr>
-            <tr>
-              <td><code>class</code></td>
-              <td><code>string</code></td>
-              <td>Empty string</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p>ContentPageData fields:</p>
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>Field</th>
-              <th>Type</th>
-              <th>Meaning / default</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>title</code></td>
-              <td><code>string</code>, required</td>
-              <td>Visible h1 and fallback browser title</td>
-            </tr>
-            <tr>
-              <td><code>pageTitle</code></td>
-              <td><code>string</code></td>
-              <td>Browser title; defaults to title</td>
-            </tr>
-            <tr>
-              <td><code>eyebrow</code></td>
-              <td><code>string</code></td>
-              <td>Optional text above h1</td>
-            </tr>
-            <tr>
-              <td><code>intro</code></td>
-              <td><code>string</code></td>
-              <td>Optional introduction below h1</td>
-            </tr>
-            <tr>
-              <td><code>breadcrumbs</code></td>
-              <td><code>Breadcrumb[]</code></td>
-              <td>Rendered by the default title header</td>
-            </tr>
-            <tr>
-              <td><code>hero</code></td>
-              <td><code>HeroSectionData</code></td>
-              <td>Replaces the default header with a hero h1; a header snippet takes priority</td>
-            </tr>
-            <tr>
-              <td><code>bodyLayout</code></td>
-              <td>wide/narrow</td>
-              <td>wide; narrow caps all sections together at narrowMax</td>
-            </tr>
-            <tr>
-              <td><code>bodySpacing</code></td>
-              <td>SectionDefinition spacing</td>
-              <td>none; vertical space around the section body</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <h3 id="custom-page-headers-and-host-metadata">Custom page headers and host metadata</h3>
       <p>
-        ContentPage keeps its default title area unless <code>showHeader=&#123;false&#125;</code> is
-        set, page.hero is supplied, or a <code>header</code> snippet replaces it. The snippet
-        receives <code>(page, titleId)</code>; assign <code>titleId</code> to its heading to label
-        main. <code>showHeader=&#123;false&#125;</code> also suppresses a supplied header snippet.
-        Use <code>manageDocumentTitle=&#123;false&#125;</code> when the host route manages its
-        document title. Standard HTML attributes such as <code>id</code>, <code>lang</code>,
-        <code>aria-label</code>
-        and <code>aria-labelledby</code> are forwarded to main; styling remains controlled through
-        <code>theme</code>
-        and <code>class</code>.
+        <code>page: ContentPageData</code> is required. It supplies the title, optional pageTitle,
+        eyebrow, intro, breadcrumbs and hero. <code>children</code> contains the sections.
+        <code>bodyLayout</code>
+        is wide or narrow; <code>bodySpacing</code> controls vertical body spacing.
       </p>
-      <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
+      <ul>
+        <li>
+          <code>leftSidebar?: Snippet</code> supplies the contents of the left surface. ContentPage owns
+          its width, shadow and scrolling.
+        </li>
+        <li>
+          <code>showContentMenu?: boolean</code> defaults to false. It builds the right-hand contents
+          menu from registered sections. An empty page reserves no right rail.
+        </li>
+        <li><code>contentMenuLabel?: string</code> defaults to “On this page”.</li>
+        <li>
+          <code>footer?: Snippet</code> renders after the sections within the content column, for example
+          previous/next links.
+        </li>
+        <li>
+          <code>header?: Snippet&lt;[ContentPageData, string]&gt;</code> replaces the title header; use
+          the supplied ID on its heading.
+        </li>
+        <li>
+          <code>showHeader</code> and <code>manageDocumentTitle</code> default to true. Turn them off
+          when the host owns the h1 or document title.
+        </li>
+        <li>
+          <code>theme</code>, <code>class</code> and standard main-element attributes are supported.
+        </li>
+      </ul>
+    </div></Section
+  >
+  <Section
+    section={{
+      id: 'custom-page-headers-and-host-metadata',
+      title: 'Headers and breadcrumbs',
+      headline: 'Headers and breadcrumbs',
+      background: { color: 'standard' }
+    }}
+    ><div class="prose">
       <p>
-        Hero headings use the ID <code>$&#123;section.id&#125;-title</code>. Without a visible page
-        header or explicit accessible label, ContentPage labels main with <code>page.title</code>.
-        Provide exactly one page-level h1 in your own header or content. Section navigation remains
-        available in all header modes.
+        The header snippet takes priority over page.hero. Without either, ContentPage renders its
+        own h1. Breadcrumbs sit outside that choice and remain available with a hero or a hidden
+        header. Supply the path from the first main-menu entry through the current page; exclude
+        Home. A one-entry breadcrumb is hidden. The logo links to Home.
+      </p>
+      <p>
+        Supply exactly one h1. When showHeader is false, main falls back to page.title as its
+        accessible label, unless aria-label or aria-labelledby is provided.
       </p>
     </div></Section
   >
   <Section
     section={{
       id: 'pageshell-props',
-      title: 'PageShell props',
-      headline: 'PageShell props',
-      variant: 'content'
+      title: 'PageShell',
+      headline: 'PageShell',
+      background: { color: 'standard' }
     }}
     ><div class="prose">
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>Prop</th>
-              <th>Type</th>
-              <th>Required / default</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>children</code></td>
-              <td><code>Snippet</code></td>
-              <td>Optional</td>
-            </tr>
-            <tr>
-              <td><code>theme</code></td>
-              <td><code>PageTheme</code></td>
-              <td>Optional; inherited CSS defaults</td>
-            </tr>
-            <tr>
-              <td><code>mode</code></td>
-              <td><code>'light'</code> or <code>'dark'</code></td>
-              <td>Unset; no system-mode detection or persistence</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <p>
-        An explicit mode also informs descendant Image components when choosing <code>srcDark</code
-        >. Without an explicit mode, images can use the system dark preference; this does not
-        automatically switch the shell's palette. A nested <code>mode=&quot;light&quot;</code> does
-        not reset inherited dark CSS values; see
-        <a href={base + '/docs/themes/'}>Themes and Styling</a>.
+        PageShell optionally wraps navigation and ContentPage to share <code>theme</code> and
+        <code>mode</code> (light or dark). It accepts a children snippet. It does not detect or persist
+        a system preference; the application owns that choice.
       </p>
     </div></Section
   >
   <Section
     section={{
       id: 'layout-and-accessibility',
-      title: 'Layout and accessibility',
-      headline: 'Layout and accessibility',
-      variant: 'content'
+      title: 'Responsive layout and scrolling',
+      headline: 'Responsive layout and scrolling',
+      background: { color: 'standard' }
     }}
     ><div class="prose">
       <p>
-        ContentPage caps content width and creates the grid container. A sidebar uses a 14rem column
-        at viewport widths of 1200px or more; below that it sits above the sections. The standalone
-        SectionNavigation sidebar variant remains a vertical list.
+        Sections never exceed 1536px. At XS–L (below 1600px), both desktop sidebars are hidden. The
+        right contents menu remains available in a sticky popup. At XL the left sidebar is 236px
+        wide with a 24px gap, and the right sidebar occupies 260px. At 2XL these widths become 250px
+        plus 24px and 274px. At 3XL the 1536px content column is centered regardless of sidebar
+        occupancy.
       </p>
       <p>
-        The page renders a labelled main landmark, h1 and document title. Section navigation is
-        produced after children register during SSR, then positioned above/beside them with CSS. DOM
-        reading and keyboard order still place it after the content. Supply any skip links before
-        the page; there is no active-section observer or automatic focus management.
+        Both panels stick 16px from the viewport top and scroll internally when necessary. The right
+        panel starts slightly lower and has no shadow. The left panel and contained standard/muted
+        section surfaces use a subtle shadow. The main menu keeps its own centered geometry.
       </p>
       <p>
-        An internal SectionSurfaceGroup joins backgrounds. Registration is request-local. The
-        content and links work without JavaScript when the host renders HTML on the server.
-      </p>
-      <p>
-        Related: <a href={base + '/docs/content-grid/'}>Section and ContentGrid</a>,
-        <a href={base + '/docs/breadcrumbs/'}>Breadcrumbs and Section Navigation</a>,
-        <a href={base + '/docs/responsive-layout/'}>Responsive Layout</a>.
+        The registry renders anchor links during SSR. JavaScript adds active-section tracking,
+        Escape dismissal and focus restoration. Native details make the mobile popup usable without
+        JavaScript. Navigation remains composed of ordinary links.
       </p>
     </div></Section
   >

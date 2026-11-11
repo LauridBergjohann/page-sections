@@ -25,7 +25,7 @@
   onDestroy(() => { registration?.unregister(); surface?.unregister(); });
 </script>
 <section {...rest} id={section.id} class={['ps-section', className]} data-ps-section={section.id}
-  data-ps-section-surface={surface?.id} data-ps-surface-owner={surfaceScope} data-background-size={background.size} data-layout={section.layout ?? 'inherit'}
+  data-ps-section-surface={surface?.id} data-ps-surface-owner={surfaceScope} data-background-color={background.color} data-background-size={background.size} data-layout={section.layout ?? 'inherit'}
   data-spacing={section.spacing ?? (context.nested ? 'none' : 'normal')} data-divider={section.divider ?? 'none'} data-variant={section.variant} data-inset={inset ?? !context.nested} data-nested={context.nested}
   aria-labelledby={section.headline ? `${section.id}-title` : undefined} aria-label={section.headline ? undefined : section.title}
   style:--ps-section-width={section.style?.width} style:color={section.style?.color}>
@@ -44,6 +44,8 @@
   .ps-section-content { max-width: 1536px; margin-inline: auto; padding: calc(var(--ps-grid-gap) * var(--ps-spacing-factor, 1)) var(--ps-grid-gap); font: var(--ps-grid-body-size)/var(--ps-grid-body-line-height) var(--ps-font-family); }
   [data-inset='false'] > .ps-section-content { padding-inline: 0; }
   .ps-section-surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+  [data-background-size='standard']:is([data-background-color='standard'], [data-background-color='muted']) { z-index: 1; }
+  [data-background-size='standard']:is([data-background-color='standard'], [data-background-color='muted']) > .ps-section-surface { box-shadow: var(--ps-surface-shadow); clip-path: inset(var(--ps-shadow-top-clip, -12px) -12px var(--ps-shadow-bottom-clip, -12px) -12px); }
   [data-background-size='full'] > .ps-section-surface { left: 50%; right: auto; width: 100vw; transform: translateX(-50%); border-radius: 0; }
   [data-layout='narrow'] { max-width: min(100%, var(--ps-narrow-max)); } [data-layout='wide'] { max-width: 1536px; }
   [data-layout='full'] { width: 100vw; margin-inline: calc(50% - 50vw); }

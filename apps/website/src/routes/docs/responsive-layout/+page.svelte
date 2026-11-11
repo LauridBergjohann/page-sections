@@ -25,14 +25,15 @@
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage
   page={{ title: 'Responsive layout', pageTitle: 'Responsive layout · Page Sections' }}
-  sectionNavigation
+  showContentMenu
 >
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">
@@ -237,6 +238,18 @@
       <p>
         See <a href={base + '/docs/core-api/'}>Core API</a> and
         <a href={base + '/docs/tokens/'}>CSS Variables and Layout Tokens</a>.
+      </p>
+    </div></Section
+  >
+  <Section
+    section={{ id: 'sidebar-geometry', title: 'Sidebar geometry', headline: 'Sidebar geometry' }}
+    ><div class="prose">
+      <p>
+        <code>resolveContentPageLayout</code> keeps the main-menu geometry independent. Below 1600px no
+        desktop rail is reserved. XL uses 236px + 24px on the left and 260px on the right, with 12px outer
+        margins. The unoccupied side keeps 136px. At 2XL the occupied reserves are 28px + 274px; an unoccupied
+        side follows the centered menu edge. At 3XL content stays centered at 1536px with the sidebars
+        outside it.
       </p>
     </div></Section
   >

@@ -6,14 +6,15 @@
 
 <script lang="ts">
   import { base } from '$app/paths';
-  import { ContentPage, Section, CodeBlock } from '@page-sections/svelte';
+  import ContentPage from '$lib/WebsitePage.svelte';
+  import { Section, CodeBlock } from '@page-sections/svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
 
 <ContentPage
   page={{ title: 'Documentation', pageTitle: 'Documentation · Page Sections' }}
-  sectionNavigation
+  showContentMenu
 >
   <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
     ><div class="prose">
@@ -101,9 +102,7 @@
       <p>
         This website documents the public APIs of <code>@page-sections/core</code> and
         <code>@page-sections/svelte</code>. The footer shows the package version built with this
-        website. See <a href={base + '/docs/migration/'}>Migrating to 0.2</a> for the
-        catalog/editorial split and shared geometry. Development, testing and publishing
-        instructions live in the repository's
+        website. Development, testing and publishing instructions live in the repository's
         <a href="https://github.com/LauridBergjohann/page-sections/tree/main/docs/development"
           >development guide</a
         >.
