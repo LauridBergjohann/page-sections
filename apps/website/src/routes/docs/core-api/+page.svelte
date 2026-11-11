@@ -45,7 +45,13 @@ console.log(background.cssBackground);`
 </script>
 
 <ContentPage page={{ title: 'Core API', pageTitle: 'Core API · Page Sections' }} showContentMenu>
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         All runtime functions, constants, classes and types below are exported from <code
@@ -57,6 +63,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'layout-constants-and-types',
       title: 'Layout constants and types',
       headline: 'Layout constants and types',
@@ -136,6 +143,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'layout-functions',
       title: 'Layout functions',
       headline: 'Layout functions',
@@ -212,6 +220,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'sectionregistry-and-section-registry',
       title: 'SectionRegistry and SECTION_REGISTRY',
       headline: 'SectionRegistry and SECTION_REGISTRY',
@@ -261,6 +270,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'background-normalization',
       title: 'Background normalization',
       headline: 'Background normalization',
@@ -302,6 +312,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'sectionsurfaceregistry-and-section-surfaces',
       title: 'SectionSurfaceRegistry and SECTION_SURFACES',
       headline: 'SectionSurfaceRegistry and SECTION_SURFACES',
@@ -341,6 +352,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'theme-and-url-helpers',
       title: 'Theme and URL helpers',
       headline: 'Theme and URL helpers',
@@ -364,6 +376,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'content-type-index',
       title: 'Content type index',
       headline: 'Content type index',
@@ -459,6 +472,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'structured-content-types-02',
       title: 'Structured content types (0.2)',
       headline: 'Structured content types (0.2)',
@@ -513,6 +527,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'code-models',
       title: 'Code models',
       headline: 'Code models',
@@ -530,6 +545,7 @@ console.log(background.cssBackground);`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'site-navigation',
       title: 'Navigation and page frames',
       headline: 'Navigation and page frames'

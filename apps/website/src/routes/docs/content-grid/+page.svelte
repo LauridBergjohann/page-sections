@@ -50,10 +50,21 @@
   showContentMenu
 >
   <Section
-    section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
-    ><GridPlayground /></Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'playground',
+      title: 'Try it',
+      headline: 'Try it yourself',
+      variant: 'content'
+    }}><GridPlayground /></Section
   >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Section gives ordinary content a semantic region, anchor, spacing and optional background.
@@ -65,6 +76,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'section-props',
       title: 'Section props',
       headline: 'Section props',
@@ -182,6 +194,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'contentgrid-and-contentblock-props',
       title: 'ContentGrid and ContentBlock props',
       headline: 'ContentGrid and ContentBlock props',
@@ -240,6 +253,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'nested-sections-and-diagnostics',
       title: 'Nested sections and diagnostics',
       headline: 'Nested sections and diagnostics',

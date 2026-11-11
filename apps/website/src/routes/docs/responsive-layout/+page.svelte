@@ -35,7 +35,13 @@
   page={{ title: 'Responsive layout', pageTitle: 'Responsive layout · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Page Sections distinguishes <strong>viewport width</strong> from
@@ -47,6 +53,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'viewport-classification-and-page-width',
       title: 'Viewport classification and page width',
       headline: 'Viewport classification and page width',
@@ -116,6 +123,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'content-grids',
       title: 'Content grids',
       headline: 'Content grids',
@@ -193,6 +201,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'explicit-responsive-blocks',
       title: 'Explicit responsive blocks',
       headline: 'Explicit responsive blocks',
@@ -211,6 +220,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'catalog-and-editorial-cards',
       title: 'Catalog and editorial cards',
       headline: 'Catalog and editorial cards',
@@ -242,7 +252,12 @@
     </div></Section
   >
   <Section
-    section={{ id: 'sidebar-geometry', title: 'Sidebar geometry', headline: 'Sidebar geometry' }}
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'sidebar-geometry',
+      title: 'Sidebar geometry',
+      headline: 'Sidebar geometry'
+    }}
     ><div class="prose">
       <p>
         <code>resolveContentPageLayout</code> keeps the main-menu geometry independent. Below 1600px no

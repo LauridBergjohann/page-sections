@@ -41,7 +41,13 @@
 </script>
 
 <ContentPage page={{ title: 'Hero', pageTitle: 'Hero · Page Sections' }} showContentMenu>
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Use HeroSection for a prominent introduction or call to action. It combines an optional
@@ -52,6 +58,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'props-and-configuration',
       title: 'Props and configuration',
       headline: 'Props and configuration',
@@ -153,6 +160,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'styling-responsive-behavior-and-accessibility',
       title: 'Styling, responsive behavior and accessibility',
       headline: 'Styling, responsive behavior and accessibility',

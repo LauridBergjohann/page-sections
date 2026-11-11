@@ -129,7 +129,13 @@ declare module '@page-sections/core' {
   }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Keep content as JSON-compatible data and render it with components supplied by your
@@ -141,6 +147,7 @@ declare module '@page-sections/core' {
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'page-and-section-models',
       title: 'Page and section models',
       headline: 'Page and section models',
@@ -232,6 +239,7 @@ declare module '@page-sections/core' {
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'sections-component-props',
       title: 'Sections component props',
       headline: 'Sections component props',
@@ -275,6 +283,7 @@ declare module '@page-sections/core' {
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'add-a-custom-section',
       title: 'Add a custom section',
       headline: 'Add a custom section',
@@ -298,6 +307,7 @@ declare module '@page-sections/core' {
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'related-models',
       title: 'Related models',
       headline: 'Related models',

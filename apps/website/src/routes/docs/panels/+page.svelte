@@ -31,7 +31,13 @@
 </script>
 
 <ContentPage page={{ title: 'Panels', pageTitle: 'Panels · Page Sections' }} showContentMenu>
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>﻿# PanelSection</p>
       <p>
@@ -43,6 +49,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'panelsection-props',
       title: 'PanelSection props',
       headline: 'PanelSection props',
@@ -67,6 +74,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'contentpanel-props',
       title: 'ContentPanel props',
       headline: 'ContentPanel props',
@@ -83,6 +91,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'actions-props',
       title: 'Actions props',
       headline: 'Actions props',

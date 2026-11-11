@@ -23,7 +23,13 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         CSS variables customize presentation; <code>layoutTokens</code> supplies canonical numeric values
@@ -34,6 +40,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'theme-and-component-variables',
       title: 'Theme and component variables',
       headline: 'Theme and component variables',
@@ -143,6 +150,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'generated-grid-variables',
       title: 'Generated grid variables',
       headline: 'Generated grid variables',
@@ -229,6 +237,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'internal-resolved-variables',
       title: 'Internal resolved variables',
       headline: 'Internal resolved variables',
@@ -251,6 +260,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'complete-numeric-token-groups',
       title: 'Complete numeric token groups',
       headline: 'Complete numeric token groups',
@@ -434,6 +444,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'generated-component-variables',
       title: 'Generated component variables',
       headline: 'Generated component variables',
@@ -516,6 +527,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'code-colors',
       title: 'Code colors',
       headline: 'Derived syntax colors',
@@ -529,7 +541,13 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       </p>
     </div></Section
   >
-  <Section section={{ id: 'sidebar-tokens', title: 'Sidebar tokens', headline: 'Sidebar tokens' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'sidebar-tokens',
+      title: 'Sidebar tokens',
+      headline: 'Sidebar tokens'
+    }}
     ><div class="prose">
       <p>
         <code>layoutTokens.sidebars</code> defines gap (24), stickyTop (16), contentMenuOffset (16), xl

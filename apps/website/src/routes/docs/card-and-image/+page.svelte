@@ -46,7 +46,13 @@
   page={{ title: 'Card and Image', pageTitle: 'Card and Image · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         These low-level building blocks are useful when composing a custom section. Card supplies
@@ -63,7 +69,13 @@
     </div></Section
   >
   <Section
-    section={{ id: 'card-props', title: 'Card props', headline: 'Card props', variant: 'content' }}
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'card-props',
+      title: 'Card props',
+      headline: 'Card props',
+      variant: 'content'
+    }}
     ><div class="prose">
       <p>
         Generic <code>T extends CardItem</code>; required item. Optional cardSize (m), variant
@@ -167,6 +179,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'image-props-and-complete-imagedata-model',
       title: 'Image props and complete ImageData model',
       headline: 'Image props and complete ImageData model',
@@ -243,6 +256,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'accessibility-and-ssr',
       title: 'Accessibility and SSR',
       headline: 'Accessibility and SSR',

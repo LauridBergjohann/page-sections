@@ -220,7 +220,7 @@
       max-height: calc(100dvh - 2 * var(--ps-sidebar-sticky-top));
       overflow: auto;
       overscroll-behavior: contain;
-      background: var(--ps-section-muted);
+      background: var(--ps-section-standard);
       border-radius: 0 var(--ps-radius) var(--ps-radius) 0;
     }
   }

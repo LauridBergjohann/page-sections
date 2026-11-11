@@ -36,7 +36,13 @@
 </script>
 
 <ContentPage page={{ title: 'Video', pageTitle: 'Video · Page Sections' }} showContentMenu>
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Use VideoSection for a native video player or YouTube embed, optionally paired with text.
@@ -46,6 +52,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'props-and-configuration',
       title: 'Props and configuration',
       headline: 'Props and configuration',
@@ -148,7 +155,14 @@
       </p>
     </div></Section
   >
-  <Section section={{ id: 'youtube', title: 'YouTube', headline: 'YouTube', variant: 'content' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'youtube',
+      title: 'YouTube',
+      headline: 'YouTube',
+      variant: 'content'
+    }}
     ><div class="prose">
       <p>
         The source accepts an 11-character ID, a youtu.be URL, or a URL on
@@ -167,6 +181,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'layout-and-accessibility',
       title: 'Layout and accessibility',
       headline: 'Layout and accessibility',

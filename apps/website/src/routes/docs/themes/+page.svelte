@@ -55,7 +55,13 @@
   page={{ title: 'Themes and styling', pageTitle: 'Themes and styling · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Page Sections provides CSS defaults without requiring a utility framework. Set shared
@@ -67,6 +73,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'complete-pagetheme-mapping',
       title: 'Complete PageTheme mapping',
       headline: 'Complete PageTheme mapping',
@@ -139,6 +146,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'light-and-dark-modes',
       title: 'Light and dark modes',
       headline: 'Light and dark modes',
@@ -161,6 +169,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'integrate-an-existing-design-system',
       title: 'Integrate an existing design system',
       headline: 'Integrate an existing design system',

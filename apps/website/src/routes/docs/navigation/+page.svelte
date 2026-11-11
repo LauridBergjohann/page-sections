@@ -62,7 +62,13 @@
   }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', background: { color: 'standard' } }}>
+  <Section
+    section={{
+      id: 'overview',
+      title: 'Overview',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
     <div class="prose"><CodeBlock {...examples[0]} highlighted={data.highlights[0]} /></div>
   </Section>
   <Section
@@ -70,7 +76,7 @@
       id: 'navigation-props',
       title: 'Navigation',
       headline: 'Navigation',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
@@ -96,7 +102,7 @@
       id: 'mainmenu',
       title: 'MainMenu and interaction',
       headline: 'MainMenu and interaction',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
@@ -122,7 +128,7 @@
       id: 'sidebar-navigation',
       title: 'SidebarNavigation',
       headline: 'SidebarNavigation',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
@@ -141,6 +147,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'buttongroup',
       title: 'ButtonGroup',
       headline: 'ButtonGroup',
@@ -236,6 +243,12 @@
         Set this token on a navigation ancestor to customize or disable elevation. If host button
         groups paint their own outline and radius, leave the satellite wrapper unpainted and apply
         the token to the actual group to avoid duplicate edges.
+      </p>
+      <p>
+        Active menu and sidebar links retain a muted background. Sidebar branches reopen along the
+        current page path after navigation. Desktop submenus connect directly to their parent link
+        and are centered beneath it. Selected ButtonGroup items use a muted background and accent
+        text; icons that inherit the text color follow the same selection treatment.
       </p>
     </div></Section
   >

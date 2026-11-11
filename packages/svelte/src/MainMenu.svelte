@@ -88,6 +88,7 @@
                 <li>
                   <a
                     href={safeHref(child.href)}
+                    class:active={active(child)}
                     aria-current={child.current ? 'page' : undefined}
                     onclick={close}
                   >
@@ -120,6 +121,9 @@
   li {
     min-width: 0;
   }
+  .ps-main-menu > li {
+    position: relative;
+  }
   a {
     display: flex;
     align-items: center;
@@ -131,10 +135,11 @@
     border-radius: 0.5rem;
   }
   a:hover,
+  a.active,
   a:focus-visible {
     background: var(--ps-section-muted);
   }
-  a.active::after {
+  .ps-main-menu > li > a.active::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -146,7 +151,7 @@
   }
   .ps-submenu {
     position: absolute;
-    top: calc(100% + 8px);
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     width: max-content;

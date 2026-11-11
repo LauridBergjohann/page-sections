@@ -1,5 +1,56 @@
 import { expect, test } from '@playwright/test';
 
+test('navigation surfaces, hover geometry and sidebar state stay consistent across pages', async ({ page }) => {
+  await page.setViewportSize({ width: 1809, height: 1000 });
+  await page.goto('/docs/hero/');
+  const docs = page.locator('.desktop-menu').getByRole('link', { name: 'Documentation', exact: true });
+  const palette = await docs.evaluate(el => {
+    const css = getComputedStyle(el);
+    return { muted: css.getPropertyValue('--ps-section-muted').trim(), standard: css.getPropertyValue('--ps-section-standard').trim(), accent: css.getPropertyValue('--ps-accent').trim() };
+  });
+  // Resolve theme tokens through CSS, independent of the palette's color notation.
+  const colors = await page.evaluate(palette => {
+    const node = document.createElement('span'); document.body.append(node);
+    const result: Record<string, string> = {};
+    for (const [key, color] of Object.entries(palette)) { node.style.color = color; result[key] = getComputedStyle(node).color; }
+    node.remove(); return result;
+  }, palette);
+  await expect(docs).toHaveCSS('background-color', colors.muted);
+  await expect(page.locator('.satellite.right [aria-pressed="true"]')).toHaveCSS('color', colors.accent);
+  await docs.hover();
+  const overlay = page.locator('.ps-submenu:visible');
+  const linkBox = (await docs.boundingBox())!;
+  const overlayBox = (await overlay.boundingBox())!;
+  expect(Math.abs(overlayBox.x + overlayBox.width / 2 - linkBox.x - linkBox.width / 2)).toBeLessThan(1);
+  expect(Math.abs(overlayBox.y - linkBox.y - linkBox.height)).toBeLessThan(1);
+  await page.mouse.move(linkBox.x + linkBox.width / 2, overlayBox.y + 2, { steps: 8 });
+  await page.waitForTimeout(250); // Longer than the pointer-leave dismissal delay.
+  await expect(overlay).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.mouse.move(0, 500);
+  await expect(docs).toHaveCSS('background-color', colors.muted);
+  const sidebar = page.locator('.ps-left-sidebar');
+  const initialTop = (await sidebar.boundingBox())!.y;
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveCSS('background-color', colors.muted);
+  await sidebar.getByRole('button', { name: 'Show pages in Sections', exact: true }).click();
+  await expect(sidebar.getByRole('link', { name: 'Hero', exact: true })).toBeHidden();
+  await page.locator('.reading-path [rel="next"]').click();
+  await expect(page).toHaveURL(/\/docs\/rich-text\/$/);
+  await expect(sidebar.getByRole('link', { name: 'Rich text', exact: true })).toBeVisible();
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Rich text');
+  await expect(page.locator('.ps-content-menu-slot .desktop')).toHaveCSS('background-color', colors.standard);
+  const sections = page.locator('.sections > [data-ps-section-group] > [data-ps-section]');
+  expect(await sections.count()).toBeGreaterThan(0);
+  for (const section of await sections.all()) {
+    await expect(section).toHaveAttribute('data-background-color', 'standard');
+    await expect(section).toHaveAttribute('data-background-size', 'standard');
+  }
+  await docs.click();
+  await expect(page).toHaveURL(/\/docs\/$/);
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+  expect((await sidebar.boundingBox())!.y).toBe(initialTop);
+});
+
 test('desktop page links reveal only the second level and retain native navigation', async ({ page }) => {
   await page.setViewportSize({ width: 1809, height: 1000 });
   await page.goto('/docs/hero/');

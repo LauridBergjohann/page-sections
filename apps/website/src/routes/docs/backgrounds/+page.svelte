@@ -47,10 +47,21 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
   showContentMenu
 >
   <Section
-    section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
-    ><SurfacePlayground /></Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'playground',
+      title: 'Try it',
+      headline: 'Try it yourself',
+      variant: 'content'
+    }}><SurfacePlayground /></Section
   >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Backgrounds separate a section's content layout from its visual surface. Use a standard
@@ -61,6 +72,7 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'sectionbackground',
       title: 'SectionBackground',
       headline: 'SectionBackground',
@@ -109,6 +121,7 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'sectionsurfacegroup',
       title: 'SectionSurfaceGroup',
       headline: 'SectionSurfaceGroup',
@@ -145,6 +158,7 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'surface-shadows',
       title: 'Contained surface shadows',
       headline: 'Contained surface shadows'

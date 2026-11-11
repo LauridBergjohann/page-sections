@@ -12,6 +12,8 @@
 
 ### Patch Changes
 
+- Anchor desktop submenus directly beneath their parent links, keep active navigation backgrounds visible, reopen the current sidebar branch on navigation and reserve breadcrumb space on every content page. Use accent-colored selected button groups and standard surfaces for content menus and website documentation sections.
+
 - Updated dependencies
   - @page-sections/core@0.4.0
 

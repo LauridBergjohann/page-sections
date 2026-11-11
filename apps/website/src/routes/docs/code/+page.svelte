@@ -92,6 +92,7 @@ const highlighted = await highlightCode(code, 'typescript');
 >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'playground',
       title: 'Try it',
       headline: 'Try the presentation',
@@ -100,6 +101,7 @@ const highlighted = await highlightCode(code, 'typescript');
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'section',
       title: 'CodeSection',
       headline: 'A complete section',
@@ -117,6 +119,7 @@ const highlighted = await highlightCode(code, 'typescript');
   </Section>
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'highlighting',
       title: 'Syntax colors',
       headline: 'Highlight at build or server time',
@@ -150,6 +153,7 @@ const highlighted = await highlightCode(code, 'typescript');
   </Section>
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'composition',
       title: 'Text and code',
       headline: 'Compose with the existing grid',
@@ -168,6 +172,7 @@ const highlighted = await highlightCode(code, 'typescript');
   </Section>
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'reference',
       title: 'Options',
       headline: 'CodeBlock and CodeData',
@@ -235,6 +240,7 @@ const highlighted = await highlightCode(code, 'typescript');
   </Section>
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'accessibility',
       title: 'SSR and accessibility',
       headline: 'Useful before JavaScript',

@@ -45,7 +45,13 @@
 </script>
 
 <ContentPage page={{ title: 'Rich text', pageTitle: 'Rich text · Page Sections' }} showContentMenu>
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>﻿# RichTextSection</p>
       <p>
@@ -57,6 +63,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'props-and-configuration',
       title: 'Props and configuration',
       headline: 'Props and configuration',
@@ -114,6 +121,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'low-level-content-components',
       title: 'Low-level content components',
       headline: 'Low-level content components',
@@ -129,6 +137,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'rendering-and-styling',
       title: 'Rendering and styling',
       headline: 'Rendering and styling',

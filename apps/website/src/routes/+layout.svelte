@@ -139,6 +139,7 @@
     cursor: pointer;
   }
   .appearance [aria-pressed='true'] {
+    color: var(--ps-accent);
     background: var(--ps-section-muted);
   }
   .appearance button:disabled {

@@ -16,7 +16,13 @@
   page={{ title: 'Svelte API', pageTitle: 'Svelte API · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Import components from <code>@page-sections/svelte</code>. The public components are listed
@@ -176,6 +182,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'props-and-snippets',
       title: 'Props and snippets',
       headline: 'Props and snippets',
@@ -209,6 +216,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'types-and-styles',
       title: 'Types and styles',
       headline: 'Types and styles',
@@ -234,6 +242,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'rendering-contract',
       title: 'Rendering contract',
       headline: 'Rendering contract',
@@ -254,6 +263,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'sidebar-navigation',
       title: 'SidebarNavigation',
       headline: 'SidebarNavigation'

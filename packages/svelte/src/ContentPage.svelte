@@ -83,9 +83,9 @@
     (!showHeader && !rest['aria-labelledby'] ? page.title : undefined)}
 >
   <div class="ps-page-frame">
-    {#if (page.breadcrumbs?.length ?? 0) > 1}<div class="breadcrumbs">
-        <Breadcrumbs items={page.breadcrumbs ?? []} />
-      </div>{/if}
+    <div class="breadcrumbs">
+      <Breadcrumbs items={page.breadcrumbs ?? []} />
+    </div>
     {#if leftSidebar}<aside class="ps-left-sidebar">
         <div class="sidebar-panel">{@render leftSidebar()}</div>
       </aside>{/if}
@@ -166,6 +166,7 @@
     min-width: 0;
   }
   .breadcrumbs {
+    min-height: var(--ps-breadcrumb-height);
     grid-column: 2;
     grid-row: 1;
     padding-inline: var(--ps-grid-gap, 24px);

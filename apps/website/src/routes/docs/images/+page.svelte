@@ -38,7 +38,13 @@
 </script>
 
 <ContentPage page={{ title: 'Images', pageTitle: 'Images · Page Sections' }} showContentMenu>
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Use ImageSection for an image on its own or paired with explanatory text. Children provide
@@ -49,6 +55,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'props-and-configuration',
       title: 'Props and configuration',
       headline: 'Props and configuration',
@@ -118,6 +125,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'responsive-layout-and-ssr',
       title: 'Responsive layout and SSR',
       headline: 'Responsive layout and SSR',

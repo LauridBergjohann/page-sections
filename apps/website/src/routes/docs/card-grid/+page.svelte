@@ -36,10 +36,21 @@
 
 <ContentPage page={{ title: 'Card grid', pageTitle: 'Card grid · Page Sections' }} showContentMenu>
   <Section
-    section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
-    ><CollectionPlayground /></Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'playground',
+      title: 'Try it',
+      headline: 'Try it yourself',
+      variant: 'content'
+    }}><CollectionPlayground /></Section
   >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>﻿# CardGridSection</p>
       <p>
@@ -49,7 +60,14 @@
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
     </div></Section
   >
-  <Section section={{ id: 'props', title: 'Props', headline: 'Props', variant: 'content' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'props',
+      title: 'Props',
+      headline: 'Props',
+      variant: 'content'
+    }}
     ><div class="prose">
       <p>Generic over <code>T extends CardItem</code>.</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
@@ -145,6 +163,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'layout-and-styling',
       title: 'Layout and styling',
       headline: 'Layout and styling',
@@ -187,6 +206,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'accessibility-and-ssr',
       title: 'Accessibility and SSR',
       headline: 'Accessibility and SSR',

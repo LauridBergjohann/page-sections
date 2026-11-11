@@ -10,7 +10,13 @@
   }}
   showContentMenu={false}
 >
-  <Section section={{ id: 'overview', title: 'Sections', background: { color: 'standard' } }}>
+  <Section
+    section={{
+      id: 'overview',
+      title: 'Sections',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
     <p>
       Follow the chapters below in order, or choose the topic you need. Each chapter includes
       examples and links to continue reading.

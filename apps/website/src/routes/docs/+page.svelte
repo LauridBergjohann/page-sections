@@ -16,7 +16,13 @@
   page={{ title: 'Documentation', pageTitle: 'Documentation · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <img src={base + '/page-sections-logo.svg'} alt="Page Sections logo" width="64" height="64" />
       <p>
@@ -31,7 +37,13 @@
     </div></Section
   >
   <Section
-    section={{ id: 'start-here', title: 'Start here', headline: 'Start here', variant: 'content' }}
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'start-here',
+      title: 'Start here',
+      headline: 'Start here',
+      variant: 'content'
+    }}
     ><div class="prose">
       <ol>
         <li><a href={base + '/getting-started/installation/'}>Install the packages</a>.</li>
@@ -52,6 +64,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'choose-an-entry-point',
       title: 'Choose an entry point',
       headline: 'Choose an entry point',

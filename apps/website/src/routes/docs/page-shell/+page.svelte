@@ -70,7 +70,7 @@
       id: 'try-layout',
       title: 'Try the layout',
       headline: 'Try the page frame',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
   >
     <div class="prose">
@@ -93,7 +93,13 @@
       />
     </div>
   </Section>
-  <Section section={{ id: 'overview', title: 'Overview', background: { color: 'standard' } }}>
+  <Section
+    section={{
+      id: 'overview',
+      title: 'Overview',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
     <div class="prose"><CodeBlock {...examples[0]} highlighted={data.highlights[0]} /></div>
   </Section>
   <Section
@@ -101,7 +107,7 @@
       id: 'contentpage-props',
       title: 'ContentPage props',
       headline: 'ContentPage props',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
@@ -143,14 +149,16 @@
       id: 'custom-page-headers-and-host-metadata',
       title: 'Headers and breadcrumbs',
       headline: 'Headers and breadcrumbs',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
         The header snippet takes priority over page.hero. Without either, ContentPage renders its
         own h1. Breadcrumbs sit outside that choice and remain available with a hero or a hidden
         header. Supply the path from the first main-menu entry through the current page; exclude
-        Home. A one-entry breadcrumb is hidden. The logo links to Home.
+        Home. A one-entry breadcrumb is hidden. Its row remains reserved, including on pages without
+        breadcrumbs, so the content and sidebars keep their vertical position. The logo links to
+        Home.
       </p>
       <p>
         Supply exactly one h1. When showHeader is false, main falls back to page.title as its
@@ -163,7 +171,7 @@
       id: 'pageshell-props',
       title: 'PageShell',
       headline: 'PageShell',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
@@ -178,7 +186,7 @@
       id: 'layout-and-accessibility',
       title: 'Responsive layout and scrolling',
       headline: 'Responsive layout and scrolling',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>

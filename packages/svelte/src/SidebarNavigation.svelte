@@ -15,6 +15,14 @@
   const current = (item: MenuItem): boolean => (activeId ? item.id === activeId : !!item.current);
   const active = (item: MenuItem): boolean =>
     current(item) || (item.children?.some(active) ?? false);
+  const currentKey = $derived(
+    activeId ??
+      JSON.stringify(
+        items.flatMap(function selected(item): string[] {
+          return [...(item.current ? [item.id] : []), ...(item.children?.flatMap(selected) ?? [])];
+        })
+      )
+  );
 </script>
 
 {#snippet entries(list: MenuItem[])}
@@ -39,7 +47,9 @@
     {/each}
   </ul>
 {/snippet}
-<nav aria-label={label} class="ps-sidebar-navigation">{@render entries(items)}</nav>
+<nav aria-label={label} class="ps-sidebar-navigation">
+  {#key currentKey}{@render entries(items)}{/key}
+</nav>
 
 <style>
   ul {
@@ -68,6 +78,7 @@
     background: var(--ps-section-muted);
   }
   a[aria-current='page'] {
+    background: var(--ps-section-muted);
     border-inline-start-color: var(--ps-accent);
     font-weight: 650;
   }

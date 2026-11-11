@@ -11,7 +11,11 @@
   showContentMenu={false}
 >
   <Section
-    section={{ id: 'overview', title: 'Building blocks', background: { color: 'standard' } }}
+    section={{
+      id: 'overview',
+      title: 'Building blocks',
+      background: { color: 'standard', size: 'standard' }
+    }}
   >
     <p>
       Follow the chapters below in order, or choose the topic you need. Each chapter includes

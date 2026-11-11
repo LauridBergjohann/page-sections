@@ -7,7 +7,13 @@
   page={{ title: 'Reference', intro: 'Look up components, core functions and design tokens.' }}
   showContentMenu={false}
 >
-  <Section section={{ id: 'overview', title: 'Reference', background: { color: 'standard' } }}>
+  <Section
+    section={{
+      id: 'overview',
+      title: 'Reference',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
     <p>
       Follow the chapters below in order, or choose the topic you need. Each chapter includes
       examples and links to continue reading.

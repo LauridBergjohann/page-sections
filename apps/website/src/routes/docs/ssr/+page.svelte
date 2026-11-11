@@ -20,7 +20,13 @@ export const prerender = true;`
   page={{ title: 'SSR and enhancement', pageTitle: 'SSR and enhancement · Page Sections' }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>
         Page Sections components can render meaningful HTML on the server. The host application must
@@ -31,6 +37,7 @@ export const prerender = true;`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'what-works-without-application-javascript',
       title: 'What works without application JavaScript?',
       headline: 'What works without application JavaScript?',
@@ -106,6 +113,7 @@ export const prerender = true;`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'host-responsibilities',
       title: 'Host responsibilities',
       headline: 'Host responsibilities',
@@ -128,6 +136,7 @@ export const prerender = true;`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'demo-reference',
       title: 'Demo reference',
       headline: 'Demo reference',
@@ -151,6 +160,7 @@ export const prerender = true;`
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'accessibility-limits',
       title: 'Accessibility limits',
       headline: 'Accessibility limits',

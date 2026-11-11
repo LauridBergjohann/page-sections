@@ -30,10 +30,21 @@
 
 <ContentPage page={{ title: 'Carousel', pageTitle: 'Carousel · Page Sections' }} showContentMenu>
   <Section
-    section={{ id: 'playground', title: 'Try it', headline: 'Try it yourself', variant: 'content' }}
-    ><CollectionPlayground kind="carousel" /></Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'playground',
+      title: 'Try it',
+      headline: 'Try it yourself',
+      variant: 'content'
+    }}><CollectionPlayground kind="carousel" /></Section
   >
-  <Section section={{ id: 'overview', title: 'Overview', spacing: 'tight' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'overview',
+      title: 'Overview',
+      spacing: 'tight'
+    }}
     ><div class="prose">
       <p>﻿# CarouselSection</p>
       <p>
@@ -49,7 +60,14 @@
       </p>
     </div></Section
   >
-  <Section section={{ id: 'props', title: 'Props', headline: 'Props', variant: 'content' }}
+  <Section
+    section={{
+      background: { color: 'standard', size: 'standard' },
+      id: 'props',
+      title: 'Props',
+      headline: 'Props',
+      variant: 'content'
+    }}
     ><div class="prose">
       <p>
         Generic over T extends CardItem. Required section: SectionDefinition and list: T[]. Optional
@@ -69,6 +87,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'layout-and-interaction',
       title: 'Layout and interaction',
       headline: 'Layout and interaction',
@@ -94,6 +113,7 @@
   >
   <Section
     section={{
+      background: { color: 'standard', size: 'standard' },
       id: 'accessibility-and-ssr',
       title: 'Accessibility and SSR',
       headline: 'Accessibility and SSR',

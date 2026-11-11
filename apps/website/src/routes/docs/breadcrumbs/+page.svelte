@@ -46,7 +46,13 @@
   }}
   showContentMenu
 >
-  <Section section={{ id: 'overview', title: 'Overview', background: { color: 'standard' } }}>
+  <Section
+    section={{
+      id: 'overview',
+      title: 'Overview',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
     <div class="prose"><CodeBlock {...examples[0]} highlighted={data.highlights[0]} /></div>
   </Section>
   <Section
@@ -54,7 +60,7 @@
       id: 'breadcrumbs',
       title: 'Breadcrumbs',
       headline: 'Breadcrumbs',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
@@ -70,7 +76,7 @@
       id: 'automatic-navigation',
       title: 'Automatic content menu',
       headline: 'Automatic content menu',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
@@ -90,7 +96,7 @@
       id: 'sectionnavigation',
       title: 'SectionNavigation',
       headline: 'SectionNavigation',
-      background: { color: 'standard' }
+      background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
       <p>
