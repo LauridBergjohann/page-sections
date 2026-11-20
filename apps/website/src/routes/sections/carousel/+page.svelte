@@ -87,10 +87,9 @@
         Generic over T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>.
         Required section:
         <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a> and list: T[].
-        Optional cardSize (m), cardVariant (catalog), mediaAspect (3/2; also 4/3 or 1/1), mediaFit (contain
-        for catalog, cover for editorial), textAlign (start), controls (true), previousLabel (Previous
-        cards), nextLabel (Next cards), media(item), itemContent(item), oncardready(parts), initialItemKey
-        and onselectionchange(key).
+        Optional cardSize (m), cardShadow (false), mediaAspect (3/2; also 4/3 or 1/1), mediaFit (contain),
+        textAlign (start), controls (true), previousLabel (Previous cards), nextLabel (Next cards), media(item),
+        itemContent(item), oncardready(parts), initialItemKey and onselectionchange(key).
       </p>
       <p>
         <code>initialItemKey</code> is applied once after mount, matching itemKey ?? id.
@@ -112,11 +111,13 @@
     ><div class="prose">
       <p>
         Each slide takes the canonical S/M/L column span, with the same container width, outer
-        gutters and gap as CardGridSection. Slides share equal heights. Catalog cards use the
-        selected media ratio plus independent title space and a collection-wide eyebrow row. S/M
-        titles have two lines, L three; S hides eyebrows. Contained media has an 8px inset; cover
-        fills the frame. Editorial mode grows with content. The previous arbitrary pixel width caps
-        and ps-carousel-card-width override were removed.
+        gutters and gap as CardGridSection. Slides share equal heights. Cards use the selected media
+        ratio plus independent title space and a collection-wide eyebrow row. S/M titles have two
+        lines, L three; S hides eyebrows. Contained media has an 8px inset; cover fills the frame.
+        Descriptions and additional content increase the card height. Optional
+        <code>cardShadow</code> adds a resting shadow; hover strengthens the shadow and highlights the
+        border in the accent color. The previous arbitrary pixel width caps and ps-carousel-card-width
+        override were removed.
       </p>
       <p>
         The focusable native region supports touch, wheel/trackpad and keyboard scrolling without

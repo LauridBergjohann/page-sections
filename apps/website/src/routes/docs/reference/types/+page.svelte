@@ -80,7 +80,6 @@
           <li><a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a></li>
           <li><a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a></li>
           <li><a href={base + '/docs/reference/types/#card-size'}>CardSize</a></li>
-          <li><a href={base + '/docs/reference/types/#card-variant'}>CardVariant</a></li>
           <li>
             <a href={base + '/docs/reference/types/#carousel-section-data'}>CarouselSectionData</a>
           </li>
@@ -370,9 +369,8 @@
             >[]; cardSize?: <a href={base + '/docs/reference/types/#card-size'}>CardSize</a
             >; variant?: <a href={base + '/docs/reference/types/#section-definition'}
               >SectionDefinition</a
-            >['variant']; cardVariant?: <a href={base + '/docs/reference/types/#card-variant'}
-              >CardVariant</a
-            >; cardTone?: <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a
+            >['variant']; cardShadow?: boolean; cardTone?: <a
+              href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a
             >; mediaAspect?: <a href={base + '/docs/reference/types/#card-media-aspect'}
               >CardMediaAspect</a
             >; mediaFit?: <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a
@@ -408,10 +406,9 @@
               ><td>Optional</td><td>See the declared value shape and the linked types.</td></tr
             >
             <tr
-              ><td><code>cardVariant</code></td><td
-                ><code><a href={base + '/docs/reference/types/#card-variant'}>CardVariant</a></code
-                ></td
-              ><td>Optional</td><td>See the declared value shape and the linked types.</td></tr
+              ><td><code>cardShadow</code></td><td><code>boolean</code></td><td>Optional</td><td
+                >See the declared value shape and the linked types.</td
+              ></tr
             >
             <tr
               ><td><code>cardTone</code></td><td
@@ -460,8 +457,8 @@
     }}
     ><div class="prose">
       <p>
-        The content of a single card. Catalog cards focus on media and title; editorial cards also
-        render descriptions, actions and footer content.
+        The content of a single card. A supplied description appears below its title. The main link
+        covers the card; additional actions and footer links remain independent.
       </p>
       <details>
         <summary>Type declaration</summary>
@@ -1543,322 +1540,6 @@
   >
   <Section
     section={{
-      id: 'card-variant',
-      title: 'CardVariant',
-      headline: 'CardVariant',
-      headingSize: 'm',
-      background: { color: 'standard' }
-    }}
-    ><div class="prose">
-      <p>CardVariant is a public type. Follow linked field types to inspect nested values.</p>
-      <details>
-        <summary>Type declaration</summary>
-        <pre><code>'catalog' | 'editorial'</code></pre>
-      </details>
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
-        <table>
-          <thead><tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr></thead><tbody
-            ><tr
-              ><td><code>toString</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a string representation of a string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>charAt</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns the character at the specified index.</td
-              ></tr
-            >
-            <tr
-              ><td><code>charCodeAt</code></td><td><code>number</code></td><td>Required</td><td
-                >Returns the Unicode value of the character at the specified location.</td
-              ></tr
-            >
-            <tr
-              ><td><code>concat</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a string that contains the concatenation of two or more strings.</td
-              ></tr
-            >
-            <tr
-              ><td><code>indexOf</code></td><td><code>number</code></td><td>Required</td><td
-                >Returns the position of the first occurrence of a substring, or -1 if it is not
-                present.</td
-              ></tr
-            >
-            <tr
-              ><td><code>lastIndexOf</code></td><td><code>number</code></td><td>Required</td><td
-                >Returns the last occurrence of a substring in the string, or -1 if it is not
-                present.</td
-              ></tr
-            >
-            <tr
-              ><td><code>localeCompare</code></td><td><code>number</code></td><td>Required</td><td
-                >Determines whether two strings are equivalent in the current locale. Determines
-                whether two strings are equivalent in the current or specified locale.</td
-              ></tr
-            >
-            <tr
-              ><td><code>match</code></td><td><code>RegExpMatchArray | null</code></td><td
-                >Required</td
-              ><td
-                >Matches a string with a regular expression, and returns an array containing the
-                results of that search. Matches a string or an object that supports being matched
-                against, and returns an array containing the results of that search, or null if no
-                matches are found.</td
-              ></tr
-            >
-            <tr
-              ><td><code>replace</code></td><td><code>string</code></td><td>Required</td><td
-                >Replaces text in a string, using a regular expression or search string. Passes a
-                string and &#123;@linkcode replaceValue&#125; to the `[Symbol.replace]` method on
-                &#123;@linkcode searchValue&#125;. This method is expected to implement its own
-                replacement algorithm. Replaces text in a string, using an object that supports
-                replacement within a string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>search</code></td><td><code>number</code></td><td>Required</td><td
-                >Finds the first substring match in a regular expression search.</td
-              ></tr
-            >
-            <tr
-              ><td><code>slice</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a section of a string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>split</code></td><td><code>string[]</code></td><td>Required</td><td
-                >Split a string into substrings using the specified separator and return them as an
-                array.</td
-              ></tr
-            >
-            <tr
-              ><td><code>substring</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns the substring at the specified location within a String object.</td
-              ></tr
-            >
-            <tr
-              ><td><code>toLowerCase</code></td><td><code>string</code></td><td>Required</td><td
-                >Converts all the alphabetic characters in a string to lowercase.</td
-              ></tr
-            >
-            <tr
-              ><td><code>toLocaleLowerCase</code></td><td><code>string</code></td><td>Required</td
-              ><td
-                >Converts all alphabetic characters to lowercase, taking into account the host
-                environment's current locale.</td
-              ></tr
-            >
-            <tr
-              ><td><code>toUpperCase</code></td><td><code>string</code></td><td>Required</td><td
-                >Converts all the alphabetic characters in a string to uppercase.</td
-              ></tr
-            >
-            <tr
-              ><td><code>toLocaleUpperCase</code></td><td><code>string</code></td><td>Required</td
-              ><td
-                >Returns a string where all alphabetic characters have been converted to uppercase,
-                taking into account the host environment's current locale.</td
-              ></tr
-            >
-            <tr
-              ><td><code>trim</code></td><td><code>string</code></td><td>Required</td><td
-                >Removes the leading and trailing white space and line terminator characters from a
-                string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>length</code></td><td><code>number</code></td><td>Required</td><td
-                >Returns the length of a String object.</td
-              ></tr
-            >
-            <tr
-              ><td><code>substr</code></td><td><code>string</code></td><td>Required</td><td
-                >Gets a substring beginning at the specified location and having the specified
-                length.</td
-              ></tr
-            >
-            <tr
-              ><td><code>valueOf</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns the primitive value of the specified object.</td
-              ></tr
-            >
-            <tr
-              ><td><code>codePointAt</code></td><td><code>number | undefined</code></td><td
-                >Required</td
-              ><td
-                >Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code
-                point value of the UTF-16 encoded code point starting at the string element at
-                position pos in the String resulting from converting this object to a String. If
-                there is no element at that position, the result is undefined. If a valid UTF-16
-                surrogate pair does not begin at pos, the result is the code unit at pos.</td
-              ></tr
-            >
-            <tr
-              ><td><code>includes</code></td><td><code>boolean</code></td><td>Required</td><td
-                >Returns true if searchString appears as a substring of the result of converting
-                this object to a String, at one or more positions that are greater than or equal to
-                position; otherwise, returns false.</td
-              ></tr
-            >
-            <tr
-              ><td><code>endsWith</code></td><td><code>boolean</code></td><td>Required</td><td
-                >Returns true if the sequence of elements of searchString converted to a String is
-                the same as the corresponding elements of this object (converted to a String)
-                starting at endPosition – length(this). Otherwise returns false.</td
-              ></tr
-            >
-            <tr
-              ><td><code>normalize</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns the String value result of normalizing the string into the normalization
-                form named by form as specified in Unicode Standard Annex #15, Unicode Normalization
-                Forms.</td
-              ></tr
-            >
-            <tr
-              ><td><code>repeat</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a String value that is made from count copies appended together. If count
-                is 0, the empty string is returned.</td
-              ></tr
-            >
-            <tr
-              ><td><code>startsWith</code></td><td><code>boolean</code></td><td>Required</td><td
-                >Returns true if the sequence of elements of searchString converted to a String is
-                the same as the corresponding elements of this object (converted to a String)
-                starting at position. Otherwise returns false.</td
-              ></tr
-            >
-            <tr
-              ><td><code>anchor</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns an `&lt;a&gt;` HTML anchor element and sets the name attribute to the text
-                value</td
-              ></tr
-            >
-            <tr
-              ><td><code>big</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;big&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>blink</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;blink&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>bold</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;b&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>fixed</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;tt&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>fontcolor</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;font&gt;` HTML element and sets the color attribute value</td
-              ></tr
-            >
-            <tr
-              ><td><code>fontsize</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;font&gt;` HTML element and sets the size attribute value</td
-              ></tr
-            >
-            <tr
-              ><td><code>italics</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns an `&lt;i&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>link</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns an `&lt;a&gt;` HTML element and sets the href attribute value</td
-              ></tr
-            >
-            <tr
-              ><td><code>small</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;small&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>strike</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;strike&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>sub</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;sub&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>sup</code></td><td><code>string</code></td><td>Required</td><td
-                >Returns a `&lt;sup&gt;` HTML element</td
-              ></tr
-            >
-            <tr
-              ><td><code>padStart</code></td><td><code>string</code></td><td>Required</td><td
-                >Pads the current string with a given string (possibly repeated) so that the
-                resulting string reaches a given length. The padding is applied from the start
-                (left) of the current string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>padEnd</code></td><td><code>string</code></td><td>Required</td><td
-                >Pads the current string with a given string (possibly repeated) so that the
-                resulting string reaches a given length. The padding is applied from the end (right)
-                of the current string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>trimEnd</code></td><td><code>string</code></td><td>Required</td><td
-                >Removes the trailing white space and line terminator characters from a string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>trimStart</code></td><td><code>string</code></td><td>Required</td><td
-                >Removes the leading white space and line terminator characters from a string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>trimLeft</code></td><td><code>string</code></td><td>Required</td><td
-                >Removes the leading white space and line terminator characters from a string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>trimRight</code></td><td><code>string</code></td><td>Required</td><td
-                >Removes the trailing white space and line terminator characters from a string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>matchAll</code></td><td
-                ><code>RegExpStringIterator&lt;RegExpExecArray&gt;</code></td
-              ><td>Required</td><td
-                >Matches a string with a regular expression, and returns an iterable of matches
-                containing the results of that search.</td
-              ></tr
-            >
-            <tr
-              ><td><code>replaceAll</code></td><td><code>string</code></td><td>Required</td><td
-                >Replace all instances of a substring in a string, using a regular expression or
-                search string.</td
-              ></tr
-            >
-            <tr
-              ><td><code>at</code></td><td><code>string | undefined</code></td><td>Required</td><td
-                >Returns a new String consisting of the single UTF-16 code unit located at the
-                specified index.</td
-              ></tr
-            >
-            <tr
-              ><td><code>__@iterator@35</code></td><td><code>StringIterator&lt;string&gt;</code></td
-              ><td>Required</td><td>Iterator</td></tr
-            ></tbody
-          >
-        </table>
-      </div>
-    </div></Section
-  >
-  <Section
-    section={{
       id: 'carousel-section-data',
       title: 'CarouselSectionData',
       headline: 'CarouselSectionData',
@@ -1885,8 +1566,8 @@
             > &#123; type: 'carousel'; list: <a href={base + '/docs/reference/types/#card-item'}
               >CardItem</a
             >[]; cardSize?: <a href={base + '/docs/reference/types/#card-size'}>CardSize</a
-            >; cardVariant?: <a href={base + '/docs/reference/types/#card-variant'}>CardVariant</a
-            >; cardTone?: <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a
+            >; cardShadow?: boolean; cardTone?: <a
+              href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a
             >; mediaAspect?: <a href={base + '/docs/reference/types/#card-media-aspect'}
               >CardMediaAspect</a
             >; mediaFit?: <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a
@@ -1913,10 +1594,9 @@
               ><td>Optional</td><td>See the declared value shape and the linked types.</td></tr
             >
             <tr
-              ><td><code>cardVariant</code></td><td
-                ><code><a href={base + '/docs/reference/types/#card-variant'}>CardVariant</a></code
-                ></td
-              ><td>Optional</td><td>See the declared value shape and the linked types.</td></tr
+              ><td><code>cardShadow</code></td><td><code>boolean</code></td><td>Optional</td><td
+                >See the declared value shape and the linked types.</td
+              ></tr
             >
             <tr
               ><td><code>cardTone</code></td><td
@@ -2134,9 +1814,8 @@
     }}
     ><div class="prose">
       <p>
-        A link styled as an action, used by HeroSection, panels and editorial cards. Every action
-        requires a visible label and a destination. It renders a native link, not a JavaScript
-        callback.
+        A link styled as an action, used by HeroSection, panels and cards. Every action requires a
+        visible label and a destination. It renders a native link, not a JavaScript callback.
       </p>
       <details>
         <summary>Type declaration</summary>
@@ -2766,8 +2445,9 @@
     }}
     ><div class="prose">
       <p>
-        A footer link with a caller-supplied icon snippet. Snippet is a Svelte fragment of markup,
-        not serializable content data. Import this type from @page-sections/svelte.
+        A footer link with a caller-supplied icon snippet. Social links open in a new tab with
+        noopener and noreferrer. Snippet is a Svelte fragment of markup, not serializable content
+        data. Import this type from @page-sections/svelte.
       </p>
       <p>
         Also includes the fields of <code
@@ -4448,7 +4128,7 @@
               ><td>Iterator</td></tr
             >
             <tr
-              ><td><code>__@unscopables@48</code></td><td
+              ><td><code>__@unscopables@47</code></td><td
                 ><code>&#123; [K in keyof any[]]?: boolean; &#125;</code></td
               ><td>Required</td><td
                 >Is an object whose properties have the value 'true' when they will be absent when

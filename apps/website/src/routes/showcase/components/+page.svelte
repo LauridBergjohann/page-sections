@@ -187,7 +187,6 @@
       <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
         ><h3>Card</h3>
         <Card
-          variant="editorial"
           item={{
             id: 'standalone',
             title: 'A standalone card',

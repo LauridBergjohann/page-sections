@@ -269,9 +269,10 @@ function recolor(art, [accent, secondary, tint, warm]) {
 }
 for (const [slug, { title, art }] of Object.entries(scenes)) {
   const palette = palettes[slug];
-  const window = frame(`<g clip-path="url(#window)">${art}</g>`, Boolean(palette));
-  const shadow = palette ? '<filter id="window-shadow" filterUnits="userSpaceOnUse" x="24" y="6" width="752" height="480" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#18231f" flood-opacity="0.18"/></filter>' : '';
-  const backdrop = palette ? '' : '<rect width="800" height="500" fill="#dcebe4"/><circle cx="732" cy="46" r="145" fill="#c9e1d4"/><circle cx="70" cy="477" r="138" fill="#eee6cb"/>';
+  const transparent = Boolean(palette) || ['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video'].includes(slug);
+  const window = frame(`<g clip-path="url(#window)">${art}</g>`, transparent);
+  const shadow = transparent ? '<filter id="window-shadow" filterUnits="userSpaceOnUse" x="24" y="6" width="752" height="480" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#18231f" flood-opacity="0.18"/></filter>' : '';
+  const backdrop = transparent ? '' : '<rect width="800" height="500" fill="#dcebe4"/><circle cx="732" cy="46" r="145" fill="#c9e1d4"/><circle cx="70" cy="477" r="138" fill="#eee6cb"/>';
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500"><title>${title}</title><defs><clipPath id="window"><rect x="62" y="82" width="676" height="360" rx="16"/></clipPath>${shadow}</defs>${backdrop}${palette ? recolor(window, palette) : window}</svg>\n`;
   writeFileSync(new URL(`${slug}.svg`, output), svg);
 }

@@ -102,7 +102,7 @@ export const documents = [
   {
     title: 'Card',
     href: '/docs/building-blocks/card/',
-    description: 'Present one item in a catalog or editorial layout.',
+    description: 'Present an item with an image, title, optional description and links.',
     group: 'Components',
     category: ''
   },

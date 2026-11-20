@@ -1,23 +1,22 @@
 <script lang="ts" generics="T extends CardItem">
   import { getContext, untrack, type Snippet } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { safeHref, type CardItem, type CardSize, type CardVariant, type SurfaceTone, type CardMediaAspect, type CardMediaFit, type HeadingLevel } from '@page-sections/core';
+  import { safeHref, type CardItem, type CardSize, type SurfaceTone, type CardMediaAspect, type CardMediaFit, type HeadingLevel } from '@page-sections/core';
   import type { CardElements } from './card.js';
   import { SECTION_CONTEXT, defaultSectionContext, type ReadSectionContext } from './sectionContext.js';
   import Image from './Image.svelte';
   import InlineText from './InlineText.svelte';
   import Actions from './Actions.svelte';
-  let { item, cardSize = 'm', variant = 'catalog', tone = 'standard', mediaAspect = '3/2', mediaFit = variant === 'catalog' ? 'contain' : 'cover', reserveEyebrow, textAlign = 'start', headingLevel, children, media, surface, onready, class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
-    item: T; cardSize?: CardSize; variant?: CardVariant; tone?: SurfaceTone; textAlign?: 'start' | 'center'; headingLevel?: HeadingLevel;
+  let { item, cardSize = 'm', tone = 'standard', shadow = false, mediaAspect = '3/2', mediaFit = 'contain', reserveEyebrow, textAlign = 'start', headingLevel, children, media, surface, onready, class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
+    item: T; cardSize?: CardSize; tone?: SurfaceTone; shadow?: boolean; textAlign?: 'start' | 'center'; headingLevel?: HeadingLevel;
     mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; reserveEyebrow?: boolean;
     children?: Snippet<[T]>; media?: Snippet<[T]>; surface?: Snippet<[T]>; onready?: (parts: CardElements<T>) => void | (() => void);
   } = $props();
   const readContext = getContext<ReadSectionContext | undefined>(SECTION_CONTEXT);
   const level = $derived(headingLevel ?? readContext?.().headingLevel ?? defaultSectionContext.headingLevel);
   const href = $derived(safeHref(item.href));
-  const wholeLink = $derived(variant === 'catalog' && Boolean(href));
-  const hasEyebrow = $derived(Boolean(item.eyebrow?.trim()) && (variant !== 'catalog' || cardSize !== 's'));
-  const showEyebrowRow = $derived(hasEyebrow || Boolean(reserveEyebrow && (variant !== 'catalog' || cardSize !== 's')));
+  const hasEyebrow = $derived(Boolean(item.eyebrow?.trim()) && cardSize !== 's');
+  const showEyebrowRow = $derived(hasEyebrow || Boolean(reserveEyebrow && cardSize !== 's'));
   const titleId = $props.id();
   let root = $state<HTMLElement>();
   let surfaceElement = $state<HTMLDivElement>();
@@ -32,9 +31,8 @@
     }
   });
 </script>
-<svelte:element this={wholeLink ? 'a' : 'article'} {...rest} bind:this={root} href={wholeLink ? href : undefined}
-  aria-labelledby={wholeLink ? titleId : undefined} class={['ps-card', className]} data-card-id={item.itemKey ?? item.id}
-  data-ps-card-size={cardSize} data-card-variant={variant} data-tone={tone} data-media-fit={mediaFit} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
+<article {...rest} bind:this={root} aria-labelledby={titleId} class={['ps-card', className]} data-card-id={item.itemKey ?? item.id}
+  data-ps-card-size={cardSize} data-tone={tone} data-shadow={shadow} data-media-fit={mediaFit} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
   <div class="surface" bind:this={surfaceElement} data-ps-card-part="surface" aria-hidden="true">{@render surface?.(item)}</div>
   <div class="media-frame" class:no-media={!media && !item.image} data-ps-card-part="media-frame">
     <div class="media" bind:this={mediaElement} data-ps-card-part="media">
@@ -44,40 +42,46 @@
   <div class="text" bind:this={copy} data-ps-card-part="copy">
     {#if showEyebrowRow}<p class="eyebrow" data-ps-card-part="eyebrow" aria-hidden={hasEyebrow ? undefined : true}>{hasEyebrow ? item.eyebrow : ''}</p>{/if}
     <svelte:element this={`h${level}`} bind:this={title} id={titleId} class="title" data-ps-card-part="title" title={item.title}>
-      {#if href && !wholeLink}<a {href}>{item.title}</a>{:else}{item.title}{/if}
+      {#if href}<a class="primary-link" {href}><span class="title-label">{item.title}</span></a>{:else}<span class="title-label">{item.title}</span>{/if}
     </svelte:element>
-    {#if variant === 'editorial'}
-      {#if item.description ?? item.subtitle}<p class="description">{item.description ?? item.subtitle}</p>{/if}
-      {@render children?.(item)}
-      {#if item.footer}<p class="footer"><InlineText text={item.footer} /></p>{/if}
-      <Actions actions={item.actions} />
-    {/if}
+    {#if item.description ?? item.subtitle}<p class="description">{item.description ?? item.subtitle}</p>{/if}
+    <div class="custom-content">{@render children?.(item)}</div>
+    {#if item.footer}<p class="footer"><InlineText text={item.footer} /></p>{/if}
+    <Actions actions={item.actions} />
   </div>
-</svelte:element>
+</article>
 <style>
-  .ps-card { position: relative; isolation: isolate; display: grid; width: 100%; min-width: 0; height: 100%; color: var(--ps-ink); text-decoration: none; border-radius: var(--ps-radius); }
-  .surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; background: var(--ps-section-standard); }
+  .ps-card { position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr; width: 100%; min-width: 0; height: 100%; color: var(--ps-ink); border-radius: var(--ps-radius); }
+  .surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; background: var(--ps-section-standard); transition: box-shadow 150ms ease, border-color 150ms ease; }
   [data-tone='muted'] .surface { background: var(--ps-section-muted); }
+  [data-shadow='true'] .surface { box-shadow: var(--ps-surface-shadow); }
+  .ps-card:has(:focus-visible) > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow); }
+  .ps-card[data-shadow='true']:has(:focus-visible) > .surface { box-shadow: 0 8px 20px rgb(0 0 0 / 20%); }
+  @media (hover: hover) {
+    .ps-card:hover > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow); }
+    .ps-card[data-shadow='true']:hover > .surface { box-shadow: 0 8px 20px rgb(0 0 0 / 20%); }
+  }
+  @media (prefers-reduced-motion: reduce) { .surface { transition: none; } }
   .media, .text { min-width: 0; min-height: 0; }
-  .title { margin: 0; overflow-wrap: anywhere; }
-  .eyebrow { margin: 0; color: var(--ps-accent); }
-  .ps-card { grid-template-rows: auto 1fr; }
   .media-frame { position: relative; width: 100%; aspect-ratio: var(--ps-card-media-aspect); align-self: start; overflow: hidden; border-radius: var(--ps-radius) var(--ps-radius) 0 0; }
+  .media-frame.no-media { display: none; }
   .media { position: absolute; inset: min(var(--ps-card-media-inset), 33%); }
   [data-media-fit='cover'] .media { inset: 0; }
   .media :global(picture), .media :global(img) { width: 100%; height: 100%; object-fit: contain; border-radius: 0; }
   [data-media-fit='cover'] .media :global(img) { object-fit: cover; }
-  [data-card-variant='catalog'] .text { grid-area: 2 / 1; display: flex; flex-direction: column; padding: var(--ps-card-text-inset-block) var(--ps-card-text-inset-inline); }
-  [data-card-variant='catalog'] .eyebrow { font-size: var(--ps-card-eyebrow-size); font-weight: var(--ps-card-eyebrow-weight); line-height: var(--ps-card-line-height); flex: 0 0 var(--ps-card-line-height); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  [data-card-variant='catalog'] .title { font-size: var(--ps-card-title-size); font-weight: var(--ps-card-title-weight); line-height: var(--ps-card-line-height); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--ps-card-text-rows); line-clamp: var(--ps-card-text-rows); height: calc(var(--ps-card-text-rows) * var(--ps-card-line-height)); overflow: hidden; flex-shrink: 0; }
-  [data-card-variant='editorial'] { grid-template-rows: auto 1fr; }
-  [data-card-variant='editorial'] .media-frame.no-media { display: none; }
-  [data-card-variant='editorial'] .text { grid-row: 2; display: flex; flex-direction: column; gap: 1rem; padding: var(--ps-grid-gap, 16px); }
-  [data-card-variant='editorial'] .title { font-size: 1.25rem; line-height: 1.35; }
-  [data-card-variant='editorial'] p { margin: 0; line-height: 1.75; }
-  [data-card-variant='editorial'] .eyebrow { font-size: .75rem; letter-spacing: .08em; min-height: 1.75em; }
-  [data-card-variant='editorial'] .description { color: var(--ps-body); }
-  [data-card-variant='editorial'] .text > :global(.ps-actions) { margin-top: auto; }
-  [data-card-variant='editorial'] .footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--ps-border); color: var(--ps-body); font-size: .875rem; }
-  .ps-card:focus-visible { outline: 3px solid var(--ps-accent); outline-offset: 4px; }
+  .text { grid-area: 2 / 1; display: flex; flex-direction: column; padding: var(--ps-card-text-inset-block) var(--ps-card-text-inset-inline); }
+  .eyebrow { margin: 0; color: var(--ps-accent); font-size: var(--ps-card-eyebrow-size); font-weight: var(--ps-card-eyebrow-weight); line-height: var(--ps-card-line-height); flex: 0 0 var(--ps-card-line-height); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .title { margin: 0; color: var(--ps-ink); overflow-wrap: anywhere; font-size: var(--ps-card-title-size); font-weight: var(--ps-card-title-weight); line-height: var(--ps-card-line-height); height: calc(var(--ps-card-text-rows) * var(--ps-card-line-height)); flex-shrink: 0; }
+  .title-label { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--ps-card-text-rows); line-clamp: var(--ps-card-text-rows); overflow: hidden; }
+  .title .primary-link, .title .primary-link:hover { color: inherit; text-decoration: none; }
+  /* Stretch the native title link over the card without nesting other interactive elements. */
+  .primary-link::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: var(--ps-radius); }
+  .primary-link:focus-visible { outline: none; }
+  .primary-link:focus-visible::after { outline: 3px solid var(--ps-accent); outline-offset: 4px; }
+  .custom-content:empty { display: none; }
+  .description, .footer { margin: 1rem 0 0; line-height: 1.75; color: var(--ps-body); }
+  .description { overflow-wrap: anywhere; }
+  .footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--ps-border); font-size: .875rem; }
+  .text > :global(.ps-actions) { margin-top: auto; padding-top: 1rem; }
+  .text :global(.ps-actions a), .footer :global(a), .custom-content :global(:is(a, button, input, select, textarea, summary, [tabindex])) { position: relative; z-index: 2; }
 </style>

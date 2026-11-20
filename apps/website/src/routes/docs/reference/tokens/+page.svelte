@@ -154,8 +154,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         descendant ink override. Set border explicitly when adapting a palette if needed.
       </p>
       <p>
-        Legacy card minimum-width and carousel-width variables were removed in 0.2. Catalog geometry
-        is generated from the same tokens as core.
+        Legacy card minimum-width and carousel-width variables were removed in 0.2. Card geometry is
+        generated from the same tokens as core.
       </p>
     </div></Section
   >
@@ -314,7 +314,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td><code>cardTextInset</code></td>
-              <td>inline=12, block=12; used by core and catalog CSS</td>
+              <td>inline=12, block=12; used by core and card CSS</td>
             </tr>
             <tr>
               <td><code>cardMediaInset</code></td>
@@ -389,8 +389,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         </table>
       </div>
       <p>
-        These feed resolveCardLayout and Svelte catalog cards; editorial cards use content
-        typography. <code>breadcrumb</code> contains:
+        These feed resolveCardLayout and Svelte cards. Optional descriptions and additional content
+        increase the base card height. <code>breadcrumb</code> contains:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -503,19 +503,19 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td>--ps-card-span</td>
-              <td>Current catalog span</td>
+              <td>Current card span</td>
             </tr>
             <tr>
               <td>--ps-card-title-size, --ps-card-title-weight</td>
-              <td>Catalog title typography</td>
+              <td>Card title typography</td>
             </tr>
             <tr>
               <td>--ps-card-eyebrow-size, --ps-card-eyebrow-weight</td>
-              <td>Catalog eyebrow typography</td>
+              <td>Card eyebrow typography</td>
             </tr>
             <tr>
               <td>--ps-card-line-height, --ps-card-text-rows</td>
-              <td>Catalog line height and title-only row budget</td>
+              <td>Card line height and title-only row budget</td>
             </tr>
             <tr>
               <td>--ps-card-media-aspect</td>

@@ -47,7 +47,7 @@ for (const file of ['src', 'index.html', 'vite.config.ts', 'prerender.mjs']) cpS
 writeFileSync(join(consumer, 'tsconfig.json'), JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'ESNext', moduleResolution: 'Bundler', strict: true, skipLibCheck: true, allowJs: true, resolveJsonModule: true }, include: ['src/**/*'] }));
 run(['run', 'check'], consumer); run(['run', 'build'], consumer);
 const html = readFileSync(join(consumer, 'dist/index.html'), 'utf8');
-for (const text of ['href="#browse"', 'data-ps-section="collection"', 'data-ps-section="browse"', 'aria-label="On this page"', 'Independent studio', 'mailto:hello@example.com', 'data-card-variant="editorial"']) assert(html.includes(text), `Consumer SSR missing ${text}`);
+for (const text of ['href="#browse"', 'data-ps-section="collection"', 'data-ps-section="browse"', 'aria-label="On this page"', 'Independent studio', 'mailto:hello@example.com', 'Readable copy']) assert(html.includes(text), `Consumer SSR missing ${text}`);
 assert(existsSync(join(consumer, 'node_modules/@page-sections/core/dist/index.js')));
 assert(html.includes('const independent = true;'), 'Consumer SSR missing code section');
 assert(!existsSync(join(consumer, 'node_modules/shiki')), 'Plain code must not require the optional highlighting engine');

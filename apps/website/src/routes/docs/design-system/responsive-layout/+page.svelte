@@ -257,27 +257,30 @@
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
-      id: 'catalog-and-editorial-cards',
-      title: 'Catalog and editorial cards',
-      headline: 'Catalog and editorial cards',
+      id: 'card-layout',
+      title: 'Card layout',
+      headline: 'Card layout',
       variant: 'content'
     }}
     ><div class="prose">
       <p>
-        Catalog cards use the same media-plus-text layout in CardGridSection and CarouselSection:
-        S/M span 2 columns, L spans 4 (3 on the S grid). Media ratios are 3/2 (default), 4/3 or 1/1;
-        titles have two lines in S/M and three in L, with an additional collection-wide eyebrow line
-        for M/L when used. Text has 12px padding; contained media has an 8px inset. S titles are
-        12px. The complete card is not constrained to a square. Geometry follows layoutTokens.cards
-        and resolveCardLayout.
+        Cards use the same media-plus-text layout in CardGridSection and CarouselSection: S/M span 2
+        columns, L spans 4 (3 on the S grid). Media ratios are 3/2 (default), 4/3 or 1/1; titles
+        have two lines in S/M and three in L, with an additional collection-wide eyebrow line for
+        M/L when used. Text has 12px padding; contained media has an 8px inset. S titles are 12px.
+        The complete card is not constrained to a square. Geometry follows layoutTokens.cards and
+        resolveCardLayout.
       </p>
       <p>
-        Editorial cards use cardVariant=&quot;editorial&quot;, responsive itemSpan and natural text
-        height and equal grid rows. They support descriptions, footers and independent action links.
+        Descriptions appear below the title when provided, with natural text height and equal grid
+        rows. CardGridSection accepts itemSpan to override the default width. A card’s main link
+        covers its whole surface, while additional action links keep their own destinations.
+        Optional cardShadow adds a resting shadow; hover and keyboard focus emphasize the border and
+        elevation.
       </p>
       <p>
-        Nested text and panels omit redundant outer gutters. A nested grid or catalog establishes a
-        new grid and owns one gutter pair; nested declarative grids should use <code
+        Nested text and panels omit redundant outer gutters. A nested grid or card collection
+        establishes a new grid and owns one gutter pair; nested declarative grids should use <code
           >&lt;Section inset&gt;</code
         >. Breakpoint selection always uses that section container before padding.
       </p>

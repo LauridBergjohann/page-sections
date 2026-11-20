@@ -148,6 +148,7 @@
     position: relative;
     border-radius: 0.5rem;
   }
+  a:hover { text-decoration: none; }
   a:hover,
   a[aria-expanded='true'],
   a.active,

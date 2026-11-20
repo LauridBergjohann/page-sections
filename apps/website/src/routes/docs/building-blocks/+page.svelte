@@ -52,8 +52,8 @@
           spacing and background.
         </li>
         <li>
-          <a href={base + '/docs/building-blocks/card/'}>Card</a> — A single linked item with catalog
-          or editorial presentation.
+          <a href={base + '/docs/building-blocks/card/'}>Card</a> — A linked item with an optional image,
+          eyebrow and description.
         </li>
         <li>
           <a href={base + '/docs/building-blocks/image/'}>Image</a> — Alternative text, responsive sources

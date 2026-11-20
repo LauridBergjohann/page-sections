@@ -31,7 +31,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#card-item',
     group: 'Data types',
     description:
-      'The content of a single card. Catalog cards focus on media and title; editorial cards also render descriptions, actions and footer content.'
+      'The content of a single card. A supplied description appears below its title. The main link covers the card; additional actions and footer links remain independent.'
   },
   {
     title: 'CardLayoutOptions',
@@ -56,12 +56,6 @@ export const typeDocuments = [
     href: '/docs/reference/types/#card-size',
     group: 'Data types',
     description: 'Fields and declaration of CardSize.'
-  },
-  {
-    title: 'CardVariant',
-    href: '/docs/reference/types/#card-variant',
-    group: 'Data types',
-    description: 'Fields and declaration of CardVariant.'
   },
   {
     title: 'CarouselSectionData',
@@ -94,7 +88,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#content-action',
     group: 'Data types',
     description:
-      'A link styled as an action, used by HeroSection, panels and editorial cards. Every action requires a visible label and a destination. It renders a native link, not a JavaScript callback.'
+      'A link styled as an action, used by HeroSection, panels and cards. Every action requires a visible label and a destination. It renders a native link, not a JavaScript callback.'
   },
   {
     title: 'ContentGridSize',
@@ -141,7 +135,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#footer-social-link',
     group: 'Data types',
     description:
-      'A footer link with a caller-supplied icon snippet. Snippet is a Svelte fragment of markup, not serializable content data. Import this type from @page-sections/svelte.'
+      'A footer link with a caller-supplied icon snippet. Social links open in a new tab with noopener and noreferrer. Snippet is a Svelte fragment of markup, not serializable content data. Import this type from @page-sections/svelte.'
   },
   {
     title: 'GridSectionData',

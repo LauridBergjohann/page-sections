@@ -22,13 +22,13 @@ const anchor = name => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('{', '&#123;').replaceAll('}', '&#125;');
 const linked = value => escape(value).replace(/\b[A-Z]\w*\b/g, name => names.has(name) ? `<a href={base + '/docs/reference/types/#${anchor(name)}'}>${name}</a>` : name);
 const descriptions = {
-  ContentAction: 'A link styled as an action, used by HeroSection, panels and editorial cards. Every action requires a visible label and a destination. It renders a native link, not a JavaScript callback.',
+  ContentAction: 'A link styled as an action, used by HeroSection, panels and cards. Every action requires a visible label and a destination. It renders a native link, not a JavaScript callback.',
   SectionDefinition: 'Shared metadata for the base Section and every ready-made section. The ID is its anchor; title labels the region and navigation; headline controls its visible heading.',
   SectionBackground: 'The visual surface behind a section. Color and painted width are independent of the content layout. Gradient colors require a full background.',
   ContentPageData: 'Metadata for ContentPage, the main content container. A browser document title is distinct from the visible h1, which you supply as content.',
   PageData: 'A data-driven page: ContentPageData plus an array of section models. Pass sections to the plural Sections component explicitly; ContentPage does not render this array itself.',
   ImageData: 'One image and its optional variants. Supply your own assets; the library does not resize images or generate srcset files.',
-  CardItem: 'The content of a single card. Catalog cards focus on media and title; editorial cards also render descriptions, actions and footer content.',
+  CardItem: 'The content of a single card. A supplied description appears below its title. The main link covers the card; additional actions and footer links remain independent.',
   VideoData: 'A native HTML video source or a YouTube source. Captions are an array of objects: src is the track URL, language is its language code, and label is its visible name.',
   MenuItem: 'One site-navigation entry. Children use the same shape recursively. IDs must be unique in the tree. resolveNavigation derives current and active states from the current location.',
   Breadcrumb: 'One step in the current page’s site hierarchy. The label is required; the destination is optional. The final item represents the current page.',
@@ -44,7 +44,7 @@ const descriptions = {
   ContentSpan: 'A column count, or an object assigning counts to container sizes xs, s, m and l. For example, { xs: 4, s: 3 } spans four columns in the smallest grid and three from s onward.',
   FooterLink: 'A native link in the site footer. Both its visible label and destination are required.',
   FooterMenuGroup: 'A labeled group of footer links. The group heading can optionally have its own destination.',
-  FooterSocialLink: 'A footer link with a caller-supplied icon snippet. Snippet is a Svelte fragment of markup, not serializable content data. Import this type from @page-sections/svelte.',
+  FooterSocialLink: 'A footer link with a caller-supplied icon snippet. Social links open in a new tab with noopener and noreferrer. Snippet is a Svelte fragment of markup, not serializable content data. Import this type from @page-sections/svelte.',
   CardElements: 'DOM parts passed to Card’s onready callback after mounting. T is your CardItem subtype. HTMLElement values are live browser elements used for measurement or enhancement, not serializable content data. Import from @page-sections/svelte.',
   CodeData: 'Plain source code and presentation options. Syntax highlighting is optional derived data, supplied separately as HighlightedCode.',
   HighlightedCode: 'Derived syntax highlighting. lines contains an array of CodeToken objects for each source line; plain code remains the source of truth.',

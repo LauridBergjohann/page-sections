@@ -12,6 +12,8 @@ test('top-level icons precede labels at every layout size and open parents stay 
       await expect(link).toBeVisible();
       await expect(link.locator(`svg.lucide-${icon}`)).toBeVisible();
       expect(await link.evaluate(el => el.firstElementChild?.classList.contains('icon'))).toBe(true);
+      await link.hover();
+      await expect(link).toHaveCSS('text-decoration-line','none');
     }
     if (mobile) await page.keyboard.press('Escape');
   }
@@ -20,11 +22,90 @@ test('top-level icons precede labels at every layout size and open parents stay 
   const color = await parent.evaluate(el => getComputedStyle(el).backgroundColor);
   expect(color).not.toBe('rgba(0, 0, 0, 0)');
   await page.locator('.desktop-menu .ps-submenu:not([hidden]) a').first().hover();
+  await expect(page.locator('.desktop-menu .ps-submenu:not([hidden]) a').first()).toHaveCSS('text-decoration-line','none');
   await expect(parent).toHaveAttribute('aria-expanded','true');
   await expect(parent).toHaveCSS('background-color',color);
   await page.keyboard.press('Escape');
   await expect(parent).toHaveAttribute('aria-expanded','false');
   await expect(parent).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
+});
+
+test('header package links and footer social links open separate tabs', async ({page}) => {
+  await page.goto('/');
+  const links = page.locator('.website-header .github-link, .ps-footer-social a');
+  expect(await links.count()).toBeGreaterThan(2);
+  for (const link of await links.all()) {
+    await expect(link).toHaveAttribute('target','_blank');
+    await expect(link).toHaveAttribute('rel','noopener noreferrer');
+  }
+});
+
+test('cards animate optional shadows and restore their original border on mouse leave', async ({page}) => {
+  await page.setViewportSize({width:1440,height:1000});
+  await page.goto('/sections/card-grid/');
+  const card = page.locator('[data-preview] .ps-card').first();
+  const surface = card.locator('.surface');
+  const toggle = page.getByRole('checkbox',{name:'Card shadow',exact:true});
+  const border = await surface.evaluate(el=>getComputedStyle(el).borderColor);
+  const accent = await card.locator('.eyebrow').evaluate(el=>getComputedStyle(el).color);
+  await expect(surface).toHaveCSS('box-shadow','none');
+  await expect(surface).toHaveCSS('transition-duration','0.15s, 0.15s');
+  await card.hover();
+  await expect(surface).toHaveCSS('border-color',accent);
+  await expect(surface).not.toHaveCSS('box-shadow','none');
+  const light = await surface.evaluate(el=>getComputedStyle(el).boxShadow);
+  await page.mouse.move(0,0);
+  await expect(surface).toHaveCSS('border-color',border);
+  await expect(surface).toHaveCSS('box-shadow','none');
+  await toggle.check();
+  await expect(surface).toHaveCSS('box-shadow',light);
+  await card.hover();
+  await expect(surface).toHaveCSS('box-shadow','rgba(0, 0, 0, 0.2) 0px 8px 20px 0px');
+  await expect(surface).toHaveCSS('border-color',accent);
+  await page.mouse.move(0,0);
+  await expect(surface).toHaveCSS('box-shadow',light);
+  await expect(surface).toHaveCSS('border-color',border);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await expect(surface).toHaveCSS('transition-duration','0s');
+});
+
+test('card images and descriptions follow the primary link while actions remain independent', async ({page}) => {
+  await page.goto('/docs/building-blocks/card/');
+  const card = page.locator('.component-preview .ps-card');
+  const primary = card.locator('.primary-link');
+  const ink = await card.evaluate(el=>getComputedStyle(el).color);
+  await expect(primary).toHaveCSS('color',ink);
+  await expect(card.locator('a a')).toHaveCount(0);
+  // Click actual image and text positions: the native overlay link receives the pointer.
+  for (const child of ['img','.description']) {
+    await card.scrollIntoViewIfNeeded();
+    const box = (await card.locator(child).boundingBox())!;
+    await page.mouse.click(box.x+box.width/2,box.y+box.height/2);
+    await expect(page).toHaveURL(/#playground$/);
+    await card.getByRole('link',{name:'Accessibility notes'}).click();
+    await expect(page).toHaveURL(/#accessibility-and-ssr$/);
+  }
+  await primary.focus();
+  await page.keyboard.press('Tab');
+  await expect(card.getByRole('link',{name:'Accessibility notes'})).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(primary).toBeFocused();
+  expect(await primary.evaluate(el=>getComputedStyle(el,'::after').outlineWidth)).toBe('3px');
+});
+
+test('section illustrations have transparent surroundings', async ({page,request}) => {
+  await page.goto('/sections/');
+  for (const img of await page.locator('#section-catalog img').all()) {
+    const response=await request.get((await img.getAttribute('src'))!);
+    const svg=await response.text();
+    expect(svg).toContain('id="window-shadow"');
+    expect(svg).not.toMatch(/<rect[^>]*(?:width="800"|height="500")/);
+  }
+  for (const width of [390,1440]) {
+    await page.setViewportSize({width,height:1000});
+    await page.locator('#section-catalog').screenshot({path:`.artifacts/cards-transparent-${width}.png`});
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
 });
 
 test('page layout examples use independent viewports and real component controls', async ({page}) => {
@@ -70,9 +151,12 @@ test('page layout examples use independent viewports and real component controls
 test('Card and Image playgrounds update their rendered component and source', async ({page}) => {
   await page.goto('/docs/building-blocks/card/');
   await page.getByLabel('Card title').fill('A new story');
-  await page.getByRole('combobox',{name:'Variant',exact:true}).selectOption('editorial');
-  await expect(page.locator('.component-preview .ps-card')).toHaveAttribute('data-card-variant','editorial');
+  await page.getByRole('checkbox',{name:'Card shadow',exact:true}).check();
+  await expect(page.locator('.component-preview .ps-card')).toHaveAttribute('data-shadow','true');
   await expect(page.locator('.component-preview .description')).toBeVisible();
+  await page.getByLabel('Show description',{exact:true}).uncheck();
+  await expect(page.locator('.component-preview .description')).toHaveCount(0);
+  await page.getByLabel('Show description',{exact:true}).check();
   await expect(page.locator('.component-preview .title')).toHaveText('A new story');
   await expect(page.locator('#playground pre')).toContainText('A new story');
   await page.getByRole('button',{name:'Reset',exact:true}).click();

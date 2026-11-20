@@ -281,8 +281,8 @@ console.log(background.cssBackground);`
         mediaFrame.height is width divided by the selected ratio. Text height is
         <code>(rows + eyebrowRows) * lineHeight + 2 * cardTextInset.block</code>; total height is
         mediaFrame.height + textHeight. The media rectangle is inset by 8px for contain (clamped to
-        available space), or fills mediaFrame for cover. These are default catalog measurements, not
-        measurements of arbitrary CSS overrides or editorial copy. Observe the actual
+        available space), or fills mediaFrame for cover. These are default base card measurements,
+        not measurements of arbitrary CSS overrides or additional card content. Observe the actual
         <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a>.media rectangle
         when attaching a renderer.
       </p>
@@ -703,10 +703,6 @@ console.log(background.cssBackground);`
           detail; controls background normalization and large detail-pane corners.
         </li>
         <li>
-          <code><a href={base + '/docs/reference/types/#card-variant'}>CardVariant</a></code>:
-          catalog or editorial.
-        </li>
-        <li>
           <code
             ><a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a></code
           >: 3/2, 4/3 or 1/1; applies to the media frame only.
@@ -719,7 +715,7 @@ console.log(background.cssBackground);`
           <code
             ><a href={base + '/docs/reference/types/#card-layout-options'}>CardLayoutOptions</a
             ></code
-          >: mediaAspect, mediaFit and reserveEyebrow for catalog measurements.
+          >: mediaAspect, mediaFit and reserveEyebrow for base card measurements.
         </li>
         <li>
           <code><a href={base + '/docs/reference/types/#inline-text'}>InlineText</a></code>: string

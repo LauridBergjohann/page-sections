@@ -87,7 +87,7 @@
       spacing: 'loose',
       background: { color: 'muted', size: 'full' }
     }}
-    cardVariant="editorial"
+    itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }}
     cardTone="standard"
     list={[
       {
@@ -151,7 +151,7 @@
       spacing: 'loose',
       background: { color: 'standard', size: 'full' }
     }}
-    cardVariant="editorial"
+    itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }}
     cardTone="standard"
     list={[
       {
@@ -187,6 +187,5 @@
     mediaAspect="4/3"
     mediaFit="contain"
     textAlign="center"
-    cardVariant="catalog"
   />
 </ContentPage>

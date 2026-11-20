@@ -90,6 +90,7 @@
     padding-inline-end: 2.75rem;
   }
   a:hover {
+    text-decoration: none;
     background: var(--ps-selection, var(--ps-section-muted));
   }
   a.active {

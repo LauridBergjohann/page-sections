@@ -18,7 +18,6 @@
 <CardGridSection
   section={{ id: 'projects', title: 'Projects', headline: 'Selected work' }}
   {list}
-  cardVariant="editorial"
   itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }}
 />`
     }
@@ -68,8 +67,8 @@
     }}
     ><div class="prose">
       <p>
-        Use a catalog for compact collections and editorial cards for longer website content. Both
-        use the same container-based ContentGrid.
+        Cards share one layout in the container-based ContentGrid. Supply a description when an item
+        needs more context; it appears below the title automatically.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
     </div></Section
@@ -117,12 +116,11 @@
             <tr>
               <td><code>cardSize</code></td>
               <td>s/m/l</td>
-              <td>m; uniform catalog size</td>
+              <td>m; uniform card size</td>
             </tr>
             <tr>
-              <td><code>cardVariant</code></td>
-              <td>catalog/editorial</td>
-              <td>catalog</td>
+              <td><code>cardShadow</code></td><td>boolean</td><td>false; optional resting shadow</td
+              >
             </tr>
             <tr>
               <td><code>cardTone</code></td>
@@ -149,7 +147,7 @@
                   ><a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a></code
                 >: contain/cover</td
               >
-              <td>contain for catalog, cover for editorial</td>
+              <td>contain</td>
             </tr>
             <tr>
               <td><code>itemSpan</code></td>
@@ -157,7 +155,7 @@
                 ><code><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></code
                 ></td
               >
-              <td>xs=4, s=3, m=4, l=4; editorial only</td>
+              <td>Optional override; otherwise cardSize determines the span</td>
             </tr>
             <tr>
               <td><code>textAlign</code></td>
@@ -172,7 +170,7 @@
             <tr>
               <td><code>itemContent</code></td>
               <td><code>Snippet&lt;[T]&gt;</code></td>
-              <td>Extra editorial copy</td>
+              <td>Extra card content</td>
             </tr>
             <tr>
               <td><code>card</code></td>
@@ -180,8 +178,7 @@
                 ><code
                   >Snippet&lt;[T, &#123; cardSize: <a
                     href={base + '/docs/reference/types/#card-size'}>CardSize</a
-                  >; variant:
-                  <a href={base + '/docs/reference/types/#card-variant'}>CardVariant</a>; tone:
+                  >; shadow: boolean; tone:
                   <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a>; textAlign:
                   'start' | 'center'; mediaAspect:
                   <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>;
@@ -227,17 +224,17 @@
         Forward <code>options.tone</code> when providing a complete custom card snippet.
       </p>
       <p>
-        Catalog S/M/L spans 2/2/4 columns; L spans 3 on the S grid. Only the media frame has a fixed
-        ratio, selected with mediaAspect. The text area is added below it: two title lines for S/M,
-        three for L, plus 12px padding on each side. S hides eyebrows. If any M/L item has an
+        Card sizes S/M/L span 2/2/4 columns; L spans 3 on the S grid. Only the media frame has a
+        fixed ratio, selected with mediaAspect. The text area is added below it: two title lines for
+        S/M, three for L, plus 12px padding on each side. S hides eyebrows. If any M/L item has an
         eyebrow, all cards reserve a separate label line, including blank items. Labels never
         consume title lines. S uses 12px titles, M 14px and L 18px. Titles clamp visually while
         their full text remains in the link's accessible name and title attribute.
       </p>
       <p>
         All grid rows share the tallest required card height, including rows with short titles or
-        missing labels. Editorial cards retain natural copy, independent title/action links and
-        bottom-aligned footers/actions. Descriptions, children and footers are editorial-only. A
+        missing labels. Descriptions and extra content grow naturally. The title link covers the
+        whole card; action links remain independent. Footers and actions align at the bottom. A
         complete card replacement must fill its slot and use the supplied layout context to retain
         alignment.
       </p>
@@ -247,6 +244,11 @@
         mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>ImageData</a
         >.aspect/objectFit do not override this collection-level contract. Compare 3:2 and 1:1 in
         the interactive example above.
+      </p>
+      <p>
+        Enable <code>cardShadow</code> for a subtle resting shadow. Hover quickly animates the border
+        to the accent color and strengthens the shadow. With cardShadow disabled, hover still adds a light
+        shadow. Leaving restores the original appearance. Reduced-motion preferences disable the transition.
       </p>
       <p>
         Per-item size and the old auto-fit minimum widths were removed in 0.2. See <a
@@ -265,10 +267,11 @@
     }}
     ><div class="prose">
       <p>
-        A catalog card with href is one native link. Do not put links/buttons into its media/surface
-        snippets. Editorial cards use article markup, with separate title and action links. Heading
-        levels inherit from the surrounding section. All content and links render on the server;
-        attachment callbacks run after hydration.
+        A card with href has a native title link stretched over its entire surface, including its
+        image. Additional actions and footer links remain independently clickable without nested
+        anchors. Cards without href remain articles. Heading levels inherit from the surrounding
+        section. All content and links render on the server; attachment callbacks run after
+        hydration.
       </p>
       <p>
         Related: <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>,

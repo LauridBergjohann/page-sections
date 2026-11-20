@@ -144,9 +144,10 @@
         Empty optional arrays behave like omitted props. Customize navigation landmark names with <code
           >socialLabel</code
         >
-        (Social media), <code>menuLabel</code> (Footer navigation) and <code>linksLabel</code> (Important
-        links). Standard HTML attributes such as id, class and lang are forwarded to the footer. Links
-        use the shared safeHref policy.
+        (Social media), <code>menuLabel</code> (Footer navigation) and <code>linksLabel</code>
+        (Important links). Standard HTML attributes such as id, class and lang are forwarded to the footer.
+        Links use the shared safeHref policy. Social links open in a new tab with
+        <code>rel="noopener noreferrer"</code>.
       </p>
     </div>
   </Section>

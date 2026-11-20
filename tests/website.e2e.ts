@@ -357,12 +357,12 @@ test('card settings update the preview and the copyable source together', async 
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.goto('/sections/card-grid/');
-  await page.getByRole('combobox', { name: 'Card variant', exact: true }).selectOption('catalog');
+  await page.getByRole('checkbox', { name: 'Card shadow', exact: true }).check();
   await page.getByRole('combobox', { name: 'Card tone', exact: true }).selectOption('standard');
   await page.getByRole('combobox', { name: 'Card size', exact: true }).selectOption('l');
   await page.getByRole('combobox', { name: 'Media aspect', exact: true }).selectOption('1/1');
   const preview = page.locator('[data-preview]');
-  await expect(preview.locator('[data-card-variant="catalog"]')).toHaveCount(4);
+  await expect(preview.locator('.ps-card[data-shadow="true"]')).toHaveCount(4);
   await expect(preview.locator('.ps-card').first()).toHaveAttribute('data-tone', 'standard');
   await expect(preview.locator('.ps-card').first()).toHaveAttribute('data-ps-card-size', 'l');
   const code = page.locator('#playground .ps-code-block').first();
@@ -471,7 +471,7 @@ test('home uses themed hero artwork, illustrated next steps and local technology
     'Made with Page Sections', 'Available on NPM', 'Source available on GitHub', 'Hosted on Vercel',
     'Made for Svelte', 'Developed by Laurid Bergjohann', 'Created in VS Code', 'Supported by Codex'
   ]);
-  expect(await technologies.evaluateAll(cards => cards.map(card => card.getAttribute('href')))).toEqual([
+  expect(await technologies.evaluateAll(cards => cards.map(card => card.querySelector('.primary-link')?.getAttribute('href')))).toEqual([
     'https://page-sections.bergjohann.com/', 'https://www.npmjs.com/package/@page-sections/svelte',
     'https://github.com/LauridBergjohann/page-sections', 'https://vercel.com/', 'https://svelte.dev/',
     'https://bergjohann.com/', 'https://code.visualstudio.com/', 'https://chatgpt.com/codex'
@@ -674,7 +674,7 @@ test('sections have a complete illustrated catalog, examples and a dedicated sid
   await expect(page.locator('#section-catalog .ps-card')).toHaveCount(9);
   for (const [index, slug] of sectionSlugs.entries()) {
     const card = page.locator('#section-catalog .ps-card').nth(index);
-    await expect(card).toHaveAttribute('href', `/sections/${slug}/`);
+    await expect(card.locator('.primary-link')).toHaveAttribute('href', `/sections/${slug}/`);
     const image = card.locator('img');
     await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);

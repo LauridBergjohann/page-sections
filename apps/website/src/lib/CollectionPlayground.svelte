@@ -6,7 +6,6 @@
     CarouselSection,
     type CardSize,
     type SurfaceTone,
-    type CardVariant,
     type CardMediaAspect,
     type CardMediaFit
   } from '@page-sections/svelte';
@@ -14,7 +13,8 @@
   let { kind = 'grid' }: { kind?: 'grid' | 'carousel' } = $props();
   let cardSize = $state<CardSize>('m');
   let cardTone = $state<SurfaceTone>('muted');
-  let cardVariant = $state<CardVariant>('catalog');
+  let cardShadow = $state(false);
+  let descriptions = $state(true);
   let mediaAspect = $state<CardMediaAspect>('3/2');
   let mediaFit = $state<CardMediaFit>('contain');
   let textAlign = $state<'start' | 'center'>('start');
@@ -22,7 +22,7 @@
   onMount(() => {
     ready = true;
   });
-  const list = [
+  const cards = [
     {
       id: 'coast',
       title: 'Notes from the coast',
@@ -56,19 +56,25 @@
       image: { src: base + '/landscape.svg', alt: 'A landscape of hills' }
     }
   ];
-  const options = $derived({ cardSize, cardTone, cardVariant, mediaAspect, mediaFit, textAlign });
+  const list = $derived(
+    cards.map((item) => ({ ...item, description: descriptions ? item.description : undefined }))
+  );
+  const options = $derived({ cardSize, cardTone, cardShadow, mediaAspect, mediaFit, textAlign });
   const name = $derived(kind === 'grid' ? 'CardGridSection' : 'CarouselSection');
   const source = $derived(
     `<script lang="ts">\n  import { ${name} } from '@page-sections/svelte';\n  const list = ${JSON.stringify(list, null, 2).replaceAll('\n', '\n  ')};\n<\/script>\n\n<${name}\n  section={{ id: 'collection', title: 'Collection' }}\n  {list}\n${Object.entries(
       options
     )
-      .map(([key, value]) => `  ${key}="${value}"`)
+      .map(([key, value]) =>
+        typeof value === 'boolean' ? `  ${key}={${value}}` : `  ${key}="${value}"`
+      )
       .join('\n')}\n/>`
   );
   function reset() {
     cardSize = 'm';
     cardTone = 'muted';
-    cardVariant = 'catalog';
+    cardShadow = false;
+    descriptions = true;
     mediaAspect = '3/2';
     mediaFit = 'contain';
     textAlign = 'start';
@@ -89,10 +95,11 @@
         ><option>standard</option><option>muted</option></select
       ></label
     >
-    <label
-      >Card variant<select bind:value={cardVariant} disabled={!ready}
-        ><option>catalog</option><option>editorial</option></select
-      ></label
+    <label class="toggle"
+      ><input type="checkbox" bind:checked={cardShadow} disabled={!ready} /> Card shadow</label
+    >
+    <label class="toggle"
+      ><input type="checkbox" bind:checked={descriptions} disabled={!ready} /> Show descriptions</label
     >
     <label
       >Media aspect<select bind:value={mediaAspect} disabled={!ready}
@@ -125,7 +132,16 @@
   </div>
 </div>
 <p class="example-note">
-  Catalog sizes control compact card geometry. Editorial cards use content spans and keep
-  descriptions visible. The code below follows your selections.
+  Card sizes control media and title geometry. Descriptions appear whenever supplied. Hover a card
+  to compare its shadow and accent border. The code below follows your selections.
 </p>
 <LiveCode code={source} />
+
+<style>
+  .playground-controls .toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+  }
+</style>

@@ -215,7 +215,7 @@
         low-level components independently.
       </p>
       <p>
-        Geometry is a shared contract: viewport thresholds, grid columns/gaps, catalog sizes and the
+        Geometry is a shared contract: viewport thresholds, grid columns/gaps, card sizes and the
         1536px content/menu cap come from layoutTokens. Per-size grid override inputs and
         <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a>.contentMax were removed
         in 0.2. Use narrowMax with page.bodyLayout or section.layout for reading widths. Colors,

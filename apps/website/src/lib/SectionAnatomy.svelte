@@ -7,7 +7,7 @@
   const notes: Record<string, string[]> = {
     'card-grid': [
       'Each item occupies a predictable grid span. Card size changes the number of cards per row.',
-      'Catalog cards keep image and text heights consistent. Choose editorial cards for longer descriptions and actions.',
+      'Cards share consistent image and title geometry. Add descriptions and actions when an item needs more context.',
       'Try changing the media ratio and tone in the demo, then resize the window to see the container grid adapt.'
     ],
     carousel: [

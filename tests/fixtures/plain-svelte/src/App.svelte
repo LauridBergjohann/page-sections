@@ -17,5 +17,5 @@
     { type: 'address', name: 'Independent studio', lines: ['Example City'] },
     { type: 'paragraph', text: [{ type: 'link', text: 'Email', href: 'mailto:hello@example.com' }] }
   ] }]} />
-  <CardGridSection section={{ id: 'editorial', title: 'Editorial' }} cardVariant="editorial" list={[{ id: 'story', title: 'A full story', description: 'Readable copy', footer, actions: [{ label: 'Read more', href: '#collection' }] }]} />
+  <CardGridSection section={{ id: 'editorial', title: 'Editorial' }} itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }} list={[{ id: 'story', title: 'A full story', description: 'Readable copy', footer, actions: [{ label: 'Read more', href: '#collection' }] }]} />
 </ContentPage>

@@ -27,6 +27,8 @@ it('renders five regions, optional heading links, icon snippets and safe URLs on
   expect(body).toContain('Resources');
   expect(body).not.toContain('href="javascript:');
   expect(body).toContain('--ps-footer-shadow:none');
+  expect(body).toMatch(/<a[^>]*href="\/community\/"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/);
+  expect(body).toMatch(/<a(?=[^>]*href="\/privacy\/")(?![^>]*target=)[^>]*>/);
 });
 
 it('accepts four groups and rejects a fifth instead of dropping content', () => {

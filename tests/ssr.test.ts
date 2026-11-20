@@ -1,13 +1,31 @@
 import { expect, it } from 'vitest';
 import { render } from 'svelte/server';
 import App from './fixtures/plain-svelte/src/App.svelte';
-import { CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation, Heading } from '../packages/svelte/src/index.js';
+import { Card, CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation, Heading } from '../packages/svelte/src/index.js';
 import PageHeaders from './PageHeaders.svelte';
 import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
 import ImplicitNestedSurfaces from './ImplicitNestedSurfaces.svelte';
 import StructuredPage from './StructuredPage.svelte';
+it.each(['cardGrid', 'carousel'] as const)('forwards optional shadows and descriptions through %s data', (type) => {
+  for (const cardShadow of [undefined, false, true]) {
+    const sections: SectionData[] = [{ type, id: 'cards', title: 'Cards', cardShadow, list: [{ id: 'one', title: 'One', description: 'Optional copy' }] }];
+    const { body } = render(Sections, { props: { sections } });
+    expect(body).toContain(`data-shadow="${cardShadow ?? false}"`);
+    expect(body).toContain('Optional copy');
+  }
+});
+it('renders a native primary card link alongside independent actions and footer links', () => {
+  const { body } = render(Card, { props: { item: { id: 'one', title: 'One', href: '/story/', description: 'The story', actions: [{ label: 'Contact', href: '/contact/' }], footer: [{ type: 'link', text: 'Author', href: '/author/' }] } } });
+  expect(body).toContain('<article');
+  expect(body).toMatch(/class="primary-link[^>]*href="\/story\/"/);
+  for (const href of ['/story/', '/contact/', '/author/']) expect(body).toContain(`href="${href}"`);
+  expect(body).not.toMatch(/<a\b[^>]*>(?:(?!<\/a>)[\s\S])*<a\b/);
+  const { body: unsafe } = render(Card, { props: { item: { id: 'two', title: 'Two', href: 'javascript:alert(1)' } } });
+  expect(unsafe).not.toContain('<a ');
+  expect(unsafe).not.toContain('class="description');
+});
 it.each(['cardGrid', 'carousel'] as const)('forwards %s surface tone from serialized data', (type) => {
   for (const tone of [undefined, 'standard', 'muted'] as const) {
     const sections: SectionData[] = JSON.parse(JSON.stringify([{ type, id: 'cards', title: 'Cards', cardTone: tone, list: [{ id: 'one', title: 'One' }] }]));
@@ -158,7 +176,7 @@ it('renders a complete portfolio from data, with one hero h1 and nested heading 
   expect(body).toMatch(/<h3[^>]*id="profile-title"/);
   expect(body).toContain('Interaction design');
   expect(body).toContain('mailto:hello@example.com');
-  expect(body).toContain('data-card-variant="editorial"');
+  expect(body).toContain('class="description');
 });
 it('renders legal document structures without a custom renderer', () => {
   const { body } = render(StructuredPage, { props: { kind: 'legal' } });

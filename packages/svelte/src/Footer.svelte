@@ -39,7 +39,7 @@
               <nav class="ps-footer-social" aria-label={socialLabel}>
                 <ul>
                   {#each social as item}
-                    <li><a href={safeHref(item.href)}><span class="ps-footer-icon" aria-hidden="true">{@render item.icon()}</span><span>{item.label}</span></a></li>
+                    <li><a href={safeHref(item.href)} target="_blank" rel="noopener noreferrer"><span class="ps-footer-icon" aria-hidden="true">{@render item.icon()}</span><span>{item.label}</span></a></li>
                   {/each}
                 </ul>
               </nav>

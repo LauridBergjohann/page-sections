@@ -14,7 +14,7 @@
 <\/script>
 
 <div class="ps-shell">
-  <Card {item} variant="editorial" mediaAspect="4/3">
+  <Card {item} mediaAspect="4/3">
     {#snippet media(card)}
       <Image
         image={{
@@ -99,12 +99,11 @@
       <p>
         Generic <code
           >T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a></code
-        >; required item. Optional cardSize (m), variant (catalog), mediaAspect (3/2; also 4/3 or
-        1/1), mediaFit (contain for catalog, cover for editorial), reserveEyebrow (otherwise follows
-        the item), textAlign (start/center), headingLevel (inherited, standalone h2), media(item),
-        surface(item), children(item) and onready(parts). Children are editorial-only. Card forwards
-        HTMLElement attributes, including class and event callbacks; card identity/accessibility
-        attributes remain component-owned.
+        >; required item. Optional cardSize (m), shadow (false), mediaAspect (3/2; also 4/3 or 1/1),
+        mediaFit (contain), reserveEyebrow (otherwise follows the item), textAlign (start/center),
+        headingLevel (inherited, standalone h2), media(item), surface(item), children(item) and
+        onready(parts). Card forwards HTMLElement attributes, including class and event callbacks;
+        card identity/accessibility attributes remain component-owned.
       </p>
       <h3 id="complete-carditem-model">
         Complete <a href={base + '/docs/reference/types/#card-item'}>CardItem</a> model
@@ -128,7 +127,9 @@
             <tr>
               <td><code>title</code></td>
               <td><code>string</code>, required</td>
-              <td>Inherited heading; full-card link for catalog, title link for editorial</td>
+              <td
+                >Inherited heading; its native link covers the entire card when href is supplied</td
+              >
             </tr>
             <tr>
               <td><code>itemKey</code></td>
@@ -168,7 +169,7 @@
                 ><code><a href={base + '/docs/reference/types/#inline-text'}>InlineText</a></code
                 ></td
               >
-              <td>Editorial footer</td>
+              <td>Optional footer</td>
             </tr>
             <tr>
               <td><code>actions</code></td>
@@ -178,18 +179,18 @@
                   >[]</code
                 ></td
               >
-              <td>Independent editorial actions</td>
+              <td>Independent action links</td>
             </tr>
           </tbody>
         </table>
       </div>
       <p>
-        Catalog height is the selected media frame plus an independent text area. S/M reserve two
-        title lines; L reserves three. Eyebrows add a separate line (hidden for S); reserveEyebrow
+        Card height includes the selected media frame and a text area. S/M reserve two title lines;
+        L reserves three. Eyebrows add a separate accent-colored line (hidden for S); reserveEyebrow
         keeps an empty line when aligning cards with missing labels. Collections compute this flag
-        from the full list. Text padding is 12px on each side. Catalog does not render descriptions,
-        children, footers or actions; use editorial for those. Editorial grows with content and
-        fills its grid slot.
+        from the full list. Text padding is 12px on each side. A supplied description appears below
+        the title and grows naturally, as do children, footers and actions. The card fills its grid
+        slot.
       </p>
       <p>
         <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a> is 3/2, 4/3
@@ -197,8 +198,7 @@
         (8px media inset, whole image) or cover (no inset, cropped image). The frame ratio and image
         fit are independent. Card media props override
         <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>.aspect/objectFit inside
-        the slot; standalone Image behavior is unchanged. Missing catalog media keeps its frame;
-        editorial cards without media omit it.
+        the slot; standalone Image behavior is unchanged. Cards without media omit the image frame.
       </p>
       <p>
         <code
@@ -211,8 +211,9 @@
         the outer aspect-ratio box. Observe element resizing when fitting external geometry: onready is
         an attachment hook, not a resize notification.
         <code>data-card-id</code> contains itemKey ?? id; data-ps-card-part names each measured part.
-        Custom catalog snippets must not introduce interactive descendants inside a linked card. These
-        hooks support external enhancements without a rendering-engine dependency.
+        The title link stretches over the card, including the image. Actions, footer links and interactive
+        children remain separate native controls; no anchors are nested. These hooks support external
+        enhancements without a rendering-engine dependency.
       </p>
     </div></Section
   >
@@ -225,6 +226,12 @@
       variant: 'content'
     }}
     ><div class="prose">
+      <p>
+        Enable <code>shadow</code> for a subtle resting shadow. Hover animates the border to the accent
+        color and strengthens the shadow; cards without a resting shadow gain a light one. Leaving restores
+        the original appearance. Keyboard focus is highlighted too, and reduced-motion preferences disable
+        the transition.
+      </p>
       <p>
         Use meaningful alt text, avoid repeating a decorative card cover in speech, and supply
         width/height to reduce shifts. Native picture selection and loading work in server-rendered

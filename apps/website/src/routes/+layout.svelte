@@ -68,12 +68,16 @@
           <SiteSearch />
           <a
             class="github-link"
+            target="_blank"
+            rel="noopener noreferrer"
             href="https://github.com/LauridBergjohann/page-sections"
             aria-label="Page Sections on GitHub"
             title="Source on GitHub"><Github /></a
           >
           <a
             class="github-link"
+            target="_blank"
+            rel="noopener noreferrer"
             href="https://www.npmjs.com/package/@page-sections/svelte"
             aria-label="Page Sections on NPM"
             title="Package on NPM"><BrandMark kind="npm" /></a

@@ -107,7 +107,7 @@ export interface CardLayoutOptions {
   reserveEyebrow?: boolean;
 }
 
-/** Default catalog geometry in CSS pixels; media is the actual poster/3D fitting rectangle. */
+/** Base card geometry in CSS pixels, excluding optional description/extra content. Media is the actual poster/3D fitting rectangle. */
 export function resolveCardLayout(containerWidth: number, cardSize: LayoutCardSize = 'm', options: CardLayoutOptions = {}) {
 	const grid = resolveContentGrid(containerWidth);
 	const card = tokens.cards[cardSize];
