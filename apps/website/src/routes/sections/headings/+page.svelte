@@ -19,6 +19,7 @@
 </script>
 
 <script lang="ts">
+  import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
   import SectionAnatomy from '$lib/SectionAnatomy.svelte';
   import LiveCode from '$lib/LiveCode.svelte';
@@ -128,8 +129,13 @@
       </p>
       <p>
         <code>HeadingSection</code> adds the normal Section layout, background, spacing and anchor.
-        It accepts a <code>section</code> using <code>HeadingSectionData</code> (without a required
-        type when used directly). Its visible heading falls back to <code>title</code>. Use
+        It accepts a <code>section</code> using
+        <code
+          ><a href={base + '/docs/reference/types/#heading-section-data'}>HeadingSectionData</a
+          ></code
+        >
+        (without a required type when used directly). Its visible heading falls back to
+        <code>title</code>. Use
         <code>headingSize</code>
         and <code>headingLevel</code> independently.
       </p>

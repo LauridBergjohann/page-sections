@@ -57,8 +57,8 @@
         alt: 'Content sources, page sections and theme settings connected in one website',
         width: 1536,
         height: 1024,
-        aspect: "16/9",
-        objectFit: 'contain',
+        aspect: '16/9',
+        objectFit: 'contain'
       },
       imageSide: 'right',
       spacing: 'loose',
@@ -96,7 +96,7 @@
         title: 'One responsive layout system',
         description:
           'Pages, grids and cards share content widths and spacing. Layouts adapt to their containers, including narrow columns on wide screens.',
-        href: base + '/docs/foundations/responsive-layout/'
+        href: base + '/docs/design-system/responsive-layout/'
       },
       {
         id: 'sections',
@@ -186,7 +186,7 @@
     cardTone="muted"
     mediaAspect="4/3"
     mediaFit="contain"
-  textAlign="center"
-  cardVariant="catalog"
+    textAlign="center"
+    cardVariant="catalog"
   />
 </ContentPage>

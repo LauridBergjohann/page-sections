@@ -60,7 +60,10 @@ console.log(page.title, cards, resolveContentGrid(840));`
       variant: 'content'
     }}
     ><div class="prose">
-      <p>Run this in an existing application:</p>
+      <p>
+        Start with an existing Svelte 5 or SvelteKit application. Run the installation command in
+        its project directory:
+      </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
         The peer dependency is <code>svelte: ^5.56.4</code>. The matching Core version and
@@ -91,10 +94,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
     }}
     ><div class="prose">
       <p>
-        PageShell, ContentPage, Header, Section and Breadcrumbs import the shared stylesheet.
-        ContentGrid imports the generated grid rules only. Low-level Card, Image, ButtonGroup,
-        MainMenu, SectionNavigation, ContentBlock, SectionSurfaceGroup, ContentPanel, Actions,
-        RichTextContent and InlineTextContent do not independently load the full theme defaults.
+        Import the shared stylesheet once in your application entry or layout. It provides the theme
+        defaults and layout rules used throughout the examples.
       </p>
       <p>
         Import the full stylesheet once in your application entry/layout when using low-level
@@ -103,7 +104,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
       <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
       <p>
         The stylesheet declares theme defaults on <code>:root</code> and component-scoped utility
-        classes. Override variables on a local ancestor or through PageShell; see
+        classes. Override variables on a local ancestor or through the shared theme wrapper
+        introduced in
         <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>.
       </p>
     </div></Section
@@ -119,8 +121,12 @@ console.log(page.title, cards, resolveContentGrid(840));`
     ><div class="prose">
       <CodeBlock {...examples[2]} highlighted={data.highlights[2]} />
       <p>
-        Core has no runtime dependencies. Declare it directly if application code imports its
-        runtime exports. Svelte consumers can import the shared types from either package:
+        Core is the framework-independent package for data shapes and layout calculations. It has no
+        runtime dependencies. Declare it directly if application code imports its runtime exports.
+        The optional example below uses CardItem (one card?s data), PageData (page metadata and its
+        sections) and resolveContentGrid (a helper calculating columns from a container width).
+        These are covered later in the type reference; you can skip this example for your first
+        Svelte page:
       </p>
       <CodeBlock {...examples[3]} highlighted={data.highlights[3]} />
     </div></Section
@@ -151,6 +157,21 @@ console.log(page.title, cards, resolveContentGrid(840));`
         >
         demonstrates SvelteKit prerendering with adapter-static; see
         <a href={base + '/docs/advanced/ssr/'}>SSR and Progressive Enhancement</a>.
+      </p>
+    </div></Section
+  >
+  <Section
+    section={{
+      id: 'next-step',
+      title: 'Next step',
+      headline: 'Next: understand sections',
+      background: { color: 'standard' }
+    }}
+    ><div class="prose">
+      <p>
+        The package is installed. Continue with <a
+          href={base + '/docs/foundations/pages-and-sections/'}>What are sections?</a
+        > before building your first page.
       </p>
     </div></Section
   >

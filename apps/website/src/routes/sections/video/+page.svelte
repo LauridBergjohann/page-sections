@@ -96,7 +96,13 @@
           <tbody>
             <tr>
               <td><code>section</code></td>
-              <td><code>Omit&lt;VideoSectionData, 'type'&gt;</code></td>
+              <td
+                ><code
+                  >Omit&lt;<a href={base + '/docs/reference/types/#video-section-data'}
+                    >VideoSectionData</a
+                  >, 'type'&gt;</code
+                ></td
+              >
               <td>Required</td>
             </tr>
             <tr>
@@ -107,7 +113,7 @@
           </tbody>
         </table>
       </div>
-      <p>Alongside <a href={base + '/docs/foundations/content-grid/'}>SectionDefinition</a>:</p>
+      <p>Alongside <a href={base + '/docs/building-blocks/section/'}>SectionDefinition</a>:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -121,7 +127,10 @@
           <tbody>
             <tr>
               <td><code>video</code></td>
-              <td><code>VideoData</code>, required</td>
+              <td
+                ><code><a href={base + '/docs/reference/types/#video-data'}>VideoData</a></code>,
+                required</td
+              >
               <td>No default</td>
             </tr>
             <tr>
@@ -137,7 +146,7 @@
           </tbody>
         </table>
       </div>
-      <p>Complete VideoData:</p>
+      <p>Complete <a href={base + '/docs/reference/types/#video-data'}>VideoData</a>:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>

@@ -9,7 +9,9 @@ const entry = (href: string, icon?: string): MenuItem => {
 };
 const groups = [
   ['Foundations', 'foundations', 'layers'],
-  ['Building blocks', 'building-blocks', 'blocks'],
+  ['Page layout', 'page-layout', 'layers'],
+  ['Components', 'building-blocks', 'blocks'],
+  ['Design system', 'design-system', 'settings'],
   ['Advanced', 'advanced', 'settings'],
   ['Reference', 'reference', 'book']
 ];
@@ -44,7 +46,10 @@ export const navigationTree: MenuItem[] = [
 
 const flatten = (items: MenuItem[]): MenuItem[] =>
   items.flatMap((item) => [item, ...flatten(item.children ?? [])]);
-export const readingOrder = flatten(navigationTree.filter((item) => item.id !== 'about'));
+// Learn the concepts before browsing the gallery, independently of header placement.
+export const readingOrder = ['start', 'docs', 'sections'].flatMap((id) =>
+  flatten(navigationTree.filter((item) => item.id === id))
+);
 export function readingNeighbors(pathname: string) {
   const index = readingOrder.findIndex((item) => item.href === pathname);
   return index < 0 ? {} : { previous: readingOrder[index - 1], next: readingOrder[index + 1] };

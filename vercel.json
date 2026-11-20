@@ -6,8 +6,65 @@
   "outputDirectory": "apps/website/build",
   "trailingSlash": true,
   "redirects": [
-    { "source": "/docs/sections/images", "destination": "/sections/image/", "permanent": true },
-    { "source": "/docs/sections/panels", "destination": "/sections/panel/", "permanent": true },
-    { "source": "/docs/sections/:path*", "destination": "/sections/:path*", "permanent": true }
+    {
+      "source": "/docs/sections/images",
+      "destination": "/sections/image/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/sections/panels",
+      "destination": "/sections/panel/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/sections/:path*",
+      "destination": "/sections/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/foundation",
+      "destination": "/docs/foundations/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/foundations/page-shell",
+      "destination": "/docs/page-layout/content-page/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/building-blocks/navigation",
+      "destination": "/docs/page-layout/header/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/building-blocks/breadcrumbs",
+      "destination": "/docs/page-layout/breadcrumbs/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/building-blocks/footer",
+      "destination": "/docs/page-layout/footer/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/building-blocks/card-and-image",
+      "destination": "/docs/building-blocks/card/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/foundations/content-grid",
+      "destination": "/docs/building-blocks/grids/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/foundations/responsive-layout",
+      "destination": "/docs/design-system/responsive-layout/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/foundations/backgrounds",
+      "destination": "/docs/design-system/backgrounds/",
+      "permanent": true
+    }
   ]
 }

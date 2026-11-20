@@ -83,7 +83,11 @@
       variant: 'content'
     }}
     ><div class="prose">
-      <p>Generic over <code>T extends CardItem</code>.</p>
+      <p>
+        Generic over <code
+          >T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a></code
+        >.
+      </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -97,7 +101,12 @@
           <tbody>
             <tr>
               <td><code>section</code></td>
-              <td><code>SectionDefinition</code></td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a
+                  ></code
+                ></td
+              >
               <td>Required</td>
             </tr>
             <tr>
@@ -117,22 +126,37 @@
             </tr>
             <tr>
               <td><code>cardTone</code></td>
-              <td><code>SurfaceTone</code>: standard/muted</td>
+              <td
+                ><code><a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a></code
+                >: standard/muted</td
+              >
               <td>standard</td>
             </tr>
             <tr>
               <td><code>mediaAspect</code></td>
-              <td><code>CardMediaAspect</code>: 3/2, 4/3, 1/1</td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a
+                  ></code
+                >: 3/2, 4/3, 1/1</td
+              >
               <td>3/2; uniform media frame</td>
             </tr>
             <tr>
               <td><code>mediaFit</code></td>
-              <td><code>CardMediaFit</code>: contain/cover</td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a></code
+                >: contain/cover</td
+              >
               <td>contain for catalog, cover for editorial</td>
             </tr>
             <tr>
               <td><code>itemSpan</code></td>
-              <td><code>ContentSpan</code></td>
+              <td
+                ><code><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></code
+                ></td
+              >
               <td>xs=4, s=3, m=4, l=4; editorial only</td>
             </tr>
             <tr>
@@ -154,16 +178,28 @@
               <td><code>card</code></td>
               <td
                 ><code
-                  >Snippet&lt;[T, &#123; cardSize: CardSize; variant: CardVariant; tone:
-                  SurfaceTone; textAlign: 'start' | 'center'; mediaAspect: CardMediaAspect;
-                  mediaFit: CardMediaFit; reserveEyebrow: boolean &#125;]&gt;</code
+                  >Snippet&lt;[T, &#123; cardSize: <a
+                    href={base + '/docs/reference/types/#card-size'}>CardSize</a
+                  >; variant:
+                  <a href={base + '/docs/reference/types/#card-variant'}>CardVariant</a>; tone:
+                  <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a>; textAlign:
+                  'start' | 'center'; mediaAspect:
+                  <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>;
+                  mediaFit:
+                  <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a>;
+                  reserveEyebrow: boolean &#125;]&gt;</code
                 ></td
               >
               <td>Optional complete card replacement</td>
             </tr>
             <tr>
               <td><code>oncardready</code></td>
-              <td><code>(parts: CardElements&lt;T&gt;) =&gt; void | (() =&gt; void)</code></td>
+              <td
+                ><code
+                  >(parts: <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a
+                  >&lt;T&gt;) =&gt; void | (() =&gt; void)</code
+                ></td
+              >
               <td>Attachment/cleanup hook for default Card</td>
             </tr>
           </tbody>
@@ -208,12 +244,13 @@
       <p>
         Use mediaFit=&quot;contain&quot; for complete objects with an 8px media inset, or
         mediaFit=&quot;cover&quot; for edge-to-edge cropped photos. Both use the same selected
-        mediaAspect. ImageData.aspect/objectFit do not override this collection-level contract.
-        Compare 3:2 and 1:1 in the interactive example above.
+        mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>ImageData</a
+        >.aspect/objectFit do not override this collection-level contract. Compare 3:2 and 1:1 in
+        the interactive example above.
       </p>
       <p>
         Per-item size and the old auto-fit minimum widths were removed in 0.2. See <a
-          href={base + '/docs/foundations/responsive-layout/'}>shared layout reference</a
+          href={base + '/docs/design-system/responsive-layout/'}>shared layout reference</a
         >.
       </p>
     </div></Section
@@ -234,9 +271,9 @@
         attachment callbacks run after hydration.
       </p>
       <p>
-        Related: <a href={base + '/docs/building-blocks/card-and-image/'}>Card and Image</a>,
+        Related: <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>,
         <a href={base + '/sections/carousel/'}>CarouselSection</a>,
-        <a href={base + '/docs/foundations/content-grid/'}>Section and grids</a>.
+        <a href={base + '/docs/building-blocks/grids/'}>Section and grids</a>.
       </p>
     </div></Section
   >

@@ -1,7 +1,7 @@
 import { expect, test, type Locator } from '@playwright/test';
 
 test('site footer exposes its documentation, legal links and responsive theme', async ({ page }) => {
-  await page.goto('/docs/building-blocks/footer/');
+  await page.goto('/docs/page-layout/footer/');
   const footer = page.locator('.site-footer');
   const socialLinks = footer.locator('.ps-footer-social a');
   await expect(socialLinks).toHaveText(['GitHub', 'NPM', 'Vercel', 'Bergjohann', 'LinkedIn', 'Svelte']);
@@ -55,7 +55,7 @@ test('site footer exposes its documentation, legal links and responsive theme', 
     }
     await footer.screenshot({ path: test.info().outputPath(`site-footer-${width}.png`) });
   }
-  await expect(footer.getByRole('link', { name: 'Footer', exact: true })).toHaveAttribute('href', '/docs/building-blocks/footer/');
+  await expect(footer.getByRole('link', { name: 'Footer', exact: true })).toHaveAttribute('href', '/docs/page-layout/footer/');
   await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
   await expect(page.locator('.ps-shell')).toHaveCSS('background-color', await themeColor(page.locator('.ps-shell'), '--ps-background'));
   await expect(footer.locator('.ps-footer-main')).toHaveCSS('background-color', await themeColor(page.locator('.ps-shell'), '--ps-footer-background'));
@@ -180,10 +180,13 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await sidebar.getByRole('button', { name: 'Show pages in Foundations', exact: true }).click();
   await expect(sidebar.getByRole('link', { name: 'Installation', exact: true })).toBeHidden();
   await page.locator('.reading-path [rel="next"]').click();
+  await expect(page).toHaveURL(/\/docs\/foundations\/pages-and-sections\/$/);
+  await page.locator('.reading-path [rel="next"]').click();
   await expect(page).toHaveURL(/\/docs\/foundations\/first-page\/$/);
-  await expect(sidebar.getByRole('link', { name: 'Your first page', exact: true })).toBeVisible();
-  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Your first page');
-  await sidebar.getByRole('link', { name: 'Page shell', exact: true }).click();
+  await expect(sidebar.getByRole('link', { name: 'Using sections', exact: true })).toBeVisible();
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Using sections');
+  await sidebar.getByRole('button', { name: 'Show pages in Page layout', exact: true }).click();
+  await sidebar.getByRole('link', { name: 'ContentPage and sidebars', exact: true }).click();
   await expect(page.locator('.ps-content-menu-slot .desktop')).toHaveCSS('background-color', colors.standard);
   const sections = page.locator('.sections > [data-ps-section]');
   expect(await sections.count()).toBeGreaterThan(0);
@@ -304,7 +307,7 @@ test('touch and mobile users can reach deep pages through real parent pages', as
   for (const width of [390, 1200]) {
     const context = await browser.newContext({ hasTouch: true, viewport: { width, height: 900 } });
     const page = await context.newPage();
-    await page.goto('http://127.0.0.1:4174/');
+    await page.goto(test.info().project.use.baseURL! + '/');
     if (width < 1200) {
       await page.locator('.mobile-menu > summary').tap();
       const mobile = page.locator('.mobile-panel');
@@ -325,7 +328,7 @@ for (const width of [390, 1600]) {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height: 900 } });
     const page = await context.newPage();
     for (const route of ['/sections/card-grid/', '/sections/code/', '/docs/reference/core-api/', '/docs/foundations/installation/']) {
-      const response = await page.goto('http://127.0.0.1:4174' + route);
+      const response = await page.goto(test.info().project.use.baseURL! + route);
       expect(response?.status()).toBe(200);
       await expect(page.locator('main h1')).toHaveCount(1);
       const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
@@ -428,7 +431,7 @@ test('home explains the library and getting started stays focused', async ({ pag
   await expect(page.locator('#install')).toContainText('npm install @page-sections/svelte');
   await expect(page.locator('#first-page')).toContainText('ContentPage');
   await page.getByRole('navigation', { name: 'Reading order' }).locator('[rel=next]').click();
-  await expect(page).toHaveURL(/\/sections\/$/);
+  await expect(page).toHaveURL(/\/docs\/$/);
   await page.setViewportSize({ width: 1809, height: 900 });
   await page.goto('/docs/');
   const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
@@ -438,7 +441,9 @@ test('home explains the library and getting started stays focused', async ({ pag
   const titles = (await chapters.getByRole('link').allTextContents()).map(title => title.trim());
   expect(titles).not.toContain('Sections');
   expect(titles).not.toContain('Hero');
-  expect(titles.indexOf('Page shell')).toBeLessThan(titles.indexOf('Card and Image'));
+  expect(titles.indexOf('What are sections?')).toBeLessThan(titles.indexOf('Using sections'));
+  expect(titles.indexOf('ContentPage and sidebars')).toBeLessThan(titles.indexOf('Card'));
+  expect(titles).toEqual(expect.arrayContaining(['Page layout', 'Components', 'Design system', 'Create your own section', 'Data types']));
 });
 
 test('home uses themed hero artwork, illustrated next steps and local technology icons', async ({ page }) => {
@@ -575,6 +580,86 @@ test('minimal demo renders a complete page without documentation infrastructure'
 const sectionSlugs = ['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video'];
 const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Video'];
 
+test('documentation teaches concepts in order and chapter landing pages explain their scope', async ({ page }) => {
+  await page.goto('/docs/');
+  for (const [slug, title] of [
+    ['foundations', 'Foundations'], ['page-layout', 'Page layout'],
+    ['building-blocks', 'Components'], ['design-system', 'Design system'],
+    ['advanced', 'Advanced'], ['reference', 'Reference']
+  ]) {
+    await page.goto(`/docs/${slug}/`);
+    await expect(page.locator('main h1')).toHaveText(title);
+    expect(await page.locator('main .prose p').count()).toBeGreaterThanOrEqual(3);
+    await expect(page.getByRole('navigation', { name: `Pages in ${title}`, exact: true })).toBeVisible();
+    for (const width of [390, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+      await page.screenshot({ path: test.info().outputPath(`docs-${slug}-${width}.png`) });
+    }
+  }
+  await page.goto('/docs/foundations/installation/');
+  for (const heading of ['What are sections?', 'Using sections', 'Themes and styling', 'Page layout', 'Header and satellites']) {
+    await page.locator('.reading-path [rel=next]').click();
+    await expect(page.locator('main h1')).toHaveText(heading);
+  }
+  await page.goto('/docs/advanced/create-your-own-section/');
+  await expect(page.locator('pre').first()).toContainText('SectionDefinition');
+  await expect(page.locator('pre').nth(1)).toContainText('QuoteSection');
+});
+
+for (const javaScriptEnabled of [false, true]) {
+  test(`object properties link to complete type fields with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
+    const context = await browser.newContext({ baseURL: test.info().project.use.baseURL, javaScriptEnabled });
+    const page = await context.newPage();
+    if (javaScriptEnabled) {
+      await page.goto('/docs/');
+      const search = page.getByRole('combobox', { name: 'Search documentation' });
+      await search.fill('ContentAction');
+      await search.press('Enter');
+      await expect(page).toHaveURL(/\/docs\/reference\/types\/#content-action$/);
+    }
+    await page.goto('/sections/hero/');
+    await page.locator('#props-and-configuration').getByRole('link', { name: 'ContentAction', exact: true }).click();
+    await expect(page).toHaveURL(/\/docs\/reference\/types\/#content-action$/);
+    const action = page.locator('#content-action');
+    await expect(action.getByRole('heading', { name: 'ContentAction', exact: true })).toBeVisible();
+    await expect(action.locator('tbody tr > td:first-child')).toHaveText(['label', 'href', 'variant']);
+    await expect(action.locator('tbody tr > td:nth-child(3)')).toHaveText(['Required', 'Required', 'Optional']);
+    await action.screenshot({ path: test.info().outputPath(`content-action-${javaScriptEnabled}.png`) });
+    await page.goto('/docs/reference/types/#hero-section-data');
+    await page.locator('#hero-section-data table').getByRole('link', { name: 'ImageData', exact: true }).click();
+    await expect(page).toHaveURL(/#image-data$/);
+    await expect(page.locator('#image-data table')).toContainText('srcDark');
+    await page.goto('/docs/reference/types/#section-definition');
+    await page.locator('#section-definition table').getByRole('link', { name: 'SectionBackground', exact: true }).click();
+    await expect(page).toHaveURL(/#section-background$/);
+    await expect(page.locator('#section-background table')).toContainText('color');
+    for (const width of [390, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+    await context.close();
+  });
+}
+
+test('previous documentation URLs retain permanent redirects to their new chapters', async ({ request }) => {
+  for (const [oldPath, destination] of [
+    ['foundation', 'foundations'],
+    ['foundations/page-shell', 'page-layout/content-page'],
+    ['building-blocks/navigation', 'page-layout/header'],
+    ['building-blocks/breadcrumbs', 'page-layout/breadcrumbs'],
+    ['building-blocks/footer', 'page-layout/footer'],
+    ['building-blocks/card-and-image', 'building-blocks/card'],
+    ['foundations/content-grid', 'building-blocks/grids'],
+    ['foundations/responsive-layout', 'design-system/responsive-layout'],
+    ['foundations/backgrounds', 'design-system/backgrounds']
+  ]) {
+    const response = await request.get(`/docs/${oldPath}/`, { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toContain(`content="0;url=/docs/${destination}/"`);
+  }
+});
+
 test('sections have a complete illustrated catalog, examples and a dedicated sidebar', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto('/sections/');
@@ -679,9 +764,9 @@ test('old section routes provide static redirects to the new canonical pages', a
     expect(response.status()).toBe(200);
     expect(await response.text()).toContain(`content="0;url=/sections/${newSlug ? newSlug + '/' : ''}"`);
   }
-  const context = await browser.newContext({ javaScriptEnabled: false });
+  const context = await browser.newContext({ javaScriptEnabled: false, baseURL: test.info().project.use.baseURL });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:4174/docs/sections/images/');
+  await page.goto('/docs/sections/images/');
   await expect(page).toHaveURL(/\/sections\/image\/$/);
   await expect(page.locator('main h1')).toHaveText('Image');
   await context.close();

@@ -135,16 +135,19 @@
         href: base + '/docs/',
         links: [
           { label: 'Foundations', href: base + '/docs/foundations/' },
-          { label: 'Reference', href: base + '/docs/reference/' },
-          { label: 'Building blocks', href: base + '/docs/building-blocks/' }
+          { label: 'Page layout', href: base + '/docs/page-layout/' },
+          { label: 'Components', href: base + '/docs/building-blocks/' },
+          { label: 'Design system', href: base + '/docs/design-system/' },
+          { label: 'Advanced', href: base + '/docs/advanced/' },
+          { label: 'Reference', href: base + '/docs/reference/' }
         ]
       },
       {
-        label: 'Building blocks',
-        href: base + '/docs/building-blocks/',
+        label: 'Page layout',
+        href: base + '/docs/page-layout/',
         links: [
-          { label: 'Header', href: base + '/docs/building-blocks/navigation/' },
-          { label: 'Footer', href: base + '/docs/building-blocks/footer/' },
+          { label: 'Header', href: base + '/docs/page-layout/header/' },
+          { label: 'Footer', href: base + '/docs/page-layout/footer/' },
           { label: 'Themes', href: base + '/docs/foundations/themes/' }
         ]
       },

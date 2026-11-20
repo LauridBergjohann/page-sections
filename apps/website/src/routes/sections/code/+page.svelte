@@ -171,7 +171,7 @@ const highlighted = await highlightCode(code, 'typescript');
     <div class="prose">
       <p>
         Place a rich-text section and a code section in a <a
-          href={base + '/docs/foundations/content-grid/'}>grid</a
+          href={base + '/docs/building-blocks/grids/'}>grid</a
         >. Reorder its blocks to put the code first. Small containers stack the blocks in reading
         order; larger containers display them side by side.
       </p>
@@ -208,9 +208,12 @@ const highlighted = await highlightCode(code, 'typescript');
               ></tr
             >
             <tr
-              ><td><code>tone: SurfaceTone</code></td><td>muted</td><td
-                >standard or muted theme surface.</td
-              ></tr
+              ><td
+                ><code
+                  >tone: <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a
+                  ></code
+                ></td
+              ><td>muted</td><td>standard or muted theme surface.</td></tr
             >
             <tr
               ><td><code>lineNumbers: boolean</code></td><td>false</td><td
@@ -231,18 +234,34 @@ const highlighted = await highlightCode(code, 'typescript');
         </table>
       </div>
       <p>
-        Additional component props: <code>highlighted?: HighlightedCode</code>, <code>copy</code>
+        Additional component props: <code
+          >highlighted?: <a href={base + '/docs/reference/types/#highlighted-code'}
+            >HighlightedCode</a
+          ></code
+        >, <code>copy</code>
         (true), <code>label</code> (“Code example”), <code>copyLabel</code> (“Copy code”),
         <code>copiedLabel</code>
         (“Copied”), and <code>copyErrorLabel</code>. Set these labels when localizing the host.
       </p>
       <p>
-        <code>CodeSection</code> accepts <code>section: Omit&lt;CodeSectionData, 'type'&gt;</code>
-        and optional <code>highlighted</code>. <code>CodeSectionData</code> extends
-        <code>SectionDefinition</code>
-        and <code>CodeData</code> with <code>type: 'code'</code>. <code>CodeToken</code> describes
-        token text, light/dark colors and font style; <code>HighlightedCode</code> contains source, language
-        and token lines. These models are JSON-compatible and live in core.
+        <code>CodeSection</code> accepts
+        <code
+          >section: Omit&lt;<a href={base + '/docs/reference/types/#code-section-data'}
+            >CodeSectionData</a
+          >, 'type'&gt;</code
+        >
+        and optional <code>highlighted</code>.
+        <code><a href={base + '/docs/reference/types/#code-section-data'}>CodeSectionData</a></code>
+        extends
+        <code
+          ><a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a></code
+        >
+        and <code><a href={base + '/docs/reference/types/#code-data'}>CodeData</a></code> with
+        <code>type: 'code'</code>.
+        <code><a href={base + '/docs/reference/types/#code-token'}>CodeToken</a></code>
+        describes token text, light/dark colors and font style;
+        <code><a href={base + '/docs/reference/types/#highlighted-code'}>HighlightedCode</a></code> contains
+        source, language and token lines. These models are JSON-compatible and live in core.
       </p>
     </div>
   </Section>

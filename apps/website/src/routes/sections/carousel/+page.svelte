@@ -84,18 +84,20 @@
     }}
     ><div class="prose">
       <p>
-        Generic over T extends CardItem. Required section: SectionDefinition and list: T[]. Optional
-        cardSize (m), cardVariant (catalog), mediaAspect (3/2; also 4/3 or 1/1), mediaFit (contain
-        for catalog, cover for editorial), textAlign (start), controls (true), previousLabel
-        (Previous cards), nextLabel (Next cards), media(item), itemContent(item),
-        oncardready(parts), initialItemKey and onselectionchange(key).
+        Generic over T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>.
+        Required section:
+        <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a> and list: T[].
+        Optional cardSize (m), cardVariant (catalog), mediaAspect (3/2; also 4/3 or 1/1), mediaFit (contain
+        for catalog, cover for editorial), textAlign (start), controls (true), previousLabel (Previous
+        cards), nextLabel (Next cards), media(item), itemContent(item), oncardready(parts), initialItemKey
+        and onselectionchange(key).
       </p>
       <p>
         <code>initialItemKey</code> is applied once after mount, matching itemKey ?? id.
         onselectionchange reports the occurrence nearest the leading edge after a native scrollend;
         duplicate content identities require unique occurrence keys. Initial placement and callback
         are enhancements; SSR starts at the first item. oncardready has the same lifecycle as
-        <a href={base + '/docs/building-blocks/card-and-image/'}>Card</a>.
+        <a href={base + '/docs/building-blocks/card/'}>Card</a>.
       </p>
     </div></Section
   >
@@ -142,7 +144,7 @@
       <p>
         Related: <a href={base + '/sections/card-grid/'}>CardGridSection</a>,
         <a href={base + '/docs/reference/core-api/'}>Core API</a>,
-        <a href={base + '/docs/foundations/responsive-layout/'}>shared layout reference</a>.
+        <a href={base + '/docs/design-system/responsive-layout/'}>shared layout reference</a>.
       </p>
     </div></Section
   >

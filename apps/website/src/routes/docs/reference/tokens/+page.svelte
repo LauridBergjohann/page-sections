@@ -264,8 +264,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       <p>
         SectionSurfaceGroup writes <code>--ps-section-top-radius</code> and
         <code>--ps-section-bottom-radius</code>, using var(--ps-radius) or 0px. Ungrouped surfaces
-        default to 0px. Image uses private <code>--image-ratio</code> and <code>--image-fit</code> variables;
-        configure ImageData instead.
+        default to 0px. Image uses private <code>--image-ratio</code> and <code>--image-fit</code>
+        variables; configure <a href={base + '/docs/reference/types/#image-data'}>ImageData</a> instead.
       </p>
     </div></Section
   >
@@ -448,7 +448,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
         Related: <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>,
-        <a href={base + '/docs/foundations/responsive-layout/'}>Responsive Layout and Breakpoints</a
+        <a href={base + '/docs/design-system/responsive-layout/'}
+          >Responsive Layout and Breakpoints</a
         >,
         <a href={base + '/docs/reference/core-api/'}>Core API</a>.
       </p>
@@ -628,8 +629,9 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       #fff. <code>--ps-footer-radius</code> falls back to --ps-radius;
       <code>--ps-footer-shadow</code>
       falls back to --ps-surface-shadow. <code>--ps-footer-bar-background</code> and
-      <code>--ps-footer-bar-ink</code> fall back to --ps-section-muted and --ps-body. Separators inherit
-      bottom-bar ink at 30% opacity. All six tokens have typed PageTheme properties.
+      <code>--ps-footer-bar-ink</code> fall back to --ps-section-muted and --ps-body. Separators
+      inherit bottom-bar ink at 30% opacity. All six tokens have typed
+      <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> properties.
     </p>
   </Section>
 </ContentPage>

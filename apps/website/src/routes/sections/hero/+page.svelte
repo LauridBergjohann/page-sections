@@ -102,7 +102,13 @@
           <tbody>
             <tr>
               <td><code>section</code></td>
-              <td><code>Omit&lt;HeroSectionData, 'type'&gt;</code></td>
+              <td
+                ><code
+                  >Omit&lt;<a href={base + '/docs/reference/types/#hero-section-data'}
+                    >HeroSectionData</a
+                  >, 'type'&gt;</code
+                ></td
+              >
               <td>Required</td>
             </tr>
             <tr>
@@ -114,7 +120,7 @@
         </table>
       </div>
       <p>
-        Section accepts all <a href={base + '/docs/foundations/content-grid/'}
+        Section accepts all <a href={base + '/docs/building-blocks/section/'}
           >SectionDefinition fields</a
         >, with these additions and specific behaviors:
       </p>
@@ -131,7 +137,9 @@
           <tbody>
             <tr>
               <td><code>image</code></td>
-              <td><code>ImageData</code></td>
+              <td
+                ><code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code></td
+              >
               <td>Optional; loaded eagerly</td>
             </tr>
             <tr>
@@ -146,7 +154,12 @@
             </tr>
             <tr>
               <td><code>actions</code></td>
-              <td><code>ContentAction[]</code></td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#content-action'}>ContentAction</a
+                  >[]</code
+                ></td
+              >
               <td>Optional native primary/secondary/text links</td>
             </tr>
             <tr>
@@ -171,7 +184,11 @@
             </tr>
             <tr>
               <td><code>headingLevel</code></td>
-              <td><code>HeadingLevel</code> (1-6)</td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a></code
+                > (1-6)</td
+              >
               <td
                 >Inherits the surrounding level; standalone h2; set headingLevel: 1 for the page
                 title</td
@@ -201,8 +218,9 @@
           >--ps-section-standard</code
         >
         with transparency; corners use <code>--ps-radius</code>. The image fills the hero's
-        background area, respecting ImageData's fit choice. Content can grow beyond the minimum
-        height.
+        background area, respecting
+        <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>'s fit choice. Content can
+        grow beyond the minimum height.
       </p>
       <p>
         Provide appropriate image alt text, or <code>alt: ''</code> for decorative imagery. Actions
@@ -211,8 +229,8 @@
         client initialization.
       </p>
       <p>
-        Related: <a href={base + '/docs/building-blocks/card-and-image/'}>Card and Image</a>,
-        <a href={base + '/docs/foundations/page-shell/'}>ContentPage and PageShell</a>.
+        Related: <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>,
+        <a href={base + '/docs/page-layout/content-page/'}>ContentPage and PageShell</a>.
       </p>
       <p>
         Artwork composition stacks text and media below an 840px container, then uses two columns.

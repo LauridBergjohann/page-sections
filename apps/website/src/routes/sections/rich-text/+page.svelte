@@ -94,14 +94,19 @@
     }}
     ><div class="prose">
       <p>
-        The required section combines SectionDefinition and RichTextContentData without a required
-        type discriminator. The serialized discriminator is richText. Choose exactly one source:
+        The required section combines <a href={base + '/docs/reference/types/#section-definition'}
+          >SectionDefinition</a
+        >
+        and <a href={base + '/docs/reference/types/#rich-text-content-data'}>RichTextContentData</a> without
+        a required type discriminator. The serialized discriminator is richText. Choose exactly one source:
       </p>
       <ul>
         <li>body: string, with optional format (markdown or text; default markdown).</li>
-        <li>blocks: RichTextBlock[].</li>
+        <li>
+          blocks: <a href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a>[].
+        </li>
       </ul>
-      <p>RichTextBlock variants:</p>
+      <p><a href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a> variants:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -114,31 +119,43 @@
           <tbody>
             <tr>
               <td>paragraph</td>
-              <td>text: InlineText; optional variant: default/lead/muted</td>
+              <td
+                >text: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>;
+                optional variant: default/lead/muted</td
+              >
             </tr>
             <tr>
               <td>address</td>
-              <td>name: string; lines: InlineText[]</td>
+              <td
+                >name: string; lines: <a href={base + '/docs/reference/types/#inline-text'}
+                  >InlineText</a
+                >[]</td
+              >
             </tr>
             <tr>
               <td>list</td>
-              <td>items: InlineText[]; optional ordered: boolean</td>
+              <td
+                >items: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>[];
+                optional ordered: boolean</td
+              >
             </tr>
             <tr>
               <td>panel</td>
               <td
-                >blocks: RichTextBlock[]; optional title, tone (standard/muted), actions:
-                ContentAction[]</td
+                >blocks: <a href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a
+                >[]; optional title, tone (standard/muted), actions:
+                <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>[]</td
               >
             </tr>
           </tbody>
         </table>
       </div>
       <p>
-        InlineText is a string or InlineRun array. Runs are text/strong/emphasis/code with text,
-        link with text/href, or break. Inline content is escaped; links pass through safeHref.
-        String values in blocks are literal text, not Markdown. Paragraph whitespace preserves line
-        breaks. Panels can nest and increment their heading level, capped at h6.
+        <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a> is a string or
+        <a href={base + '/docs/reference/types/#inline-run'}>InlineRun</a> array. Runs are text/strong/emphasis/code
+        with text, link with text/href, or break. Inline content is escaped; links pass through safeHref.
+        String values in blocks are literal text, not Markdown. Paragraph whitespace preserves line breaks.
+        Panels can nest and increment their heading level, capped at h6.
       </p>
     </div></Section
   >
@@ -152,9 +169,11 @@
     }}
     ><div class="prose">
       <p>
-        <code>RichTextContent</code> accepts required content: RichTextContentData and renders the
-        same prose without a section wrapper. <code>InlineTextContent</code> accepts required text: InlineText.
-        Neither adds a page heading, registry entry, arbitrary HTML parser or application dependency.
+        <code>RichTextContent</code> accepts required content:
+        <a href={base + '/docs/reference/types/#rich-text-content-data'}>RichTextContentData</a>
+        and renders the same prose without a section wrapper. <code>InlineTextContent</code> accepts
+        required text: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>. Neither
+        adds a page heading, registry entry, arbitrary HTML parser or application dependency.
       </p>
     </div></Section
   >
@@ -179,7 +198,7 @@
       </p>
       <p>
         Related: <a href={base + '/sections/panel/'}>Panels</a>,
-        <a href={base + '/docs/foundations/content-grid/'}>Section and grids</a>,
+        <a href={base + '/docs/building-blocks/grids/'}>Section and grids</a>,
         <a href={base + '/docs/advanced/data-and-custom-sections/'}>Data models</a>.
       </p>
     </div></Section

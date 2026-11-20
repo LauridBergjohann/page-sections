@@ -75,6 +75,13 @@
     }}
     ><div class="prose">
       <p>
+        A theme is a set of shared visual values such as colors, typeface and corner radius.
+        PageShell is an optional wrapper that applies those values and a color mode to all
+        components inside it. It renders a div, so it does not change your document landmarks. The
+        theme prop is a <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> object; all
+        its fields are optional CSS values.
+      </p>
+      <p>
         Page Sections provides CSS defaults without requiring a utility framework. Set shared
         variables on an ancestor, or use PageShell to scope a typed theme across navigation and page
         content.
@@ -97,7 +104,7 @@
         <table>
           <thead>
             <tr>
-              <th>PageTheme property</th>
+              <th><a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> property</th>
               <th>CSS variable</th>
             </tr>
           </thead>
@@ -210,8 +217,9 @@
       <p>
         Geometry is a shared contract: viewport thresholds, grid columns/gaps, catalog sizes and the
         1536px content/menu cap come from layoutTokens. Per-size grid override inputs and
-        PageTheme.contentMax were removed in 0.2. Use narrowMax with page.bodyLayout or
-        section.layout for reading widths. Colors, font family and radius remain theme controls.
+        <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a>.contentMax were removed
+        in 0.2. Use narrowMax with page.bodyLayout or section.layout for reading widths. Colors,
+        font family and radius remain theme controls.
       </p>
       <p>
         Section variant selects default grid typography, content headings or larger feature
@@ -221,7 +229,7 @@
         > for forwarding exceptions.
       </p>
       <p>
-        Related: <a href={base + '/docs/foundations/backgrounds/'}
+        Related: <a href={base + '/docs/design-system/backgrounds/'}
           >Section Backgrounds and Surface Groups</a
         >,
         <a href={base + '/docs/reference/tokens/'}>CSS Variables and Layout Tokens</a>.

@@ -80,11 +80,16 @@
     }}
     ><div class="prose">
       <p>
-        Required section: Omit&lt;PanelSectionData, 'type'&gt;. Shared SectionDefinition fields
-        apply; additional fields are blocks: RichTextBlock[] (required), tone: standard/muted
-        (default muted), actions: ContentAction[] (optional). The data discriminator is panel. The
-        section headline is rendered once inside the panel and labels the section. Nested
-        panels/text follow the inherited heading hierarchy.
+        Required section: Omit&lt;<a href={base + '/docs/reference/types/#panel-section-data'}
+          >PanelSectionData</a
+        >, 'type'&gt;. Shared
+        <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
+        fields apply; additional fields are blocks:
+        <a href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a>[] (required),
+        tone: standard/muted (default muted), actions:
+        <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>[] (optional). The
+        data discriminator is panel. The section headline is rendered once inside the panel and
+        labels the section. Nested panels/text follow the inherited heading hierarchy.
       </p>
       <p>
         <code>tone</code> selects the panel surface independently of <code>background.color</code>,
@@ -122,11 +127,12 @@
     }}
     ><div class="prose">
       <p>
-        Actions accepts optional actions: ContentAction[]. An empty/omitted list renders nothing.
-        Each action has label, href and optional variant: primary/secondary/text (default text).
-        Primary uses accent and onAccent; secondary uses the standard surface. URLs pass through
-        safeHref. Actions are ordinary anchors, available in SSR, and introduce no router or
-        icon-library dependency.
+        Actions accepts optional actions: <a href={base + '/docs/reference/types/#content-action'}
+          >ContentAction</a
+        >[]. An empty/omitted list renders nothing. Each action has label, href and optional
+        variant: primary/secondary/text (default text). Primary uses accent and onAccent; secondary
+        uses the standard surface. URLs pass through safeHref. Actions are ordinary anchors,
+        available in SSR, and introduce no router or icon-library dependency.
       </p>
       <p>
         Related: <a href={base + '/sections/rich-text/'}>Structured text</a>,

@@ -1,4 +1,4 @@
-// Chapter metadata feeds the navigation tree, search and guided reading order.
+// Shared chapter metadata for navigation, search and reading order.
 export const documents = [
   {
     title: 'Overview',
@@ -8,67 +8,200 @@ export const documents = [
     category: ''
   },
   {
+    title: 'Foundations',
+    href: '/docs/foundations/',
+    description: 'Installation, What are sections?, Using sections, Theming.',
+    group: 'Overview',
+    category: ''
+  },
+  {
     title: 'Installation',
     href: '/docs/foundations/installation/',
-    description:
-      'Choose @page-sections/svelte for a Svelte website, or @page-sections/core for framework-independent data and calculations.',
+    description: 'Install the package and styles in a Svelte application.',
     group: 'Foundations',
     category: ''
   },
   {
-    title: 'Your first page',
-    href: '/docs/foundations/first-page/',
-    description:
-      'After installation, add a page with a text introduction and a collection of links:',
-    group: 'Foundations',
-    category: ''
-  },
-  {
-    title: 'Pages and sections',
+    title: 'What are sections?',
     href: '/docs/foundations/pages-and-sections/',
-    description:
-      'Use a small set of composable containers rather than a separate page format for every layout.',
+    description: 'Understand content regions, IDs, labels and visible headings.',
     group: 'Foundations',
     category: ''
   },
   {
-    title: 'Page shell',
-    href: '/docs/foundations/page-shell/',
-    description:
-      'ContentPage is the main content container. PageShell is an optional ancestor that shares a theme across the page and independent navigation.',
+    title: 'Using sections',
+    href: '/docs/foundations/first-page/',
+    description: 'Build a small content page step by step.',
     group: 'Foundations',
     category: ''
   },
   {
-    title: 'Sections and grids',
-    href: '/docs/foundations/content-grid/',
-    description:
-      'Section, ContentGrid and ContentBlock: arrange content in columns and reading layouts.',
-    group: 'Foundations',
-    category: ''
-  },
-  {
-    title: 'Responsive layout',
-    href: '/docs/foundations/responsive-layout/',
-    description:
-      'Viewport breakpoints, container widths, card sizes and responsive layout calculations.',
-    group: 'Foundations',
-    category: ''
-  },
-  {
-    title: 'Themes and styling',
+    title: 'Theming',
     href: '/docs/foundations/themes/',
-    description:
-      'Page Sections provides CSS defaults without requiring a utility framework. Set shared variables on an ancestor, or use PageShell to scope a typed theme across navigation and page content.',
+    description: 'Set shared colors, typography and color mode.',
     group: 'Foundations',
+    category: ''
+  },
+  {
+    title: 'Page layout',
+    href: '/docs/page-layout/',
+    description:
+      'Header and satellites, Breadcrumbs, ContentPage and sidebars, Heading levels and anchor links, Footer.',
+    group: 'Overview',
+    category: ''
+  },
+  {
+    title: 'Header and satellites',
+    href: '/docs/page-layout/header/',
+    description: 'Site identity, primary navigation and secondary controls.',
+    group: 'Page layout',
+    category: ''
+  },
+  {
+    title: 'Breadcrumbs',
+    href: '/docs/page-layout/breadcrumbs/',
+    description: 'Show the current page in its site hierarchy.',
+    group: 'Page layout',
+    category: ''
+  },
+  {
+    title: 'ContentPage and sidebars',
+    href: '/docs/page-layout/content-page/',
+    description: 'Main content, site navigation and an on-page index.',
+    group: 'Page layout',
+    category: ''
+  },
+  {
+    title: 'Heading levels and anchor links',
+    href: '/docs/page-layout/headings-and-anchors/',
+    description: 'Semantic headings, visual sizes and stable section destinations.',
+    group: 'Page layout',
+    category: ''
+  },
+  {
+    title: 'Footer',
+    href: '/docs/page-layout/footer/',
+    description: 'Shared links, brand information and a bottom bar.',
+    group: 'Page layout',
+    category: ''
+  },
+  {
+    title: 'Components',
+    href: '/docs/building-blocks/',
+    description: 'Section, Card, Image, ContentGrid and ContentBlock.',
+    group: 'Overview',
+    category: ''
+  },
+  {
+    title: 'Section',
+    href: '/docs/building-blocks/section/',
+    description: 'The base section container and its shared properties.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'Card',
+    href: '/docs/building-blocks/card/',
+    description: 'Present one item in a catalog or editorial layout.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'Image',
+    href: '/docs/building-blocks/image/',
+    description: 'Responsive, accessible and theme-aware image rendering.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'ContentGrid and ContentBlock',
+    href: '/docs/building-blocks/grids/',
+    description: 'Arrange content with responsive column spans.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'Design system',
+    href: '/docs/design-system/',
+    description: 'Layout sizes and responsiveness, Backgrounds and groups.',
+    group: 'Overview',
+    category: ''
+  },
+  {
+    title: 'Layout sizes and responsiveness',
+    href: '/docs/design-system/responsive-layout/',
+    description: 'Viewport breakpoints, container widths and card sizing.',
+    group: 'Design system',
     category: ''
   },
   {
     title: 'Backgrounds and groups',
-    href: '/docs/foundations/backgrounds/',
-    description:
-      "Backgrounds separate a section's content layout from its visual surface. Use a standard background for a contained panel and a full background for a page-wide transition.",
-    group: 'Foundations',
+    href: '/docs/design-system/backgrounds/',
+    description: 'Surface colors, widths, transitions and connected groups.',
+    group: 'Design system',
+    category: ''
+  },
+  {
+    title: 'Advanced',
+    href: '/docs/advanced/',
+    description: 'Create your own section, Data and custom renderers, SSR and enhancement.',
+    group: 'Overview',
+    category: ''
+  },
+  {
+    title: 'Create your own section',
+    href: '/docs/advanced/create-your-own-section/',
+    description: 'Build a reusable component around the base Section.',
+    group: 'Advanced',
+    category: ''
+  },
+  {
+    title: 'Data and custom renderers',
+    href: '/docs/advanced/data-and-custom-sections/',
+    description: 'Render content data and extend the section type map.',
+    group: 'Advanced',
+    category: ''
+  },
+  {
+    title: 'SSR and enhancement',
+    href: '/docs/advanced/ssr/',
+    description: 'Deliver useful HTML before browser enhancement.',
+    group: 'Advanced',
+    category: ''
+  },
+  {
+    title: 'Reference',
+    href: '/docs/reference/',
+    description: 'Data types, Svelte API, Core API, CSS variables and tokens.',
+    group: 'Overview',
+    category: ''
+  },
+  {
+    title: 'Data types',
+    href: '/docs/reference/types/',
+    description: 'Object fields, required values and linked nested types.',
+    group: 'Reference',
+    category: ''
+  },
+  {
+    title: 'Svelte API',
+    href: '/docs/reference/svelte-api/',
+    description: 'Public components and their usage guides.',
+    group: 'Reference',
+    category: ''
+  },
+  {
+    title: 'Core API',
+    href: '/docs/reference/core-api/',
+    description: 'Functions, registries and framework-independent exports.',
+    group: 'Reference',
+    category: ''
+  },
+  {
+    title: 'CSS variables and tokens',
+    href: '/docs/reference/tokens/',
+    description: 'Exact values for themes and responsive layout.',
+    group: 'Reference',
     category: ''
   },
   {
@@ -141,107 +274,9 @@ export const documents = [
     category: 'Collections'
   },
   {
-    title: 'Card and Image',
-    href: '/docs/building-blocks/card-and-image/',
-    description:
-      'These low-level building blocks are useful when composing a custom section. Card supplies the same article used by the two collection components; Image supplies shared responsive and theme-aware image rendering.',
-    group: 'Building blocks',
-    category: ''
-  },
-  {
-    title: 'Header and satellites',
-    href: '/docs/building-blocks/navigation/',
-    description: 'MainMenu, Header and satellites: menus, tools and responsive settings.',
-    group: 'Building blocks',
-    category: ''
-  },
-  {
-    title: 'Footer',
-    href: '/docs/building-blocks/footer/',
-    description:
-      'A site-level footer with brand, social links, grouped menus and a required bottom bar.',
-    group: 'Building blocks',
-    category: ''
-  },
-  {
-    title: 'Breadcrumbs and anchors',
-    href: '/docs/building-blocks/breadcrumbs/',
-    description:
-      'Keep breadcrumbs in sync with the site tree and follow the active section with an automatic content menu.',
-    group: 'Building blocks',
-    category: ''
-  },
-  {
-    title: 'Data and custom sections',
-    href: '/docs/advanced/data-and-custom-sections/',
-    description:
-      'Keep content as JSON-compatible data and render it with components supplied by your application. This makes the same model usable for local files, a CMS or a future editing interface.',
-    group: 'Advanced',
-    category: ''
-  },
-  {
-    title: 'SSR and enhancement',
-    href: '/docs/advanced/ssr/',
-    description:
-      'Page Sections components can render meaningful HTML on the server. The host application must enable SSR or prerendering; importing the library into a client-only application does not provide either automatically.',
-    group: 'Advanced',
-    category: ''
-  },
-  {
-    title: 'CSS variables and tokens',
-    href: '/docs/reference/tokens/',
-    description: 'Customize theme variables and understand the shared layout tokens.',
-    group: 'Reference',
-    category: ''
-  },
-  {
-    title: 'Svelte API',
-    href: '/docs/reference/svelte-api/',
-    description:
-      'Import components from @page-sections/svelte. The public components are listed below. Component props are documented on the linked pages; this index shows where to start, without duplicating the full reference.',
-    group: 'Reference',
-    category: ''
-  },
-  {
-    title: 'Core API',
-    href: '/docs/reference/core-api/',
-    description:
-      'All runtime functions, constants, classes and types below are exported from @page-sections/core. The package has no runtime dependencies, DOM requirement or rendering implementation. Svelte re-exports its types only.',
-    group: 'Reference',
-    category: ''
-  },
-  {
-    title: 'Foundations',
-    href: '/docs/foundations/',
-    description: 'Understand page composition, responsive layouts, themes and backgrounds.',
-    group: 'Overview',
-    category: ''
-  },
-  {
     title: 'Sections',
     href: '/sections/',
     description: 'Choose the right section for text, media, code and collections.',
-    group: 'Overview',
-    category: ''
-  },
-  {
-    title: 'Building blocks',
-    href: '/docs/building-blocks/',
-    description: 'Combine navigation and smaller components into your own layouts.',
-    group: 'Overview',
-    category: ''
-  },
-  {
-    title: 'Advanced',
-    href: '/docs/advanced/',
-    description: 'Connect data sources, add custom sections and render on the server.',
-    group: 'Overview',
-    category: ''
-  },
-  {
-    title: 'Reference',
-    href: '/docs/reference/',
-    description: 'Look up components, core functions and design tokens.',
     group: 'Overview',
     category: ''
   }

@@ -1,20 +1,10 @@
-<script module lang="ts">
-  // Executable examples are owned by this page and checked by check:docs.
-  export const examples: { language: string; code: string; filename?: string; group?: string }[] =
-    [];
-</script>
-
 <script lang="ts">
-  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-
   import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-
-  import type { PageData } from './$types';
-  let { data }: { data: PageData } = $props();
+  import { HeadingSection, Section } from '@page-sections/svelte';
+  import WebsitePage from '$lib/WebsitePage.svelte';
 </script>
 
-<ContentPage
+<WebsitePage
   page={{ title: 'Documentation', pageTitle: 'Documentation · Page Sections' }}
   showContentMenu
 >
@@ -22,117 +12,88 @@
     section={{
       id: 'page-heading',
       title: 'Documentation',
+      introduction:
+        'Build your understanding one chapter at a time, from your first content section to a complete website.',
       headingLevel: 1,
       headingSize: 'l',
-      background: { color: 'standard', size: 'standard' }
+      background: { color: 'standard' }
     }}
   />
   <Section
     section={{
-      background: { color: 'standard', size: 'standard' },
-      id: 'overview',
-      title: 'Overview',
-      spacing: 'tight'
+      id: 'start-here',
+      title: 'Start with the basics',
+      headline: 'Start with the basics',
+      background: { color: 'standard' }
     }}
     ><div class="prose">
-      <img src={base + '/page-sections-logo.svg'} alt="Page Sections logo" width="64" height="64" />
       <p>
-        Page Sections is a simple, extensible toolkit for building content-driven websites from
-        reusable sections and layouts.
+        Page Sections is a Svelte toolkit for composing content websites. A section is a meaningful
+        part of a page, such as an introduction, a text passage or an image with a caption. You
+        combine these parts in ordinary Svelte markup.
       </p>
       <p>
-        Use it to compose a portfolio, publication, product page or company website. Content stays
-        ordinary HTML, layouts adapt to their containers, and reusable models keep CMS data separate
-        from rendering components.
+        You only need basic HTML and Svelte knowledge to begin. Follow Next at the bottom of each
+        chapter; each part introduces the names used by the next one. API details are linked
+        wherever you need them.
       </p>
+      <p><a href={base + '/docs/foundations/installation/'}>Start with installation</a></p>
     </div></Section
   >
   <Section
     section={{
-      background: { color: 'standard', size: 'standard' },
-      id: 'start-here',
-      title: 'Start here',
-      headline: 'Start here',
-      variant: 'content'
+      id: 'learning-path',
+      title: 'Your learning path',
+      headline: 'Your learning path',
+      background: { color: 'standard' }
     }}
     ><div class="prose">
       <ol>
-        <li><a href={base + '/docs/foundations/installation/'}>Install the packages</a>.</li>
-        <li><a href={base + '/docs/foundations/first-page/'}>Build your first page</a>.</li>
         <li>
-          Learn how <a href={base + '/docs/foundations/pages-and-sections/'}
-            >pages, sections and blocks fit together</a
-          >.
+          <a href={base + '/docs/foundations/'}>Foundations</a> — Install the library, understand what
+          a section is, compose your first content and choose a theme.
         </li>
         <li>
-          Explore the <a
-            href="https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo"
-            >demo source</a
-          >.
+          <a href={base + '/docs/page-layout/'}>Page layout</a> — Turn that content into a semantic HTML
+          page with a header, main content, sidebars and footer.
+        </li>
+        <li>
+          <a href={base + '/docs/building-blocks/'}>Components</a> — Explore the base Section, individual
+          cards, images and column layouts.
+        </li>
+        <li>
+          <a href={base + '/docs/design-system/'}>Design system</a> — Understand widths, viewport breakpoints,
+          container responsiveness and connected backgrounds.
+        </li>
+        <li>
+          <a href={base + '/docs/advanced/'}>Advanced</a> — Build your own section, render content data
+          and prepare server-rendered HTML.
+        </li>
+        <li>
+          <a href={base + '/docs/reference/'}>Reference</a> — Look up object fields, component exports,
+          core utilities and exact design tokens.
         </li>
       </ol>
     </div></Section
   >
   <Section
     section={{
-      background: { color: 'standard', size: 'standard' },
-      id: 'choose-an-entry-point',
-      title: 'Choose an entry point',
-      headline: 'Choose an entry point',
-      variant: 'content'
+      id: 'find-an-answer',
+      title: 'Find a specific answer',
+      headline: 'Find a specific answer',
+      background: { color: 'standard' }
     }}
     ><div class="prose">
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
-        <table>
-          <thead>
-            <tr>
-              <th>Goal</th>
-              <th>Guide</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Compose a page</td>
-              <td><a href={base + '/docs/foundations/page-shell/'}>ContentPage and PageShell</a></td
-              >
-            </tr>
-            <tr>
-              <td>Arrange different-width content</td>
-              <td><a href={base + '/docs/foundations/content-grid/'}>Section and ContentGrid</a></td
-              >
-            </tr>
-            <tr>
-              <td>Browse reusable components</td>
-              <td><a href={base + '/docs/reference/svelte-api/'}>Svelte API</a></td>
-            </tr>
-            <tr>
-              <td>Integrate a design system</td>
-              <td><a href={base + '/docs/foundations/themes/'}>Themes and Styling</a></td>
-            </tr>
-            <tr>
-              <td>Render CMS data or add a custom section</td>
-              <td
-                ><a href={base + '/docs/advanced/data-and-custom-sections/'}
-                  >Data Models and Custom Sections</a
-                ></td
-              >
-            </tr>
-            <tr>
-              <td>Use models without Svelte</td>
-              <td><a href={base + '/docs/reference/core-api/'}>Core API</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <p>
-        This website documents the public APIs of <code>@page-sections/core</code> and
-        <code>@page-sections/svelte</code>. The footer shows the package version built with this
-        website. Development, testing and publishing instructions live in the repository's
-        <a href="https://github.com/LauridBergjohann/page-sections/tree/main/docs/development"
-          >development guide</a
-        >.
+        Already know the basics? The <a href={base + '/sections/'}>section gallery</a> shows
+        ready-made text, media and collection layouts. The
+        <a href={base + '/docs/reference/types/'}>data type reference</a> explains object properties such
+        as a link action or an image, including their nested fields.
+      </p>
+      <p>
+        The documentation follows the package version shown in the footer. Examples use application
+        routes and media files that you provide.
       </p>
     </div></Section
   >
-</ContentPage>
+</WebsitePage>

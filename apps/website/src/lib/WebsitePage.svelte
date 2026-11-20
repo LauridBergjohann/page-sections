@@ -4,6 +4,8 @@
   import { ContentPage, SidebarNavigation } from '@page-sections/svelte';
   import { resolveNavigation, type MenuItem } from '@page-sections/core';
   import { navigationTree, readingNeighbors } from './navigation';
+  import { documents } from './catalog';
+  import { base } from '$app/paths';
   import NavigationIcon from './NavigationIcon.svelte';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   let {
@@ -54,9 +56,14 @@
         <ul>
           {#each childPages as item}<li>
               <a href={item.href}>
-                {#if item.icon}<NavigationIcon name={item.icon} />{/if}{item.label}<span
-                  aria-hidden="true">→</span
-                >
+                {#if item.icon}<NavigationIcon name={item.icon} />{/if}
+                <span class="chapter-copy">
+                  <strong>{item.label}</strong>
+                  <small
+                    >{documents.find((document) => base + document.href === item.href)
+                      ?.description}</small
+                  >
+                </span>
               </a>
             </li>{/each}
         </ul>
@@ -101,8 +108,12 @@
     border-radius: 0.75rem;
     text-decoration: none;
   }
-  .child-pages a span {
-    margin-inline-start: auto;
+  .chapter-copy {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .chapter-copy small {
+    line-height: 1.5;
   }
   .reading-path {
     display: flex;

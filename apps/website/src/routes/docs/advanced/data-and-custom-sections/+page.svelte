@@ -128,15 +128,15 @@ declare module '@page-sections/core' {
 
 <ContentPage
   page={{
-    title: 'Data and custom sections',
-    pageTitle: 'Data and custom sections · Page Sections'
+    title: 'Data and custom renderers',
+    pageTitle: 'Data and custom renderers · Page Sections'
   }}
   showContentMenu
 >
   <HeadingSection
     section={{
       id: 'page-heading',
-      title: 'Data and custom sections',
+      title: 'Data and custom renderers',
       headingLevel: 1,
       headingSize: 'l',
       background: { color: 'standard', size: 'standard' }
@@ -168,14 +168,21 @@ declare module '@page-sections/core' {
     }}
     ><div class="prose">
       <p>
-        <code>ContentPageData</code> has required title and optional pageTitle, breadcrumbs,
-        bodyLayout (wide/narrow) and bodySpacing. <code>PageData</code> extends it with required
-        <code>sections: SectionData[]</code>. ContentPage itself does not read page.sections; render
-        Sections explicitly.
+        <code><a href={base + '/docs/reference/types/#content-page-data'}>ContentPageData</a></code>
+        has required title and optional pageTitle, breadcrumbs, bodyLayout (wide/narrow) and bodySpacing.
+        <code><a href={base + '/docs/reference/types/#page-data'}>PageData</a></code>
+        extends it with required
+        <code
+          >sections: <a href={base + '/docs/reference/types/#section-data'}>SectionData</a>[]</code
+        >. ContentPage itself does not read page.sections; render Sections explicitly.
       </p>
       <p>
-        <code>SectionData = SectionTypeMap[keyof SectionTypeMap]</code>. Every built-in entry
-        extends the <a href={base + '/docs/foundations/content-grid/'}>shared SectionDefinition</a>.
+        <code
+          ><a href={base + '/docs/reference/types/#section-data'}>SectionData</a> =
+          <a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a>[keyof
+          <a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a>]</code
+        >. Every built-in entry extends the
+        <a href={base + '/docs/building-blocks/grids/'}>shared SectionDefinition</a>.
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -183,54 +190,123 @@ declare module '@page-sections/core' {
           <thead>
             <tr>
               <th>Interface / discriminator</th>
-              <th>Additional fields beyond SectionDefinition</th>
+              <th
+                >Additional fields beyond <a
+                  href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a
+                ></th
+              >
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><code>HeroSectionData</code> / <code>hero</code></td>
               <td
-                >Optional image: ImageData, size: CardSize, textBackground: boolean, actions:
-                ContentAction[], composition: overlay/artwork, imageSide: left/right</td
+                ><code
+                  ><a href={base + '/docs/reference/types/#hero-section-data'}>HeroSectionData</a
+                  ></code
+                >
+                / <code>hero</code></td
+              >
+              <td
+                >Optional image: <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>,
+                size: <a href={base + '/docs/reference/types/#card-size'}>CardSize</a>,
+                textBackground: boolean, actions:
+                <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>[],
+                composition: overlay/artwork, imageSide: left/right</td
               >
             </tr>
             <tr>
-              <td><code>RichTextSectionData</code> / <code>richText</code></td>
-              <td>Either body with optional format (markdown/text), or blocks: RichTextBlock[]</td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#rich-text-section-data'}
+                    >RichTextSectionData</a
+                  ></code
+                >
+                / <code>richText</code></td
+              >
+              <td
+                >Either body with optional format (markdown/text), or blocks: <a
+                  href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a
+                >[]</td
+              >
             </tr>
             <tr>
-              <td><code>PanelSectionData</code> / <code>panel</code></td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#panel-section-data'}>PanelSectionData</a
+                  ></code
+                >
+                / <code>panel</code></td
+              >
               <td>Required blocks; optional tone (standard/muted), actions</td>
             </tr>
             <tr>
-              <td><code>ImageSectionData</code> / <code>image</code></td>
-              <td>Required image: ImageData; optional description: string, imageSide: left/right</td
-              >
-            </tr>
-            <tr>
-              <td><code>VideoSectionData</code> / <code>video</code></td>
-              <td>Required video: VideoData; optional description: string, videoSide: left/right</td
-              >
-            </tr>
-            <tr>
-              <td><code>CardGridSectionData</code> / <code>cardGrid</code></td>
               <td
-                >Required list: CardItem[]; optional cardSize, cardVariant, mediaAspect, mediaFit,
-                itemSpan, textAlign</td
+                ><code
+                  ><a href={base + '/docs/reference/types/#image-section-data'}>ImageSectionData</a
+                  ></code
+                >
+                / <code>image</code></td
+              >
+              <td
+                >Required image: <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>;
+                optional description: string, imageSide: left/right</td
               >
             </tr>
             <tr>
-              <td><code>CarouselSectionData</code> / <code>carousel</code></td>
               <td
-                >Required list: CardItem[]; optional cardSize, cardVariant, mediaAspect, mediaFit,
-                textAlign, controls, initialItemKey</td
+                ><code
+                  ><a href={base + '/docs/reference/types/#video-section-data'}>VideoSectionData</a
+                  ></code
+                >
+                / <code>video</code></td
+              >
+              <td
+                >Required video: <a href={base + '/docs/reference/types/#video-data'}>VideoData</a>;
+                optional description: string, videoSide: left/right</td
               >
             </tr>
             <tr>
-              <td><code>GridSectionData</code> / <code>grid</code></td>
               <td
-                >Required blocks: &#123; id: string; span?: ContentSpan; sections: SectionData[]
-                &#125;[]</td
+                ><code
+                  ><a href={base + '/docs/reference/types/#card-grid-section-data'}
+                    >CardGridSectionData</a
+                  ></code
+                >
+                / <code>cardGrid</code></td
+              >
+              <td
+                >Required list: <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>[];
+                optional cardSize, cardVariant, mediaAspect, mediaFit, itemSpan, textAlign</td
+              >
+            </tr>
+            <tr>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#carousel-section-data'}
+                    >CarouselSectionData</a
+                  ></code
+                >
+                / <code>carousel</code></td
+              >
+              <td
+                >Required list: <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>[];
+                optional cardSize, cardVariant, mediaAspect, mediaFit, textAlign, controls,
+                initialItemKey</td
+              >
+            </tr>
+            <tr>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#grid-section-data'}>GridSectionData</a
+                  ></code
+                >
+                / <code>grid</code></td
+              >
+              <td
+                >Required blocks: &#123; id: string; span?: <a
+                  href={base + '/docs/reference/types/#content-span'}>ContentSpan</a
+                >; sections:
+                <a href={base + '/docs/reference/types/#section-data'}>SectionData</a>[] &#125;[]</td
               >
             </tr>
           </tbody>
@@ -272,7 +348,11 @@ declare module '@page-sections/core' {
           <tbody>
             <tr>
               <td><code>sections</code></td>
-              <td><code>SectionData[]</code></td>
+              <td
+                ><code
+                  ><a href={base + '/docs/reference/types/#section-data'}>SectionData</a>[]</code
+                ></td
+              >
               <td>Required</td>
             </tr>
             <tr>
@@ -285,7 +365,11 @@ declare module '@page-sections/core' {
       </div>
       <p>
         The <code>code</code> discriminator renders CodeSection. Optional
-        <code>codeHighlights: Record&lt;string, HighlightedCode&gt;</code>
+        <code
+          >codeHighlights: Record&lt;string, <a
+            href={base + '/docs/reference/types/#highlighted-code'}>HighlightedCode</a
+          >&gt;</code
+        >
         supplies derived syntax tokens keyed by section ID and is forwarded into nested grids. Sections
         keys entries by id. A matching custom renderer takes precedence over a built-in and receives the
         complete <code>section</code> prop. Unknown types throw an error during rendering. Recursive grid
@@ -328,10 +412,17 @@ declare module '@page-sections/core' {
     }}
     ><div class="prose">
       <p>
-        CardItem and ImageData are fully documented in <a
-          href={base + '/docs/building-blocks/card-and-image/'}>Card and Image</a
-        >; VideoData in <a href={base + '/sections/video/'}>VideoSection</a>. Header uses MenuItem,
-        ButtonGroupItem, Breadcrumb and SectionNavigationItem. PageTheme describes CSS values and is
+        <a href={base + '/docs/reference/types/#card-item'}>CardItem</a> and
+        <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>
+        are fully documented in <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>;
+        <a href={base + '/docs/reference/types/#video-data'}>VideoData</a>
+        in <a href={base + '/sections/video/'}>VideoSection</a>. Header uses
+        <a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a>,
+        <a href={base + '/docs/reference/types/#button-group-item'}>ButtonGroupItem</a>,
+        <a href={base + '/docs/reference/types/#breadcrumb'}>Breadcrumb</a>
+        and
+        <a href={base + '/docs/reference/types/#section-navigation-item'}>SectionNavigationItem</a>.
+        <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> describes CSS values and is
         not a place to store event handlers or framework components.
       </p>
       <p>

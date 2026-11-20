@@ -77,7 +77,7 @@ export const nextStepCards = [
     id: 'page-layout',
     title: 'Configure your page layout',
     description: 'Bring navigation, content and sidebars together.',
-    href: '/docs/foundations/page-shell/'
+    href: '/docs/page-layout/content-page/'
   },
   {
     id: 'adapt-theme',
