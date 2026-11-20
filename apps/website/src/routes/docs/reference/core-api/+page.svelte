@@ -143,7 +143,7 @@ console.log(background.cssBackground);`
           >&#123; layout, content: &#123; x, width &#125;, menu: &#123; x, y, width, height &#125;
           &#125;</code
         >. It accounts for a reserved scrollbar and safe-area insets while classifying the original
-        viewport width. The host owns those measurements; native Navigation assumes a full-width
+        viewport width. The host owns those measurements; native Header assumes a full-width
         containing block.
       </p>
       <p>
@@ -461,13 +461,11 @@ console.log(background.cssBackground);`
             </tr>
             <tr>
               <td><code>VideoData</code></td>
-              <td><a href={base + '/docs/sections/video/'}>VideoSection</a></td>
+              <td><a href={base + '/sections/video/'}>VideoSection</a></td>
             </tr>
             <tr>
               <td><code>MenuItem</code>, <code>ButtonGroupItem</code></td>
-              <td
-                ><a href={base + '/docs/building-blocks/navigation/'}>Navigation and Satellites</a
-                ></td
+              <td><a href={base + '/docs/building-blocks/navigation/'}>Header and Satellites</a></td
               >
             </tr>
             <tr>
@@ -532,8 +530,8 @@ console.log(background.cssBackground);`
         </li>
       </ul>
       <p>
-        See <a href={base + '/docs/sections/rich-text/'}>structured text</a>,
-        <a href={base + '/docs/sections/panels/'}>panels</a>
+        See <a href={base + '/sections/rich-text/'}>structured text</a>,
+        <a href={base + '/sections/panel/'}>panels</a>
         and <a href={base + '/docs/foundations/responsive-layout/'}>shared layout reference</a>.
       </p>
       <p>
@@ -557,7 +555,7 @@ console.log(background.cssBackground);`
         adds section metadata and the <code>code</code> discriminator. <code>CodeToken</code> and
         <code>HighlightedCode</code>
         describe optional derived syntax tokens. See the
-        <a href={base + '/docs/sections/code/'}>complete code reference</a> for fields, defaults and examples.
+        <a href={base + '/sections/code/'}>complete code reference</a> for fields, defaults and examples.
       </p>
     </div></Section
   >
@@ -565,8 +563,8 @@ console.log(background.cssBackground);`
     section={{
       background: { color: 'standard', size: 'standard' },
       id: 'site-navigation',
-      title: 'Navigation and page frames',
-      headline: 'Navigation and page frames'
+      title: 'Header and page frames',
+      headline: 'Header and page frames'
     }}
     ><div class="prose">
       <p>
@@ -602,6 +600,21 @@ console.log(background.cssBackground);`
       SectionDefinition.headingSize selects the visual size. <code>HeadingSectionData</code> extends SectionDefinition
       with type: 'heading'. It is part of SectionTypeMap and renders through Sections. Place it or a HeroSectionData
       record directly in PageData.sections and set headingLevel: 1 for the page title.
+    </p>
+  </Section>
+  <Section
+    section={{
+      id: 'footer-models',
+      title: 'Footer models',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
+    <p>
+      <code>FooterLink</code> requires label and href. <code>FooterMenuGroup</code> requires label
+      and a readonly links array, with an optional href for its heading. Footer accepts at most four
+      groups. <code>PageTheme</code> includes footerBackground, footerInk, footerRadius,
+      footerShadow, footerBarBackground and footerBarInk. See
+      <a href={base + '/docs/building-blocks/footer/'}>Footer</a>.
     </p>
   </Section>
 </ContentPage>

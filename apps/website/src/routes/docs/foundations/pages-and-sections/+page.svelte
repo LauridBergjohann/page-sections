@@ -5,24 +5,26 @@
       code: `<script>
   import {
     PageShell,
-    Navigation,
+    Header,
     MainMenu,
     ContentPage,
+    Footer,
     Section
   } from '@page-sections/svelte';
 <\/script>
 
 <PageShell>
-  <Navigation>
+  <Header>
     {#snippet menu()}<MainMenu
         items={[{ id: 'home', label: 'Home', href: '/' }]}
       />{/snippet}
-  </Navigation>
+  </Header>
   <ContentPage page={{ title: 'A simple page' }}>
     <Section section={{ id: 'intro', title: 'Introduction', headline: 'Welcome' }}>
       <p>Your content stays normal Svelte markup.</p>
     </Section>
   </ContentPage>
+  <Footer footnote="© My Website" links={[{ label: 'Contact', href: '/contact/' }]} />
 </PageShell>`
     }
   ];
@@ -80,12 +82,16 @@
               >
             </tr>
             <tr>
-              <td>Navigation</td>
-              <td>Site-level menu and optional satellites, independently of the page.</td>
+              <td>Header</td>
+              <td>Header landmark with brand, navigation, tools and optional satellites.</td>
             </tr>
             <tr>
               <td>ContentPage</td>
               <td>Main landmark, title, introduction, breadcrumbs and section registry.</td>
+            </tr>
+            <tr>
+              <td>Footer</td>
+              <td>Site footer landmark, outside ContentPage, with footnote and important links.</td>
             </tr>
             <tr>
               <td>Section</td>
@@ -111,7 +117,7 @@
       </div>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
-        ContentPage does not own the main menu or interpret a <code>page.sections</code> array. Put Navigation
+        ContentPage does not own the main menu or interpret a <code>page.sections</code> array. Put Header
         alongside it and render children or a Sections component explicitly. Avoid nesting ContentPages:
         each renders a main landmark and page heading.
       </p>

@@ -8,7 +8,7 @@
   import BookOpen from '@lucide/svelte/icons/book-open';
   import Code from '@lucide/svelte/icons/code';
   import Menu from '@lucide/svelte/icons/menu';
-  import { PageShell, Navigation } from '@page-sections/svelte';
+  import { PageShell, Header } from '@page-sections/svelte';
   import '../app.css';
 
   let { children }: { children: Snippet } = $props();
@@ -41,7 +41,7 @@
 </script>
 
 <PageShell {mode}>
-  <Navigation items={menuItems} closeKey={page.url.pathname} scrollBehavior="delayed">
+  <Header items={menuItems} closeKey={page.url.pathname} scrollBehavior="delayed">
     {#snippet brand()}
       <a class="skip-link" href="#main-content">Skip to content</a>
       <a class="demo-brand" href="/" aria-label="Page Sections home">
@@ -85,7 +85,7 @@
         >
       </div>
     {/snippet}
-  </Navigation>
+  </Header>
   <div id="main-content" tabindex="-1">{@render children()}</div>
   <footer class="demo-footer">
     <span class="footer-brand"

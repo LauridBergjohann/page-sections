@@ -9,8 +9,24 @@
   import Palette from '@lucide/svelte/icons/palette';
   import Code from '@lucide/svelte/icons/code';
   import Download from '@lucide/svelte/icons/download';
+  import Grid from '@lucide/svelte/icons/layout-grid';
+  import Carousel from '@lucide/svelte/icons/gallery-horizontal-end';
+  import Heading from '@lucide/svelte/icons/heading';
+  import Hero from '@lucide/svelte/icons/panels-top-left';
+  import Image from '@lucide/svelte/icons/image';
+  import Panel from '@lucide/svelte/icons/panel-top';
+  import Text from '@lucide/svelte/icons/text';
+  import Video from '@lucide/svelte/icons/video';
   let { name }: { name?: string } = $props();
   const icons = {
+    grid: Grid,
+    carousel: Carousel,
+    heading: Heading,
+    hero: Hero,
+    image: Image,
+    panel: Panel,
+    text: Text,
+    video: Video,
     layers: Layers,
     panels: Panels,
     blocks: Blocks,

@@ -330,9 +330,9 @@ declare module '@page-sections/core' {
       <p>
         CardItem and ImageData are fully documented in <a
           href={base + '/docs/building-blocks/card-and-image/'}>Card and Image</a
-        >; VideoData in <a href={base + '/docs/sections/video/'}>VideoSection</a>. Navigation uses
-        MenuItem, ButtonGroupItem, Breadcrumb and SectionNavigationItem. PageTheme describes CSS
-        values and is not a place to store event handlers or framework components.
+        >; VideoData in <a href={base + '/sections/video/'}>VideoSection</a>. Header uses MenuItem,
+        ButtonGroupItem, Breadcrumb and SectionNavigationItem. PageTheme describes CSS values and is
+        not a place to store event handlers or framework components.
       </p>
       <p>
         Related: <a href={base + '/docs/reference/core-api/'}>Core API</a>,

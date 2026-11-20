@@ -2,12 +2,15 @@
   import { onMount, type Snippet } from 'svelte';
   import { page } from '$app/state';
   import { base } from '$app/paths';
-  import { Navigation, PageShell } from '@page-sections/svelte';
+  import { Footer, Header, PageShell } from '@page-sections/svelte';
   import Menu from '@lucide/svelte/icons/menu';
   import Settings from '@lucide/svelte/icons/settings';
   import Sun from '@lucide/svelte/icons/sun';
   import Moon from '@lucide/svelte/icons/moon';
+  import Globe from '@lucide/svelte/icons/globe';
   import Github from '$lib/GitHubMark.svelte';
+  import LinkedIn from '$lib/LinkedInMark.svelte';
+  import BrandMark from '$lib/BrandMark.svelte';
   import SiteSearch from '$lib/SiteSearch.svelte';
   import NavigationIcon from '$lib/NavigationIcon.svelte';
   import { navigationTree } from '$lib/navigation';
@@ -38,63 +41,131 @@
   const items = $derived(resolveNavigation(navigationTree, { pathname: page.url.pathname }).items);
 </script>
 
+{#snippet githubIcon()}<Github />{/snippet}
+{#snippet linkedinIcon()}<LinkedIn />{/snippet}
+{#snippet npmIcon()}<BrandMark kind="npm" />{/snippet}
+{#snippet vercelIcon()}<BrandMark kind="vercel" />{/snippet}
+{#snippet svelteIcon()}<BrandMark kind="svelte" />{/snippet}
+{#snippet globeIcon()}<Globe aria-hidden="true" />{/snippet}
+
 <PageShell {mode}>
-  <header class="website-header">
-    <Navigation {items} closeKey={page.url.pathname}>
-      {#snippet itemIcon(item)}<NavigationIcon name={item.icon} />{/snippet}
-      {#snippet brand()}
-        <a class="skip-link" href="#main-content">Skip to content</a>
-        <a class="site-brand" href={base + '/'} aria-label="Page Sections home">
-          <img src={base + '/page-sections-logo.svg'} width="32" height="32" alt="" />
-          <span>Page Sections</span>
-        </a>
-      {/snippet}
-      {#snippet menuIcon()}<Menu size={20} aria-hidden="true" />{/snippet}
-      {#snippet settingsIcon()}<Settings size={20} aria-hidden="true" />{/snippet}
-      {#snippet tools()}
-        <div class="header-tools">
-          <SiteSearch />
-          <a
-            class="github-link"
-            href="https://github.com/LauridBergjohann/page-sections"
-            aria-label="Page Sections on GitHub"
-            title="Source on GitHub"><Github /></a
-          >
-        </div>
-      {/snippet}
-      {#snippet right()}
-        <div class="appearance" role="group" aria-label="Appearance">
-          <button
-            type="button"
-            aria-label="Light"
-            title="Light"
-            aria-pressed={mode === 'light'}
-            disabled={!ready}
-            onclick={() => setMode('light')}><Sun size={18} aria-hidden="true" /></button
-          >
-          <button
-            type="button"
-            aria-label="Dark"
-            title="Dark"
-            aria-pressed={mode === 'dark'}
-            disabled={!ready}
-            onclick={() => setMode('dark')}><Moon size={18} aria-hidden="true" /></button
-          >
-        </div>
-      {/snippet}
-    </Navigation>
-  </header>
+  <Header class="website-header" {items} closeKey={page.url.pathname}>
+    {#snippet itemIcon(item)}<NavigationIcon name={item.icon} />{/snippet}
+    {#snippet brand()}
+      <a class="skip-link" href="#main-content">Skip to content</a>
+      <a class="site-brand" href={base + '/'} aria-label="Page Sections home">
+        <img src={base + '/page-sections-logo.svg'} width="32" height="32" alt="" />
+        <span>Page Sections</span>
+      </a>
+    {/snippet}
+    {#snippet menuIcon()}<Menu size={20} aria-hidden="true" />{/snippet}
+    {#snippet settingsIcon()}<Settings size={20} aria-hidden="true" />{/snippet}
+    {#snippet tools()}
+      <div class="header-tools">
+        <SiteSearch />
+        <a
+          class="github-link"
+          href="https://github.com/LauridBergjohann/page-sections"
+          aria-label="Page Sections on GitHub"
+          title="Source on GitHub"><Github /></a
+        >
+      </div>
+    {/snippet}
+    {#snippet right()}
+      <div class="appearance" role="group" aria-label="Appearance">
+        <button
+          type="button"
+          aria-label="Light"
+          title="Light"
+          aria-pressed={mode === 'light'}
+          disabled={!ready}
+          onclick={() => setMode('light')}><Sun size={18} aria-hidden="true" /></button
+        >
+        <button
+          type="button"
+          aria-label="Dark"
+          title="Dark"
+          aria-pressed={mode === 'dark'}
+          disabled={!ready}
+          onclick={() => setMode('dark')}><Moon size={18} aria-hidden="true" /></button
+        >
+      </div>
+    {/snippet}
+  </Header>
   <div id="main-content" tabindex="-1">{@render children()}</div>
-  <footer class="site-footer">
-    <a class="site-brand" href={base + '/'}
-      ><img src={base + '/page-sections-logo.svg'} alt="" width="24" height="24" />Page Sections
-      <span class="version">v{version}</span></a
-    >
-    <span>Made with Page Sections.</span>
-    <a href={base + '/about/#impressum'}>Imprint</a>
-    <a href={base + '/about/#datenschutz'}>Privacy</a>
-    <a href="https://github.com/LauridBergjohann/page-sections">Source on GitHub ↗</a>
-  </footer>
+  <Footer
+    class="site-footer"
+    footnote="© 2026 Page Sections."
+    links={[
+      { label: 'Imprint', href: base + '/about/#impressum' },
+      { label: 'Privacy', href: base + '/about/#datenschutz' },
+      {
+        label: 'Licence',
+        href: 'https://github.com/LauridBergjohann/page-sections/blob/main/LICENSE'
+      }
+    ]}
+    social={[
+      {
+        label: 'GitHub',
+        href: 'https://github.com/LauridBergjohann/page-sections',
+        icon: githubIcon
+      },
+      { label: 'NPM', href: 'https://www.npmjs.com/package/@page-sections/svelte', icon: npmIcon },
+      { label: 'Vercel', href: 'https://vercel.com/', icon: vercelIcon },
+      { label: 'Bergjohann', href: 'https://bergjohann.com/', icon: globeIcon },
+      {
+        label: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/laurid-bergjohann',
+        icon: linkedinIcon
+      },
+      { label: 'Svelte', href: 'https://svelte.dev/', icon: svelteIcon }
+    ]}
+    menu={[
+      {
+        label: 'Product',
+        href: base + '/',
+        links: [
+          { label: 'Getting started', href: base + '/getting-started/' },
+          { label: 'Sections', href: base + '/sections/' },
+          { label: 'About', href: base + '/about/' }
+        ]
+      },
+      {
+        label: 'Documentation',
+        href: base + '/docs/',
+        links: [
+          { label: 'Foundations', href: base + '/docs/foundations/' },
+          { label: 'Reference', href: base + '/docs/reference/' },
+          { label: 'Building blocks', href: base + '/docs/building-blocks/' }
+        ]
+      },
+      {
+        label: 'Building blocks',
+        href: base + '/docs/building-blocks/',
+        links: [
+          { label: 'Header', href: base + '/docs/building-blocks/navigation/' },
+          { label: 'Footer', href: base + '/docs/building-blocks/footer/' },
+          { label: 'Themes', href: base + '/docs/foundations/themes/' }
+        ]
+      },
+      {
+        label: 'Resources',
+        links: [
+          { label: 'Svelte API', href: base + '/docs/reference/svelte-api/' },
+          { label: 'Core API', href: base + '/docs/reference/core-api/' },
+          { label: 'Layout tokens', href: base + '/docs/reference/tokens/' }
+        ]
+      }
+    ]}
+  >
+    {#snippet brand()}
+      <a class="site-brand" href={base + '/'}>
+        <img src={base + '/page-sections-logo-footer.svg'} alt="" width="32" height="32" />
+        Page Sections <span class="version">v{version}</span>
+      </a>
+      <p>Composable Svelte components for content-driven websites.</p>
+    {/snippet}
+  </Footer>
 </PageShell>
 
 <style>
@@ -115,13 +186,13 @@
     background: var(--ps-selection, var(--ps-section-muted));
   }
   @media (min-width: 1200px) {
-    .website-header :global(.desktop-menu > ul) {
+    :global(.website-header .desktop-menu > ul) {
       justify-content: center;
     }
-    .website-header :global(.brand) {
+    :global(.website-header .brand) {
       margin-inline-end: clamp(1.5rem, 3vw, 4rem);
     }
-    .website-header :global(.tools) {
+    :global(.website-header .tools) {
       margin-inline-start: 1.5rem;
     }
   }

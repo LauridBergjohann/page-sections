@@ -28,9 +28,9 @@
 
 @media (min-width: 1809px) { .ps-content-width { width: min(100%, 1536px); } }
 
-:root { --ps-breadcrumb-font-size: 10px; --ps-breadcrumb-height: 24px; }
+:root { --ps-breadcrumb-font-size: 12px; --ps-breadcrumb-height: 24px; }
 
-@media (min-width: 600px) { :root { --ps-breadcrumb-font-size: 10px; --ps-breadcrumb-height: 24px; } }
+@media (min-width: 600px) { :root { --ps-breadcrumb-font-size: 12px; --ps-breadcrumb-height: 24px; } }
 
 @media (min-width: 840px) { :root { --ps-breadcrumb-font-size: 12px; --ps-breadcrumb-height: 30px; } }
 

@@ -1,5 +1,7 @@
 export { default as ContentPage } from './ContentPage.svelte';
 export { default as PageShell } from './PageShell.svelte';
+export { default as Footer } from './Footer.svelte';
+export type { FooterSocialLink } from './footer.js';
 export { default as Section } from './Section.svelte';
 export { default as Heading } from './Heading.svelte';
 export { default as HeadingSection } from './HeadingSection.svelte';
@@ -8,7 +10,9 @@ export { default as ContentGrid } from './ContentGrid.svelte';
 export { default as ContentBlock } from './ContentBlock.svelte';
 export { default as Breadcrumbs } from './Breadcrumbs.svelte';
 export { default as SectionNavigation } from './SectionNavigation.svelte';
-export { default as Navigation } from './Navigation.svelte';
+export { default as Header } from './Header.svelte';
+/** @deprecated Use Header for the site-level header. */
+export { default as Navigation } from './Header.svelte';
 export { default as MainMenu } from './MainMenu.svelte';
 export { default as SidebarNavigation } from './SidebarNavigation.svelte';
 export { default as ButtonGroup } from './ButtonGroup.svelte';

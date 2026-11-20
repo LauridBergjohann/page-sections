@@ -57,6 +57,14 @@
               <td><a href={base + '/docs/foundations/page-shell/'}>Pages</a></td>
             </tr>
             <tr>
+              <td><code>Footer</code></td>
+              <td
+                >Site footer; footnote, links. Social entries use FooterSocialLink with an icon
+                snippet.</td
+              >
+              <td><a href={base + '/docs/building-blocks/footer/'}>Footer</a></td>
+            </tr>
+            <tr>
               <td><code>PageShell</code></td>
               <td>Shared theme/mode; none</td>
               <td><a href={base + '/docs/foundations/page-shell/'}>Pages</a></td>
@@ -84,57 +92,57 @@
             <tr>
               <td><code>HeroSection</code></td>
               <td>Prominent copy/image/actions; section</td>
-              <td><a href={base + '/docs/sections/hero/'}>HeroSection</a></td>
+              <td><a href={base + '/sections/hero/'}>HeroSection</a></td>
             </tr>
             <tr>
               <td><code>RichTextSection</code></td>
               <td>Markdown, plain text or blocks; section</td>
-              <td><a href={base + '/docs/sections/rich-text/'}>RichTextSection</a></td>
+              <td><a href={base + '/sections/rich-text/'}>RichTextSection</a></td>
             </tr>
             <tr>
               <td><code>RichTextContent</code></td>
               <td>Text without a section wrapper; content</td>
-              <td><a href={base + '/docs/sections/rich-text/'}>RichTextSection</a></td>
+              <td><a href={base + '/sections/rich-text/'}>RichTextSection</a></td>
             </tr>
             <tr>
               <td><code>InlineTextContent</code></td>
               <td>Escaped inline runs; text</td>
-              <td><a href={base + '/docs/sections/rich-text/'}>RichTextSection</a></td>
+              <td><a href={base + '/sections/rich-text/'}>RichTextSection</a></td>
             </tr>
             <tr>
               <td><code>Actions</code></td>
               <td>Native action links; optional actions</td>
-              <td><a href={base + '/docs/sections/panels/'}>Panels</a></td>
+              <td><a href={base + '/sections/panel/'}>Panels</a></td>
             </tr>
             <tr>
               <td><code>ContentPanel</code></td>
               <td>Reusable inset panel; no required props</td>
-              <td><a href={base + '/docs/sections/panels/'}>Panels</a></td>
+              <td><a href={base + '/sections/panel/'}>Panels</a></td>
             </tr>
             <tr>
               <td><code>PanelSection</code></td>
               <td>Panel with section metadata; section</td>
-              <td><a href={base + '/docs/sections/panels/'}>Panels</a></td>
+              <td><a href={base + '/sections/panel/'}>Panels</a></td>
             </tr>
             <tr>
               <td><code>ImageSection</code></td>
               <td>Image with optional text; section</td>
-              <td><a href={base + '/docs/sections/images/'}>ImageSection</a></td>
+              <td><a href={base + '/sections/image/'}>ImageSection</a></td>
             </tr>
             <tr>
               <td><code>VideoSection</code></td>
               <td>HTML5/YouTube with optional text; section</td>
-              <td><a href={base + '/docs/sections/video/'}>VideoSection</a></td>
+              <td><a href={base + '/sections/video/'}>VideoSection</a></td>
             </tr>
             <tr>
               <td><code>CardGridSection</code></td>
               <td>Responsive card collection; section, list</td>
-              <td><a href={base + '/docs/sections/card-grid/'}>CardGridSection</a></td>
+              <td><a href={base + '/sections/card-grid/'}>CardGridSection</a></td>
             </tr>
             <tr>
               <td><code>CarouselSection</code></td>
               <td>Horizontal card collection; section, list</td>
-              <td><a href={base + '/docs/sections/carousel/'}>CarouselSection</a></td>
+              <td><a href={base + '/sections/carousel/'}>CarouselSection</a></td>
             </tr>
             <tr>
               <td><code>Card</code></td>
@@ -147,19 +155,27 @@
               <td><a href={base + '/docs/building-blocks/card-and-image/'}>Card and Image</a></td>
             </tr>
             <tr>
-              <td><code>Navigation</code></td>
+              <td><code>Header</code></td>
               <td>Independent menu and satellites; none</td>
-              <td><a href={base + '/docs/building-blocks/navigation/'}>Navigation</a></td>
+              <td><a href={base + '/docs/building-blocks/navigation/'}>Header</a></td>
+            </tr>
+            <tr>
+              <td><code>Navigation</code></td>
+              <td
+                >Deprecated compatibility export of Header; remove any surrounding header element
+                when migrating.</td
+              >
+              <td><a href={base + '/docs/building-blocks/navigation/'}>Header</a></td>
             </tr>
             <tr>
               <td><code>MainMenu</code></td>
               <td>Recursive native menu; items</td>
-              <td><a href={base + '/docs/building-blocks/navigation/'}>Navigation</a></td>
+              <td><a href={base + '/docs/building-blocks/navigation/'}>Header</a></td>
             </tr>
             <tr>
               <td><code>ButtonGroup</code></td>
               <td>Labelled controls/links; items, label</td>
-              <td><a href={base + '/docs/building-blocks/navigation/'}>Navigation</a></td>
+              <td><a href={base + '/docs/building-blocks/navigation/'}>Header</a></td>
             </tr>
             <tr>
               <td><code>Breadcrumbs</code></td>
@@ -182,12 +198,12 @@
             </tr>
             <tr
               ><td><code>CodeBlock</code></td><td>Standalone source presentation; code</td><td
-                ><a href={base + '/docs/sections/code/'}>Code</a></td
+                ><a href={base + '/sections/code/'}>Code</a></td
               ></tr
             >
             <tr
               ><td><code>CodeSection</code></td><td>Source with section metadata; section</td><td
-                ><a href={base + '/docs/sections/code/'}>Code</a></td
+                ><a href={base + '/sections/code/'}>Code</a></td
               ></tr
             >
           </tbody>
@@ -205,7 +221,7 @@
     }}
     ><div class="prose">
       <p>
-        Svelte 5 snippets are used instead of named legacy slots. Navigation has
+        Svelte 5 snippets are used instead of named legacy slots. Header has
         menu/brand/left/right/tools/settingsIcon/menuIcon snippets. Card has
         media(item)/surface(item)/children(item); the collections have
         media(item)/itemContent(item). CardGridSection also has surface(item) and a complete
@@ -218,8 +234,10 @@
         attributes except id/children; ContentGrid and ContentBlock forward div attributes.
         ContentPage forwards main attributes (including id, lang and ARIA attributes), except style;
         use theme and class for styling. Card also forwards HTMLElement attributes, including class
-        and event callbacks. Other components do not accept general class/style or arbitrary HTML
-        attributes. Configure them through documented props, section metadata and CSS variables.
+        and event callbacks. Header and Footer forward HTML attributes, including class, style and
+        ARIA attributes, to their header/footer root. Other components do not accept general
+        class/style or arbitrary HTML attributes. Configure them through documented props, section
+        metadata and CSS variables.
       </p>
       <p>
         Most predefined components accept <code>section: Omit&lt;TheirSectionData, 'type'&gt;</code
@@ -287,8 +305,9 @@
       <p>
         <code>SidebarNavigation</code> renders a recursive site tree with current-page markers and expandable
         ancestors. Pass it as ContentPage's leftSidebar snippet. ContentPage's showContentMenu flag supplies
-        the separate automatic right menu; footer provides a slot for reading-order links. Navigation's
-        itemIcon snippet supplies application-owned icons.
+        the separate automatic right menu; pageEnd provides a snippet for reading-order links inside main.
+        The deprecated footer snippet remains a fallback; pageEnd takes precedence when both are supplied.
+        Header's itemIcon snippet supplies application-owned icons.
       </p>
     </div></Section
   >
@@ -305,7 +324,7 @@
       <code>Heading</code> accepts text, level (HeadingLevel, default 2), size (HeadingSize, default
       m), id, eyebrow and introduction. It renders typography only. <code>HeadingSection</code>
       accepts section: Omit&lt;HeadingSectionData, 'type'&gt; and adds section layout, surface and registration.
-      See <a href={base + '/docs/sections/headings/'}>Headings</a>.
+      See <a href={base + '/sections/headings/'}>Headings</a>.
     </p>
     <p>
       ContentPage renders the sections supplied as children. Place HeadingSection or HeroSection

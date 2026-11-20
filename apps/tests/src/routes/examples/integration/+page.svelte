@@ -4,7 +4,7 @@
     CardGridSection,
     CarouselSection,
     ContentPage,
-    Navigation,
+    Header,
     Section,
     SectionSurfaceGroup,
     RichTextSection,
@@ -88,7 +88,7 @@
     onDiagnostic={() => (diagnostics += 1)}
     ><output data-testid="diagnostics">{diagnostics}</output></Section
   >
-  <Navigation
+  <Header
     label="Nested menu example"
     items={[
       {

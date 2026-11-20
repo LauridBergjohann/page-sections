@@ -19,6 +19,7 @@
     children,
     manageDocumentTitle = true,
     leftSidebar,
+    pageEnd,
     footer,
     showContentMenu = false,
     contentMenuLabel,
@@ -29,6 +30,8 @@
     page: ContentPageData;
     children?: Snippet;
     leftSidebar?: Snippet;
+    pageEnd?: Snippet;
+    /** @deprecated Use pageEnd. This content is inside main, not the site footer. */
     footer?: Snippet;
     showContentMenu?: boolean;
     contentMenuLabel?: string;
@@ -92,7 +95,7 @@
           </div>
         </div>
       </SectionSurfaceGroup>
-      {@render footer?.()}
+      {@render (pageEnd ?? footer)?.()}
     </div>
     <!-- After sections register, including during SSR. -->
     {#if showContentMenu && sections().length}<aside class="ps-content-menu-slot">

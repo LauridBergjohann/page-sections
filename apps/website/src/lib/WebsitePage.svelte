@@ -15,7 +15,7 @@
   }: ComponentProps<typeof ContentPage> & { showSidebar?: boolean } = $props();
   const navigation = $derived(resolveNavigation(navigationTree, { pathname: route.url.pathname }));
   const neighbors = $derived(readingNeighbors(route.url.pathname));
-  const sidebar = $derived(showSidebar ?? navigation.root?.id === 'docs');
+  const sidebar = $derived(showSidebar ?? ['docs', 'sections'].includes(navigation.root?.id ?? ''));
   const find = (items: MenuItem[], id?: string): MenuItem | undefined => {
     for (const item of items) {
       if (item.id === id) return item;
@@ -30,7 +30,7 @@
   <SidebarNavigation
     items={navigation.sidebarItems}
     activeId={navigation.activeId}
-    label="Documentation chapters"
+    label={navigation.root?.id === 'sections' ? 'Sections' : 'Documentation chapters'}
   >
     {#snippet icon(item)}<NavigationIcon name={item.icon} />{/snippet}
     {#snippet disclosureIcon()}<ChevronDown size={16} />{/snippet}
@@ -47,8 +47,8 @@
   leftSidebar={sidebar ? sidebarContent : undefined}
 >
   {@render children?.()}
-  {#snippet footer()}
-    {#if childPages.length}
+  {#snippet pageEnd()}
+    {#if childPages.length && navigation.activeId !== 'sections'}
       <nav class="child-pages" aria-label={`Pages in ${page.title}`}>
         <h2>Explore {page.title}</h2>
         <ul>

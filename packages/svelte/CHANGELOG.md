@@ -1,5 +1,21 @@
 # @page-sections/svelte
 
+## 0.5.0
+
+### Minor Changes
+
+- Keep footer social labels on one line by extending items into the next grid gutter; use two social columns on very narrow phones to prevent overlap. Promote the website's Sections catalog with illustrated cards and interactive demos, and retain redirects from the previous documentation URLs.
+- Animate desktop dropdown and mobile menu backdrop blur, respecting reduced motion. Align sidebar child links with a 2rem inset and slightly smaller type. Right-align social links in L and keep at least 8px footer outer gutters across all layouts.
+- Add Header as the site-level header landmark with menus inside nav and brand/tools outside. Navigation remains a deprecated export of Header. Add ContentPage.pageEnd with footer as a deprecated fallback. Document the recommended PageShell/Header/ContentPage/Footer composition and allow local snippet styles to override link defaults.
+- Use 24px vertical footer-grid padding and 8px outer insets for the footnote and important links at every breakpoint.
+- Add a site-level Footer with optional brand, social links and up to four menu groups, required footnote and important links, responsive content-grid alignment, and independent theme settings for its main surface and bottom bar.
+
+### Patch Changes
+
+- Isolate nested section surfaces so transparent examples do not interrupt the rounded surface run of their parent sections. Allocate footer social grid cells the full column-and-gutter width.
+- Updated dependencies
+  - @page-sections/core@0.5.0
+
 ## 0.4.1
 
 ### Patch Changes

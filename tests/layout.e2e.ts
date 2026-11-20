@@ -185,12 +185,13 @@ test('desktop submenus open without changing the header height', async ({ page }
   await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto('/examples/integration/');
   const nav = page.getByRole('navigation', { name: 'Nested menu example' });
+  const header = page.locator('header').filter({ has: nav });
   await nav.getByRole('link', { name: 'More pages', exact: true }).hover();
   await expect(nav.getByRole('link', { name: 'Legal example' })).toBeVisible();
-  expect((await nav.locator('.header').boundingBox())!.height).toBe(64);
+  expect((await header.locator('.header').boundingBox())!.height).toBe(64);
   await page.keyboard.press('Escape');
-  await expect(nav.locator('.desktop-menu .ps-submenu')).toBeHidden();
+  await expect(nav.locator('.ps-submenu')).toBeHidden();
   await nav.getByRole('link', { name: 'More pages', exact: true }).hover();
   await page.getByRole('heading', { name: 'Integration contracts', exact: true }).click();
-  await expect(nav.locator('.desktop-menu .ps-submenu')).toBeHidden();
+  await expect(nav.locator('.ps-submenu')).toBeHidden();
 });

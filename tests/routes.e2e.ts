@@ -152,7 +152,7 @@ test('compact navigation fits wider font metrics on every route at 320px', async
     // Verdana reproduces the wrap on Windows; the generic fallback also runs on Linux.
     // Letter spacing adds a deterministic width stress even when Verdana is unavailable.
     await page.addStyleTag({ content: '.ps-navigation { font-family: Verdana, sans-serif !important; letter-spacing: .1px; }' });
-    const nav = page.getByRole('navigation', { name: 'Main navigation' });
+    const nav = page.getByRole('banner');
     const header = (await nav.locator('.header').boundingBox())!;
     expect(header.height).toBe(66);
     await expect(nav.getByRole('link', { name: 'Page Sections home' })).toBeVisible();
@@ -168,7 +168,7 @@ for (const width of [320, 600, 840, 1200, 1599, 1600, 1809, 2300]) {
   test('navigation follows the reference at ' + width + 'px', async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
-    const nav = page.getByRole('navigation', { name: 'Main navigation' });
+    const nav = page.getByRole('banner');
     await expect(nav.getByRole('link', { name: 'Page Sections home' })).toBeVisible();
     const header = await nav.locator('.header').boundingBox();
     expect(header!.height).toBe(width < 1600 ? 66 : 64);

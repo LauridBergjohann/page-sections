@@ -72,8 +72,8 @@ export const documents = [
     category: ''
   },
   {
-    title: 'Headings',
-    href: '/docs/sections/headings/',
+    title: 'Heading',
+    href: '/sections/headings/',
     description:
       'Compose page titles and section headings with independent size, semantics and surfaces.',
     group: 'Sections',
@@ -81,36 +81,36 @@ export const documents = [
   },
   {
     title: 'Hero',
-    href: '/docs/sections/hero/',
+    href: '/sections/hero/',
     description:
       'Use HeroSection for a prominent introduction or call to action. It combines an optional image with a readable copy area; omit the image for a text-led hero.',
     group: 'Sections',
     category: 'Introduction'
   },
   {
-    title: 'Rich text',
-    href: '/docs/sections/rich-text/',
+    title: 'RichText',
+    href: '/sections/rich-text/',
     description: 'RichTextSection: readable paragraphs, headings, lists and structured content.',
     group: 'Sections',
     category: 'Text and code'
   },
   {
-    title: 'Panels',
-    href: '/docs/sections/panels/',
+    title: 'Panel',
+    href: '/sections/panel/',
     description: 'PanelSection: group related content on standard or muted surfaces.',
     group: 'Sections',
     category: 'Text and code'
   },
   {
     title: 'Code',
-    href: '/docs/sections/code/',
+    href: '/sections/code/',
     description: 'CodeBlock, CodeSection, syntax highlighting and text beside code.',
     group: 'Sections',
     category: 'Text and code'
   },
   {
-    title: 'Images',
-    href: '/docs/sections/images/',
+    title: 'Image',
+    href: '/sections/image/',
     description:
       'Use ImageSection for an image on its own or paired with explanatory text. Children provide richer accompanying content without storing markup in the image data.',
     group: 'Sections',
@@ -118,15 +118,15 @@ export const documents = [
   },
   {
     title: 'Video',
-    href: '/docs/sections/video/',
+    href: '/sections/video/',
     description:
       'Use VideoSection for a native video player or YouTube embed, optionally paired with text.',
     group: 'Sections',
     category: 'Media'
   },
   {
-    title: 'Card grid',
-    href: '/docs/sections/card-grid/',
+    title: 'CardGrid',
+    href: '/sections/card-grid/',
     description:
       'CardGridSection: card sizes, tones, variants, image ratios and responsive collections.',
     group: 'Sections',
@@ -134,7 +134,7 @@ export const documents = [
   },
   {
     title: 'Carousel',
-    href: '/docs/sections/carousel/',
+    href: '/sections/carousel/',
     description:
       'CarouselSection: horizontal collections with native scrolling and shared card options.',
     group: 'Sections',
@@ -149,9 +149,17 @@ export const documents = [
     category: ''
   },
   {
-    title: 'Navigation and satellites',
+    title: 'Header and satellites',
     href: '/docs/building-blocks/navigation/',
-    description: 'MainMenu, Navigation and satellites: menus, tools and responsive settings.',
+    description: 'MainMenu, Header and satellites: menus, tools and responsive settings.',
+    group: 'Building blocks',
+    category: ''
+  },
+  {
+    title: 'Footer',
+    href: '/docs/building-blocks/footer/',
+    description:
+      'A site-level footer with brand, social links, grouped menus and a required bottom bar.',
     group: 'Building blocks',
     category: ''
   },
@@ -211,7 +219,7 @@ export const documents = [
   },
   {
     title: 'Sections',
-    href: '/docs/sections/',
+    href: '/sections/',
     description: 'Choose the right section for text, media, code and collections.',
     group: 'Overview',
     category: ''

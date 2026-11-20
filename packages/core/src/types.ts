@@ -78,4 +78,11 @@ export type SectionData = SectionTypeMap[keyof SectionTypeMap];
 export interface PageData extends ContentPageData { sections: SectionData[] }
 export interface MenuItem { id: string; label: string; href: string; current?: boolean; active?: boolean; icon?: string; children?: MenuItem[] }
 export interface ButtonGroupItem { id: string; label: string; href?: string; selected?: boolean; disabled?: boolean }
-export interface PageTheme { background?: string; ink?: string; body?: string; accent?: string; onAccent?: string; standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string }
+export interface FooterLink { label: string; href: string }
+export interface FooterMenuGroup { label: string; href?: string; links: readonly FooterLink[] }
+export interface PageTheme {
+  background?: string; ink?: string; body?: string; accent?: string; onAccent?: string;
+  standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string;
+  footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;
+  footerBarBackground?: string; footerBarInk?: string;
+}

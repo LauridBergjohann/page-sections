@@ -4,5 +4,10 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build:website",
   "outputDirectory": "apps/website/build",
-  "trailingSlash": true
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/docs/sections/images", "destination": "/sections/image/", "permanent": true },
+    { "source": "/docs/sections/panels", "destination": "/sections/panel/", "permanent": true },
+    { "source": "/docs/sections/:path*", "destination": "/sections/:path*", "permanent": true }
+  ]
 }

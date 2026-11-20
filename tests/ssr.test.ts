@@ -6,6 +6,7 @@ import PageHeaders from './PageHeaders.svelte';
 import type { SectionData } from '@page-sections/core';
 import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
+import ImplicitNestedSurfaces from './ImplicitNestedSurfaces.svelte';
 import StructuredPage from './StructuredPage.svelte';
 it.each(['cardGrid', 'carousel'] as const)('forwards %s surface tone from serialized data', (type) => {
   for (const tone of [undefined, 'standard', 'muted'] as const) {
@@ -115,7 +116,7 @@ it('escapes raw HTML and unsafe markdown links', () => {
   const { body } = render(RichTextSection, { props: { section: { id: 'text', title: 'Text', body: '<script>alert(1)</script>\n\n[x](javascript:alert(1))' } } });
   expect(body).not.toContain('<script>'); expect(body).not.toContain('href="javascript:');
 });
-it('does not require a page or stage to render navigation', () => { expect(render(Navigation).body).toContain('Main navigation'); });
+it('does not require a page or stage to render the compatibility header', () => { expect(render(Navigation).body).toContain('<header'); });
 it('supports custom renderers without serializing component functions', () => {
   const section = JSON.parse(JSON.stringify({ type: 'quote', id: 'quote', title: 'Quote', quote: 'A custom section.' })) as SectionData;
   const { body } = render(Sections, { props: { sections: [section], renderers: { quote: CustomSection } } });
@@ -124,9 +125,29 @@ it('supports custom renderers without serializing component functions', () => {
 });
 it('isolates nested surface groups even when their local numeric ids match', () => {
   const { body } = render(NestedSurfaces);
-  const scopes = [...body.matchAll(/data-ps-section-group="([^"]+)"/g)].map(match => match[1]);
-  expect(new Set(scopes).size).toBe(2);
+  const scopes = [...new Set([...body.matchAll(/data-ps-surface-owner="([^"]+)"/g)].map(match => match[1]))];
+  expect(scopes).toHaveLength(2);
   for (const scope of scopes) expect(body).toContain(`[data-ps-surface-owner="${scope}"][data-ps-section-surface="0"]`);
+});
+it('keeps nested transparent examples from splitting their parent surface run during SSR', () => {
+  const { body } = render(ImplicitNestedSurfaces);
+  const surface = (id: string) => {
+    const tag = body.match(new RegExp(`<section[^>]*id="${id}"[^>]*>`))![0];
+    const owner = tag.match(/data-ps-surface-owner="([^"]+)"/)![1];
+    const surfaceId = tag.match(/data-ps-section-surface="([^"]+)"/)![1];
+    const selector = `[data-ps-surface-owner="${owner}"][data-ps-section-surface="${surfaceId}"]`;
+    return { owner, rules: body.slice(body.indexOf('@media (min-width:1600px)')).split(selector).pop()!.split('}')[0] };
+  };
+  const heading = surface('heading');
+  expect(heading.rules).toContain('--ps-section-top-radius:var(--ps-radius)');
+  expect(heading.rules).toContain('--ps-section-bottom-radius:0px');
+  for (const id of ['first', 'middle', 'last']) {
+    const parent = surface(id);
+    expect(parent.owner).toBe(heading.owner);
+    expect(surface(`${id}-example`).owner).not.toBe(parent.owner);
+    expect(parent.rules).toContain('--ps-section-top-radius:0px');
+    expect(parent.rules).toContain(`--ps-section-bottom-radius:${id === 'last' ? 'var(--ps-radius)' : '0px'}`);
+  }
 });
 it('renders a complete portfolio from data, with one hero h1 and nested heading levels', () => {
   const { body } = render(StructuredPage);

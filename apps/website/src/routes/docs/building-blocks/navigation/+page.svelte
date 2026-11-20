@@ -4,7 +4,7 @@
       language: 'svelte',
       code: `<script lang="ts">
   import {
-    Navigation,
+    Header,
     ContentPage,
     SidebarNavigation,
     Section,
@@ -30,9 +30,9 @@
   const navigation = resolveNavigation(tree, { currentId: 'planting' });
 <\/script>
 
-<Navigation items={navigation.items}>
+<Header items={navigation.items}>
   {#snippet brand()}<a href="/">Garden journal</a>{/snippet}
-</Navigation>
+</Header>
 <ContentPage
   page={{ title: 'Planting', breadcrumbs: navigation.breadcrumbs }}
   showContentMenu
@@ -59,15 +59,15 @@
 
 <ContentPage
   page={{
-    title: 'Navigation and satellites',
-    pageTitle: 'Navigation and satellites · Page Sections'
+    title: 'Header and satellites',
+    pageTitle: 'Header and satellites · Page Sections'
   }}
   showContentMenu
 >
   <HeadingSection
     section={{
       id: 'page-heading',
-      title: 'Navigation and satellites',
+      title: 'Header and satellites',
       headingLevel: 1,
       headingSize: 'l',
       background: { color: 'standard', size: 'standard' }
@@ -85,8 +85,8 @@
   <Section
     section={{
       id: 'navigation-props',
-      title: 'Navigation',
-      headline: 'Navigation',
+      title: 'Header',
+      headline: 'Header',
       background: { color: 'standard', size: 'standard' }
     }}
     ><div class="prose">
@@ -96,11 +96,19 @@
         and icon is an application-defined key.
       </p>
       <p>
-        Navigation accepts brand, tools, left and right snippets, plus menuIcon and settingsIcon.
-        Satellites appear from XL and move into settings below XL. The optional menu snippet
-        replaces the desktop menu; items still supplies the mobile tree. <code>closeKey</code>
+        Header renders the site header landmark. Only the menus are inside nav landmarks; brand,
+        tools and settings sit outside navigation. It accepts brand, tools, left and right snippets,
+        plus menuIcon and settingsIcon. Satellites appear from XL and move into settings below XL.
+        The optional menu snippet replaces the desktop menu; items still supplies the mobile tree. <code
+          >closeKey</code
+        >
         closes open menus when the host changes routes. <code>scrollBehavior</code> supports static (default),
         delayed and fixed.
+      </p>
+      <p>
+        <code>Navigation</code> remains a deprecated compatibility export of Header with the same props.
+        Prefer Header in new code and remove an existing outer header wrapper. Pass class, style, id and
+        other HTML attributes directly to Header. The documentation URL remains unchanged.
       </p>
       <p>
         <code>itemIcon?: Snippet&lt;[MenuItem]&gt;</code> renders second-level icons. The website uses
@@ -120,7 +128,9 @@
         On XS–M, the burger contains every hierarchy level. A page link and a separate native
         disclosure control keep navigation distinct from expanding children. On L and above, the
         header shows the first level. Hover or keyboard focus reveals the second level in an
-        overlay, while the page behind it blurs. The overlay does not list deeper levels.
+        overlay, while the page behind it blurs. Opening the mobile burger menu also blurs the page.
+        The blur animates in and out over 180ms, unless reduced motion is requested. The overlay
+        does not list deeper levels.
       </p>
       <p>
         Clicking any menu link immediately navigates to its page. Links retain open-in-new-tab and
@@ -130,7 +140,7 @@
       </p>
       <p>
         Standalone <code>MainMenu</code> accepts items, icon, variant (desktop/mobile), closeKey and onOpenChange.
-        Use Navigation for the complete header, satellites and backdrop.
+        Use Header for the complete header, satellites and backdrop.
       </p>
     </div></Section
   >
@@ -240,8 +250,8 @@
         JavaScript for their callbacks; links remain functional in SSR HTML.
       </p>
       <p>
-        ButtonGroup does not import full shared theme styles on its own. Navigation does, or import
-        the stylesheet explicitly when using them elsewhere.
+        ButtonGroup does not import full shared theme styles on its own. Header does, or import the
+        stylesheet explicitly when using them elsewhere.
       </p>
       <p>
         Site navigation, <a href={base + '/docs/building-blocks/breadcrumbs/'}
@@ -250,7 +260,7 @@
         Give each landmark a suitable label.
       </p>
       <p>
-        Navigation links use neutral <code>--ps-ink</code>; content links retain
+        Header links use neutral <code>--ps-ink</code>; content links retain
         <code>--ps-accent</code>. Header and satellites share <code>--ps-navigation-shadow</code>.
         Set this token on a navigation ancestor to customize or disable elevation. If host button
         groups paint their own outline and radius, leave the satellite wrapper unpainted and apply

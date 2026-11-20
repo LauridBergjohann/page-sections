@@ -20,6 +20,9 @@ Use Node 24 and npm 11, matching CI and hosting. On PowerShell with script restr
 - [Documentation authoring and hosting](documentation.md)
 - [Versioning and releases](releasing.md)
 - [Spatial Elements integration contract](spatial-elements-adoption.md)
+- [Footer, layout and documentation work plan](footer-layout-docs-plan.md)
 - [API observations](api-notes.md)
 
 Build-producing commands run sequentially because package output is shared. Keep LICENSE and NOTICE attribution intact. Generated dist/build outputs are ignored; commit package source, generated layout CSS and lockfile changes.
+
+The website development server resolves `@page-sections/svelte` to workspace source and excludes workspace packages from dependency prebundling. Component edits therefore arrive through Vite without stale copies from `dist`. Production builds continue to consume the built package; rebuild packages before building the website.

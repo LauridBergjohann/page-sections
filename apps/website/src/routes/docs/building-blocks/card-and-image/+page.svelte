@@ -280,8 +280,8 @@
         HTML. The library does not resize, upload or generate responsive assets.
       </p>
       <p>
-        Related: <a href={base + '/docs/sections/images/'}>ImageSection</a>,
-        <a href={base + '/docs/sections/card-grid/'}>CardGridSection</a>,
+        Related: <a href={base + '/sections/image/'}>ImageSection</a>,
+        <a href={base + '/sections/card-grid/'}>CardGridSection</a>,
         <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>.
       </p>
     </div></Section

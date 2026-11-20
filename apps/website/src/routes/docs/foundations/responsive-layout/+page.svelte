@@ -126,9 +126,8 @@
         the available containing-block width; mount it at the viewport level.
       </p>
       <p>
-        Navigation shows its item disclosure below 1200px and satellites at 1600px. ContentPage uses
-        its sidebar from 1200px. Image/video pairs split at a 600px container; artwork heroes at
-        840px.
+        Header shows its item disclosure below 1200px and satellites at 1600px. ContentPage uses its
+        sidebar from 1200px. Image/video pairs split at a 600px container; artwork heroes at 840px.
       </p>
     </div></Section
   >

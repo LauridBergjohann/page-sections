@@ -14,10 +14,11 @@ const pages = walk(routes).filter(file => file.endsWith('+page.svelte'));
 const routeOf = file => '/' + relative(routes, dirname(file)).replaceAll('\\', '/') + (dirname(file) === routes ? '' : '/');
 const routeSources = new Map(pages.map(file => [routeOf(file), read(file)]));
 const catalog = read(join(root, 'apps/website/src/lib/catalog.ts'));
-const allDocs = pages.filter(file => /[\\/](docs|getting-started)[\\/]/.test(file));
+const isRedirect = file => { const server = join(dirname(file), '+page.server.ts'); return existsSync(server) && read(server).includes('redirect(308'); };
+const allDocs = pages.filter(file => /[\\/](docs|getting-started|sections)[\\/]/.test(file) && !isRedirect(file));
 let links = 0;
 for (const [route, source] of routeSources) {
-  if (/^\/(docs|getting-started)\/.+/.test(route) && !catalog.includes(route)) throw new Error(`Missing navigation entry: ${route}`);
+  if (/^\/(docs|getting-started|sections)\/.+/.test(route) && !catalog.includes(route) && !isRedirect(pages.find(file => routeOf(file) === route))) throw new Error(`Missing navigation entry: ${route}`);
   if (source.includes('github.com/LauridBergjohann/page-sections/wiki')) throw new Error(`Old Wiki link in ${route}`);
   for (const match of source.matchAll(/href=\{base\s*\+\s*['"]([^'"]+)['"]\}/g)) {
     const [path, hash] = match[1].split('#');

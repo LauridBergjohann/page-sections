@@ -48,6 +48,31 @@
   </Section>
 </ContentPage>
 `
+    },
+    {
+      language: 'svelte',
+      code: `<script>
+  import { PageShell, Header, ContentPage, Footer } from '@page-sections/svelte';
+<\/script>
+
+<PageShell mode="light">
+  <Header items={[{ id: 'home', label: 'Home', href: '/' }]}>
+    {#snippet brand()}<a class="brand" href="/">My Website</a>{/snippet}
+  </Header>
+  <ContentPage page={{ title: 'Welcome' }}>
+    <h1>Welcome</h1>
+    <p>Page content.</p>
+    {#snippet pageEnd()}<a href="/next/">Continue reading</a>{/snippet}
+  </ContentPage>
+  <Footer footnote="© My Website" links={[{ label: 'Privacy', href: '/privacy/' }]}>
+    {#snippet brand()}<p class="description">A short description.</p>{/snippet}
+  </Footer>
+</PageShell>
+
+<style>
+  .brand { font-weight: 700; color: #007b5e; }
+  .description { max-width: 32ch; }
+</style>`
     }
   ];
 </script>
@@ -140,7 +165,7 @@
         </li>
         <li><code>contentMenuLabel?: string</code> defaults to “On this page”.</li>
         <li>
-          <code>footer?: Snippet</code> renders after the sections within the content column, for example
+          <code>pageEnd?: Snippet</code> renders after the sections within the content column, for example
           previous/next links.
         </li>
         <li>
@@ -184,9 +209,29 @@
     }}
     ><div class="prose">
       <p>
-        PageShell optionally wraps navigation and ContentPage to share <code>theme</code> and
+        PageShell optionally wraps Header, ContentPage and Footer to share <code>theme</code>
+        and
         <code>mode</code> (light or dark). It accepts a children snippet. It does not detect or persist
         a system preference; the application owns that choice.
+      </p>
+      <p>
+        Recommended site structure: PageShell contains Header, ContentPage and Footer as siblings.
+        They own their header, main and footer elements; do not add duplicate wrappers. PageShell
+        itself is a neutral div. Header keeps brand and tools outside its menu navigation landmarks.
+        ContentPage may include related asides, and its pageEnd snippet stays inside main. The site
+        Footer belongs after ContentPage.
+      </p>
+      <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
+      <p>
+        Theme variables configure shared surfaces; classes on snippet elements configure your own
+        content in the declaring component's style block. Header and Footer accept class, style and
+        other HTML attributes on their roots. Their link defaults have low specificity so local
+        snippet styles can override them.
+      </p>
+      <p>
+        Migration: Navigation remains a deprecated export of Header. Replace it with Header and
+        remove any surrounding header element. Rename ContentPage's footer snippet to pageEnd;
+        footer remains a fallback, and pageEnd wins if both are passed.
       </p>
     </div></Section
   >
@@ -216,7 +261,7 @@
       <p>
         The registry renders anchor links during SSR. JavaScript adds active-section tracking,
         Escape dismissal and focus restoration. Native details make the mobile popup usable without
-        JavaScript. Navigation remains composed of ordinary links.
+        JavaScript. Menus remain composed of ordinary links.
       </p>
     </div></Section
   >

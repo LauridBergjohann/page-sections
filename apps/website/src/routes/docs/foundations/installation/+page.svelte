@@ -91,7 +91,7 @@ console.log(page.title, cards, resolveContentGrid(840));`
     }}
     ><div class="prose">
       <p>
-        PageShell, ContentPage, Navigation, Section and Breadcrumbs import the shared stylesheet.
+        PageShell, ContentPage, Header, Section and Breadcrumbs import the shared stylesheet.
         ContentGrid imports the generated grid rules only. Low-level Card, Image, ButtonGroup,
         MainMenu, SectionNavigation, ContentBlock, SectionSurfaceGroup, ContentPanel, Actions,
         RichTextContent and InlineTextContent do not independently load the full theme defaults.

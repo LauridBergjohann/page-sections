@@ -103,6 +103,18 @@
           </thead>
           <tbody>
             <tr>
+              <td><code>footerBackground</code></td><td><code>--ps-footer-background</code></td>
+            </tr>
+            <tr><td><code>footerInk</code></td><td><code>--ps-footer-ink</code></td></tr>
+            <tr><td><code>footerRadius</code></td><td><code>--ps-footer-radius</code></td></tr>
+            <tr><td><code>footerShadow</code></td><td><code>--ps-footer-shadow</code></td></tr>
+            <tr
+              ><td><code>footerBarBackground</code></td><td
+                ><code>--ps-footer-bar-background</code></td
+              ></tr
+            >
+            <tr><td><code>footerBarInk</code></td><td><code>--ps-footer-bar-ink</code></td></tr>
+            <tr>
               <td><code>background</code></td>
               <td><code>--ps-background</code></td>
             </tr>

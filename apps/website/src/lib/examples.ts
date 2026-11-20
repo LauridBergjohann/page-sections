@@ -48,7 +48,7 @@ export const portfolio: PageData = {
           actions: [
             {
               label: 'View collection',
-              href: base + '/docs/sections/card-grid/',
+              href: base + '/sections/card-grid/',
               variant: 'primary'
             }
           ]
@@ -148,7 +148,7 @@ export const portfolio: PageData = {
       ],
       actions: [
         { label: 'About the project', href: base + '/about/' },
-        { label: 'Catalog cards', href: base + '/docs/sections/card-grid/' }
+        { label: 'Catalog cards', href: base + '/sections/card-grid/' }
       ]
     }
   ]

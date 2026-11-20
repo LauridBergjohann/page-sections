@@ -405,12 +405,12 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
           <tbody>
             <tr>
               <td>xs</td>
-              <td>10</td>
+              <td>12</td>
               <td>24</td>
             </tr>
             <tr>
               <td>s</td>
-              <td>10</td>
+              <td>12</td>
               <td>24</td>
             </tr>
             <tr>
@@ -443,7 +443,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       </div>
       <p>
         Breadcrumbs consumes these generated viewport sizes and minimum heights, allowing wrapping
-        to grow beyond the minimum. Navigation consumes the generated menu and satellite geometry.
+        to grow beyond the minimum. Header consumes the generated menu and satellite geometry.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
@@ -614,6 +614,22 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       its current viewport position. It updates on scrolling and resizing, leaving the sticky inset
       below the panel. Native sidebar scrollbars use a thin thumb derived from
       <code>--ps-body</code> and a transparent track.
+    </p>
+  </Section>
+  <Section
+    section={{
+      id: 'footer-tokens',
+      title: 'Footer tokens',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
+    <p>
+      <code>--ps-footer-background</code> and <code>--ps-footer-ink</code> default to #163570 and
+      #fff. <code>--ps-footer-radius</code> falls back to --ps-radius;
+      <code>--ps-footer-shadow</code>
+      falls back to --ps-surface-shadow. <code>--ps-footer-bar-background</code> and
+      <code>--ps-footer-bar-ink</code> fall back to --ps-section-muted and --ps-body. Separators inherit
+      bottom-bar ink at 30% opacity. All six tokens have typed PageTheme properties.
     </p>
   </Section>
 </ContentPage>

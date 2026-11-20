@@ -104,7 +104,8 @@
     flex: none;
   }
   details > ul {
-    margin-inline-start: 1rem;
+    margin-inline-start: 2rem;
+    font-size: 0.9375em;
   }
   summary {
     position: absolute;
