@@ -79,7 +79,9 @@
           class:active={active(item)}
           aria-current={item.current ? 'page' : undefined}
           aria-expanded={item.children?.length ? open === item.id : undefined}
-          onclick={close}>{item.label}</a
+          onclick={close}
+          >{#if icon && item.icon}<span class="icon" aria-hidden="true">{@render icon(item)}</span
+            >{/if}{item.label}</a
         >
         {#if item.children?.length}
           <div class="ps-submenu" hidden={open !== item.id}>
@@ -147,6 +149,7 @@
     border-radius: 0.5rem;
   }
   a:hover,
+  a[aria-expanded='true'],
   a.active,
   a:focus-visible {
     background: var(--ps-selection, var(--ps-section-muted));

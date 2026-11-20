@@ -9,7 +9,7 @@ const entry = (href: string, icon?: string): MenuItem => {
 };
 const groups = [
   ['Foundations', 'foundations', 'layers'],
-  ['Page layout', 'page-layout', 'layers'],
+  ['Page layout', 'page-layout', 'panels-top-left'],
   ['Components', 'building-blocks', 'blocks'],
   ['Design system', 'design-system', 'settings'],
   ['Advanced', 'advanced', 'settings'],
@@ -18,11 +18,13 @@ const groups = [
 export const navigationTree: MenuItem[] = [
   {
     id: 'start',
+    icon: 'rocket',
     label: 'Getting Started',
     href: base + '/getting-started/'
   },
   {
     id: 'sections',
+    icon: 'layout-template',
     label: 'Sections',
     href: base + '/sections/',
     children: sectionCatalog.map((item) => ({
@@ -34,6 +36,7 @@ export const navigationTree: MenuItem[] = [
   },
   {
     id: 'docs',
+    icon: 'book-text',
     label: 'Documentation',
     href: base + '/docs/',
     children: groups.map(([group, slug, icon]) => ({
@@ -41,7 +44,7 @@ export const navigationTree: MenuItem[] = [
       children: documents.filter((item) => item.group === group).map((item) => entry(item.href))
     }))
   },
-  { id: 'about', label: 'About', href: base + '/about/' }
+  { id: 'about', label: 'About', href: base + '/about/', icon: 'info' }
 ];
 
 const flatten = (items: MenuItem[]): MenuItem[] =>

@@ -47,6 +47,8 @@
 </script>
 
 <script lang="ts">
+  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
   import { Footer, HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
   import { base } from '$app/paths';
   import WebsitePage from '$lib/WebsitePage.svelte';
@@ -65,6 +67,26 @@
       background: { color: 'standard', size: 'standard' }
     }}
   />
+  <Section
+    section={{
+      id: 'anatomy',
+      title: 'At a glance',
+      headline: 'At a glance',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutDiagram kind="footer" />
+  </Section>
+  <Section
+    section={{
+      id: 'live-example',
+      title: 'Live example',
+      headline: 'Try the page layout',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutPreview kind="footer" />
+  </Section>
   <Section
     section={{
       id: 'composition',
@@ -137,23 +159,19 @@
   >
     <div class="prose">
       <p>
-        The main box always keeps at least 8px outer gutters on both sides, up to a maximum width of
-        1536px. It uses 136px insets at XL (1600–1808px), and stays centered from 2XL. The bottom
-        bar spans the viewport, with its footnote and links aligned to the main box, inset 8px from
-        its left and right edges respectively at every breakpoint. The main grid has 24px top and
-        bottom padding; horizontal padding follows the content-grid gap.
+        The footer follows the content width, while its bottom bar spans the viewport. In smaller
+        windows, the brand and social links stack. Wide windows have room for link groups beside
+        them.
       </p>
       <p>
-        Brand and social stack on XS–M and sit beside each other on L, where social links start at
-        the top right and fill toward the left. From XL, they occupy four of the twelve content-grid
-        columns; the menu uses the remaining eight, two per group. The menu is hidden below XL.
-        Essential links therefore belong in the bottom bar. Longer footnotes and link lists wrap
-        naturally.
+        Link groups are hidden when space is limited, so essential links belong in the bottom bar.
+        Without a brand, social links or groups, only this bar remains. Longer footnotes and link
+        lists wrap naturally.
       </p>
       <p>
-        Without brand, social or menu, only the bottom bar remains, at least 40px high. A menu-only
-        footer also collapses to this bar below XL. Above the bar, its background starts 40px below
-        the top of the main box.
+        For precise widths and breakpoints, see the <a
+          href={base + '/docs/design-system/responsive-layout/'}>responsive design system</a
+        >.
       </p>
     </div>
   </Section>

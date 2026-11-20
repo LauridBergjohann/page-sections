@@ -12,6 +12,7 @@
 
 ### Patch Changes
 
+- Render configured icons before top-level menu labels in desktop and mobile layouts, and keep a desktop parent highlighted while its submenu is open.
 - Isolate nested section surfaces so transparent examples do not interrupt the rounded surface run of their parent sections. Allocate footer social grid cells the full column-and-gutter width.
 - Updated dependencies
   - @page-sections/core@0.5.0

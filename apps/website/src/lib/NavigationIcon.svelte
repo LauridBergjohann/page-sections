@@ -1,5 +1,9 @@
 <script lang="ts">
   import Layers from '@lucide/svelte/icons/layers';
+  import Rocket from '@lucide/svelte/icons/rocket';
+  import LayoutTemplate from '@lucide/svelte/icons/layout-template';
+  import BookText from '@lucide/svelte/icons/book-text';
+  import Info from '@lucide/svelte/icons/info';
   import Panels from '@lucide/svelte/icons/panels-top-left';
   import Blocks from '@lucide/svelte/icons/blocks';
   import Settings from '@lucide/svelte/icons/settings';
@@ -19,6 +23,11 @@
   import Video from '@lucide/svelte/icons/video';
   let { name }: { name?: string } = $props();
   const icons = {
+    rocket: Rocket,
+    'layout-template': LayoutTemplate,
+    'book-text': BookText,
+    info: Info,
+    'panels-top-left': Panels,
     grid: Grid,
     carousel: Carousel,
     heading: Heading,

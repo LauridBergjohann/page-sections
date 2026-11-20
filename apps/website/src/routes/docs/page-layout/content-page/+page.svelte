@@ -78,6 +78,8 @@
 </script>
 
 <script lang="ts">
+  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
   import { base } from '$app/paths';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
@@ -108,6 +110,26 @@
   />
   <Section
     section={{
+      id: 'anatomy',
+      title: 'At a glance',
+      headline: 'At a glance',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutDiagram kind="content-page" />
+  </Section>
+  <Section
+    section={{
+      id: 'live-example',
+      title: 'Live example',
+      headline: 'Try the page layout',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutPreview kind="content-page" />
+  </Section>
+  <Section
+    section={{
       id: 'try-layout',
       title: 'Try the layout',
       headline: 'Try the page frame',
@@ -122,8 +144,8 @@
         the current path, breadcrumbs and sidebar items from that tree.
       </p>
       <p>
-        Change the sidebars of this page and resize the browser. Below 1600px the content menu moves
-        into a sticky popup.
+        Change the sidebars of this page and resize the browser. In a narrow window, the content
+        menu moves into a sticky popup.
       </p>
       <fieldset>
         <legend>Visible sidebars</legend><label
@@ -259,24 +281,14 @@
     }}
     ><div class="prose">
       <p>
-        Sections never exceed 1536px. At XS–L (below 1600px), both desktop sidebars are hidden. The
-        right contents menu remains available in a sticky popup. Both panels are 248px wide at XL
-        and 2XL, with a 12px gap at XL and a 28px gap at 2XL. At 3XL panels are 300px wide with a
-        28px gap, and the 1536px content column stays centered regardless of sidebar occupancy.
+        On wide screens, the sidebars sit beside the content. In smaller windows, the content menu
+        moves into a sticky popup. Long sidebars scroll independently, while the main content stays
+        readable.
       </p>
       <p>
-        Both panels stick 16px from the viewport top and scroll internally when necessary. The right
-        panel docks only when every page-level section, including the heading, has a standard-width
-        standard or muted background. It then fills the gap, starts 16px lower and has no shadow. A
-        transparent or full-width surface makes it freestanding, with the same rounded corners, gap
-        and shadow as the left panel. An ordinary unpainted page header also makes it freestanding.
-        Nested blocks inside an opaque section do not break that section's surface. This updates
-        automatically, including without JavaScript. The main menu keeps its own centered geometry.
-      </p>
-      <p>
-        The registry renders anchor links during SSR. JavaScript adds active-section tracking,
-        Escape dismissal and focus restoration. Native details make the mobile popup usable without
-        JavaScript. Menus remain composed of ordinary links.
+        The <a href={base + '/docs/design-system/responsive-layout/'}>responsive design system</a> explains
+        the layout sizes, breakpoints and sidebar widths. Topic links also work without JavaScript; JavaScript
+        adds active-topic tracking and keyboard focus restoration.
       </p>
     </div></Section
   >

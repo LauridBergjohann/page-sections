@@ -1,8 +1,9 @@
 <script lang="ts">
+  import SectionCatalog from '$lib/SectionCatalog.svelte';
   import { base } from '$app/paths';
-  import { HeadingSection, CardGridSection, Section, Sections } from '@page-sections/svelte';
+  import { HeadingSection, Section, Sections } from '@page-sections/svelte';
   import ContentPage from '$lib/WebsitePage.svelte';
-  import { sectionCards, sectionCatalog } from '$lib/sectionCatalog';
+  import { sectionCatalog } from '$lib/sectionCatalog';
   import { sectionExample } from '$lib/sectionExamples';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -20,16 +21,7 @@
       background: { color: 'standard', size: 'standard' }
     }}
   />
-  <CardGridSection
-    section={{
-      id: 'section-catalog',
-      title: 'All sections',
-      background: { color: 'transparent', size: 'standard' }
-    }}
-    list={sectionCards}
-    cardSize="m"
-    cardTone="standard"
-  />
+  <SectionCatalog />
   <HeadingSection
     section={{
       id: 'examples-heading',

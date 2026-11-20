@@ -1,6 +1,7 @@
 import { expect, test, type Locator } from '@playwright/test';
 
 test('site footer exposes its documentation, legal links and responsive theme', async ({ page }) => {
+  test.setTimeout(90000); // Capture and check the footer at sixteen viewport boundaries.
   await page.goto('/docs/page-layout/footer/');
   const footer = page.locator('.site-footer');
   const socialLinks = footer.locator('.ps-footer-social a');
@@ -534,13 +535,16 @@ test('each section detail introduces its purpose directly below the page title',
   }
 });
 
-for (const width of [320, 600, 840, 1200, 1700]) {
+for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
   test(`header search and GitHub link fit at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     const github = page.getByRole('link', { name: 'Page Sections on GitHub' });
     await expect(github).toBeVisible();
     await expect(github).toHaveAttribute('href', 'https://github.com/LauridBergjohann/page-sections');
+    const npm = page.getByRole('link', { name: 'Page Sections on NPM' });
+    await expect(npm).toBeVisible();
+    await expect(npm).toHaveAttribute('href', 'https://www.npmjs.com/package/@page-sections/svelte');
     const header = await page.locator('.website-header .header').boundingBox();
     expect(header!.height).toBe(width < 1600 ? 66 : 64);
     const input = page.getByRole('combobox', { name: 'Search documentation' });

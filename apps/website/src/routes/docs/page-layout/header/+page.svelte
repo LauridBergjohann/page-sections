@@ -48,6 +48,8 @@
 </script>
 
 <script lang="ts">
+  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
   import { base } from '$app/paths';
@@ -73,6 +75,26 @@
       background: { color: 'standard', size: 'standard' }
     }}
   />
+  <Section
+    section={{
+      id: 'anatomy',
+      title: 'At a glance',
+      headline: 'At a glance',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutDiagram kind="header" />
+  </Section>
+  <Section
+    section={{
+      id: 'live-example',
+      title: 'Live example',
+      headline: 'Try the page layout',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutPreview kind="header" />
+  </Section>
   <Section
     section={{
       id: 'overview',
@@ -115,10 +137,9 @@
       <p>
         Header renders the site header landmark. Only the menus are inside nav landmarks; brand,
         tools and settings sit outside navigation. It accepts brand, tools, left and right snippets,
-        plus menuIcon and settingsIcon. Satellites appear from XL and move into settings below XL.
-        The optional menu snippet replaces the desktop menu; items still supplies the mobile tree. <code
-          >closeKey</code
-        >
+        plus menuIcon and settingsIcon. Satellites appear alongside the header in wide windows and
+        move into settings when space is limited. The optional menu snippet replaces the desktop
+        menu; items still supplies the mobile tree. <code>closeKey</code>
         closes open menus when the host changes routes. <code>scrollBehavior</code> supports static (default),
         delayed and fixed.
       </p>
@@ -131,7 +152,9 @@
         <code
           >itemIcon?: Snippet&lt;[<a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a
           >]&gt;</code
-        > renders second-level icons. The website uses Lucide; the library has no icon dependency.
+        > renders icons before the label at every menu level, including the main entries at every screen
+        size. Supply an icon key on each item and render it through this snippet. The website uses Lucide;
+        the library has no icon dependency.
       </p>
     </div></Section
   >
@@ -144,12 +167,12 @@
     }}
     ><div class="prose">
       <p>
-        On XS–M, the burger contains every hierarchy level. A page link and a separate native
-        disclosure control keep navigation distinct from expanding children. On L and above, the
-        header shows the first level. Hover or keyboard focus reveals the second level in an
-        overlay, while the page behind it blurs. Opening the mobile burger menu also blurs the page.
-        The blur animates in and out over 180ms, unless reduced motion is requested. The overlay
-        does not list deeper levels.
+        In smaller windows, the burger contains every hierarchy level. A page link and a separate
+        native disclosure control keep navigation distinct from expanding children. In wider
+        windows, the header shows the first level. Hover or keyboard focus reveals the second level
+        in an overlay, while the page behind it blurs. Opening the mobile burger menu also blurs the
+        page. The blur animates in and out over 180ms, unless reduced motion is requested. The
+        overlay does not list deeper levels.
       </p>
       <p>
         Clicking any menu link immediately navigates to its page. Links retain open-in-new-tab and

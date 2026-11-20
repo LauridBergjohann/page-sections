@@ -24,6 +24,7 @@
 </script>
 
 <script lang="ts">
+  import DeviceLayouts from '$lib/DeviceLayouts.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
   import { base } from '$app/paths';
@@ -46,6 +47,28 @@
       background: { color: 'standard', size: 'standard' }
     }}
   />
+  <Section
+    section={{
+      id: 'every-screen',
+      title: 'From phones to ultrawide',
+      headline: 'Designed for the whole range of screens',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        The Spatial Elements layout system behind Page Sections considers the full range of viewing
+        conditions: phones, tablets, laptops, desktop monitors and ultrawide screens. Responsive
+        design should make thoughtful use of extra space as well as fit into a small window.
+      </p>
+      <p>
+        On ultrawide screens, the content column stays centered and capped at 1536 CSS pixels. Wider
+        sidebars use the surrounding space without stretching the main content across the entire
+        display. The seven viewport sizes below describe available space, not a fixed device model.
+      </p>
+    </div>
+    <DeviceLayouts />
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -130,7 +153,7 @@
       </p>
       <p>
         Header shows its item disclosure below 1200px and satellites at 1600px. ContentPage uses its
-        sidebar from 1200px. Image/video pairs split at a 600px container; artwork heroes at 840px.
+        sidebars from 1600px. Image/video pairs split at a 600px container; artwork heroes at 840px.
       </p>
     </div></Section
   >

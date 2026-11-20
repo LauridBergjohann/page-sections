@@ -8,6 +8,7 @@
 </script>
 
 <script lang="ts">
+  import ComponentPlayground from '$lib/ComponentPlayground.svelte';
   import { base } from '$app/paths';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
   import WebsitePage from '$lib/WebsitePage.svelte';
@@ -27,6 +28,16 @@
       background: { color: 'standard' }
     }}
   />
+  <Section
+    section={{
+      id: 'playground',
+      title: 'Try it yourself',
+      headline: 'Try it yourself',
+      background: { color: 'standard' }
+    }}
+  >
+    <ComponentPlayground kind="image" />
+  </Section>
   <Section
     section={{
       id: 'single-image',

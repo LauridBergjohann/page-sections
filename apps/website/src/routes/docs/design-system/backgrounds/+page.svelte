@@ -34,6 +34,7 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
 </script>
 
 <script lang="ts">
+  import BackgroundDiagram from '$lib/BackgroundDiagram.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
   import SurfacePlayground from '$lib/SurfacePlayground.svelte';
@@ -59,13 +60,21 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
   />
   <Section
     section={{
-      background: { color: 'standard', size: 'standard' },
-      id: 'playground',
-      title: 'Try it',
-      headline: 'Try it yourself',
-      variant: 'content'
-    }}><SurfacePlayground /></Section
+      id: 'background-anatomy',
+      title: 'Surfaces at a glance',
+      headline: 'Color and width are independent',
+      background: { color: 'standard' }
+    }}><BackgroundDiagram /></Section
   >
+  <HeadingSection
+    section={{
+      id: 'playground',
+      title: 'Try it yourself',
+      headingLevel: 2,
+      background: { color: 'standard' }
+    }}
+  />
+  <SurfacePlayground />
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },

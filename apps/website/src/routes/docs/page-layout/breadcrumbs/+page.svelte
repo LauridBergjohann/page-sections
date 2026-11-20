@@ -33,6 +33,8 @@
 </script>
 
 <script lang="ts">
+  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
   import { base } from '$app/paths';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
@@ -58,6 +60,26 @@
       background: { color: 'standard', size: 'standard' }
     }}
   />
+  <Section
+    section={{
+      id: 'anatomy',
+      title: 'At a glance',
+      headline: 'At a glance',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutDiagram kind="breadcrumbs" />
+  </Section>
+  <Section
+    section={{
+      id: 'live-example',
+      title: 'Live example',
+      headline: 'Try the page layout',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutPreview kind="breadcrumbs" />
+  </Section>
   <Section
     section={{
       id: 'overview',
@@ -101,9 +123,9 @@
     ><div class="prose">
       <p>
         <code>showContentMenu</code> registers section IDs and titles automatically. It displays a sticky
-        right sidebar from XL or a sticky button with a popup on XS–L. The active bullet follows the reading
-        position. Short last sections are selected at the end of the document. Reordered, added or removed
-        sections update the list.
+        right sidebar in wide windows or a sticky button with a popup in smaller windows. The active bullet
+        follows the reading position. Short last sections are selected at the end of the document. Reordered,
+        added or removed sections update the list.
       </p>
       <p>
         Native anchor links work without JavaScript. The enhanced menu adds active-state tracking

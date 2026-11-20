@@ -8,6 +8,8 @@
 </script>
 
 <script lang="ts">
+  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
   import { base } from '$app/paths';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
   import WebsitePage from '$lib/WebsitePage.svelte';
@@ -33,6 +35,26 @@
       background: { color: 'standard' }
     }}
   />
+  <Section
+    section={{
+      id: 'anatomy',
+      title: 'At a glance',
+      headline: 'At a glance',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutDiagram kind="headings-and-anchors" />
+  </Section>
+  <Section
+    section={{
+      id: 'live-example',
+      title: 'Live example',
+      headline: 'Try the page layout',
+      background: { color: 'standard' }
+    }}
+  >
+    <PageLayoutPreview kind="headings-and-anchors" />
+  </Section>
   <Section
     section={{
       id: 'outline',

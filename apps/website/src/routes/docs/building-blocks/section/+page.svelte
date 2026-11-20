@@ -8,6 +8,7 @@
 </script>
 
 <script lang="ts">
+  import SectionCatalog from '$lib/SectionCatalog.svelte';
   import { base } from '$app/paths';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
   import WebsitePage from '$lib/WebsitePage.svelte';
@@ -26,6 +27,7 @@
       background: { color: 'standard' }
     }}
   />
+  <SectionCatalog heading />
   <Section
     section={{
       id: 'base-container',

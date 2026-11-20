@@ -35,6 +35,7 @@
 </script>
 
 <script lang="ts">
+  import ComponentPlayground from '$lib/ComponentPlayground.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
   import { base } from '$app/paths';
@@ -54,6 +55,16 @@
       background: { color: 'standard', size: 'standard' }
     }}
   />
+  <Section
+    section={{
+      id: 'playground',
+      title: 'Try it yourself',
+      headline: 'Try it yourself',
+      background: { color: 'standard' }
+    }}
+  >
+    <ComponentPlayground kind="card" />
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
