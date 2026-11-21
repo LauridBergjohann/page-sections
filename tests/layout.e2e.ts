@@ -124,13 +124,19 @@ for (const width of [320, 840, 1920]) {
 }
 
 test('native navigation follows delayed scrolling and closes mobile menus on navigation', async ({ page }) => {
-  await page.setViewportSize({ width: 840, height: 900 });
-  await page.goto('/examples/cards/');
-  const header = page.locator('.ps-navigation .header');
-  for (const y of [0, 80, 112, 160]) {
-    await page.evaluate(y => window.scrollTo(0, y), y);
-    await expect.poll(async () => (await header.boundingBox())!.y).toBe(resolveMenuOffset(y));
+  for (const width of [840, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/examples/cards/');
+    await expect(page.locator('.ps-header')).toHaveAttribute('data-scroll', 'delayed');
+    const surfaces = page.locator(width >= 1600 ? '.ps-navigation .header, .ps-navigation .satellite' : '.ps-navigation .header');
+    const initialTops = await surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+    for (const y of [0, 16, 32, 48, 160, 16, 0]) {
+      await page.evaluate(y => window.scrollTo(0, y), y);
+      await expect.poll(() => surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top)))
+        .toEqual(initialTops.map(top => top + resolveMenuOffset(y)));
+    }
   }
+  await page.setViewportSize({ width: 840, height: 900 });
   await page.evaluate(() => window.scrollTo(0, 0));
   const menu = page.locator('.mobile-menu');
   await menu.locator('summary').click();

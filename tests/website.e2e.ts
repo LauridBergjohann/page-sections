@@ -1,5 +1,33 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+for (const width of [390, 1920]) {
+  for (const javaScriptEnabled of [false, true]) {
+    test(`header and satellites share the 32px scroll delay at ${width}px, JS=${javaScriptEnabled}`, async ({ browser, baseURL }) => {
+      const context = await browser.newContext({ baseURL, javaScriptEnabled, viewport: { width, height: 900 } });
+      const page = await context.newPage();
+      await page.goto('/docs/design-system/responsive-layout/');
+      const header = page.locator('.website-header');
+      await expect(header).toHaveAttribute('data-scroll', 'delayed');
+      const surfaces = width >= 1600 ? header.locator('.header, .satellite') : header.locator('.header');
+      const initialTops = await surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+      const content = page.locator('main').first();
+      const contentTop = (await content.boundingBox())!.y;
+      for (const y of [0, 16, 32, 48, 160, 16, 0]) {
+        await page.evaluate(y => window.scrollTo(0, y), y);
+        await expect.poll(() => surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top)))
+          .toEqual(initialTops.map(top => top + Math.min(0, 32 - y)));
+        expect((await content.boundingBox())!.y + y).toBeCloseTo(contentTop, 1);
+      }
+      // Customizing the CSS token changes the hold distance without adding page spacing.
+      await header.evaluate(node => node.style.setProperty('--ps-sticky-range', '64px'));
+      await page.evaluate(() => window.scrollTo(0, 48));
+      await expect.poll(() => surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top))).toEqual(initialTops);
+      expect((await content.boundingBox())!.y + 48).toBeCloseTo(contentTop, 1);
+      await context.close();
+    });
+  }
+}
+
 test('site footer exposes its documentation, legal links and responsive theme', async ({ page }) => {
   test.setTimeout(90000); // Capture and check the footer at sixteen viewport boundaries.
   await page.goto('/docs/page-layout/footer/');

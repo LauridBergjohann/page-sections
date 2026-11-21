@@ -4,7 +4,7 @@
   import type { MenuItem } from '@page-sections/core';
   import MainMenu from './MainMenu.svelte';
   import './styles.css';
-  let { menu, items, brand, left, right, tools, settingsIcon, menuIcon, itemIcon, label = 'Main navigation', settingsLabel = 'Settings', menuLabel = 'Open navigation', closeKey, scrollBehavior = 'static', class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
+  let { menu, items, brand, left, right, tools, settingsIcon, menuIcon, itemIcon, label = 'Main navigation', settingsLabel = 'Settings', menuLabel = 'Open navigation', closeKey, scrollBehavior = 'delayed', class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
     menu?: Snippet; items?: MenuItem[]; brand?: Snippet; left?: Snippet; right?: Snippet; tools?: Snippet;
     settingsIcon?: Snippet; menuIcon?: Snippet; itemIcon?: Snippet<[MenuItem]>; label?: string; settingsLabel?: string; menuLabel?: string;
     closeKey?: unknown; scrollBehavior?: 'static' | 'delayed' | 'fixed';

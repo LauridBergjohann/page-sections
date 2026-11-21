@@ -21,8 +21,8 @@ describe('shared navigation and catalog geometry', () => {
     expect(resolvePageLayout({ width: 1600, height: 900, scrollbarWidth: 17, safeArea: { left: 20, right: 30, top: 10 } })).toMatchObject({ layout: 'xl', menu: { x: 156, y: 26, width: 1261, height: 64 } });
     expect(resolvePageLayout({ width: 50, height: 0, safeArea: { left: 70, right: 90 } }).menu.width).toBe(0);
   });
-  it('keeps the header still for the first 112 scroll pixels', () => {
-    expect([0, 111, 112, 113, 200].map(value => resolveMenuOffset(value))).toEqual([0, 0, 0, -1, -88]);
+  it('keeps the header still for the first 32 scroll pixels', () => {
+    expect([0, 31, 32, 33, 200].map(value => resolveMenuOffset(value))).toEqual([0, 0, 0, -1, -168]);
     expect(resolveMenuOffset(200, true)).toBe(0);
   });
   it.each([[320, 's', 142, 2], [320, 'm', 142, 2], [320, 'l', 296, 4], [720, 'l', 336, 3], [840, 'm', 190, 2], [1536, 'm', 228, 2], [1536, 'l', 480, 4]] as const)('fits %s/%s cards into canonical spans', (width, cardSize, expected, span) => {

@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Default Header to delayed scrolling: the header and satellites stay in place for the first 32 scroll pixels, then leave together. Enable this on the website using native CSS sticky positioning, including without JavaScript. The delay remains configurable through --ps-sticky-range; static and fixed modes remain available.
+
 - Remove the outer borders from the main header and satellites. Keep breadcrumbs on one line with ellipsis and inset the compact content-menu button 12px from the first section.
 
   Animate the main menu's active background and accent line together. Give ButtonGroup one sliding selection surface with rounded outer edges, transitioning text/icon colors, optional icon snippets and accessible icon-only controls. Preserve native links, server-rendered selections and reduced-motion behavior.

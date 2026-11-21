@@ -1,6 +1,6 @@
 /* Generated from core layoutTokens.json; extracted from Beta.8. Do not edit. */
 
-:root { --ps-content-max: 1536px; --ps-menu-height: 66px; --ps-menu-top: 0px; --ps-nav-height: 66px; --ps-sticky-range: 112px; --ps-satellite-width: 80px; --ps-satellite-height: 40px; --ps-satellite-inset: 28px; --ps-satellite-top: 28px; }
+:root { --ps-content-max: 1536px; --ps-menu-height: 66px; --ps-menu-top: 0px; --ps-nav-height: 66px; --ps-sticky-range: 32px; --ps-satellite-width: 80px; --ps-satellite-height: 40px; --ps-satellite-inset: 28px; --ps-satellite-top: 28px; }
 
 .ps-content-width { width: min(100%, 1536px); margin-inline: auto; }
 

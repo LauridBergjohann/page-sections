@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- Keep the core package version aligned with the Svelte navigation fixes. No core API changes.
+- Align the menu scroll threshold with Spatial Elements: keep the header still for the first 32 scroll pixels, then scroll it out with the page.
 
 ## 0.5.0
 

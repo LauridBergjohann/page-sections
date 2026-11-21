@@ -41,7 +41,7 @@
 </script>
 
 <PageShell {mode}>
-  <Header items={menuItems} closeKey={page.url.pathname} scrollBehavior="delayed">
+  <Header items={menuItems} closeKey={page.url.pathname}>
     {#snippet brand()}
       <a class="skip-link" href="#main-content">Skip to content</a>
       <a class="demo-brand" href="/" aria-label="Page Sections home">

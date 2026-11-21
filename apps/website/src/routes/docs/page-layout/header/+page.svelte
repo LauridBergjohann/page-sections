@@ -140,8 +140,17 @@
         plus menuIcon and settingsIcon. Satellites appear alongside the header in wide windows and
         move into settings when space is limited. The optional menu snippet replaces the desktop
         menu; items still supplies the mobile tree. <code>closeKey</code>
-        closes open menus when the host changes routes. <code>scrollBehavior</code> supports static (default),
-        delayed and fixed.
+        closes open menus when the host changes routes.
+      </p>
+      <p>
+        By default, <code>scrollBehavior="delayed"</code> keeps the header and its satellites in
+        place for the first 32 pixels of downward scrolling. They then scroll out together with the
+        page, and return along the same path when scrolling up. This uses CSS sticky positioning and
+        also works without JavaScript. Set <code>--ps-sticky-range</code> on Header or an ancestor
+        to change that distance. Use <code>scrollBehavior="static"</code> to scroll away
+        immediately, or <code>scrollBehavior="fixed"</code> to keep the header visible throughout the
+        page. If an enclosing navigation shell already controls scrolling, use static to avoid two sticky
+        layers.
       </p>
       <p>
         <code>Navigation</code> remains a deprecated compatibility export of Header with the same props.

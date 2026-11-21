@@ -330,7 +330,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             <tr>
               <td><code>menu</code></td>
               <td
-                >height=66, wideHeight=64, wideTop=16, scrollThreshold=112; generated header
+                >height=66, wideHeight=64, wideTop=16, scrollThreshold=32; generated header
                 dimensions and delayed scrolling</td
               >
             </tr>
@@ -493,7 +493,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td>--ps-sticky-range</td>
-              <td>112px delayed-scroll interval</td>
+              <td>32px delayed-scroll interval; override on Header or an ancestor</td>
             </tr>
             <tr>
               <td
