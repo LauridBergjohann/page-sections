@@ -1,5 +1,87 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+for (const width of [390, 1599]) {
+  for (const javaScriptEnabled of [false, true]) {
+    test(`compact content menu docks and reflects its open state at ${width}px, JS=${javaScriptEnabled}`, async ({ browser, baseURL }) => {
+      const context = await browser.newContext({ baseURL, javaScriptEnabled, viewport: { width, height: 900 } });
+      const page = await context.newPage();
+      await page.goto('/docs/design-system/responsive-layout/');
+      const content = page.locator('main').first();
+      const button = content.getByRole('button', { name: 'On this page', exact: true });
+      const popup = content.locator('.ps-content-menu-slot .popup');
+      const initial = (await button.boundingBox())!;
+      const section = (await content.locator('[data-ps-section]').first().boundingBox())!;
+      expect(initial.y - section.y).toBe(12);
+      expect(section.x + section.width - initial.x - initial.width).toBe(12);
+      for (const y of [16, 32, 64, 200, 600, 0]) {
+        await page.evaluate(y => window.scrollTo(0, y), y);
+        await expect.poll(() => page.evaluate(() => scrollY)).toBe(y);
+        await expect.poll(async () => (await button.boundingBox())!.y).toBe(Math.max(12, initial.y - y));
+        if (width === 390 && javaScriptEnabled && y === 200) await page.screenshot({ path: test.info().outputPath('content-menu-docked.png') });
+      }
+      // A genuinely fixed header still needs room above the docked control.
+      const header = page.locator('.website-header');
+      await header.evaluate(node => node.setAttribute('data-scroll', 'fixed'));
+      await page.evaluate(() => window.scrollTo(0, 200));
+      await expect.poll(async () => (await button.boundingBox())!.y).toBe(78);
+      await header.evaluate(node => node.setAttribute('data-scroll', 'static'));
+      await expect.poll(async () => (await button.boundingBox())!.y).toBe(12);
+      await header.evaluate(node => node.setAttribute('data-scroll', 'delayed'));
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect.poll(async () => (await button.boundingBox())!.y).toBe(initial.y);
+      // Use custom tokens to verify the same theming contract as ButtonGroup.
+      await content.evaluate(node => {
+        node.style.setProperty('--ps-accent', 'rgb(4, 180, 120)');
+        node.style.setProperty('--ps-selection', 'rgb(50, 60, 70)');
+      });
+      const normal = await button.evaluate(node => ({ color: getComputedStyle(node).color, background: getComputedStyle(node).backgroundColor }));
+      for (const dismissal of javaScriptEnabled ? ['toggle', 'escape', 'close', 'outside'] : ['toggle']) {
+        await button.click();
+        await expect(popup).toBeVisible();
+        await expect(button).toHaveCSS('color', 'rgb(4, 180, 120)');
+        await expect(button.locator('svg')).toHaveCSS('stroke', 'rgb(4, 180, 120)');
+        await expect(button).toHaveCSS('background-color', 'rgb(50, 60, 70)');
+        if (dismissal === 'escape') await page.keyboard.press('Escape');
+        else if (dismissal === 'close') await popup.getByRole('button', { name: 'Close content menu' }).click();
+        else if (dismissal === 'outside') await content.locator('h1').click();
+        else await button.click();
+        await expect(popup).toBeHidden();
+        await expect(button).toHaveCSS('color', normal.color);
+        await expect(button).toHaveCSS('background-color', normal.background);
+      }
+      await context.close();
+    });
+  }
+}
+
+for (const width of [390, 1920]) {
+  for (const javaScriptEnabled of [false, true]) {
+    test(`header and satellites share the 32px scroll delay at ${width}px, JS=${javaScriptEnabled}`, async ({ browser, baseURL }) => {
+      const context = await browser.newContext({ baseURL, javaScriptEnabled, viewport: { width, height: 900 } });
+      const page = await context.newPage();
+      await page.goto('/docs/design-system/responsive-layout/');
+      const header = page.locator('.website-header');
+      await expect(header).toHaveAttribute('data-scroll', 'delayed');
+      const surfaces = width >= 1600 ? header.locator('.header, .satellite') : header.locator('.header');
+      const initialTops = await surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+      const content = page.locator('main').first();
+      const contentTop = (await content.boundingBox())!.y;
+      for (const y of [0, 16, 32, 48, 160, 16, 0]) {
+        await page.evaluate(y => window.scrollTo(0, y), y);
+        await expect.poll(() => surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top)))
+          .toEqual(initialTops.map(top => top + Math.min(0, 32 - y)));
+        expect((await content.boundingBox())!.y + y).toBeCloseTo(contentTop, 1);
+      }
+      // Customizing the CSS token changes the hold distance without adding page spacing.
+      await header.evaluate(node => node.style.setProperty('--ps-sticky-range', '64px'));
+      await page.evaluate(() => window.scrollTo(0, 48));
+      await expect.poll(() => surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top))).toEqual(initialTops);
+      expect((await content.boundingBox())!.y + 48).toBeCloseTo(contentTop, 1);
+      await context.close();
+    });
+  }
+}
+
 test('site footer exposes its documentation, legal links and responsive theme', async ({ page }) => {
   test.setTimeout(90000); // Capture and check the footer at sixteen viewport boundaries.
   await page.goto('/docs/page-layout/footer/');
@@ -102,7 +184,7 @@ test('headings, compact code tools and nested routes use the website design syst
   const shell = page.locator('.ps-shell');
   await expect(shell).toHaveAttribute('data-ps-theme', 'light');
   const lightAccent = await themeColor(shell, '--ps-accent');
-  await expect(page.locator('.desktop-menu a.active').first()).toHaveCSS('background-color', await themeColor(shell, '--ps-selection'));
+  await expect.poll(() => page.locator('.desktop-menu .ps-main-menu').evaluate(node => getComputedStyle(node, '::before').backgroundColor)).toBe(await themeColor(shell, '--ps-selection'));
   await expect(page.locator('.site-footer .ps-footer-links a').last()).toHaveCSS('color', await themeColor(shell, '--ps-footer-bar-ink'));
   await page.goto('/sections/headings/');
   const preview = page.locator('#heading-preview');
@@ -149,11 +231,11 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
     for (const [key, color] of Object.entries(palette)) { node.style.color = color; result[key] = getComputedStyle(node).color; }
     node.remove(); return result;
   }, palette);
-  await expect(docs).toHaveCSS('background-color', colors.muted);
+  await expect.poll(() => page.locator('.desktop-menu .ps-main-menu').evaluate(node => getComputedStyle(node, '::before').backgroundColor)).toBe(colors.muted);
   await expect(docs).toHaveCSS('font-weight', '400');
   await expect(docs).toHaveCSS('border-radius', '0px');
   const headerBox = (await page.locator('.website-header .header').boundingBox())!;
-  expect((await docs.boundingBox())!.height).toBe(headerBox.height - 2);
+  expect((await docs.boundingBox())!.height).toBe(headerBox.height);
   await expect(page.locator('.satellite.right [aria-pressed="true"]')).toHaveCSS('color', colors.accent);
   await docs.hover();
   const overlay = page.locator('.ps-submenu:visible');
@@ -166,7 +248,7 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await expect(overlay).toBeVisible();
   await page.keyboard.press('Escape');
   await page.mouse.move(0, 500);
-  await expect(docs).toHaveCSS('background-color', colors.muted);
+  await expect.poll(() => page.locator('.desktop-menu .ps-main-menu').evaluate(node => getComputedStyle(node, '::before').backgroundColor)).toBe(colors.muted);
   const sidebar = page.locator('.ps-left-sidebar');
   const initialTop = (await sidebar.boundingBox())!.y;
   await expect(sidebar.locator('[aria-current="page"]')).toHaveCSS('background-color', colors.muted);
@@ -398,6 +480,7 @@ test('code composition supports languages, side order, wrapping and dark mode', 
 });
 
 test('global search supports shortcuts, keyboard navigation and empty results', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
   await page.goto('/docs/');
   const input = page.getByRole('combobox', { name: 'Search documentation' });
   await expect(input).toBeVisible();
@@ -539,16 +622,18 @@ for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
   test(`header search and GitHub link fit at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
-    const github = page.getByRole('link', { name: 'Page Sections on GitHub' });
-    await expect(github).toBeVisible();
+    const github = page.getByRole('link', { name: 'Page Sections on GitHub', includeHidden: true });
+    if (width < 600) await expect(github).toBeHidden();
+    else await expect(github).toBeVisible();
     await expect(github).toHaveAttribute('href', 'https://github.com/LauridBergjohann/page-sections');
-    const npm = page.getByRole('link', { name: 'Page Sections on NPM' });
-    await expect(npm).toBeVisible();
+    const npm = page.getByRole('link', { name: 'Page Sections on NPM', includeHidden: true });
+    if (width < 600) await expect(npm).toBeHidden();
+    else await expect(npm).toBeVisible();
     await expect(npm).toHaveAttribute('href', 'https://www.npmjs.com/package/@page-sections/svelte');
     const header = await page.locator('.website-header .header').boundingBox();
     expect(header!.height).toBe(width < 1600 ? 66 : 64);
     const input = page.getByRole('combobox', { name: 'Search documentation' });
-    if (width < 800) {
+    if (width < 800 || (width >= 1200 && width < 1400)) {
       await page.getByRole('button', { name: 'Open search', exact: true }).click();
     } else await input.click();
     await expect(input).toBeFocused();
@@ -557,7 +642,7 @@ for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await input.press('Escape');
     await expect(page.getByRole('listbox')).toHaveCount(0);
-    if (width < 800) await expect(page.getByRole('button', { name: 'Open search', exact: true })).toBeFocused();
+    if (width < 800 || (width >= 1200 && width < 1400)) await expect(page.getByRole('button', { name: 'Open search', exact: true })).toBeFocused();
     await page.keyboard.press('Control+k');
     await expect(input).toBeFocused();
     await input.fill('CodeBlock');
@@ -618,6 +703,7 @@ for (const javaScriptEnabled of [false, true]) {
     if (javaScriptEnabled) {
       await page.goto('/docs/');
       const search = page.getByRole('combobox', { name: 'Search documentation' });
+      await page.getByRole('button', { name: 'Open search', exact: true }).click();
       await search.fill('ContentAction');
       await search.press('Enter');
       await expect(page).toHaveURL(/\/docs\/reference\/types\/#content-action$/);
@@ -791,4 +877,44 @@ test('carousel details start with a configurable, scrollable collection', async 
   await expect(page.locator('#playground pre')).toContainText('cardSize="l"');
   await page.getByRole('button', { name: 'Reset example', exact: true }).click();
   await expect(cards.first()).toHaveAttribute('data-ps-card-size', 'm');
+});
+
+test('compact header keeps the brand and prioritizes search and settings', async ({page}) => {
+  test.setTimeout(60000);
+  await page.goto('/docs/design-system/responsive-layout/');
+  const header = page.locator('.website-header .header');
+  for (const width of [320, 390, 599, 600, 840, 1200, 1399, 1600, 1920]) {
+    await page.setViewportSize({width, height: 900});
+    const brand = header.getByRole('link', {name: 'Page Sections home'});
+    await expect(brand.locator('span')).toBeVisible();
+    await expect(brand.locator('img')).toBeVisible();
+    const github = header.getByRole('link', {name: 'Page Sections on GitHub'});
+    const npm = header.getByRole('link', {name: 'Page Sections on NPM'});
+    if (width < 600) {
+      await expect(github).toBeHidden(); await expect(npm).toBeHidden();
+      await expect(header.getByRole('button', {name: 'Open search'})).toBeVisible();
+      await expect(header.locator('.settings > summary')).toBeVisible();
+    } else { await expect(github).toBeVisible(); await expect(npm).toBeVisible(); }
+    expect((await header.boundingBox())!.height).toBe(width < 1600 ? 66 : 64);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    const boxes = await header.locator('.brand, .tools, .settings, .mobile-navigation, .desktop-menu').evaluateAll(nodes => nodes.filter(node => node.getClientRects().length).map(node => node.getBoundingClientRect().toJSON()));
+    for (const a of boxes) for (const b of boxes) if (a.x < b.x) expect(a.right).toBeLessThanOrEqual(b.x + 1);
+    const trail = page.getByRole('navigation', {name: 'Breadcrumb', exact: true});
+    const tops = await trail.locator('li').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+    expect(new Set(tops).size).toBe(1);
+    if (width < 600) {
+      const button = (await page.locator('.ps-content-menu-slot summary').boundingBox())!;
+      const section = (await page.locator('.ps-page-content [data-ps-section]').first().boundingBox())!;
+      expect(button.y - section.y).toBeCloseTo(12, 0);
+      expect(section.x + section.width - button.x - button.width).toBeCloseTo(12, 0);
+    }
+    await expect(header).toHaveCSS('border-top-width', '0px');
+    await expect(header).toHaveCSS('border-bottom-width', '0px');
+    if (width >= 1600) await expect(page.locator('.satellite.right')).toHaveCSS('outline-style', 'none');
+    if ([320, 390, 1200, 1920].includes(width)) await page.screenshot({path: test.info().outputPath(`navigation-${width}.png`)});
+  }
+  await page.locator('.satellite.right').getByRole('button', {name: 'Dark', exact: true}).click();
+  await expect(header).toHaveCSS('border-width', '0px');
+  await expect(page.locator('.satellite.right')).toHaveCSS('outline-style', 'none');
+  await page.screenshot({path: test.info().outputPath('navigation-dark.png')});
 });

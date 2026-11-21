@@ -68,6 +68,7 @@ for (const width of [390, 1599, 1600, 1808, 1809, 2299, 2300, 2800]) {
     } else {
       await expect(root.locator('.ps-left-sidebar')).toBeHidden();
       const button = root.getByRole('button', { name: 'On this page', exact: true });
+      await expect.poll(async () => (await button.boundingBox())!.y).toBe(12);
       await button.click();
       await expect(root.locator('.popup')).toBeVisible();
       await root.locator('.popup a').last().click();

@@ -2,7 +2,7 @@
   import { onMount, type Snippet } from 'svelte';
   import { page } from '$app/state';
   import { base } from '$app/paths';
-  import { Footer, Header, PageShell } from '@page-sections/svelte';
+  import { ButtonGroup, Footer, Header, PageShell } from '@page-sections/svelte';
   import Menu from '@lucide/svelte/icons/menu';
   import Settings from '@lucide/svelte/icons/settings';
   import Sun from '@lucide/svelte/icons/sun';
@@ -52,7 +52,7 @@
   {@render children()}
 {:else}
   <PageShell {mode}>
-    <Header class="website-header" {items} closeKey={page.url.pathname}>
+    <Header class="website-header" {items} closeKey={page.url.pathname} scrollBehavior="delayed">
       {#snippet itemIcon(item)}<NavigationIcon name={item.icon} />{/snippet}
       {#snippet brand()}
         <a class="skip-link" href="#main-content">Skip to content</a>
@@ -85,24 +85,19 @@
         </div>
       {/snippet}
       {#snippet right()}
-        <div class="appearance" role="group" aria-label="Appearance">
-          <button
-            type="button"
-            aria-label="Light"
-            title="Light"
-            aria-pressed={mode === 'light'}
-            disabled={!ready}
-            onclick={() => setMode('light')}><Sun size={18} aria-hidden="true" /></button
-          >
-          <button
-            type="button"
-            aria-label="Dark"
-            title="Dark"
-            aria-pressed={mode === 'dark'}
-            disabled={!ready}
-            onclick={() => setMode('dark')}><Moon size={18} aria-hidden="true" /></button
-          >
-        </div>
+        <ButtonGroup
+          label="Appearance"
+          iconOnly
+          items={[
+            { id: 'light', label: 'Light', selected: mode === 'light', disabled: !ready },
+            { id: 'dark', label: 'Dark', selected: mode === 'dark', disabled: !ready }
+          ]}
+          onselect={(item) => setMode(item.id)}
+        >
+          {#snippet icon(item)}
+            {#if item.id === 'light'}<Sun size={18} />{:else}<Moon size={18} />{/if}
+          {/snippet}
+        </ButtonGroup>
       {/snippet}
     </Header>
     <div id="main-content" tabindex="-1">{@render children()}</div>
@@ -210,9 +205,13 @@
     width: 22px;
     height: 22px;
   }
-  @media (min-width: 1200px) and (max-width: 1399.98px) {
-    .site-brand span {
+  @media (max-width: 599.98px) {
+    .github-link {
       display: none;
+    }
+    .site-brand {
+      gap: 0.5rem;
+      font-size: 0.875rem;
     }
   }
   @media (min-width: 1200px) {
@@ -225,28 +224,5 @@
     :global(.website-header .tools) {
       margin-inline-start: 1.5rem;
     }
-  }
-  .appearance {
-    display: flex;
-  }
-  .appearance button {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
-    color: var(--ps-ink);
-    cursor: pointer;
-  }
-  .appearance [aria-pressed='true'] {
-    color: var(--ps-accent);
-    background: var(--ps-selection, var(--ps-section-muted));
-  }
-  .appearance button:disabled {
-    opacity: 0.5;
-    cursor: default;
   }
 </style>

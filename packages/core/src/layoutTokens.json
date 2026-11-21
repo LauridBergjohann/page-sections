@@ -97,7 +97,7 @@
     "height": 66,
     "wideHeight": 64,
     "wideTop": 16,
-    "scrollThreshold": 112
+    "scrollThreshold": 32
   },
   "satellite": {
     "width": 80,

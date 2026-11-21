@@ -4,7 +4,7 @@
   import type { MenuItem } from '@page-sections/core';
   import MainMenu from './MainMenu.svelte';
   import './styles.css';
-  let { menu, items, brand, left, right, tools, settingsIcon, menuIcon, itemIcon, label = 'Main navigation', settingsLabel = 'Settings', menuLabel = 'Open navigation', closeKey, scrollBehavior = 'static', class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
+  let { menu, items, brand, left, right, tools, settingsIcon, menuIcon, itemIcon, label = 'Main navigation', settingsLabel = 'Settings', menuLabel = 'Open navigation', closeKey, scrollBehavior = 'delayed', class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
     menu?: Snippet; items?: MenuItem[]; brand?: Snippet; left?: Snippet; right?: Snippet; tools?: Snippet;
     settingsIcon?: Snippet; menuIcon?: Snippet; itemIcon?: Snippet<[MenuItem]>; label?: string; settingsLabel?: string; menuLabel?: string;
     closeKey?: unknown; scrollBehavior?: 'static' | 'delayed' | 'fixed';
@@ -90,7 +90,7 @@
   [data-scroll='fixed'] { height: var(--ps-nav-height); }
   [data-scroll='fixed'] .ps-navigation-rack { position: fixed; inset: 0 0 auto; }
   .ps-navigation { position: relative; padding-top: var(--ps-menu-top); min-height: var(--ps-nav-height); }
-  .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; background: var(--ps-section-standard); border-bottom: 1px solid var(--ps-border); box-shadow: var(--ps-navigation-shadow); }
+  .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; background: var(--ps-section-standard); box-shadow: var(--ps-navigation-shadow); }
   .brand, .tools { flex-shrink: 0; }
   .brand { min-width: 0; }
   .menu { flex: 1; min-width: 0; }
@@ -104,10 +104,11 @@
   .mobile-panel :global(ul) { flex-direction: column; align-items: stretch; }
   .desktop-menu { display: none; }
   @media (max-width: 1599.98px) { .header { width: 100%; } }
+  @media (max-width: 599.98px) { .header { gap: .25rem; } }
   @media (min-width: 1200px) { .mobile-navigation { display: none; } .desktop-menu { display: block; } }
   @media (min-width: 1600px) {
-    .header { border: 1px solid var(--ps-border); border-radius: var(--ps-radius); }
-    .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-section-standard); border-radius: 12px; outline: 1px solid var(--ps-border); box-shadow: var(--ps-navigation-shadow); }
+    .header { border-radius: var(--ps-radius); }
+    .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-section-standard); border-radius: 12px; box-shadow: var(--ps-navigation-shadow); }
     .left { left: var(--ps-satellite-inset); } .right { right: var(--ps-satellite-inset); }
     .settings { display: none; }
   }

@@ -1,5 +1,11 @@
 # @page-sections/core
 
+## 0.5.1
+
+### Patch Changes
+
+- Align the menu scroll threshold with Spatial Elements: keep the header still for the first 32 scroll pixels, then scroll it out with the page.
+
 ## 0.5.0
 
 ### Minor Changes

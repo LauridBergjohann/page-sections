@@ -140,8 +140,17 @@
         plus menuIcon and settingsIcon. Satellites appear alongside the header in wide windows and
         move into settings when space is limited. The optional menu snippet replaces the desktop
         menu; items still supplies the mobile tree. <code>closeKey</code>
-        closes open menus when the host changes routes. <code>scrollBehavior</code> supports static (default),
-        delayed and fixed.
+        closes open menus when the host changes routes.
+      </p>
+      <p>
+        By default, <code>scrollBehavior="delayed"</code> keeps the header and its satellites in
+        place for the first 32 pixels of downward scrolling. They then scroll out together with the
+        page, and return along the same path when scrolling up. This uses CSS sticky positioning and
+        also works without JavaScript. Set <code>--ps-sticky-range</code> on Header or an ancestor
+        to change that distance. Use <code>scrollBehavior="static"</code> to scroll away
+        immediately, or <code>scrollBehavior="fixed"</code> to keep the header visible throughout the
+        page. If an enclosing navigation shell already controls scrolling, use static to avoid two sticky
+        layers.
       </p>
       <p>
         <code>Navigation</code> remains a deprecated compatibility export of Header with the same props.
@@ -254,6 +263,18 @@
               >
               <td>Optional callback for button activation</td>
             </tr>
+            <tr
+              ><td><code>icon</code></td><td
+                >Snippet&lt;[<a href={base + '/docs/reference/types/#button-group-item'}
+                  >ButtonGroupItem</a
+                >]&gt;</td
+              ><td>Optional icon rendered for each item</td></tr
+            >
+            <tr
+              ><td><code>iconOnly</code></td><td>boolean</td><td
+                >false; with an icon, use the item label as the accessible name and tooltip</td
+              ></tr
+            >
           </tbody>
         </table>
       </div>
@@ -317,9 +338,8 @@
       <p>
         Header links use neutral <code>--ps-ink</code>; content links retain
         <code>--ps-accent</code>. Header and satellites share <code>--ps-navigation-shadow</code>.
-        Set this token on a navigation ancestor to customize or disable elevation. If host button
-        groups paint their own outline and radius, leave the satellite wrapper unpainted and apply
-        the token to the actual group to avoid duplicate edges.
+        Set this token on a navigation ancestor to customize or disable elevation. The header and
+        satellite containers have no border or outline; shadows separate them from the page.
       </p>
       <p>
         The current page and its ancestors retain a muted background in both menus. Only the current
@@ -328,7 +348,11 @@
         Sidebar branches reopen along the current page path after navigation. Desktop submenus
         connect directly to their parent link and are centered beneath it. Selected ButtonGroup
         items use a muted background and accent text; icons that inherit the text color follow the
-        same selection treatment.
+        same selection treatment. With one selected item, the background slides to its new position
+        in 180 milliseconds while the text and icon colors transition. Only the group's outer
+        corners are rounded. The main-menu background and accent line move together when the active
+        route changes; font weight changes immediately. Reduced-motion preferences disable these
+        animations.
       </p>
     </div></Section
   >

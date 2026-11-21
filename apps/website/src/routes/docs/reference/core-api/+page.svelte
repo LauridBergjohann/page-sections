@@ -189,8 +189,8 @@ console.log(background.cssBackground);`
         containing block.
       </p>
       <p>
-        <code>resolveMenuOffset(scrollY: number, fixed = false)</code> returns zero until 112px,
-        then <code>112 - scrollY</code>; fixed mode always returns zero.
+        <code>resolveMenuOffset(scrollY: number, fixed = false)</code> returns zero until 32px, then
+        <code>32 - scrollY</code>; fixed mode always returns zero.
       </p>
     </div></Section
   >

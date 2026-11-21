@@ -109,7 +109,8 @@
         Use the same navigation tree for the menu, sidebar and breadcrumbs. The first breadcrumb is
         the main-menu entry; Home is reachable through the logo. Breadcrumbs accepts items and an
         optional label. It renders nothing with fewer than two items and marks the final entry with
-        aria-current="page".
+        aria-current="page". The trail stays on one line. Labels that do not fit are shortened with
+        an ellipsis; their full text remains available to assistive technology.
       </p>
     </div></Section
   >
@@ -125,7 +126,11 @@
         <code>showContentMenu</code> registers section IDs and titles automatically. It displays a sticky
         right sidebar in wide windows or a sticky button with a popup in smaller windows. The active bullet
         follows the reading position. Short last sections are selected at the end of the document. Reordered,
-        added or removed sections update the list.
+        added or removed sections update the list. The compact button sits 12 pixels from both the right
+        edge and the beginning of the page's first section. It scrolls up with the content, then docks
+        12 pixels below the viewport edge. A permanently fixed header reserves its own height above the
+        button. While the popup is open, the button uses the accent color and selection background, matching
+        ButtonGroup; closing it restores its normal appearance.
       </p>
       <p>
         Native anchor links work without JavaScript. The enhanced menu adds active-state tracking

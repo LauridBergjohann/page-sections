@@ -1,41 +1,104 @@
-<script lang="ts">
+﻿<script lang="ts">
+  import type { Snippet } from 'svelte';
   import { safeHref, type ButtonGroupItem } from '@page-sections/core';
+  import { selectionIndicator } from './selectionIndicator.js';
+  import './selectionIndicator.css';
   let {
     items,
     label,
-    onselect
-  }: { items: ButtonGroupItem[]; label: string; onselect?: (item: ButtonGroupItem) => void } =
-    $props();
+    onselect,
+    icon,
+    iconOnly = false
+  }: {
+    items: ButtonGroupItem[];
+    label: string;
+    onselect?: (item: ButtonGroupItem) => void;
+    icon?: Snippet<[ButtonGroupItem]>;
+    iconOnly?: boolean;
+  } = $props();
 </script>
 
-<div role="group" aria-label={label}>
-  {#each items as item (item.id)}{#if item.href && !item.disabled}<a
+{#snippet content(item: ButtonGroupItem)}
+  {#if icon}<span class="icon" aria-hidden="true">{@render icon(item)}</span>{/if}
+  {#if !iconOnly || !icon}<span>{item.label}</span>{/if}
+{/snippet}
+<div
+  class="ps-button-group ps-selection-track"
+  role="group"
+  aria-label={label}
+  use:selectionIndicator={{
+    items: ':scope > a, :scope > button',
+    selected: '[aria-pressed="true"], [aria-current]'
+  }}
+>
+  {#each items as item, index (item.id)}
+    {#if item.href && !item.disabled}
+      <a
         href={safeHref(item.href)}
-        aria-current={item.selected ? 'true' : undefined}>{item.label}</a
-      >{:else}<button
+        aria-current={item.selected ? 'true' : undefined}
+        aria-label={iconOnly && icon ? item.label : undefined}
+        title={iconOnly && icon ? item.label : undefined}
+        class:icon-only={iconOnly && !!icon}
+        data-first={index === 0 || undefined}
+        data-last={index === items.length - 1 || undefined}
+      >
+        {@render content(item)}
+      </a>
+    {:else}
+      <button
         type="button"
         disabled={item.disabled}
         aria-pressed={item.selected}
-        onclick={() => onselect?.(item)}>{item.label}</button
-      >{/if}{/each}
+        aria-label={iconOnly && icon ? item.label : undefined}
+        title={iconOnly && icon ? item.label : undefined}
+        class:icon-only={iconOnly && !!icon}
+        data-first={index === 0 || undefined}
+        data-last={index === items.length - 1 || undefined}
+        onclick={() => onselect?.(item)}>{@render content(item)}</button
+      >
+    {/if}
+  {/each}
 </div>
 
 <style>
-  div {
+  .ps-button-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem;
+    width: fit-content;
+    max-width: 100%;
+    border-radius: var(--ps-radius, 12px);
   }
   a,
   button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     border: 0;
     padding: 0.65rem;
-    border-radius: calc(var(--ps-radius) / 2);
+    border-radius: 0;
     font: inherit;
     color: inherit;
     background: transparent;
     cursor: pointer;
     text-decoration: none;
+    transition: color 180ms ease;
+  }
+  [data-first] {
+    border-start-start-radius: var(--ps-radius, 12px);
+    border-end-start-radius: var(--ps-radius, 12px);
+  }
+  [data-last] {
+    border-start-end-radius: var(--ps-radius, 12px);
+    border-end-end-radius: var(--ps-radius, 12px);
+  }
+  .icon {
+    display: flex;
+  }
+  .icon-only {
+    width: 40px;
+    height: 40px;
+    padding: 0;
   }
   [aria-pressed='true'],
   [aria-current] {
@@ -43,8 +106,25 @@
     background: var(--ps-selection, var(--ps-section-muted));
     font-weight: 700;
   }
+  .ps-button-group:global([data-ps-selection-ready]) > :is([aria-pressed='true'], [aria-current]) {
+    background: transparent;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--ps-accent);
+    outline-offset: -2px;
+  }
   button:disabled {
     opacity: 0.5;
     cursor: default;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a,
+    button {
+      transition: none;
+    }
   }
 </style>

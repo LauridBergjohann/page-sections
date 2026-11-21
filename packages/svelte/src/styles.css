@@ -46,8 +46,8 @@
 
 /* Keep the compact contents control reachable while a persistent header is visible. */
 @media (max-width: 1599.98px) {
-  .ps-shell:has(.ps-navigation-track:is([data-scroll='fixed'], [data-scroll='delayed'])) .ps-content-menu-slot { top: calc(var(--ps-nav-height) + var(--ps-sidebar-sticky-top)); }
-  .ps-shell:has(.ps-navigation-track:is([data-scroll='fixed'], [data-scroll='delayed'])) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }
+  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot { top: var(--ps-nav-height); }
+  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }
 }
 
 /* Native scrollbars retain keyboard and pointer behavior with a quieter appearance. */

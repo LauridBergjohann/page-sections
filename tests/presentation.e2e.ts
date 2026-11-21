@@ -30,7 +30,7 @@ for (const width of [375, 1920]) {
       await expect(nav.locator('.header')).toHaveCSS('box-shadow', 'none');
       if (width >= 1600) {
         await expect(nav.locator('.satellite').first()).toHaveCSS('box-shadow', 'none');
-        await expect(nav.locator('.satellite').first()).toHaveCSS('outline-width', '1px');
+        await expect(nav.locator('.satellite').first()).toHaveCSS('outline-style', 'none');
       }
     }
   });
