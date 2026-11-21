@@ -182,8 +182,17 @@
     list-style: none;
     border: 1px solid var(--ps-border);
     border-radius: 0.5rem;
+    color: var(--ps-ink);
     background: var(--ps-section-standard);
     box-shadow: var(--ps-surface-shadow);
+    transition: color 180ms ease, background-color 180ms ease;
+  }
+  .mobile[open] > summary {
+    color: var(--ps-accent);
+    background: var(--ps-selection, var(--ps-section-muted));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    summary { transition: none; }
   }
   summary::-webkit-details-marker {
     display: none;

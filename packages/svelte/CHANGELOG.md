@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Let the compact content-menu button scroll with the page before docking 12px below the viewport edge. Reserve header space only for fixed headers. Use the accent and selection colors while the popup is open, restoring the normal appearance when closed.
+
 - Default Header to delayed scrolling: the header and satellites stay in place for the first 32 scroll pixels, then leave together. Enable this on the website using native CSS sticky positioning, including without JavaScript. The delay remains configurable through --ps-sticky-range; static and fixed modes remain available.
 
 - Remove the outer borders from the main header and satellites. Keep breadcrumbs on one line with ellipsis and inset the compact content-menu button 12px from the first section.

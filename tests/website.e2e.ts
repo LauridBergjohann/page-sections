@@ -1,5 +1,59 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+for (const width of [390, 1599]) {
+  for (const javaScriptEnabled of [false, true]) {
+    test(`compact content menu docks and reflects its open state at ${width}px, JS=${javaScriptEnabled}`, async ({ browser, baseURL }) => {
+      const context = await browser.newContext({ baseURL, javaScriptEnabled, viewport: { width, height: 900 } });
+      const page = await context.newPage();
+      await page.goto('/docs/design-system/responsive-layout/');
+      const content = page.locator('main').first();
+      const button = content.getByRole('button', { name: 'On this page', exact: true });
+      const popup = content.locator('.ps-content-menu-slot .popup');
+      const initial = (await button.boundingBox())!;
+      const section = (await content.locator('[data-ps-section]').first().boundingBox())!;
+      expect(initial.y - section.y).toBe(12);
+      expect(section.x + section.width - initial.x - initial.width).toBe(12);
+      for (const y of [16, 32, 64, 200, 600, 0]) {
+        await page.evaluate(y => window.scrollTo(0, y), y);
+        await expect.poll(() => page.evaluate(() => scrollY)).toBe(y);
+        await expect.poll(async () => (await button.boundingBox())!.y).toBe(Math.max(12, initial.y - y));
+        if (width === 390 && javaScriptEnabled && y === 200) await page.screenshot({ path: test.info().outputPath('content-menu-docked.png') });
+      }
+      // A genuinely fixed header still needs room above the docked control.
+      const header = page.locator('.website-header');
+      await header.evaluate(node => node.setAttribute('data-scroll', 'fixed'));
+      await page.evaluate(() => window.scrollTo(0, 200));
+      await expect.poll(async () => (await button.boundingBox())!.y).toBe(78);
+      await header.evaluate(node => node.setAttribute('data-scroll', 'static'));
+      await expect.poll(async () => (await button.boundingBox())!.y).toBe(12);
+      await header.evaluate(node => node.setAttribute('data-scroll', 'delayed'));
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect.poll(async () => (await button.boundingBox())!.y).toBe(initial.y);
+      // Use custom tokens to verify the same theming contract as ButtonGroup.
+      await content.evaluate(node => {
+        node.style.setProperty('--ps-accent', 'rgb(4, 180, 120)');
+        node.style.setProperty('--ps-selection', 'rgb(50, 60, 70)');
+      });
+      const normal = await button.evaluate(node => ({ color: getComputedStyle(node).color, background: getComputedStyle(node).backgroundColor }));
+      for (const dismissal of javaScriptEnabled ? ['toggle', 'escape', 'close', 'outside'] : ['toggle']) {
+        await button.click();
+        await expect(popup).toBeVisible();
+        await expect(button).toHaveCSS('color', 'rgb(4, 180, 120)');
+        await expect(button.locator('svg')).toHaveCSS('stroke', 'rgb(4, 180, 120)');
+        await expect(button).toHaveCSS('background-color', 'rgb(50, 60, 70)');
+        if (dismissal === 'escape') await page.keyboard.press('Escape');
+        else if (dismissal === 'close') await popup.getByRole('button', { name: 'Close content menu' }).click();
+        else if (dismissal === 'outside') await content.locator('h1').click();
+        else await button.click();
+        await expect(popup).toBeHidden();
+        await expect(button).toHaveCSS('color', normal.color);
+        await expect(button).toHaveCSS('background-color', normal.background);
+      }
+      await context.close();
+    });
+  }
+}
+
 for (const width of [390, 1920]) {
   for (const javaScriptEnabled of [false, true]) {
     test(`header and satellites share the 32px scroll delay at ${width}px, JS=${javaScriptEnabled}`, async ({ browser, baseURL }) => {

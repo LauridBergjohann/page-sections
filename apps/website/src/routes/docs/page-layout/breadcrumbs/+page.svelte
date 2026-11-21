@@ -127,7 +127,10 @@
         right sidebar in wide windows or a sticky button with a popup in smaller windows. The active bullet
         follows the reading position. Short last sections are selected at the end of the document. Reordered,
         added or removed sections update the list. The compact button sits 12 pixels from both the right
-        edge and the beginning of the page's first section.
+        edge and the beginning of the page's first section. It scrolls up with the content, then docks
+        12 pixels below the viewport edge. A permanently fixed header reserves its own height above the
+        button. While the popup is open, the button uses the accent color and selection background, matching
+        ButtonGroup; closing it restores its normal appearance.
       </p>
       <p>
         Native anchor links work without JavaScript. The enhanced menu adds active-state tracking

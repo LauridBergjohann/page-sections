@@ -143,7 +143,7 @@
     grid-column: 2;
     grid-row: 2;
     position: sticky;
-    top: var(--ps-sidebar-sticky-top);
+    top: 0;
     align-self: start;
     justify-self: end;
     height: 0;
