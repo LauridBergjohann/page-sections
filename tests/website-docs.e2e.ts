@@ -93,6 +93,44 @@ test('card images and descriptions follow the primary link while actions remain 
   expect(await primary.evaluate(el=>getComputedStyle(el,'::after').outlineWidth)).toBe('3px');
 });
 
+test('all card sizes keep descriptions close, scale their text and fill each grid row', async ({page}) => {
+  await page.goto('/sections/card-grid/');
+  const sizes: Record<string, number> = {};
+  for (const width of [390,900,1440]) {
+    await page.setViewportSize({width,height:1000});
+    for (const size of ['s','m','l']) {
+      await page.getByRole('combobox',{name:'Card size',exact:true}).selectOption(size);
+      const cards = page.locator('[data-preview] .ps-card');
+      await expect(cards.first()).toHaveAttribute('data-ps-card-size',size);
+      const metrics = await cards.evaluateAll(elements => elements.map(card => {
+        const box=card.getBoundingClientRect();
+        const title=card.querySelector('.title-label')!;
+        const description=card.querySelector('.description')!;
+        return {top:box.top,height:box.height,gap:description.getBoundingClientRect().top-title.getBoundingClientRect().bottom,
+          titleSize:parseFloat(getComputedStyle(title).fontSize),descriptionSize:parseFloat(getComputedStyle(description).fontSize),
+          fits:description.scrollHeight <= description.clientHeight+1};
+      }));
+      for (const metric of metrics) {
+        expect(metric.descriptionSize).toBeLessThanOrEqual(metric.titleSize);
+        expect(metric.gap).toBeGreaterThanOrEqual(4);
+        expect(metric.gap).toBeLessThanOrEqual(8);
+        expect(metric.fits).toBe(true);
+        for (const peer of metrics.filter(other=>Math.abs(other.top-metric.top)<1)) {
+          expect(Math.abs(peer.height-metric.height)).toBeLessThan(1);
+        }
+      }
+      if (width === 1440) {
+        sizes[size]=metrics[0].descriptionSize;
+        expect(metrics.filter(metric=>Math.abs(metric.top-metrics[0].top)<1).length).toBeGreaterThan(1);
+        await page.locator('[data-preview]').screenshot({path:`.artifacts/card-content-${size}.png`});
+      }
+    }
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
+  expect(sizes.s).toBeLessThan(sizes.m);
+  expect(sizes.m).toBeLessThan(sizes.l);
+});
+
 test('section illustrations have transparent surroundings', async ({page,request}) => {
   await page.goto('/sections/');
   for (const img of await page.locator('#section-catalog img').all()) {
@@ -106,6 +144,23 @@ test('section illustrations have transparent surroundings', async ({page,request
     await page.locator('#section-catalog').screenshot({path:`.artifacts/cards-transparent-${width}.png`});
     expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   }
+});
+
+test('default and explicit card spans stretch with descriptions before hydration', async ({browser,baseURL}) => {
+  const context=await browser.newContext({javaScriptEnabled:false,baseURL,viewport:{width:1440,height:1000}});
+  const page=await context.newPage();
+  for (const [url,selector] of [['/sections/card-grid/','[data-preview] .ps-card'],['/showcase/portfolio/','#projects .ps-card']]) {
+    await page.goto(url);
+    const boxes=await page.locator(selector).evaluateAll(cards=>cards.map(card=>{
+      const {top,height}=card.getBoundingClientRect(); return {top,height};
+    }));
+    expect(boxes.length).toBeGreaterThan(1);
+    expect(boxes.filter(box=>Math.abs(box.top-boxes[0].top)<1).length).toBeGreaterThan(1);
+    for (const box of boxes) for (const peer of boxes.filter(other=>Math.abs(other.top-box.top)<1)) {
+      expect(Math.abs(peer.height-box.height)).toBeLessThan(1);
+    }
+  }
+  await context.close();
 });
 
 test('page layout examples use independent viewports and real component controls', async ({page}) => {

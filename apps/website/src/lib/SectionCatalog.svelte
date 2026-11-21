@@ -17,4 +17,6 @@
   list={sectionCards}
   cardSize="m"
   cardTone="standard"
+  cardShadow={true}
+  mediaFit="cover"
 />

@@ -272,11 +272,12 @@
         resolveCardLayout.
       </p>
       <p>
-        Descriptions appear below the title when provided, with natural text height and equal grid
-        rows. CardGridSection accepts itemSpan to override the default width. A card’s main link
-        covers its whole surface, while additional action links keep their own destinations.
-        Optional cardShadow adds a resting shadow; hover and keyboard focus emphasize the border and
-        elevation.
+        Descriptions appear close below the actual title when provided, without unused title lines.
+        Their text scales with card size and never exceeds the title size, with natural height and
+        equal grid rows. CardGridSection accepts itemSpan to override the default width. A card’s
+        main link covers its whole surface, while additional action links keep their own
+        destinations. Optional cardShadow adds a resting shadow; hover and keyboard focus emphasize
+        the border and elevation.
       </p>
       <p>
         Nested text and panels omit redundant outer gutters. A nested grid or card collection

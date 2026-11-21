@@ -185,12 +185,14 @@
         </table>
       </div>
       <p>
-        Card height includes the selected media frame and a text area. S/M reserve two title lines;
-        L reserves three. Eyebrows add a separate accent-colored line (hidden for S); reserveEyebrow
-        keeps an empty line when aligning cards with missing labels. Collections compute this flag
-        from the full list. Text padding is 12px on each side. A supplied description appears below
-        the title and grows naturally, as do children, footers and actions. The card fills its grid
-        slot.
+        Card height includes the selected media frame and a text area. Titles use up to two lines in
+        S/M and three in L. Cards without descriptions reserve that title space; with a description,
+        the title uses only the lines it needs. Eyebrows add a separate accent-colored line (hidden
+        for S); reserveEyebrow keeps an empty line when aligning cards with missing labels.
+        Collections compute this flag from the full list. Text padding is 12px on each side. A
+        supplied description appears below the title with a compact half-em gap. Its font scales
+        with card size and never exceeds the title size. Descriptions grow naturally, as do
+        children, footers and actions. The card fills its grid slot.
       </p>
       <p>
         <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a> is 3/2, 4/3

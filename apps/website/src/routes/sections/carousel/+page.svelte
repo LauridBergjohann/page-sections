@@ -112,9 +112,10 @@
       <p>
         Each slide takes the canonical S/M/L column span, with the same container width, outer
         gutters and gap as CardGridSection. Slides share equal heights. Cards use the selected media
-        ratio plus independent title space and a collection-wide eyebrow row. S/M titles have two
-        lines, L three; S hides eyebrows. Contained media has an 8px inset; cover fills the frame.
-        Descriptions and additional content increase the card height. Optional
+        ratio plus independent title space and a collection-wide eyebrow row. S/M titles have up to
+        two lines, L three; S hides eyebrows. Contained media has an 8px inset; cover fills the
+        frame. Descriptions follow the actual title with a compact gap and text no larger than the
+        title. Cards grow to fit their content. Optional
         <code>cardShadow</code> adds a resting shadow; hover strengthens the shadow and highlights the
         border in the accent color. The previous arbitrary pixel width caps and ps-carousel-card-width
         override were removed.

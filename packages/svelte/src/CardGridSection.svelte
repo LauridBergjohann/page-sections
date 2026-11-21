@@ -28,7 +28,8 @@
   </ContentGrid>
 </Section>
 <style>
-  .card-item { grid-column: span var(--ps-card-span); min-width: 0; }
-  :global(.ps-card-grid) { align-items: stretch; grid-auto-rows: 1fr; }
+  /* ContentGrid aligns items to the start; each card slot must explicitly fill its row. */
+  .card-item { grid-column: span var(--ps-card-span); min-width: 0; align-self: stretch; display: grid; }
+  :global(.ps-card-grid) { grid-auto-rows: 1fr; }
   :global(.ps-card-grid > .ps-content-block) { align-self: stretch; display: grid; }
 </style>

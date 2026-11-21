@@ -225,11 +225,17 @@
       </p>
       <p>
         Card sizes S/M/L span 2/2/4 columns; L spans 3 on the S grid. Only the media frame has a
-        fixed ratio, selected with mediaAspect. The text area is added below it: two title lines for
-        S/M, three for L, plus 12px padding on each side. S hides eyebrows. If any M/L item has an
-        eyebrow, all cards reserve a separate label line, including blank items. Labels never
-        consume title lines. S uses 12px titles, M 14px and L 18px. Titles clamp visually while
-        their full text remains in the link's accessible name and title attribute.
+        fixed ratio, selected with mediaAspect. The text area is added below it: up to two title
+        lines for S/M, three for L, plus 12px padding on each side. S hides eyebrows. If any M/L
+        item has an eyebrow, all cards reserve a separate label line, including blank items. Labels
+        never consume title lines. S uses 12px titles, M 14px and L 18px. Titles clamp visually
+        while their full text remains in the link's accessible name and title attribute.
+      </p>
+      <p>
+        With a description, the title uses only the lines it needs and the description follows with
+        a compact half-em gap. Description text scales with the card size and never exceeds the
+        title size. Cards without descriptions retain the reserved title lines for consistent base
+        geometry.
       </p>
       <p>
         All grid rows share the tallest required card height, including rows with short titles or

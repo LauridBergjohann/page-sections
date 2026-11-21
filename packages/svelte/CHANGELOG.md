@@ -14,6 +14,7 @@
 
 ### Patch Changes
 
+- Keep cards equally tall with different description lengths. Place descriptions close to the actual title, scale their text with the card size, and cap it at the title size.
 - Remove hover underlines in main menus and submenus. Open footer social links in a new tab.
 
 - Render configured icons before top-level menu labels in desktop and mobile layouts, and keep a desktop parent highlighted while its submenu is open.

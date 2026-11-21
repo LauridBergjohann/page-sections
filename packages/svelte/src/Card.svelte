@@ -73,6 +73,7 @@
   .eyebrow { margin: 0; color: var(--ps-accent); font-size: var(--ps-card-eyebrow-size); font-weight: var(--ps-card-eyebrow-weight); line-height: var(--ps-card-line-height); flex: 0 0 var(--ps-card-line-height); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .title { margin: 0; color: var(--ps-ink); overflow-wrap: anywhere; font-size: var(--ps-card-title-size); font-weight: var(--ps-card-title-weight); line-height: var(--ps-card-line-height); height: calc(var(--ps-card-text-rows) * var(--ps-card-line-height)); flex-shrink: 0; }
   .title-label { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--ps-card-text-rows); line-clamp: var(--ps-card-text-rows); overflow: hidden; }
+  .text:has(> .description) .title { height: auto; }
   .title .primary-link, .title .primary-link:hover { color: inherit; text-decoration: none; }
   /* Stretch the native title link over the card without nesting other interactive elements. */
   .primary-link::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: var(--ps-radius); }
@@ -80,7 +81,7 @@
   .primary-link:focus-visible::after { outline: 3px solid var(--ps-accent); outline-offset: 4px; }
   .custom-content:empty { display: none; }
   .description, .footer { margin: 1rem 0 0; line-height: 1.75; color: var(--ps-body); }
-  .description { overflow-wrap: anywhere; }
+  .description { margin-top: .5em; font-size: min(var(--ps-card-title-size), var(--ps-grid-body-size)); line-height: 1.5; overflow-wrap: anywhere; }
   .footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--ps-border); font-size: .875rem; }
   .text > :global(.ps-actions) { margin-top: auto; padding-top: 1rem; }
   .text :global(.ps-actions a), .footer :global(a), .custom-content :global(:is(a, button, input, select, textarea, summary, [tabindex])) { position: relative; z-index: 2; }

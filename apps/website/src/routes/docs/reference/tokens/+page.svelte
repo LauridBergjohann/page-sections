@@ -389,8 +389,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         </table>
       </div>
       <p>
-        These feed resolveCardLayout and Svelte cards. Optional descriptions and additional content
-        increase the base card height. <code>breadcrumb</code> contains:
+        These feed resolveCardLayout and Svelte cards. Descriptions use natural title height;
+        descriptions and additional content make the final height content-dependent. <code
+          >breadcrumb</code
+        > contains:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">

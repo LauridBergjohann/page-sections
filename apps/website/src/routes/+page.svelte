@@ -87,8 +87,9 @@
       spacing: 'loose',
       background: { color: 'muted', size: 'full' }
     }}
-    itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }}
+    cardSize="l"
     cardTone="standard"
+    mediaFit="cover"
     list={[
       {
         id: 'layout',
@@ -151,8 +152,9 @@
       spacing: 'loose',
       background: { color: 'standard', size: 'full' }
     }}
-    itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }}
+    cardSize="l"
     cardTone="standard"
+    mediaFit="cover"
     list={[
       {
         id: 'start',
