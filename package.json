@@ -14,7 +14,7 @@
   "scripts": {
     "layout:generate": "node scripts/generate-layout-css.mjs",
     "check:layout": "node scripts/generate-layout-css.mjs --check",
-    "check:docs": "npm run build && node scripts/check-docs.mjs",
+    "check:docs": "node scripts/generate-type-reference.mjs --check && npm run build && node scripts/check-docs.mjs",
     "build": "npm run build -w @page-sections/core && npm run build -w @page-sections/svelte",
     "check": "npm run build && svelte-check --tsconfig tsconfig.json && npm run check -w @page-sections/demo -w @page-sections/website -w @page-sections/tests",
     "test": "vitest run",
@@ -38,7 +38,8 @@
     "format:apps": "prettier --write \"apps/*/src/**/*.{svelte,ts,js,css}\"",
     "check:format": "prettier --check \"apps/*/src/**/*.{svelte,ts,js,css}\"",
     "test:website": "playwright test --config playwright.website.config.ts",
-    "check:ci": "node scripts/check-ci.mjs"
+    "check:ci": "node scripts/check-ci.mjs",
+    "docs:types": "node scripts/generate-type-reference.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "2.31.1",

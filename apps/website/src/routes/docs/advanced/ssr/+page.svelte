@@ -186,7 +186,7 @@ export const prerender = true;`
         composition.
       </p>
       <p>
-        Related: <a href={base + '/docs/sections/carousel/'}>CarouselSection</a>,
+        Related: <a href={base + '/sections/carousel/'}>CarouselSection</a>,
         <a href={base + '/docs/foundations/installation/'}>Installation</a>,
         <a
           href="https://github.com/LauridBergjohann/page-sections/blob/main/docs/development/demo.md"

@@ -17,7 +17,7 @@
   </Section>
   <CardGridSection
     section={{ id: 'projects', title: 'Projects', headline: 'Selected projects' }}
-    cardVariant="editorial"
+    itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }}
     cardTone="muted"
     list={[
       {

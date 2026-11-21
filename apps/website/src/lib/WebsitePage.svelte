@@ -4,6 +4,8 @@
   import { ContentPage, SidebarNavigation } from '@page-sections/svelte';
   import { resolveNavigation, type MenuItem } from '@page-sections/core';
   import { navigationTree, readingNeighbors } from './navigation';
+  import { documents } from './catalog';
+  import { base } from '$app/paths';
   import NavigationIcon from './NavigationIcon.svelte';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   let {
@@ -15,7 +17,7 @@
   }: ComponentProps<typeof ContentPage> & { showSidebar?: boolean } = $props();
   const navigation = $derived(resolveNavigation(navigationTree, { pathname: route.url.pathname }));
   const neighbors = $derived(readingNeighbors(route.url.pathname));
-  const sidebar = $derived(showSidebar ?? navigation.root?.id === 'docs');
+  const sidebar = $derived(showSidebar ?? ['docs', 'sections'].includes(navigation.root?.id ?? ''));
   const find = (items: MenuItem[], id?: string): MenuItem | undefined => {
     for (const item of items) {
       if (item.id === id) return item;
@@ -30,7 +32,7 @@
   <SidebarNavigation
     items={navigation.sidebarItems}
     activeId={navigation.activeId}
-    label="Documentation chapters"
+    label={navigation.root?.id === 'sections' ? 'Sections' : 'Documentation chapters'}
   >
     {#snippet icon(item)}<NavigationIcon name={item.icon} />{/snippet}
     {#snippet disclosureIcon()}<ChevronDown size={16} />{/snippet}
@@ -47,16 +49,21 @@
   leftSidebar={sidebar ? sidebarContent : undefined}
 >
   {@render children?.()}
-  {#snippet footer()}
-    {#if childPages.length}
+  {#snippet pageEnd()}
+    {#if childPages.length && navigation.activeId !== 'sections'}
       <nav class="child-pages" aria-label={`Pages in ${page.title}`}>
         <h2>Explore {page.title}</h2>
         <ul>
           {#each childPages as item}<li>
               <a href={item.href}>
-                {#if item.icon}<NavigationIcon name={item.icon} />{/if}{item.label}<span
-                  aria-hidden="true">→</span
-                >
+                {#if item.icon}<NavigationIcon name={item.icon} />{/if}
+                <span class="chapter-copy">
+                  <strong>{item.label}</strong>
+                  <small
+                    >{documents.find((document) => base + document.href === item.href)
+                      ?.description}</small
+                  >
+                </span>
               </a>
             </li>{/each}
         </ul>
@@ -101,8 +108,12 @@
     border-radius: 0.75rem;
     text-decoration: none;
   }
-  .child-pages a span {
-    margin-inline-start: auto;
+  .chapter-copy {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .chapter-copy small {
+    line-height: 1.5;
   }
   .reading-path {
     display: flex;

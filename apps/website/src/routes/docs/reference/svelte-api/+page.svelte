@@ -54,126 +54,139 @@
             <tr>
               <td><code>ContentPage</code></td>
               <td>Main content; page</td>
-              <td><a href={base + '/docs/foundations/page-shell/'}>Pages</a></td>
+              <td><a href={base + '/docs/page-layout/content-page/'}>Pages</a></td>
+            </tr>
+            <tr>
+              <td><code>Footer</code></td>
+              <td
+                >Site footer; footnote, links. Social entries use <a
+                  href={base + '/docs/reference/types/#footer-social-link'}>FooterSocialLink</a
+                > with an icon snippet.</td
+              >
+              <td><a href={base + '/docs/page-layout/footer/'}>Footer</a></td>
             </tr>
             <tr>
               <td><code>PageShell</code></td>
               <td>Shared theme/mode; none</td>
-              <td><a href={base + '/docs/foundations/page-shell/'}>Pages</a></td>
+              <td><a href={base + '/docs/page-layout/content-page/'}>Pages</a></td>
             </tr>
             <tr>
               <td><code>Section</code></td>
               <td>General content region; section</td>
-              <td><a href={base + '/docs/foundations/content-grid/'}>Section and grids</a></td>
+              <td><a href={base + '/docs/building-blocks/section/'}>Section</a></td>
             </tr>
             <tr>
               <td><code>ContentGrid</code></td>
               <td>Responsive block grid; none</td>
-              <td><a href={base + '/docs/foundations/content-grid/'}>Section and grids</a></td>
+              <td><a href={base + '/docs/building-blocks/grids/'}>Content grids</a></td>
             </tr>
             <tr>
               <td><code>ContentBlock</code></td>
               <td>Explicit grid span; none</td>
-              <td><a href={base + '/docs/foundations/content-grid/'}>Section and grids</a></td>
+              <td><a href={base + '/docs/building-blocks/grids/'}>Content grids</a></td>
             </tr>
             <tr>
               <td><code>SectionSurfaceGroup</code></td>
               <td>Adjacent background corners; none</td>
-              <td><a href={base + '/docs/foundations/backgrounds/'}>Surface groups</a></td>
+              <td><a href={base + '/docs/design-system/backgrounds/'}>Surface groups</a></td>
             </tr>
             <tr>
               <td><code>HeroSection</code></td>
               <td>Prominent copy/image/actions; section</td>
-              <td><a href={base + '/docs/sections/hero/'}>HeroSection</a></td>
+              <td><a href={base + '/sections/hero/'}>HeroSection</a></td>
             </tr>
             <tr>
               <td><code>RichTextSection</code></td>
               <td>Markdown, plain text or blocks; section</td>
-              <td><a href={base + '/docs/sections/rich-text/'}>RichTextSection</a></td>
+              <td><a href={base + '/sections/rich-text/'}>RichTextSection</a></td>
             </tr>
             <tr>
               <td><code>RichTextContent</code></td>
               <td>Text without a section wrapper; content</td>
-              <td><a href={base + '/docs/sections/rich-text/'}>RichTextSection</a></td>
+              <td><a href={base + '/sections/rich-text/'}>RichTextSection</a></td>
             </tr>
             <tr>
               <td><code>InlineTextContent</code></td>
               <td>Escaped inline runs; text</td>
-              <td><a href={base + '/docs/sections/rich-text/'}>RichTextSection</a></td>
+              <td><a href={base + '/sections/rich-text/'}>RichTextSection</a></td>
             </tr>
             <tr>
               <td><code>Actions</code></td>
               <td>Native action links; optional actions</td>
-              <td><a href={base + '/docs/sections/panels/'}>Panels</a></td>
+              <td><a href={base + '/sections/panel/'}>Panels</a></td>
             </tr>
             <tr>
               <td><code>ContentPanel</code></td>
               <td>Reusable inset panel; no required props</td>
-              <td><a href={base + '/docs/sections/panels/'}>Panels</a></td>
+              <td><a href={base + '/sections/panel/'}>Panels</a></td>
             </tr>
             <tr>
               <td><code>PanelSection</code></td>
               <td>Panel with section metadata; section</td>
-              <td><a href={base + '/docs/sections/panels/'}>Panels</a></td>
+              <td><a href={base + '/sections/panel/'}>Panels</a></td>
             </tr>
             <tr>
               <td><code>ImageSection</code></td>
               <td>Image with optional text; section</td>
-              <td><a href={base + '/docs/sections/images/'}>ImageSection</a></td>
+              <td><a href={base + '/sections/image/'}>ImageSection</a></td>
             </tr>
             <tr>
               <td><code>VideoSection</code></td>
               <td>HTML5/YouTube with optional text; section</td>
-              <td><a href={base + '/docs/sections/video/'}>VideoSection</a></td>
+              <td><a href={base + '/sections/video/'}>VideoSection</a></td>
             </tr>
             <tr>
               <td><code>CardGridSection</code></td>
               <td>Responsive card collection; section, list</td>
-              <td><a href={base + '/docs/sections/card-grid/'}>CardGridSection</a></td>
+              <td><a href={base + '/sections/card-grid/'}>CardGridSection</a></td>
             </tr>
             <tr>
               <td><code>CarouselSection</code></td>
               <td>Horizontal card collection; section, list</td>
-              <td><a href={base + '/docs/sections/carousel/'}>CarouselSection</a></td>
+              <td><a href={base + '/sections/carousel/'}>CarouselSection</a></td>
             </tr>
             <tr>
               <td><code>Card</code></td>
               <td>Standalone article; item</td>
-              <td><a href={base + '/docs/building-blocks/card-and-image/'}>Card and Image</a></td>
+              <td><a href={base + '/docs/building-blocks/card/'}>Card</a></td>
             </tr>
             <tr>
               <td><code>Image</code></td>
               <td>Shared picture/img renderer; image</td>
-              <td><a href={base + '/docs/building-blocks/card-and-image/'}>Card and Image</a></td>
+              <td><a href={base + '/docs/building-blocks/image/'}>Image</a></td>
+            </tr>
+            <tr>
+              <td><code>Header</code></td>
+              <td>Independent menu and satellites; none</td>
+              <td><a href={base + '/docs/page-layout/header/'}>Header</a></td>
             </tr>
             <tr>
               <td><code>Navigation</code></td>
-              <td>Independent menu and satellites; none</td>
-              <td><a href={base + '/docs/building-blocks/navigation/'}>Navigation</a></td>
+              <td
+                >Deprecated compatibility export of Header; remove any surrounding header element
+                when migrating.</td
+              >
+              <td><a href={base + '/docs/page-layout/header/'}>Header</a></td>
             </tr>
             <tr>
               <td><code>MainMenu</code></td>
               <td>Recursive native menu; items</td>
-              <td><a href={base + '/docs/building-blocks/navigation/'}>Navigation</a></td>
+              <td><a href={base + '/docs/page-layout/header/'}>Header</a></td>
             </tr>
             <tr>
               <td><code>ButtonGroup</code></td>
               <td>Labelled controls/links; items, label</td>
-              <td><a href={base + '/docs/building-blocks/navigation/'}>Navigation</a></td>
+              <td><a href={base + '/docs/page-layout/header/'}>Header</a></td>
             </tr>
             <tr>
               <td><code>Breadcrumbs</code></td>
               <td>Site ancestry; items</td>
-              <td
-                ><a href={base + '/docs/building-blocks/breadcrumbs/'}>Breadcrumbs and index</a></td
-              >
+              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs and index</a></td>
             </tr>
             <tr>
               <td><code>SectionNavigation</code></td>
               <td>Explicit anchor list; items</td>
-              <td
-                ><a href={base + '/docs/building-blocks/breadcrumbs/'}>Breadcrumbs and index</a></td
-              >
+              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs and index</a></td>
             </tr>
             <tr>
               <td><code>Sections</code></td>
@@ -182,12 +195,12 @@
             </tr>
             <tr
               ><td><code>CodeBlock</code></td><td>Standalone source presentation; code</td><td
-                ><a href={base + '/docs/sections/code/'}>Code</a></td
+                ><a href={base + '/sections/code/'}>Code</a></td
               ></tr
             >
             <tr
               ><td><code>CodeSection</code></td><td>Source with section metadata; section</td><td
-                ><a href={base + '/docs/sections/code/'}>Code</a></td
+                ><a href={base + '/sections/code/'}>Code</a></td
               ></tr
             >
           </tbody>
@@ -205,7 +218,7 @@
     }}
     ><div class="prose">
       <p>
-        Svelte 5 snippets are used instead of named legacy slots. Navigation has
+        Svelte 5 snippets are used instead of named legacy slots. Header has
         menu/brand/left/right/tools/settingsIcon/menuIcon snippets. Card has
         media(item)/surface(item)/children(item); the collections have
         media(item)/itemContent(item). CardGridSection also has surface(item) and a complete
@@ -218,14 +231,17 @@
         attributes except id/children; ContentGrid and ContentBlock forward div attributes.
         ContentPage forwards main attributes (including id, lang and ARIA attributes), except style;
         use theme and class for styling. Card also forwards HTMLElement attributes, including class
-        and event callbacks. Other components do not accept general class/style or arbitrary HTML
-        attributes. Configure them through documented props, section metadata and CSS variables.
+        and event callbacks. Header and Footer forward HTML attributes, including class, style and
+        ARIA attributes, to their header/footer root. Other components do not accept general
+        class/style or arbitrary HTML attributes. Configure them through documented props, section
+        metadata and CSS variables.
       </p>
       <p>
         Most predefined components accept <code>section: Omit&lt;TheirSectionData, 'type'&gt;</code
-        >. CardGridSection and CarouselSection instead take shared SectionDefinition plus separate
-        list/configuration props. <code>type</code> belongs to serialized sections rendered by Sections,
-        not to a required declarative prop.
+        >. CardGridSection and CarouselSection instead take shared
+        <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
+        plus separate list/configuration props. <code>type</code> belongs to serialized sections rendered
+        by Sections, not to a required declarative prop.
       </p>
     </div></Section
   >
@@ -240,10 +256,12 @@
     ><div class="prose">
       <p>
         The root export includes <code>export type * from '@page-sections/core'</code> and the
-        Svelte-specific <code>CardElements&lt;T&gt;</code> type (item, root, surface, media, copy, title).
-        It does not re-export core runtime classes/functions/constants. Component prop interfaces are
-        not separately named exports; use Svelte's ComponentProps where applicable or the shared data
-        interfaces.
+        Svelte-specific
+        <code
+          ><a href={base + '/docs/reference/types/#card-elements'}>CardElements</a>&lt;T&gt;</code
+        > type (item, root, surface, media, copy, title). It does not re-export core runtime classes/functions/constants.
+        Component prop interfaces are not separately named exports; use Svelte's ComponentProps where
+        applicable or the shared data interfaces.
       </p>
       <p>
         Shared styles are exported through <code>@page-sections/svelte/styles.css</code>. The
@@ -287,8 +305,9 @@
       <p>
         <code>SidebarNavigation</code> renders a recursive site tree with current-page markers and expandable
         ancestors. Pass it as ContentPage's leftSidebar snippet. ContentPage's showContentMenu flag supplies
-        the separate automatic right menu; footer provides a slot for reading-order links. Navigation's
-        itemIcon snippet supplies application-owned icons.
+        the separate automatic right menu; pageEnd provides a snippet for reading-order links inside main.
+        The deprecated footer snippet remains a fallback; pageEnd takes precedence when both are supplied.
+        Header's itemIcon snippet supplies application-owned icons.
       </p>
     </div></Section
   >
@@ -302,10 +321,15 @@
     }}
   >
     <p>
-      <code>Heading</code> accepts text, level (HeadingLevel, default 2), size (HeadingSize, default
-      m), id, eyebrow and introduction. It renders typography only. <code>HeadingSection</code>
-      accepts section: Omit&lt;HeadingSectionData, 'type'&gt; and adds section layout, surface and registration.
-      See <a href={base + '/docs/sections/headings/'}>Headings</a>.
+      <code>Heading</code> accepts text, level (<a
+        href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a
+      >, default 2), size (<a href={base + '/docs/reference/types/#heading-size'}>HeadingSize</a>,
+      default m), id, eyebrow and introduction. It renders typography only.
+      <code>HeadingSection</code>
+      accepts section: Omit&lt;<a href={base + '/docs/reference/types/#heading-section-data'}
+        >HeadingSectionData</a
+      >, 'type'&gt; and adds section layout, surface and registration. See
+      <a href={base + '/sections/headings/'}>Headings</a>.
     </p>
     <p>
       ContentPage renders the sections supplied as children. Place HeadingSection or HeroSection

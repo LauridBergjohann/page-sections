@@ -20,9 +20,9 @@
 </script>
 
 <script lang="ts">
-  import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
+  import { HeadingSection, Section, CodeBlock, CardGridSection } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
+  import { nextStepCards } from '$lib/sectionCatalog';
   import ContentPage from '$lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
@@ -63,26 +63,21 @@
       The components include their styles.
     </p>
     <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
+    <p>
+      Or try it now in the <a href="https://svelte.dev/playground/f110f1e79b614ab7984adb25eef69c5b"
+        >Svelte Playground</a
+      >!
+    </p>
   </Section>
-  <Section
+  <CardGridSection
     section={{
       id: 'next',
       title: 'Next steps',
       headline: '3. Make it yours',
       background: { color: 'standard', size: 'standard' }
     }}
-  >
-    <p>
-      Add <a href={base + '/docs/sections/'}>sections</a>, configure your
-      <a href={base + '/docs/foundations/page-shell/'}>page layout</a>
-      and adapt the <a href={base + '/docs/foundations/themes/'}>theme</a>.
-    </p>
-    <p>
-      The <a href={base + '/docs/foundations/installation/'}>installation reference</a> covers
-      requirements and framework setup. For a complete starting point, explore the
-      <a href="https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo"
-        >minimal demo</a
-      >.
-    </p>
-  </Section>
+    list={nextStepCards}
+    cardSize="m"
+    cardTone="standard"
+  />
 </ContentPage>

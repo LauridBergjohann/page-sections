@@ -1,5 +1,71 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+test('site footer exposes its documentation, legal links and responsive theme', async ({ page }) => {
+  test.setTimeout(90000); // Capture and check the footer at sixteen viewport boundaries.
+  await page.goto('/docs/page-layout/footer/');
+  const footer = page.locator('.site-footer');
+  const socialLinks = footer.locator('.ps-footer-social a');
+  await expect(socialLinks).toHaveText(['GitHub', 'NPM', 'Vercel', 'Bergjohann', 'LinkedIn', 'Svelte']);
+  await expect(footer.getByRole('link', { name: 'NPM', exact: true })).toHaveAttribute('href', 'https://www.npmjs.com/package/@page-sections/svelte');
+  await expect(footer.getByRole('link', { name: 'Vercel', exact: true })).toHaveAttribute('href', 'https://vercel.com/');
+  await expect(footer.getByRole('link', { name: 'Svelte', exact: true })).toHaveAttribute('href', 'https://svelte.dev/');
+  await expect(socialLinks.locator('svg')).toHaveCount(6);
+  await expect(page.locator('main h1')).toHaveText('Footer');
+  await expect(page.getByRole('banner')).toHaveCount(1);
+  await expect(page.getByRole('main')).toHaveCount(1);
+  await expect(page.getByRole('contentinfo')).toHaveCount(1);
+  await expect(page.locator('.footer-preview .ps-footer-main')).toHaveCount(0);
+  for (const width of [320, 359, 360, 390, 599, 600, 839, 840, 1199, 1200, 1599, 1600, 1808, 1809, 1920, 2300]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const navigation = page.getByRole('navigation', { name: 'Main navigation', exact: true });
+    await expect(navigation).toHaveCount(1);
+    await expect(navigation.getByRole('link', { name: 'Page Sections home' })).toHaveCount(0);
+    await expect(navigation.locator('.tools, .settings, .satellite')).toHaveCount(0);
+    await expect(footer.getByRole('link', { name: 'GitHub', exact: true })).toBeVisible();
+    const linkedin = footer.getByRole('link', { name: 'LinkedIn', exact: true });
+    await expect(linkedin).toBeVisible();
+    await expect(linkedin).toHaveAttribute('href', 'https://www.linkedin.com/in/laurid-bergjohann');
+    await expect(linkedin.locator('svg')).toBeVisible();
+    const website = footer.getByRole('link', { name: 'Bergjohann', exact: true });
+    await expect(website).toBeVisible();
+    await expect(website).toHaveAttribute('href', 'https://bergjohann.com/');
+    await expect(website.locator('svg')).toHaveClass(/lucide-globe/);
+    const text = website.locator('span').last();
+    await expect(footer.locator('.ps-footer-social ul')).toHaveCSS('column-gap', '0px');
+    expect(await text.evaluate(element => element.getBoundingClientRect().height)).toBeLessThanOrEqual(await text.evaluate(element => parseFloat(getComputedStyle(element).lineHeight)));
+    const rectangles = await socialLinks.evaluateAll(links => links.map(link => {
+      const icon = link.firstElementChild!.getBoundingClientRect();
+      const label = link.lastElementChild!.getBoundingClientRect();
+      return { left: Math.min(icon.left, label.left), right: Math.max(icon.right, label.right), top: icon.top };
+    }));
+    for (const first of rectangles) for (const second of rectangles) {
+      if (first.left < second.left && Math.abs(first.top - second.top) < 2) expect(first.right).toBeLessThanOrEqual(second.left);
+    }
+    await expect(footer.getByRole('link', { name: 'Privacy', exact: true })).toHaveAttribute('href', '/about/#datenschutz');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    const shell = page.locator('.ps-shell');
+    await expect(shell).toHaveCSS('background-color', await themeColor(shell, '--ps-background'));
+    await expect(footer.locator('.ps-footer-main')).toHaveCSS('background-color', await themeColor(shell, '--ps-footer-background'));
+    await expect(footer.locator('.ps-footer-main')).toHaveCSS('color', await themeColor(shell, '--ps-footer-ink'));
+    await expect(footer.locator('.ps-footer-bar')).toHaveCSS('background-color', await themeColor(shell, '--ps-footer-bar-background'));
+    await expect(footer.locator('.ps-footer-links a').first()).toHaveCSS('color', await themeColor(shell, '--ps-footer-bar-ink'));
+    if (width === 1200) {
+      const social = (await footer.locator('.ps-footer-social').boundingBox())!;
+      const label = (await footer.getByRole('link', { name: 'GitHub', exact: true }).locator('span').last().boundingBox())!;
+      expect(label.x + label.width).toBeCloseTo(social.x + social.width, 0);
+    }
+    await footer.screenshot({ path: test.info().outputPath(`site-footer-${width}.png`) });
+  }
+  await expect(footer.getByRole('link', { name: 'Footer', exact: true })).toHaveAttribute('href', '/docs/page-layout/footer/');
+  await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
+  await expect(page.locator('.ps-shell')).toHaveCSS('background-color', await themeColor(page.locator('.ps-shell'), '--ps-background'));
+  await expect(footer.locator('.ps-footer-main')).toHaveCSS('background-color', await themeColor(page.locator('.ps-shell'), '--ps-footer-background'));
+  await expect(footer.locator('.ps-footer-main')).toHaveCSS('color', await themeColor(page.locator('.ps-shell'), '--ps-footer-ink'));
+  await expect(footer.locator('.ps-footer-links a').first()).toHaveCSS('color', await themeColor(page.locator('.ps-shell'), '--ps-footer-bar-ink'));
+  await expect(footer.locator('.ps-footer-bar')).toHaveCSS('background-color', await themeColor(page.locator('.ps-shell'), '--ps-footer-bar-background'));
+  await footer.screenshot({ path: test.info().outputPath('site-footer-dark.png') });
+});
+
 // Resolve the website's theme tokens through CSS rather than pinning its palette.
 async function themeColor(shell: Locator, token: `--ps-${string}`) {
   return shell.evaluate((element, token) => {
@@ -37,8 +103,8 @@ test('headings, compact code tools and nested routes use the website design syst
   await expect(shell).toHaveAttribute('data-ps-theme', 'light');
   const lightAccent = await themeColor(shell, '--ps-accent');
   await expect(page.locator('.desktop-menu a.active').first()).toHaveCSS('background-color', await themeColor(shell, '--ps-selection'));
-  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', lightAccent);
-  await page.goto('/docs/sections/headings/');
+  await expect(page.locator('.site-footer .ps-footer-links a').last()).toHaveCSS('color', await themeColor(shell, '--ps-footer-bar-ink'));
+  await page.goto('/sections/headings/');
   const preview = page.locator('#heading-preview');
   await page.getByRole('combobox', { name: 'Heading size', exact: true }).selectOption('xl');
   await page.getByRole('combobox', { name: 'Heading level', exact: true }).selectOption('3');
@@ -57,7 +123,7 @@ test('headings, compact code tools and nested routes use the website design syst
   await expect(shell).toHaveAttribute('data-ps-theme', 'dark');
   const darkAccent = await themeColor(shell, '--ps-accent');
   expect(darkAccent).not.toBe(lightAccent);
-  await expect(page.locator('.site-footer a').last()).toHaveCSS('color', darkAccent);
+  await expect(page.locator('.site-footer .ps-footer-links a').last()).toHaveCSS('color', await themeColor(shell, '--ps-footer-bar-ink'));
   await page.setViewportSize({ width: 320, height: 800 });
   await page.goto('/getting-started/');
   const burger = (await page.locator('.mobile-menu > summary').boundingBox())!;
@@ -70,7 +136,7 @@ test('headings, compact code tools and nested routes use the website design syst
 
 test('navigation surfaces, hover geometry and sidebar state stay consistent across pages', async ({ page }) => {
   await page.setViewportSize({ width: 1809, height: 1000 });
-  await page.goto('/docs/sections/hero/');
+  await page.goto('/docs/foundations/installation/');
   const docs = page.locator('.desktop-menu').getByRole('link', { name: 'Documentation', exact: true });
   const palette = await docs.evaluate(el => {
     const css = getComputedStyle(el);
@@ -105,14 +171,23 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   const initialTop = (await sidebar.boundingBox())!.y;
   await expect(sidebar.locator('[aria-current="page"]')).toHaveCSS('background-color', colors.muted);
   await expect(sidebar.locator('[aria-current="page"]')).toHaveCSS('font-weight', '650');
-  await expect(sidebar.getByRole('link', { name: 'Sections', exact: true })).toHaveCSS('background-color', colors.muted);
-  await expect(sidebar.getByRole('link', { name: 'Sections', exact: true })).toHaveCSS('font-weight', '400');
-  await sidebar.getByRole('button', { name: 'Show pages in Sections', exact: true }).click();
-  await expect(sidebar.getByRole('link', { name: 'Hero', exact: true })).toBeHidden();
+  await expect(sidebar.getByRole('link', { name: 'Foundations', exact: true })).toHaveCSS('background-color', colors.muted);
+  await expect(sidebar.getByRole('link', { name: 'Foundations', exact: true })).toHaveCSS('font-weight', '400');
+  const parentText = (await sidebar.getByRole('link', { name: 'Foundations', exact: true }).locator('span').last().boundingBox())!;
+  const childLink = sidebar.getByRole('link', { name: 'Installation', exact: true });
+  const childText = (await childLink.locator('span').last().boundingBox())!;
+  expect(Math.abs(childText.x - parentText.x)).toBeLessThan(3);
+  await expect(childLink).toHaveCSS('font-size', '15px');
+  await sidebar.getByRole('button', { name: 'Show pages in Foundations', exact: true }).click();
+  await expect(sidebar.getByRole('link', { name: 'Installation', exact: true })).toBeHidden();
   await page.locator('.reading-path [rel="next"]').click();
-  await expect(page).toHaveURL(/\/docs\/sections\/rich-text\/$/);
-  await expect(sidebar.getByRole('link', { name: 'Rich text', exact: true })).toBeVisible();
-  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Rich text');
+  await expect(page).toHaveURL(/\/docs\/foundations\/pages-and-sections\/$/);
+  await page.locator('.reading-path [rel="next"]').click();
+  await expect(page).toHaveURL(/\/docs\/foundations\/first-page\/$/);
+  await expect(sidebar.getByRole('link', { name: 'Using sections', exact: true })).toBeVisible();
+  await expect(sidebar.locator('[aria-current="page"]')).toHaveText('Using sections');
+  await sidebar.getByRole('button', { name: 'Show pages in Page layout', exact: true }).click();
+  await sidebar.getByRole('link', { name: 'ContentPage and sidebars', exact: true }).click();
   await expect(page.locator('.ps-content-menu-slot .desktop')).toHaveCSS('background-color', colors.standard);
   const sections = page.locator('.sections > [data-ps-section]');
   expect(await sections.count()).toBeGreaterThan(0);
@@ -132,7 +207,7 @@ test('single-page entry points and legal footer links lead to actual project con
   await page.goto('/getting-started/');
   const menu = page.locator('.desktop-menu');
   await expect(menu.locator('.ps-main-menu > li')).toHaveCount(4);
-  const start = menu.getByRole('link', { name: 'Getting started', exact: true });
+  const start = menu.getByRole('link', { name: 'Getting Started', exact: true });
   await expect(start).not.toHaveAttribute('aria-expanded');
   await expect(page.locator('.child-pages')).toHaveCount(0);
   await expect(page.locator('#first-page')).toContainText('ContentPage');
@@ -153,59 +228,97 @@ test('single-page entry points and legal footer links lead to actual project con
 
 test('desktop page links reveal only the second level and retain native navigation', async ({ page }) => {
   await page.setViewportSize({ width: 1809, height: 1000 });
-  await page.goto('/docs/sections/hero/');
+  await page.goto('/sections/hero/');
   const menu = page.locator('.website-header .desktop-menu');
-  const docs = menu.getByRole('link', { name: 'Documentation', exact: true });
+  const docs = menu.getByRole('link', { name: 'Sections', exact: true });
   await docs.hover();
-  await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(5);
-  await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(5);
-  await expect(menu.getByRole('link', { name: 'Hero', exact: true })).toHaveCount(0);
+  await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(9);
+  await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(9);
+  await expect(menu.locator('.ps-submenu .ps-submenu')).toHaveCount(0);
   await expect(page.locator('.menu-backdrop')).toBeVisible();
   await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await expect(page.locator('.menu-backdrop')).toHaveCSS('transition-duration', /^0\.18s(?:, 0\.18s)*$/);
+  await page.mouse.move(0, 500);
+  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await docs.hover();
+  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
   await page.keyboard.press('Escape');
-  await expect(page.locator('.menu-backdrop')).toHaveCount(0);
-  await menu.getByRole('link', { name: 'Showcase', exact: true }).focus();
+  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await menu.getByRole('link', { name: 'About', exact: true }).focus();
   await docs.focus();
-  await expect(menu.getByRole('link', { name: 'Sections', exact: true })).toBeVisible();
-  await menu.getByRole('link', { name: 'Sections', exact: true }).focus();
+  await expect(menu.getByRole('link', { name: 'Hero', exact: true })).toBeVisible();
+  await menu.getByRole('link', { name: 'Hero', exact: true }).focus();
   await page.keyboard.press('Escape');
   await expect(docs).toBeFocused();
-  await expect(page.locator('.menu-backdrop')).toHaveCount(0);
+  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
   const opened = page.context().waitForEvent('page');
   await docs.click({ modifiers: ['Control'] });
   const newTab = await opened;
-  await newTab.waitForURL(/\/docs\/$/);
+  await newTab.waitForURL(/\/sections\/$/);
   await newTab.close();
   await docs.click();
-  await expect(page).toHaveURL(/\/docs\/$/);
+  await expect(page).toHaveURL(/\/sections\/$/);
   await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
-  await page.locator('.child-pages').getByRole('link', { name: 'Sections' }).click();
-  await page.locator('.child-pages').getByRole('link', { name: 'Hero' }).click();
-  await expect(page).toHaveURL(/\/docs\/sections\/hero\/$/);
+  await page.locator('#section-catalog').getByRole('link', { name: 'Hero', exact: true }).click();
+  await expect(page).toHaveURL(/\/sections\/hero\/$/);
   const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
-  await expect(breadcrumb.locator('li')).toHaveCount(3);
+  await expect(breadcrumb.locator('li')).toHaveCount(2);
   await expect(breadcrumb).not.toContainText('Home');
   await expect(page.locator('.ps-left-sidebar [aria-current="page"]')).toHaveText('Hero');
-  await expect(page.locator('.reading-path [rel="next"]')).toContainText('Rich text');
+  await expect(page.locator('.reading-path [rel="next"]')).toContainText('Image');
+});
+
+test('mobile menus animate the page blur and restore it on every dismissal path', async ({ page }) => {
+  await page.goto('/docs/foundations/installation/');
+  const backdrop = page.locator('.website-header .menu-backdrop');
+  const burger = page.locator('.website-header .mobile-menu > summary');
+  for (const width of [320, 600, 840]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true }).locator('ol')).toHaveCSS('font-size', '12px');
+    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+    await expect(backdrop).toHaveCSS('transition-property', /(?:^|, )backdrop-filter$/);
+    await expect(backdrop).toHaveCSS('transition-duration', /^0\.18s(?:, 0\.18s)*$/);
+    await burger.click();
+    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
+    await burger.click();
+    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+    await burger.click();
+    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
+    await page.keyboard.press('Escape');
+    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  }
+  await burger.click();
+  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await page.locator('.site-footer').click({ position: { x: 5, y: 5 } });
+  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await burger.click();
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(backdrop).toHaveCSS('transition-duration', '0s');
+  await burger.click();
+  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await page.locator('.mobile-panel').getByRole('link', { name: 'Documentation', exact: true }).click();
+  await expect(page).toHaveURL(/\/docs\/$/);
+  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
 });
 
 test('touch and mobile users can reach deep pages through real parent pages', async ({ browser }) => {
   for (const width of [390, 1200]) {
     const context = await browser.newContext({ hasTouch: true, viewport: { width, height: 900 } });
     const page = await context.newPage();
-    await page.goto('http://127.0.0.1:4174/');
+    await page.goto(test.info().project.use.baseURL! + '/');
     if (width < 1200) {
       await page.locator('.mobile-menu > summary').tap();
       const mobile = page.locator('.mobile-panel');
-      await mobile.getByRole('button', { name: 'Show pages in Documentation', exact: true }).tap();
       await mobile.getByRole('button', { name: 'Show pages in Sections', exact: true }).tap();
       await mobile.getByRole('link', { name: 'Hero', exact: true }).tap();
     } else {
-      await page.locator('.desktop-menu').getByRole('link', { name: 'Documentation', exact: true }).tap();
-      await page.locator('.child-pages').getByRole('link', { name: 'Sections' }).tap();
-      await page.locator('.child-pages').getByRole('link', { name: 'Hero' }).tap();
+      await page.locator('.desktop-menu').getByRole('link', { name: 'Sections', exact: true }).tap();
+      await page.locator('#section-catalog').getByRole('link', { name: 'Hero', exact: true }).tap();
     }
-    await expect(page).toHaveURL(/\/docs\/sections\/hero\/$/);
+    await expect(page).toHaveURL(/\/sections\/hero\/$/);
     await expect(page.locator('.ps-left-sidebar')).toBeHidden();
     await context.close();
   }
@@ -215,8 +328,8 @@ for (const width of [390, 1600]) {
   test(`documentation is readable and linked without JavaScript at ${width}px`, async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height: 900 } });
     const page = await context.newPage();
-    for (const route of ['/docs/sections/card-grid/', '/docs/sections/code/', '/docs/reference/core-api/', '/docs/foundations/installation/']) {
-      const response = await page.goto('http://127.0.0.1:4174' + route);
+    for (const route of ['/sections/card-grid/', '/sections/code/', '/docs/reference/core-api/', '/docs/foundations/installation/']) {
+      const response = await page.goto(test.info().project.use.baseURL! + route);
       expect(response?.status()).toBe(200);
       await expect(page.locator('main h1')).toHaveCount(1);
       const chapters = page.getByRole('navigation', { name: 'Documentation chapters' });
@@ -228,6 +341,13 @@ for (const width of [390, 1600]) {
       await expect(code.first().getByRole('button', { name: 'Copy code' })).toBeDisabled();
       await expect(page.locator('[style*="--ps-code-light"]').first()).toBeAttached();
     }
+    if (width < 1200) {
+      const burger = page.locator('.mobile-menu > summary');
+      await burger.click();
+      await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
+      await burger.click();
+      await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+    }
     await page.screenshot({ path: `.artifacts/website-no-js-${width}.png`, fullPage: true });
     await context.close();
   });
@@ -236,13 +356,13 @@ for (const width of [390, 1600]) {
 test('card settings update the preview and the copyable source together', async ({ page, context }) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-  await page.goto('/docs/sections/card-grid/');
-  await page.getByRole('combobox', { name: 'Card variant', exact: true }).selectOption('catalog');
+  await page.goto('/sections/card-grid/');
+  await page.getByRole('checkbox', { name: 'Card shadow', exact: true }).check();
   await page.getByRole('combobox', { name: 'Card tone', exact: true }).selectOption('standard');
   await page.getByRole('combobox', { name: 'Card size', exact: true }).selectOption('l');
   await page.getByRole('combobox', { name: 'Media aspect', exact: true }).selectOption('1/1');
   const preview = page.locator('[data-preview]');
-  await expect(preview.locator('[data-card-variant="catalog"]')).toHaveCount(4);
+  await expect(preview.locator('.ps-card[data-shadow="true"]')).toHaveCount(4);
   await expect(preview.locator('.ps-card').first()).toHaveAttribute('data-tone', 'standard');
   await expect(preview.locator('.ps-card').first()).toHaveAttribute('data-ps-card-size', 'l');
   const code = page.locator('#playground .ps-code-block').first();
@@ -258,7 +378,7 @@ test('card settings update the preview and the copyable source together', async 
 });
 
 test('code composition supports languages, side order, wrapping and dark mode', async ({ page }) => {
-  await page.goto('/docs/sections/code/');
+  await page.goto('/sections/code/');
   await page.getByRole('combobox', { name: 'Language', exact: true }).selectOption('json');
   await page.getByRole('combobox', { name: 'Code position', exact: true }).selectOption('left');
   await page.getByLabel('Wrap long lines', { exact: true }).check();
@@ -288,7 +408,7 @@ test('global search supports shortcuts, keyboard navigation and empty results', 
   await input.press('ArrowDown');
   await expect(input).toHaveAttribute('aria-activedescendant', 'site-search-result-0');
   await input.press('Enter');
-  await expect(page).toHaveURL(/\/docs\/sections\/code\/$/);
+  await expect(page).toHaveURL(/\/sections\/code\/$/);
   await expect(page.getByRole('listbox')).toHaveCount(0);
   await page.keyboard.press('Meta+k');
   await expect(input).toBeFocused();
@@ -299,8 +419,8 @@ test('global search supports shortcuts, keyboard navigation and empty results', 
   await input.fill('portfolio');
   await page.getByRole('listbox', { name: 'Search results' }).getByRole('option').click();
   await expect(page).toHaveURL(/\/showcase\/portfolio\/$/);
-  await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Showcase', exact: true }).click();
-  await expect(page.getByRole('link', { name: 'A personal portfolio', exact: true })).toBeVisible();
+  await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Sections', exact: true }).click();
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(9);
 });
 
 test('home explains the library and getting started stays focused', async ({ page }) => {
@@ -320,18 +440,111 @@ test('home explains the library and getting started stays focused', async ({ pag
   for (const summary of await chapters.locator('summary').all()) await summary.click();
   await expect(chapters.getByRole('searchbox')).toHaveCount(0);
   const titles = (await chapters.getByRole('link').allTextContents()).map(title => title.trim());
-  expect(titles.indexOf('Page shell')).toBeLessThan(titles.indexOf('Hero'));
-  expect(titles.indexOf('Hero')).toBeLessThan(titles.indexOf('Code'));
-  expect(titles.indexOf('Code')).toBeLessThan(titles.indexOf('Card and Image'));
+  expect(titles).not.toContain('Sections');
+  expect(titles).not.toContain('Hero');
+  expect(titles.indexOf('What are sections?')).toBeLessThan(titles.indexOf('Using sections'));
+  expect(titles.indexOf('ContentPage and sidebars')).toBeLessThan(titles.indexOf('Card'));
+  expect(titles).toEqual(expect.arrayContaining(['Page layout', 'Components', 'Design system', 'Create your own section', 'Data types']));
 });
 
-for (const width of [320, 600, 840, 1200, 1700]) {
+test('home uses themed hero artwork, illustrated next steps and local technology icons', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/');
+  const hero = page.locator('#welcome img');
+  await expect.poll(() => hero.evaluate(img => img.currentSrc)).toContain('/hero-light.webp');
+  const story = page.locator('#what-is-page-sections .ps-media-pair');
+  await expect(story).toHaveAttribute('data-side', 'right');
+  await expect(story.locator('img')).toHaveAttribute('src', /(?:^|\/)hero\.png$/);
+  const imageBox = (await story.locator('img').boundingBox())!;
+  const textBox = (await story.locator('.prose').boundingBox())!;
+  expect(textBox.x + textBox.width).toBeLessThanOrEqual(imageBox.x);
+  await expect(page.locator('#features-title')).toHaveText('Features');
+  await expect(page.locator('#features .ps-card img')).toHaveCount(6);
+  await expect(page.locator('#explore .title a')).toHaveText([
+    'Install it or try it in the playground', 'Explore available sections', 'Make it yours — create a custom theme'
+  ]);
+  expect(await page.locator('#explore .title a').evaluateAll(links => links.map(link => new URL(link.href).pathname)))
+    .toEqual(['/getting-started/', '/sections/', '/docs/foundations/themes/']);
+  const technologies = page.locator('#built-with .ps-card');
+  await expect(technologies).toHaveCount(8);
+  await expect(technologies.locator('.title')).toHaveText([
+    'Made with Page Sections', 'Available on NPM', 'Source available on GitHub', 'Hosted on Vercel',
+    'Made for Svelte', 'Developed by Laurid Bergjohann', 'Created in VS Code', 'Supported by Codex'
+  ]);
+  expect(await technologies.evaluateAll(cards => cards.map(card => card.querySelector('.primary-link')?.getAttribute('href')))).toEqual([
+    'https://page-sections.bergjohann.com/', 'https://www.npmjs.com/package/@page-sections/svelte',
+    'https://github.com/LauridBergjohann/page-sections', 'https://vercel.com/', 'https://svelte.dev/',
+    'https://bergjohann.com/', 'https://code.visualstudio.com/', 'https://chatgpt.com/codex'
+  ]);
+  for (const image of await page.locator('main img').all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  }
+  await page.screenshot({ path: test.info().outputPath('home-light.png'), fullPage: true });
+  await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
+  await expect.poll(() => hero.evaluate(img => img.currentSrc)).toContain('/hero-dark.webp');
+  for (const id of ['github', 'vercel', 'codex']) {
+    const icon = page.locator(`#built-with [data-card-id="${id}"] img`);
+    await icon.scrollIntoViewIfNeeded();
+    await expect.poll(() => icon.evaluate(img => img.currentSrc)).toContain(`/technology/${id}-dark.svg`);
+    await expect.poll(() => icon.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  }
+  await page.screenshot({ path: test.info().outputPath('home-dark.png'), fullPage: true });
+  for (const width of [320, 600, 840, 1200]) {
+    await page.setViewportSize({ width, height: 900 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: test.info().outputPath('home-mobile.png'), fullPage: true });
+});
+
+for (const javaScriptEnabled of [false, true]) {
+  test(`section examples keep one outer surface run and highlighted source with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
+    const context = await browser.newContext({ baseURL: test.info().project.use.baseURL, javaScriptEnabled, viewport: { width: 1920, height: 1000 } });
+    const page = await context.newPage();
+    await page.goto('/sections/');
+    const corners = page.locator('#examples-heading > .ps-section-surface');
+    const radius = await page.locator('.ps-shell').evaluate(element => getComputedStyle(element).getPropertyValue('--ps-radius').trim());
+    await expect(corners).toHaveCSS('border-top-left-radius', radius);
+    await expect(corners).toHaveCSS('border-bottom-left-radius', '0px');
+    for (const [index, slug] of sectionSlugs.entries()) {
+      await expect(page.locator(`#${slug}`)).toHaveAttribute('data-background-color', index % 2 ? 'standard' : 'muted');
+      const surface = page.locator(`#${slug} > .ps-section-surface`);
+      await expect(surface).toHaveCSS('border-top-left-radius', '0px');
+      await expect(surface).toHaveCSS('border-bottom-left-radius', index === sectionSlugs.length - 1 ? radius : '0px');
+    }
+    const tokens = page.locator('#code-example .code-line > span[style*="--ps-code-light"]');
+    expect(await tokens.count()).toBeGreaterThan(5);
+    const colors = await tokens.evaluateAll(tokens => [...new Set(tokens.map(token => getComputedStyle(token).color))]);
+    expect(colors.length).toBeGreaterThan(2);
+    if (javaScriptEnabled) {
+      await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
+      await expect(page.locator('#code-example .ps-code-block')).toHaveAttribute('data-code-mode', 'dark');
+      expect(await tokens.evaluateAll(tokens => [...new Set(tokens.map(token => getComputedStyle(token).color))])).not.toEqual(colors);
+    }
+    await context.close();
+  });
+}
+
+test('each section detail introduces its purpose directly below the page title', async ({ page }) => {
+  for (const slug of sectionSlugs) {
+    await page.goto(`/sections/${slug}/`);
+    const introduction = page.locator('#page-heading .ps-heading > h1 + .introduction');
+    await expect(introduction).toBeVisible();
+    expect((await introduction.innerText()).length).toBeGreaterThan(60);
+  }
+});
+
+for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
   test(`header search and GitHub link fit at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     const github = page.getByRole('link', { name: 'Page Sections on GitHub' });
     await expect(github).toBeVisible();
     await expect(github).toHaveAttribute('href', 'https://github.com/LauridBergjohann/page-sections');
+    const npm = page.getByRole('link', { name: 'Page Sections on NPM' });
+    await expect(npm).toBeVisible();
+    await expect(npm).toHaveAttribute('href', 'https://www.npmjs.com/package/@page-sections/svelte');
     const header = await page.locator('.website-header .header').boundingBox();
     expect(header!.height).toBe(width < 1600 ? 66 : 64);
     const input = page.getByRole('combobox', { name: 'Search documentation' });
@@ -349,10 +562,10 @@ for (const width of [320, 600, 840, 1200, 1700]) {
     await expect(input).toBeFocused();
     await input.fill('CodeBlock');
     await input.press('Enter');
-    await expect(page).toHaveURL(/\/docs\/sections\/code\/$/);
+    await expect(page).toHaveURL(/\/sections\/code\/$/);
     if (width >= 1200) {
       const brand = await page.getByRole('link', { name: 'Page Sections home', exact: true }).boundingBox();
-      const showcase = await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Showcase', exact: true }).boundingBox();
+      const showcase = await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Sections', exact: true }).boundingBox();
       expect(showcase!.x - brand!.x - brand!.width).toBeGreaterThan(24);
     }
   });
@@ -366,4 +579,216 @@ test('minimal demo renders a complete page without documentation infrastructure'
   await expect(page.getByRole('link', { name: 'A community garden', exact: true })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
   await context.close();
+});
+
+const sectionSlugs = ['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video'];
+const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Video'];
+
+test('documentation teaches concepts in order and chapter landing pages explain their scope', async ({ page }) => {
+  await page.goto('/docs/');
+  for (const [slug, title] of [
+    ['foundations', 'Foundations'], ['page-layout', 'Page layout'],
+    ['building-blocks', 'Components'], ['design-system', 'Design system'],
+    ['advanced', 'Advanced'], ['reference', 'Reference']
+  ]) {
+    await page.goto(`/docs/${slug}/`);
+    await expect(page.locator('main h1')).toHaveText(title);
+    expect(await page.locator('main .prose p').count()).toBeGreaterThanOrEqual(3);
+    await expect(page.getByRole('navigation', { name: `Pages in ${title}`, exact: true })).toBeVisible();
+    for (const width of [390, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+      await page.screenshot({ path: test.info().outputPath(`docs-${slug}-${width}.png`) });
+    }
+  }
+  await page.goto('/docs/foundations/installation/');
+  for (const heading of ['What are sections?', 'Using sections', 'Themes and styling', 'Page layout', 'Header and satellites']) {
+    await page.locator('.reading-path [rel=next]').click();
+    await expect(page.locator('main h1')).toHaveText(heading);
+  }
+  await page.goto('/docs/advanced/create-your-own-section/');
+  await expect(page.locator('pre').first()).toContainText('SectionDefinition');
+  await expect(page.locator('pre').nth(1)).toContainText('QuoteSection');
+});
+
+for (const javaScriptEnabled of [false, true]) {
+  test(`object properties link to complete type fields with JavaScript ${javaScriptEnabled}`, async ({ browser }) => {
+    const context = await browser.newContext({ baseURL: test.info().project.use.baseURL, javaScriptEnabled });
+    const page = await context.newPage();
+    if (javaScriptEnabled) {
+      await page.goto('/docs/');
+      const search = page.getByRole('combobox', { name: 'Search documentation' });
+      await search.fill('ContentAction');
+      await search.press('Enter');
+      await expect(page).toHaveURL(/\/docs\/reference\/types\/#content-action$/);
+    }
+    await page.goto('/sections/hero/');
+    await page.locator('#props-and-configuration').getByRole('link', { name: 'ContentAction', exact: true }).click();
+    await expect(page).toHaveURL(/\/docs\/reference\/types\/#content-action$/);
+    const action = page.locator('#content-action');
+    await expect(action.getByRole('heading', { name: 'ContentAction', exact: true })).toBeVisible();
+    await expect(action.locator('tbody tr > td:first-child')).toHaveText(['label', 'href', 'variant']);
+    await expect(action.locator('tbody tr > td:nth-child(3)')).toHaveText(['Required', 'Required', 'Optional']);
+    await action.screenshot({ path: test.info().outputPath(`content-action-${javaScriptEnabled}.png`) });
+    await page.goto('/docs/reference/types/#hero-section-data');
+    await page.locator('#hero-section-data table').getByRole('link', { name: 'ImageData', exact: true }).click();
+    await expect(page).toHaveURL(/#image-data$/);
+    await expect(page.locator('#image-data table')).toContainText('srcDark');
+    await page.goto('/docs/reference/types/#section-definition');
+    await page.locator('#section-definition table').getByRole('link', { name: 'SectionBackground', exact: true }).click();
+    await expect(page).toHaveURL(/#section-background$/);
+    await expect(page.locator('#section-background table')).toContainText('color');
+    for (const width of [390, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+    await context.close();
+  });
+}
+
+test('previous documentation URLs retain permanent redirects to their new chapters', async ({ request }) => {
+  for (const [oldPath, destination] of [
+    ['foundation', 'foundations'],
+    ['foundations/page-shell', 'page-layout/content-page'],
+    ['building-blocks/navigation', 'page-layout/header'],
+    ['building-blocks/breadcrumbs', 'page-layout/breadcrumbs'],
+    ['building-blocks/footer', 'page-layout/footer'],
+    ['building-blocks/card-and-image', 'building-blocks/card'],
+    ['foundations/content-grid', 'building-blocks/grids'],
+    ['foundations/responsive-layout', 'design-system/responsive-layout'],
+    ['foundations/backgrounds', 'design-system/backgrounds']
+  ]) {
+    const response = await request.get(`/docs/${oldPath}/`, { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toContain(`content="0;url=/docs/${destination}/"`);
+  }
+});
+
+test('sections have a complete illustrated catalog, examples and a dedicated sidebar', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/sections/');
+  await expect(page.locator('.desktop-menu .ps-main-menu > li > a')).toHaveText(['Getting Started', 'Sections', 'Documentation', 'About']);
+  const sidebar = page.getByRole('navigation', { name: 'Sections', exact: true });
+  await expect(sidebar.getByRole('link')).toHaveText(sectionTitles);
+  await expect(sidebar.locator('a svg')).toHaveCount(9);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(9);
+  for (const [index, slug] of sectionSlugs.entries()) {
+    const card = page.locator('#section-catalog .ps-card').nth(index);
+    await expect(card.locator('.primary-link')).toHaveAttribute('href', `/sections/${slug}/`);
+    const image = card.locator('img');
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+    await expect(page.locator(`#${slug}-example`)).toBeAttached();
+    await expect(page.locator(`#${slug} .detail-link a`)).toHaveAttribute('href', `/sections/${slug}/`);
+  }
+  await page.locator('#page-heading').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: test.info().outputPath('sections-desktop.png') });
+  for (const width of [320, 840, 1200]) {
+    await page.setViewportSize({ width, height: 900 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: test.info().outputPath('sections-mobile.png') });
+});
+
+test('getting started links to the playground and offers four illustrated next steps', async ({ page }) => {
+  await page.goto('/getting-started/');
+  await expect(page.locator('#first-page').getByRole('link', { name: 'Svelte Playground' })).toHaveAttribute('href', 'https://svelte.dev/playground/f110f1e79b614ab7984adb25eef69c5b');
+  const cards = page.locator('#next .ps-card');
+  await expect(cards).toHaveCount(4);
+  await expect(cards.locator('.title')).toHaveText(['Add Sections', 'Configure your page layout', 'Adapt the theme', 'Explore the minimal demo']);
+  await page.locator('#next').scrollIntoViewIfNeeded();
+  for (const image of await cards.locator('img').all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  }
+  await page.locator('#next').screenshot({ path: test.info().outputPath('getting-started-cards.png') });
+});
+
+for (const kind of ['hero', 'image', 'panel', 'rich-text', 'video']) {
+  test(`${kind} starts with a working interactive example and copyable source`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto(`/sections/${kind}/`);
+    const demo = page.locator(`[data-section-playground="${kind}"]`);
+    const preview = demo.locator('[data-live-preview]');
+    await demo.getByRole('textbox', { name: 'Headline', exact: true }).fill('My own example');
+    await expect(preview.getByRole('heading', { name: 'My own example', exact: true })).toBeVisible();
+    if (kind === 'hero') {
+      await demo.getByRole('combobox', { name: 'Composition', exact: true }).selectOption('overlay');
+      await expect(preview.locator('.hero')).toHaveAttribute('data-composition', 'overlay');
+      await demo.getByLabel('Show image', { exact: true }).uncheck();
+      await expect(preview.locator('img')).toHaveCount(0);
+    } else if (kind === 'image') {
+      await demo.getByLabel('Image alternative text').fill('An accessible landscape');
+      await expect(preview.locator('img')).toHaveAttribute('alt', 'An accessible landscape');
+      await demo.getByRole('combobox', { name: 'Image fit', exact: true }).selectOption('contain');
+      await expect(preview.locator('img')).toHaveCSS('object-fit', 'contain');
+      await demo.getByLabel('Show description', { exact: true }).uncheck();
+    } else if (kind === 'panel') {
+      await demo.getByRole('combobox', { name: 'Block type', exact: true }).selectOption('list');
+      await expect(preview.getByRole('listitem')).toHaveCount(3);
+      await demo.getByLabel('Show action', { exact: true }).uncheck();
+      await expect(preview.getByRole('link')).toHaveCount(0);
+    } else if (kind === 'rich-text') {
+      await demo.getByRole('combobox', { name: 'Content format', exact: true }).selectOption('text');
+      await demo.getByRole('textbox', { name: 'Content', exact: true }).fill('**Plain text**');
+      await expect(preview).toContainText('**Plain text**');
+      await demo.getByRole('combobox', { name: 'Content format', exact: true }).selectOption('blocks');
+      await demo.getByRole('combobox', { name: 'Block type', exact: true }).selectOption('address');
+      await expect(preview.locator('address')).toContainText('Example Studio');
+    } else {
+      const video = preview.locator('video');
+      await expect.poll(() => video.evaluate(video => video.readyState)).toBeGreaterThanOrEqual(1);
+      expect(await video.evaluate(video => video.duration)).toBeGreaterThan(3);
+      await video.evaluate(video => video.play());
+      await expect.poll(() => video.evaluate(video => video.currentTime)).toBeGreaterThan(0);
+      await video.evaluate(video => video.pause());
+      await demo.getByLabel('Include captions', { exact: true }).uncheck();
+      await expect(video.locator('track')).toHaveCount(0);
+    }
+    await demo.locator('summary').click();
+    await expect(demo.locator('.source pre')).toContainText('My own example');
+    await demo.getByRole('button', { name: 'Reset example', exact: true }).click();
+    await expect(preview.getByRole('heading', { name: 'A new perspective', exact: true })).toBeVisible();
+    await expect(page.locator('#anatomy img')).toHaveAttribute('src', `/illustrations/${kind}.svg`);
+    for (const width of [320, 840, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+    await page.locator('#playground').screenshot({ path: test.info().outputPath(`${kind}-demo.png`) });
+    expect(errors).toEqual([]);
+  });
+}
+
+test('old section routes provide static redirects to the new canonical pages', async ({ request, browser }) => {
+  for (const [oldSlug, newSlug] of [['', ''], ...sectionSlugs.map(slug => [slug === 'image' ? 'images' : slug === 'panel' ? 'panels' : slug, slug])]) {
+    const response = await request.get(`/docs/sections/${oldSlug ? oldSlug + '/' : ''}`, { maxRedirects: 0 });
+    // adapter-static emits a meta refresh; Vercel applies permanent HTTP redirects at deployment.
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toContain(`content="0;url=/sections/${newSlug ? newSlug + '/' : ''}"`);
+  }
+  const context = await browser.newContext({ javaScriptEnabled: false, baseURL: test.info().project.use.baseURL });
+  const page = await context.newPage();
+  await page.goto('/docs/sections/images/');
+  await expect(page).toHaveURL(/\/sections\/image\/$/);
+  await expect(page.locator('main h1')).toHaveText('Image');
+  await context.close();
+});
+
+test('carousel details start with a configurable, scrollable collection', async ({ page }) => {
+  await page.goto('/sections/carousel/');
+  await page.getByRole('combobox', { name: 'Card size', exact: true }).selectOption('l');
+  await page.getByRole('combobox', { name: 'Card tone', exact: true }).selectOption('muted');
+  const cards = page.locator('[data-preview] .ps-card');
+  await expect(cards.first()).toHaveAttribute('data-ps-card-size', 'l');
+  await expect(cards.first()).toHaveAttribute('data-tone', 'muted');
+  const track = page.locator('#collection-track');
+  await expect(track).toHaveCSS('scroll-snap-type', 'x mandatory');
+  await page.getByRole('button', { name: 'Next cards', exact: true }).click();
+  await expect.poll(() => track.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+  await expect(page.locator('#playground pre')).toContainText('CarouselSection');
+  await expect(page.locator('#playground pre')).toContainText('cardSize="l"');
+  await page.getByRole('button', { name: 'Reset example', exact: true }).click();
+  await expect(cards.first()).toHaveAttribute('data-ps-card-size', 'm');
 });

@@ -29,9 +29,8 @@ export const portfolio: PageData = {
       id: 'projects',
       title: 'Projects',
       headline: 'Selected work',
-      cardVariant: 'editorial',
-      cardTone: 'muted',
       itemSpan: { xs: 4, s: 3, m: 4, l: 4 },
+      cardTone: 'muted',
       background: { color: 'standard' },
       list: [
         {
@@ -48,7 +47,7 @@ export const portfolio: PageData = {
           actions: [
             {
               label: 'View collection',
-              href: base + '/docs/sections/card-grid/',
+              href: base + '/sections/card-grid/',
               variant: 'primary'
             }
           ]
@@ -143,12 +142,12 @@ export const portfolio: PageData = {
       blocks: [
         {
           type: 'paragraph',
-          text: 'Read about the project or explore the catalog card sizes used by the layout system.'
+          text: 'Read about the project or explore the card sizes used by the layout system.'
         }
       ],
       actions: [
         { label: 'About the project', href: base + '/about/' },
-        { label: 'Catalog cards', href: base + '/docs/sections/card-grid/' }
+        { label: 'Cards', href: base + '/sections/card-grid/' }
       ]
     }
   ]
@@ -165,7 +164,7 @@ export const catalogItems: CardItem[] = Array.from({ length: 12 }, (_, index) =>
 }));
 
 export const catalog: PageData = {
-  title: 'Catalog geometry',
+  title: 'Card geometry',
   pageTitle: 'Catalog example — Page Sections',
   sections: [
     {
@@ -173,7 +172,7 @@ export const catalog: PageData = {
       introduction:
         'Choose a media format without sacrificing text space. Cards within each collection share a height, including short titles and missing labels.',
       id: 'page-heading',
-      title: 'Catalog geometry',
+      title: 'Card geometry',
       headingLevel: 1,
       headingSize: 'l'
     },

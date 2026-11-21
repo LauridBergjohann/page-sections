@@ -21,7 +21,7 @@
   />
   <CardGridSection
     section={{ id: 'examples', title: 'Examples' }}
-    cardVariant="editorial"
+    itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }}
     cardTone="muted"
     list={[
       {
@@ -29,7 +29,7 @@
         title: 'A personal portfolio',
         eyebrow: '01 / Content from data',
         description:
-          'An artwork hero, editorial cards, a biography and a contact panel, all rendered from a serializable model.',
+          'An artwork hero, cards with descriptions, a biography and a contact panel, all rendered from a serializable model.',
         href: base + '/showcase/portfolio/',
         image: { src: base + '/landscape.svg', alt: 'Layered green mountains' }
       },

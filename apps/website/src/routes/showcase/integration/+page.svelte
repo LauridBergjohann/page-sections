@@ -3,7 +3,7 @@
     HeadingSection,
     CardGridSection,
     CarouselSection,
-    Navigation,
+    Header,
     Section,
     SectionSurfaceGroup,
     RichTextSection,
@@ -18,7 +18,7 @@
   let mediaAspect: CardMediaAspect = $state('1/1');
   const integrationItems = catalogItems.map((item) => ({
     ...item,
-    href: base + '/docs/sections/card-grid/#playground'
+    href: base + '/sections/card-grid/#playground'
   }));
   let items = $state(integrationItems.slice(0, 3));
   let attached = $state(0);
@@ -90,7 +90,7 @@
     onDiagnostic={() => (diagnostics += 1)}
     ><output data-testid="diagnostics">{diagnostics}</output></Section
   >
-  <Navigation
+  <Header
     label="Nested menu example"
     items={[
       {

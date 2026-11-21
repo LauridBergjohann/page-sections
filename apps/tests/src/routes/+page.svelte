@@ -81,7 +81,6 @@
         image: { ...landscape, src: '/coast.svg', alt: 'Sunlit sandstone cliffs beside the sea' }
       }
     ]}
-    cardVariant="editorial"
     itemSpan={{ xs: 4, s: 3, m: 4, l: 6 }}
   />
 </ContentPage>

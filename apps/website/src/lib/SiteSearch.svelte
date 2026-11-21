@@ -4,9 +4,11 @@
   import { afterNavigate } from '$app/navigation';
   import Search from '@lucide/svelte/icons/search';
   import { documents } from './catalog';
+  import { typeDocuments } from './typeCatalog';
 
   const entries = [
     ...documents,
+    ...typeDocuments,
     {
       title: 'Getting started',
       href: '/getting-started/',

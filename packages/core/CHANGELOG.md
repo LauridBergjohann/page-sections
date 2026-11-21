@@ -1,5 +1,14 @@
 # @page-sections/core
 
+## 0.5.0
+
+### Minor Changes
+
+- Unify cards into one presentation: remove CardVariant, Card.variant and collection cardVariant options. Descriptions render when supplied; use itemSpan for custom grid widths. Add optional cardShadow to collections (shadow on Card), with animated accent borders and hover shadows. The whole card links to its target while additional actions remain independent.
+
+- Raise XS/S breadcrumb text to 12px, matching M.
+- Add a site-level Footer with optional brand, social links and up to four menu groups, required footnote and important links, responsive content-grid alignment, and independent theme settings for its main surface and bottom bar.
+
 ## 0.4.1
 
 ### Patch Changes

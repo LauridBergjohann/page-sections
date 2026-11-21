@@ -154,8 +154,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         descendant ink override. Set border explicitly when adapting a palette if needed.
       </p>
       <p>
-        Legacy card minimum-width and carousel-width variables were removed in 0.2. Catalog geometry
-        is generated from the same tokens as core.
+        Legacy card minimum-width and carousel-width variables were removed in 0.2. Card geometry is
+        generated from the same tokens as core.
       </p>
     </div></Section
   >
@@ -264,8 +264,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       <p>
         SectionSurfaceGroup writes <code>--ps-section-top-radius</code> and
         <code>--ps-section-bottom-radius</code>, using var(--ps-radius) or 0px. Ungrouped surfaces
-        default to 0px. Image uses private <code>--image-ratio</code> and <code>--image-fit</code> variables;
-        configure ImageData instead.
+        default to 0px. Image uses private <code>--image-ratio</code> and <code>--image-fit</code>
+        variables; configure <a href={base + '/docs/reference/types/#image-data'}>ImageData</a> instead.
       </p>
     </div></Section
   >
@@ -314,7 +314,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td><code>cardTextInset</code></td>
-              <td>inline=12, block=12; used by core and catalog CSS</td>
+              <td>inline=12, block=12; used by core and card CSS</td>
             </tr>
             <tr>
               <td><code>cardMediaInset</code></td>
@@ -389,8 +389,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         </table>
       </div>
       <p>
-        These feed resolveCardLayout and Svelte catalog cards; editorial cards use content
-        typography. <code>breadcrumb</code> contains:
+        These feed resolveCardLayout and Svelte cards. Descriptions use natural title height;
+        descriptions and additional content make the final height content-dependent. <code
+          >breadcrumb</code
+        > contains:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -405,12 +407,12 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
           <tbody>
             <tr>
               <td>xs</td>
-              <td>10</td>
+              <td>12</td>
               <td>24</td>
             </tr>
             <tr>
               <td>s</td>
-              <td>10</td>
+              <td>12</td>
               <td>24</td>
             </tr>
             <tr>
@@ -443,12 +445,13 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       </div>
       <p>
         Breadcrumbs consumes these generated viewport sizes and minimum heights, allowing wrapping
-        to grow beyond the minimum. Navigation consumes the generated menu and satellite geometry.
+        to grow beyond the minimum. Header consumes the generated menu and satellite geometry.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
         Related: <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>,
-        <a href={base + '/docs/foundations/responsive-layout/'}>Responsive Layout and Breakpoints</a
+        <a href={base + '/docs/design-system/responsive-layout/'}
+          >Responsive Layout and Breakpoints</a
         >,
         <a href={base + '/docs/reference/core-api/'}>Core API</a>.
       </p>
@@ -502,19 +505,19 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td>--ps-card-span</td>
-              <td>Current catalog span</td>
+              <td>Current card span</td>
             </tr>
             <tr>
               <td>--ps-card-title-size, --ps-card-title-weight</td>
-              <td>Catalog title typography</td>
+              <td>Card title typography</td>
             </tr>
             <tr>
               <td>--ps-card-eyebrow-size, --ps-card-eyebrow-weight</td>
-              <td>Catalog eyebrow typography</td>
+              <td>Card eyebrow typography</td>
             </tr>
             <tr>
               <td>--ps-card-line-height, --ps-card-text-rows</td>
-              <td>Catalog line height and title-only row budget</td>
+              <td>Card line height and title-only row budget</td>
             </tr>
             <tr>
               <td>--ps-card-media-aspect</td>
@@ -614,6 +617,23 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       its current viewport position. It updates on scrolling and resizing, leaving the sticky inset
       below the panel. Native sidebar scrollbars use a thin thumb derived from
       <code>--ps-body</code> and a transparent track.
+    </p>
+  </Section>
+  <Section
+    section={{
+      id: 'footer-tokens',
+      title: 'Footer tokens',
+      background: { color: 'standard', size: 'standard' }
+    }}
+  >
+    <p>
+      <code>--ps-footer-background</code> and <code>--ps-footer-ink</code> default to #163570 and
+      #fff. <code>--ps-footer-radius</code> falls back to --ps-radius;
+      <code>--ps-footer-shadow</code>
+      falls back to --ps-surface-shadow. <code>--ps-footer-bar-background</code> and
+      <code>--ps-footer-bar-ink</code> fall back to --ps-section-muted and --ps-body. Separators
+      inherit bottom-bar ink at 30% opacity. All six tokens have typed
+      <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> properties.
     </p>
   </Section>
 </ContentPage>

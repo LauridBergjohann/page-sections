@@ -1,8 +1,15 @@
 <script lang="ts">
-  import { HeroSection, Section, CardGridSection } from '@page-sections/svelte';
+  import { HeroSection, ImageSection, CardGridSection } from '@page-sections/svelte';
 
   import { base } from '$app/paths';
   import ContentPage from '$lib/WebsitePage.svelte';
+  import { technologies } from '$lib/technologies';
+  const illustration = (name: string, alt: string) => ({
+    src: base + `/illustrations/${name}.svg`,
+    alt,
+    width: 800,
+    height: 500
+  });
 </script>
 
 <svelte:head
@@ -25,32 +32,43 @@
         introduction:
           'A Svelte 5 component library for content-driven websites. Build portfolios, product pages and documentation from reusable sections that share one responsive layout system.',
         image: {
-          src: base + '/hero.png',
-          alt: 'Layered green hills beneath a quiet sky',
-          width: 1200,
-          height: 750
+          src: base + '/hero-light.webp',
+          srcDark: base + '/hero-dark.webp',
+          alt: 'Layered page layouts with a hero, cards and a shared content grid',
+          width: 1499,
+          height: 1049
         },
+        imageSide: 'left',
         actions: [
           { label: 'Get started', href: base + '/getting-started/', variant: 'primary' },
-          { label: 'Explore the showcase', href: base + '/showcase/', variant: 'text' }
+          { label: 'Explore sections', href: base + '/sections/', variant: 'secondary' }
         ]
       },
       headingLevel: 1
     }}
   />
-  <Section
+  <ImageSection
     section={{
       id: 'what-is-page-sections',
       title: 'What is Page Sections?',
       headline: 'From content to a complete page.',
-      layout: 'narrow',
-      spacing: 'loose'
+      image: {
+        src: base + '/hero.png',
+        alt: 'Content sources, page sections and theme settings connected in one website',
+        width: 1536,
+        height: 1024,
+        aspect: '16/9',
+        objectFit: 'contain'
+      },
+      imageSide: 'right',
+      spacing: 'loose',
+      background: { color: 'standard', size: 'full' }
     }}
   >
     <div class="prose">
       <p>
         Page Sections brings the structure of a website into a small set of composable components: a
-        page contains sections, sections arrange text, images, cards and code. Navigation, spacing,
+        page contains sections, sections arrange text, images, cards and code. Header, spacing,
         surfaces and responsive grids follow the same layout rules.
       </p>
       <p>
@@ -59,27 +77,31 @@
         publication. You choose the content and visual identity; the components handle the layout.
       </p>
     </div>
-  </Section>
+  </ImageSection>
   <CardGridSection
     section={{
       id: 'features',
       title: 'Why Page Sections?',
-      headline: 'The common work, already connected.',
+      headline: 'Features',
       introduction: 'A consistent foundation with room for your own design.',
-      spacing: 'loose'
+      spacing: 'loose',
+      background: { color: 'muted', size: 'full' }
     }}
-    cardVariant="editorial"
-    cardTone="muted"
+    cardSize="l"
+    cardTone="standard"
+    mediaFit="cover"
     list={[
       {
         id: 'layout',
+        image: illustration('feature-layout', 'One content grid adapts from desktop to mobile'),
         title: 'One responsive layout system',
         description:
           'Pages, grids and cards share content widths and spacing. Layouts adapt to their containers, including narrow columns on wide screens.',
-        href: base + '/docs/foundations/responsive-layout/'
+        href: base + '/docs/design-system/responsive-layout/'
       },
       {
         id: 'sections',
+        image: illustration('feature-sections', 'Different sections combine into a coherent page'),
         title: 'Sections that work together',
         description:
           'Compose heroes, rich text, panels, images, video, card grids, carousels and code examples. Combine them without rebuilding the page structure.',
@@ -87,6 +109,7 @@
       },
       {
         id: 'content',
+        image: illustration('feature-content', 'Structured content becomes a visual page'),
         title: 'Your content, your source',
         description:
           'Start with ordinary Svelte and HTML. Use serializable models when your content comes from JSON or a CMS, and add custom sections when you need them.',
@@ -94,6 +117,7 @@
       },
       {
         id: 'html',
+        image: illustration('feature-html', 'Readable content arrives as a complete document'),
         title: 'Content before JavaScript',
         description:
           'With SSR or prerendering, text, links and native navigation arrive as HTML. JavaScript adds interactions to an already readable page.',
@@ -101,6 +125,7 @@
       },
       {
         id: 'theme',
+        image: illustration('feature-theme', 'A shared palette connects light and dark themes'),
         title: 'A foundation for your brand',
         description:
           'Use light and dark themes, standard and muted surfaces, and shared CSS variables to make the same components feel at home in your design.',
@@ -108,6 +133,10 @@
       },
       {
         id: 'independent',
+        image: illustration(
+          'feature-independent',
+          'A section library connects to different applications'
+        ),
         title: 'Bring your own application',
         description:
           'Use the library in plain Svelte or SvelteKit. No required CSS framework, CMS or router; syntax highlighting is an optional addition.',
@@ -120,53 +149,45 @@
       id: 'explore',
       title: 'Explore',
       headline: 'See it. Try it. Build it.',
-      spacing: 'loose'
+      spacing: 'loose',
+      background: { color: 'standard', size: 'full' }
     }}
-    cardVariant="editorial"
-    cardTone="muted"
+    cardSize="l"
+    cardTone="standard"
+    mediaFit="cover"
     list={[
       {
-        id: 'cards',
-        eyebrow: '01 / Try a layout',
-        title: 'Make room for your content',
+        id: 'start',
+        title: 'Install it or try it in the playground',
         description:
-          'Change card sizes, surfaces and image proportions. See the result and the code together.',
-        href: base + '/docs/sections/card-grid/'
+          'Start your first page locally or experiment with a working example in your browser.',
+        href: base + '/getting-started/',
+        image: illustration('explore-start', 'An installation command beside a live page preview')
       },
       {
-        id: 'code',
-        eyebrow: '02 / Explain an idea',
-        title: 'Code belongs in the story',
-        description: 'Present readable, highlighted examples on their own or alongside text.',
-        href: base + '/docs/sections/code/'
+        id: 'sections',
+        title: 'Explore available sections',
+        description:
+          'Find the right building blocks and try their layouts in interactive examples.',
+        href: base + '/sections/',
+        image: illustration('explore-sections', 'A catalog of different section layouts')
       },
       {
-        id: 'data',
-        eyebrow: '03 / Compose freely',
-        title: 'Start with HTML. Grow with data.',
-        description: 'Use components directly or render serializable content from your own CMS.',
-        href: base + '/docs/advanced/data-and-custom-sections/'
+        id: 'theme',
+        title: 'Make it yours — create a custom theme',
+        description: 'Adapt colors, typography and surfaces to your own visual identity.',
+        href: base + '/docs/foundations/themes/',
+        image: illustration('explore-theme', 'Color swatches bring a personal identity to a page')
       }
     ]}
   />
-  <Section
-    section={{
-      id: 'built-with',
-      title: 'Built with Page Sections',
-      headline: 'The documentation is a working example.',
-      layout: 'narrow',
-      spacing: 'loose'
-    }}
-  >
-    <div class="prose">
-      <p>
-        Every page on this website uses the same components you install. Navigation, reading
-        layouts, cards and code examples all come from Page Sections.
-      </p>
-      <p>
-        No special renderer, router or CSS framework is required. Content and links are available
-        before JavaScript; interactions enhance them when it loads.
-      </p>
-    </div>
-  </Section>
+  <CardGridSection
+    section={{ id: 'built-with', title: 'Built with', headline: 'Built with', spacing: 'loose' }}
+    list={technologies}
+    cardSize="m"
+    cardTone="muted"
+    mediaAspect="4/3"
+    mediaFit="contain"
+    textAlign="center"
+  />
 </ContentPage>

@@ -1,9 +1,10 @@
 ﻿<script lang="ts">
   import { tick, untrack, type Snippet } from 'svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
   import type { MenuItem } from '@page-sections/core';
   import MainMenu from './MainMenu.svelte';
   import './styles.css';
-  let { menu, items, brand, left, right, tools, settingsIcon, menuIcon, itemIcon, label = 'Main navigation', settingsLabel = 'Settings', menuLabel = 'Open navigation', closeKey, scrollBehavior = 'static' }: {
+  let { menu, items, brand, left, right, tools, settingsIcon, menuIcon, itemIcon, label = 'Main navigation', settingsLabel = 'Settings', menuLabel = 'Open navigation', closeKey, scrollBehavior = 'static', class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
     menu?: Snippet; items?: MenuItem[]; brand?: Snippet; left?: Snippet; right?: Snippet; tools?: Snippet;
     settingsIcon?: Snippet; menuIcon?: Snippet; itemIcon?: Snippet<[MenuItem]>; label?: string; settingsLabel?: string; menuLabel?: string;
     closeKey?: unknown; scrollBehavior?: 'static' | 'delayed' | 'fixed';
@@ -44,20 +45,22 @@
   else closeAll();
   if (window.innerWidth >= 1600) close(settings);
 }} />
-<div class="ps-navigation-track" data-scroll={scrollBehavior}>
+<header {...rest} class={['ps-header', 'ps-navigation-track', className].filter(Boolean).join(' ')} data-scroll={scrollBehavior}>
  <div class="ps-navigation-rack">
-  {#if dropdownOpen}<div class="menu-backdrop" aria-hidden="true"></div>{/if}
-  <nav bind:this={root} class="ps-navigation" aria-label={label}>
+  <div class="menu-backdrop" data-open={dropdownOpen} aria-hidden="true"></div>
+  <div bind:this={root} class="ps-navigation">
     {#if left}<div class="satellite left">{@render left()}</div>{/if}
     <div class="header ps-content-width">
       {#if items}
+        <nav class="mobile-navigation" aria-label={label}>
         <details bind:this={mobile} class="mobile-menu">
           <summary aria-label={menuLabel}>{#if menuIcon}{@render menuIcon()}{:else}<span aria-hidden="true">&#9776;</span>{/if}</summary>
           <div class="mobile-panel"><MainMenu {items} variant="mobile" icon={itemIcon} /></div>
         </details>
+        </nav>
       {/if}
       {#if brand}<div class="brand">{@render brand()}</div>{/if}
-      <div class="menu">{#if menu}{@render menu()}{:else if items}<div class="desktop-menu"><MainMenu {items} icon={itemIcon} closeKey={menuRevision} onOpenChange={(open) => dropdownOpen = open} /></div>{/if}</div>
+      <div class="menu">{#if menu}<nav aria-label={label}>{@render menu()}</nav>{:else if items}<nav class="desktop-menu" aria-label={label}><MainMenu {items} icon={itemIcon} closeKey={menuRevision} onOpenChange={(open) => dropdownOpen = open} /></nav>{/if}</div>
       {#if tools}<div class="tools">{@render tools()}</div>{/if}
       {#if left || right}
         <details bind:this={settings} class="settings">
@@ -73,23 +76,26 @@
       {/if}
     </div>
     {#if right}<div class="satellite right">{@render right()}</div>{/if}
-  </nav>
+  </div>
  </div>
-</div>
+</header>
 <style>
-  .menu-backdrop { position: fixed; inset: 0; backdrop-filter: blur(3px); pointer-events: none; }
+  .menu-backdrop { position: fixed; inset: 0; backdrop-filter: blur(0px); transition: backdrop-filter 180ms ease; pointer-events: none; }
+  @media (min-width: 1200px) { .menu-backdrop[data-open='true'] { backdrop-filter: blur(3px); } }
+  @media (max-width: 1199.98px) { .ps-navigation-rack:has(.mobile-menu[open]) .menu-backdrop { backdrop-filter: blur(3px); } }
+  @media (prefers-reduced-motion: reduce) { .menu-backdrop { transition: none; } }
   .ps-navigation-track { position: relative; z-index: 20; }
   [data-scroll='delayed'] { height: calc(var(--ps-nav-height) + var(--ps-sticky-range)); margin-bottom: calc(-1 * var(--ps-sticky-range)); pointer-events: none; }
   [data-scroll='delayed'] .ps-navigation-rack { position: sticky; top: 0; height: var(--ps-nav-height); pointer-events: auto; }
   [data-scroll='fixed'] { height: var(--ps-nav-height); }
   [data-scroll='fixed'] .ps-navigation-rack { position: fixed; inset: 0 0 auto; }
-  nav { position: relative; padding-top: var(--ps-menu-top); min-height: var(--ps-nav-height); }
+  .ps-navigation { position: relative; padding-top: var(--ps-menu-top); min-height: var(--ps-nav-height); }
   .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; background: var(--ps-section-standard); border-bottom: 1px solid var(--ps-border); box-shadow: var(--ps-navigation-shadow); }
   .brand, .tools { flex-shrink: 0; }
   .brand { min-width: 0; }
   .menu { flex: 1; min-width: 0; }
   .satellite { display: none; }
-  .settings, .mobile-menu { flex-shrink: 0; }
+  .settings, .mobile-navigation { flex-shrink: 0; }
   summary { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; list-style: none; }
   summary::-webkit-details-marker { display: none; }
   summary:hover, details[open] > summary { background: var(--ps-section-muted); }
@@ -98,7 +104,7 @@
   .mobile-panel :global(ul) { flex-direction: column; align-items: stretch; }
   .desktop-menu { display: none; }
   @media (max-width: 1599.98px) { .header { width: 100%; } }
-  @media (min-width: 1200px) { .mobile-menu { display: none; } .desktop-menu { display: block; } }
+  @media (min-width: 1200px) { .mobile-navigation { display: none; } .desktop-menu { display: block; } }
   @media (min-width: 1600px) {
     .header { border: 1px solid var(--ps-border); border-radius: var(--ps-radius); }
     .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-section-standard); border-radius: 12px; outline: 1px solid var(--ps-border); box-shadow: var(--ps-navigation-shadow); }

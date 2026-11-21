@@ -4,6 +4,7 @@
   import { SECTION_REGISTRY, SECTION_SURFACES, normalizeSectionBackground, createSectionBackgroundNormalizer, type SectionBackgroundDiagnostic, type SectionDefinition, type SectionRegistry, type SectionSurfaceRegistry } from '@page-sections/core';
   import './styles.css';
   import Heading from './Heading.svelte';
+  import SectionSurfaceGroup from './SectionSurfaceGroup.svelte';
   import { SURFACE_SCOPE } from './surfaceContext.js';
   import { SECTION_CONTEXT, defaultSectionContext, nextHeading, type ReadSectionContext } from './sectionContext.js';
   type Props = Omit<HTMLAttributes<HTMLElement>, 'children' | 'id'> & { section: SectionDefinition; children?: Snippet; renderHeader?: boolean; inset?: boolean; onDiagnostic?: (diagnostic: SectionBackgroundDiagnostic) => void };
@@ -37,7 +38,10 @@
       <Heading text={section.headline} level={heading} size={section.headingSize ?? (section.variant === 'content' ? 'm' : 'l')} id={`${section.id}-title`} eyebrow={section.eyebrow} introduction={section.introduction} />
     </div>
   {/if}
-  {@render children?.()}
+  {#if children}
+    <!-- Nested sections form their own surface run; they cannot split this section's siblings. -->
+    <SectionSurfaceGroup>{@render children()}</SectionSurfaceGroup>
+  {/if}
   </div>
 </section>
 <style>

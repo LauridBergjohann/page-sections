@@ -3,7 +3,7 @@ import { resolve, dirname, join, relative } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import ts from 'typescript';
-import { compile } from 'svelte/compiler';
+import { compile, parse } from 'svelte/compiler';
 import { examplesFrom } from './documentation-examples.mjs';
 
 const root = resolve(import.meta.dirname, '..');
@@ -14,10 +14,29 @@ const pages = walk(routes).filter(file => file.endsWith('+page.svelte'));
 const routeOf = file => '/' + relative(routes, dirname(file)).replaceAll('\\', '/') + (dirname(file) === routes ? '' : '/');
 const routeSources = new Map(pages.map(file => [routeOf(file), read(file)]));
 const catalog = read(join(root, 'apps/website/src/lib/catalog.ts'));
-const allDocs = pages.filter(file => /[\\/](docs|getting-started)[\\/]/.test(file));
+const isRedirect = file => { const server = join(dirname(file), '+page.server.ts'); return existsSync(server) && read(server).includes('redirect(308'); };
+const allDocs = pages.filter(file => /[\\/](docs|getting-started|sections)[\\/]/.test(file) && !isRedirect(file));
 let links = 0;
+const typeReference = routeSources.get('/docs/reference/types/');
+const documentedTypes = new Set([...typeReference.matchAll(/title: '(\w+)'/g)].map(match => match[1]));
+// Catch new unlinked named types in property tables and inline signatures.
+for (const file of allDocs) {
+  if (routeOf(file) === '/docs/reference/types/') continue;
+  function checkTypeLinks(node, inCode = false, inLink = false) {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) { node.forEach(child => checkTypeLinks(child, inCode, inLink)); return; }
+    if (node.type === 'Text' && inCode && !inLink) {
+      for (const name of node.data.match(/\b[A-Z]\w*\b/g) ?? []) {
+        if (documentedTypes.has(name)) throw new Error(`${routeOf(file)}: unlinked property type ${name}`);
+      }
+    }
+    if (node.children) checkTypeLinks(node.children, inCode || node.name === 'code', inLink || node.name === 'a');
+    if (node.else) checkTypeLinks(node.else, inCode, inLink);
+  }
+  checkTypeLinks(parse(read(file)).html);
+}
 for (const [route, source] of routeSources) {
-  if (/^\/(docs|getting-started)\/.+/.test(route) && !catalog.includes(route)) throw new Error(`Missing navigation entry: ${route}`);
+  if (/^\/(docs|getting-started|sections)\/.+/.test(route) && !catalog.includes(route) && !isRedirect(pages.find(file => routeOf(file) === route))) throw new Error(`Missing navigation entry: ${route}`);
   if (source.includes('github.com/LauridBergjohann/page-sections/wiki')) throw new Error(`Old Wiki link in ${route}`);
   for (const match of source.matchAll(/href=\{base\s*\+\s*['"]([^'"]+)['"]\}/g)) {
     const [path, hash] = match[1].split('#');
