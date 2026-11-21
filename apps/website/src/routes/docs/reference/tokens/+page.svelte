@@ -47,6 +47,13 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         for core calculations and generated grid CSS. Changing CSS does not mutate the token object. This
         page distinguishes public theme controls, generated layout variables and implementation details.
       </p>
+      <p>
+        Navigation measures <code>--ps-selection-x</code>, <code>--ps-selection-y</code>,
+        <code>--ps-selection-width</code>, <code>--ps-selection-height</code> and
+        <code>--ps-selection-radius</code> internally for the moving selection surface. Do not set
+        these measurements yourself. Use <code>--ps-selection</code> for its color and
+        <code>--ps-radius</code> for the ButtonGroup's outer corners.
+      </p>
     </div></Section
   >
   <Section

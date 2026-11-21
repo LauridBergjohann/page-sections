@@ -1,5 +1,11 @@
 # @page-sections/core
 
+## 0.5.1
+
+### Patch Changes
+
+- Keep the core package version aligned with the Svelte navigation fixes. No core API changes.
+
 ## 0.5.0
 
 ### Minor Changes

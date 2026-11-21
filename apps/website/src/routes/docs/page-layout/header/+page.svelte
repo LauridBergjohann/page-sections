@@ -254,6 +254,18 @@
               >
               <td>Optional callback for button activation</td>
             </tr>
+            <tr
+              ><td><code>icon</code></td><td
+                >Snippet&lt;[<a href={base + '/docs/reference/types/#button-group-item'}
+                  >ButtonGroupItem</a
+                >]&gt;</td
+              ><td>Optional icon rendered for each item</td></tr
+            >
+            <tr
+              ><td><code>iconOnly</code></td><td>boolean</td><td
+                >false; with an icon, use the item label as the accessible name and tooltip</td
+              ></tr
+            >
           </tbody>
         </table>
       </div>
@@ -317,9 +329,8 @@
       <p>
         Header links use neutral <code>--ps-ink</code>; content links retain
         <code>--ps-accent</code>. Header and satellites share <code>--ps-navigation-shadow</code>.
-        Set this token on a navigation ancestor to customize or disable elevation. If host button
-        groups paint their own outline and radius, leave the satellite wrapper unpainted and apply
-        the token to the actual group to avoid duplicate edges.
+        Set this token on a navigation ancestor to customize or disable elevation. The header and
+        satellite containers have no border or outline; shadows separate them from the page.
       </p>
       <p>
         The current page and its ancestors retain a muted background in both menus. Only the current
@@ -328,7 +339,11 @@
         Sidebar branches reopen along the current page path after navigation. Desktop submenus
         connect directly to their parent link and are centered beneath it. Selected ButtonGroup
         items use a muted background and accent text; icons that inherit the text color follow the
-        same selection treatment.
+        same selection treatment. With one selected item, the background slides to its new position
+        in 180 milliseconds while the text and icon colors transition. Only the group's outer
+        corners are rounded. The main-menu background and accent line move together when the active
+        route changes; font weight changes immediately. Reduced-motion preferences disable these
+        animations.
       </p>
     </div></Section
   >

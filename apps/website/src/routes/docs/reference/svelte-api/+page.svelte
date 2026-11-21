@@ -175,7 +175,10 @@
             </tr>
             <tr>
               <td><code>ButtonGroup</code></td>
-              <td>Labelled controls/links; items, label</td>
+              <td
+                >Labelled controls/links with animated selection; items, label, onselect, icon,
+                iconOnly</td
+              >
               <td><a href={base + '/docs/page-layout/header/'}>Header</a></td>
             </tr>
             <tr>

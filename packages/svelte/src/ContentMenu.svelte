@@ -170,6 +170,7 @@
   }
   .mobile {
     position: relative;
+    margin-block-start: 12px;
     margin-inline-end: 12px;
   }
   summary {

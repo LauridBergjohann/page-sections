@@ -1,5 +1,14 @@
 # @page-sections/svelte
 
+## 0.5.1
+
+### Patch Changes
+
+- Remove the outer borders from the main header and satellites. Keep breadcrumbs on one line with ellipsis and inset the compact content-menu button 12px from the first section.
+
+  Animate the main menu's active background and accent line together. Give ButtonGroup one sliding selection surface with rounded outer edges, transitioning text/icon colors, optional icon snippets and accessible icon-only controls. Preserve native links, server-rendered selections and reduced-motion behavior.
+  - @page-sections/core@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes

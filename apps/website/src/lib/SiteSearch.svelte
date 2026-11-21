@@ -320,7 +320,7 @@
   .search-hint {
     border-block: 1px solid var(--ps-border);
   }
-  @media (max-width: 799px) {
+  @media (max-width: 799px), (min-width: 1200px) and (max-width: 1399.98px) {
     .site-search {
       position: static;
       width: 40px;

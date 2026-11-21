@@ -1,0 +1,29 @@
+.ps-selection-track {
+  position: relative;
+  isolation: isolate;
+}
+.ps-selection-track[data-ps-selection-ready]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  width: var(--ps-selection-width);
+  height: var(--ps-selection-height);
+  border-radius: var(--ps-selection-radius, 0px);
+  background: var(--ps-selection, var(--ps-section-muted));
+  transform: translate3d(var(--ps-selection-x), var(--ps-selection-y), 0);
+}
+.ps-selection-track[data-ps-selection-animated]::before {
+  transition:
+    transform 180ms ease,
+    width 180ms ease,
+    height 180ms ease,
+    border-radius 180ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ps-selection-track[data-ps-selection-animated]::before {
+    transition: none;
+  }
+}

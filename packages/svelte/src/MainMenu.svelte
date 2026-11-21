@@ -2,6 +2,8 @@
   import { onDestroy, type Snippet } from 'svelte';
   import { safeHref, type MenuItem } from '@page-sections/core';
   import SidebarNavigation from './SidebarNavigation.svelte';
+  import { selectionIndicator } from './selectionIndicator.js';
+  import './selectionIndicator.css';
   let {
     items,
     variant = 'desktop',
@@ -61,7 +63,8 @@
 {#if variant === 'mobile'}
   <SidebarNavigation {items} {icon} label="Mobile pages" />
 {:else}
-  <ul bind:this={host} class="ps-main-menu">
+  <ul bind:this={host} class="ps-main-menu ps-selection-track"
+    use:selectionIndicator={{ items: ':scope > li > a', selected: '.active' }}>
     {#each items as item (item.id)}
       <li
         onpointerenter={(event) => {
@@ -127,16 +130,11 @@
     position: relative;
   }
   .ps-main-menu > li > a {
-    min-height: calc(var(--ps-menu-height) - 1px);
+    min-height: var(--ps-menu-height);
     border-radius: 0;
   }
   a[aria-current='page'] {
     font-weight: 650;
-  }
-  @media (min-width: 1600px) {
-    .ps-main-menu > li > a {
-      min-height: calc(var(--ps-menu-height) - 2px);
-    }
   }
   a {
     display: flex;
@@ -191,5 +189,16 @@
   .icon {
     display: flex;
     flex: none;
+  }
+  .ps-main-menu:global([data-ps-selection-ready]) > li > a.active { background: transparent; }
+  .ps-main-menu:global([data-ps-selection-ready]) > li > a.active::after { content: none; }
+  .ps-main-menu:global([data-ps-selection-ready])::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 40px; height: 3px;
+    border-radius: 2px; background: var(--ps-accent); pointer-events: none;
+    transform: translate3d(calc(var(--ps-selection-x) + (var(--ps-selection-width) - 40px) / 2), calc(var(--ps-selection-y) + var(--ps-selection-height) - 3px), 0);
+  }
+  .ps-main-menu:global([data-ps-selection-animated])::after { transition: transform 180ms ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .ps-main-menu:global([data-ps-selection-animated])::after { transition: none; }
   }
 </style>

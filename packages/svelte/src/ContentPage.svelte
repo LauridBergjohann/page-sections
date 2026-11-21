@@ -130,6 +130,7 @@
     min-width: 0;
   }
   .breadcrumbs {
+    min-width: 0;
     min-height: var(--ps-breadcrumb-height);
     grid-column: 2;
     grid-row: 1;
