@@ -20,6 +20,7 @@ body {
   --ps-body: #666666;
   --ps-accent: #007b5e;
   --ps-on-accent: #ffffff;
+  --ps-panel-border: color-mix(in srgb, var(--ps-ink) 12%, transparent);
   --ps-border: #d1d1d1;
   --ps-radius: 12px;
   --ps-footer-background: #007b5e;
@@ -36,6 +37,7 @@ body {
   --ps-body: #fff;
   --ps-accent: #2bc093;
   --ps-on-accent: hsl(220, 10%, 12%);
+  --ps-panel-border: color-mix(in srgb, var(--ps-ink) 12%, transparent);
   --ps-border: hsl(219, 10%, 34%);
   --ps-radius: 12px;
   --ps-footer-background: rgb(53, 58, 65);

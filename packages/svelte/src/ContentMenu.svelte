@@ -112,12 +112,6 @@
     ></summary
   >
   <div class="popup ps-sidebar-scroll">
-    {#if ready}<button
-        class="close"
-        type="button"
-        aria-label="Close content menu"
-        onclick={() => close(true)}>×</button
-      >{/if}
     {@render links()}
   </div>
 </details>
@@ -200,10 +194,13 @@
   summary::-webkit-details-marker {
     display: none;
   }
-  .popup, .desktop { outline: 1px solid var(--ps-panel-border); outline-offset: -1px; }
+  .desktop { outline: 1px solid var(--ps-panel-border); outline-offset: -1px; }
   .popup {
     position: absolute;
-    top: 48px;
+    top: calc(100% + 8px);
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--ps-panel-border);
     right: 0;
     width: min(280px, calc(100vw - 24px));
     max-height: calc(100dvh - 96px);
@@ -211,21 +208,7 @@
     overscroll-behavior: contain;
     background: var(--ps-section-standard);
     border-radius: var(--ps-radius);
-    box-shadow: var(--ps-surface-shadow);
-  }
-  .close:focus-visible { outline: 2px solid var(--ps-accent); outline-offset: 2px; }
-  .close {
-    border-radius: 8px; outline: 1px solid var(--ps-border); outline-offset: -1px;
-    position: absolute;
-    right: 0.5rem;
-    top: 0.5rem;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font-size: 1.5rem;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
+    box-shadow: var(--ps-navigation-shadow);
   }
   @media (min-width: 1600px) {
     .mobile {

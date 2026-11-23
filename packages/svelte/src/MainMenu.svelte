@@ -168,7 +168,7 @@
   }
   .ps-submenu {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
     width: max-content;

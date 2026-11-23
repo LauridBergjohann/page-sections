@@ -283,13 +283,11 @@
     outline-offset: 2px;
   }
   .mobile-search {
-    outline: 1px solid var(--ps-border);
-    outline-offset: -1px;
     display: none;
   }
   .search-panel {
     position: absolute;
-    top: calc(100% + 0.75rem);
+    top: calc(100% + 8px);
     right: 0;
     z-index: 5;
     width: 30rem;
@@ -298,7 +296,7 @@
     color: var(--ps-ink);
     border: 1px solid var(--ps-panel-border);
     border-radius: var(--ps-radius);
-    box-shadow: 0 12px 32px #0003;
+    box-shadow: var(--ps-navigation-shadow);
     overflow: hidden;
   }
   ul {
@@ -345,8 +343,6 @@
     display: contents;
   }
   .mobile-search {
-    outline: 1px solid var(--ps-border);
-    outline-offset: -1px;
     transition:
       color 180ms ease,
       background-color 180ms ease;
@@ -357,8 +353,6 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .mobile-search {
-      outline: 1px solid var(--ps-border);
-      outline-offset: -1px;
       transition: none;
     }
   }

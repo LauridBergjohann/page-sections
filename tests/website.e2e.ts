@@ -2,7 +2,7 @@ import { expect, test, type Locator } from '@playwright/test';
 
 test('control and panel edges are independent and preserve header geometry', async ({ page }) => {
   await page.goto('/docs/');
-  await page.addStyleTag({ content: ':root, .ps-shell { --ps-border: rgb(200, 50, 30) !important; --ps-panel-border: rgb(30, 60, 200); }' });
+  await page.addStyleTag({ content: ':root, .ps-shell { --ps-border: rgb(200, 50, 30) !important; --ps-panel-border: rgb(30, 60, 200) !important; }' });
   const header = page.locator('.website-header .header');
   for (const width of [390, 1920]) {
     await page.setViewportSize({ width, height: 900 });
@@ -12,9 +12,9 @@ test('control and panel edges are independent and preserve header geometry', asy
     });
     expect(edge).toEqual({ color: 'rgb(30, 60, 200)', top: width < 1600 ? '0px' : '1px', bottom: '1px' });
     const before = await header.boundingBox();
-    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: transparent; }' });
+    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: transparent !important; }' });
     expect(await header.boundingBox()).toEqual(before);
-    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: rgb(30, 60, 200); }' });
+    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: rgb(30, 60, 200) !important; }' });
   }
   await expect(page.locator('.satellite .ps-button-group').first()).toHaveCSS('outline-color', 'rgb(200, 50, 30)');
 });
@@ -68,14 +68,13 @@ for (const width of [390, 1599]) {
         node.style.setProperty('--ps-selection', 'rgb(50, 60, 70)');
       });
       const normal = await button.evaluate(node => ({ color: getComputedStyle(node).color, background: getComputedStyle(node).backgroundColor }));
-      for (const dismissal of javaScriptEnabled ? ['toggle', 'escape', 'close', 'outside'] : ['toggle']) {
+      for (const dismissal of javaScriptEnabled ? ['toggle', 'escape', 'outside'] : ['toggle']) {
         await button.click();
         await expect(popup).toBeVisible();
         await expect(button).toHaveCSS('color', 'rgb(4, 180, 120)');
         await expect(button.locator('svg')).toHaveCSS('stroke', 'rgb(4, 180, 120)');
         await expect(button).toHaveCSS('background-color', 'rgb(50, 60, 70)');
         if (dismissal === 'escape') await page.keyboard.press('Escape');
-        else if (dismissal === 'close') await popup.getByRole('button', { name: 'Close content menu' }).click();
         else if (dismissal === 'outside') await content.locator('h1').click();
         else await button.click();
         await expect(popup).toBeHidden();

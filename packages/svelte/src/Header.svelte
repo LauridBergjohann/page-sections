@@ -95,7 +95,6 @@
   .menu { flex: 1; min-width: 0; }
   .satellite { display: none; }
   .header::after { content: ''; position: absolute; inset: 0; border: solid var(--ps-panel-border); border-width: 0 0 1px; border-radius: inherit; pointer-events: none; z-index: 3; }
-  summary { outline: 1px solid var(--ps-border); outline-offset: -1px; }
   .settings, .mobile-navigation { flex-shrink: 0; }
   summary { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; list-style: none; }
   summary:focus-visible { outline: 2px solid var(--ps-accent); outline-offset: 2px; }
@@ -104,8 +103,8 @@
   summary:hover { background: var(--ps-selection, var(--ps-section-muted)); }
   details[open] > summary { color: var(--ps-accent); background: var(--ps-selection, var(--ps-section-muted)); }
   @media (prefers-reduced-motion: reduce) { summary { transition: none; } }
-  .settings-panel { position: absolute; top: calc(100% + 8px); right: 12px; width: min(280px, calc(100vw - 24px)); display: grid; gap: 16px; padding: 20px; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-radius: var(--ps-radius); box-shadow: 0 12px 32px #0002; z-index: 2; }
-  .mobile-panel { position: absolute; top: 100%; inset-inline: 0; max-height: calc(100dvh - var(--ps-nav-height)); overflow: auto; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); padding: 12px; z-index: 2; }
+  .settings-panel { position: absolute; top: calc(100% + 8px); right: 12px; width: min(280px, calc(100vw - 24px)); display: grid; gap: 16px; padding: 20px; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); z-index: 2; }
+  .mobile-panel { position: absolute; top: calc(100% + 8px); inset-inline: 12px; border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); max-height: calc(100dvh - var(--ps-nav-height)); overflow: auto; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); padding: 12px; z-index: 2; }
   .mobile-panel :global(ul) { flex-direction: column; align-items: stretch; }
   .desktop-menu { display: none; }
   @media (max-width: 1599.98px) { .header { width: 100%; } }
