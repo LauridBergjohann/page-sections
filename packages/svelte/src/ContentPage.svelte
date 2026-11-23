@@ -77,7 +77,7 @@
   aria-label={rest['aria-label'] ?? (!rest['aria-labelledby'] ? page.title : undefined)}
 >
   <div class="ps-page-frame">
-    <div class="breadcrumbs">
+    <div class="breadcrumbs ps-grid-scope">
       <Breadcrumbs items={page.breadcrumbs ?? []} />
     </div>
     {#if leftSidebar}<aside class="ps-left-sidebar">

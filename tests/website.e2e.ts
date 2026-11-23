@@ -1,5 +1,19 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+test('breadcrumbs follow the responsive content inset', async ({ page }) => {
+  await page.goto('/docs/foundations/installation/');
+  const breadcrumbs = page.locator('.breadcrumbs');
+  const content = page.locator('.ps-page-content .ps-section-content').first();
+  for (const [width, inset] of [[390, 12], [599, 12], [600, 16], [839, 16], [840, 16], [1199, 16], [1200, 24], [1599, 24]]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(breadcrumbs).toHaveCSS('padding-left', `${inset}px`);
+    await expect(breadcrumbs).toHaveCSS('padding-right', `${inset}px`);
+    const breadcrumbStart = await breadcrumbs.locator('nav').evaluate(el => el.getBoundingClientRect().left);
+    const contentStart = await content.evaluate(el => el.getBoundingClientRect().left + parseFloat(getComputedStyle(el).paddingLeft));
+    expect(Math.abs(breadcrumbStart - contentStart)).toBeLessThan(1);
+  }
+});
+
 for (const width of [390, 1599]) {
   for (const javaScriptEnabled of [false, true]) {
     test(`compact content menu docks and reflects its open state at ${width}px, JS=${javaScriptEnabled}`, async ({ browser, baseURL }) => {
