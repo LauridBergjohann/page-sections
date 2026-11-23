@@ -80,6 +80,10 @@ export interface ButtonGroupItem { id: string; label: string; href?: string; sel
 export interface FooterLink { label: string; href: string }
 export interface FooterMenuGroup { label: string; href?: string; links: readonly FooterLink[] }
 export interface PageTheme {
+  /** Cards, icon buttons and grouped controls. Use transparent to hide. */
+  border?: string;
+  /** Panels, navigation and popups. Use transparent to hide. */
+  panelBorder?: string;
   background?: string; ink?: string; body?: string; accent?: string; onAccent?: string;
   standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string;
   footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;

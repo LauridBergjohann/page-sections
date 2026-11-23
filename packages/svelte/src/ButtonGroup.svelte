@@ -3,6 +3,7 @@
   import { safeHref, type ButtonGroupItem } from '@page-sections/core';
   import { selectionIndicator } from './selectionIndicator.js';
   import './selectionIndicator.css';
+  import './styles.css';
   let {
     items,
     label,
@@ -66,6 +67,8 @@
     flex-wrap: wrap;
     width: fit-content;
     max-width: 100%;
+    outline: 1px solid var(--ps-border);
+    outline-offset: -1px;
     border-radius: var(--ps-radius, 12px);
   }
   a,

@@ -1,5 +1,24 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+test('control and panel edges are independent and preserve header geometry', async ({ page }) => {
+  await page.goto('/docs/');
+  await page.addStyleTag({ content: ':root, .ps-shell { --ps-border: rgb(200, 50, 30) !important; --ps-panel-border: rgb(30, 60, 200); }' });
+  const header = page.locator('.website-header .header');
+  for (const width of [390, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    const edge = await header.evaluate(el => {
+      const css = getComputedStyle(el, '::after');
+      return { color: css.borderBottomColor, top: css.borderTopWidth, bottom: css.borderBottomWidth };
+    });
+    expect(edge).toEqual({ color: 'rgb(30, 60, 200)', top: width < 1600 ? '0px' : '1px', bottom: '1px' });
+    const before = await header.boundingBox();
+    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: transparent; }' });
+    expect(await header.boundingBox()).toEqual(before);
+    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: rgb(30, 60, 200); }' });
+  }
+  await expect(page.locator('.satellite .ps-button-group').first()).toHaveCSS('outline-color', 'rgb(200, 50, 30)');
+});
+
 test('breadcrumbs follow the responsive content inset', async ({ page }) => {
   await page.goto('/docs/foundations/installation/');
   const breadcrumbs = page.locator('.breadcrumbs');

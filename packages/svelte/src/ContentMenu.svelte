@@ -200,6 +200,7 @@
   summary::-webkit-details-marker {
     display: none;
   }
+  .popup, .desktop { outline: 1px solid var(--ps-panel-border); outline-offset: -1px; }
   .popup {
     position: absolute;
     top: 48px;
@@ -212,7 +213,9 @@
     border-radius: var(--ps-radius);
     box-shadow: var(--ps-surface-shadow);
   }
+  .close:focus-visible { outline: 2px solid var(--ps-accent); outline-offset: 2px; }
   .close {
+    border-radius: 8px; outline: 1px solid var(--ps-border); outline-offset: -1px;
     position: absolute;
     right: 0.5rem;
     top: 0.5rem;

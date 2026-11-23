@@ -4,6 +4,7 @@
   --ps-section-standard: #fff; --ps-section-muted: #e8edf3; --ps-radius: 18px;
   --ps-font-family: system-ui, sans-serif; --ps-narrow-max: 780px;
   --ps-border: color-mix(in srgb, var(--ps-ink) 18%, transparent);
+  --ps-panel-border: color-mix(in srgb, var(--ps-ink) 12%, transparent);
   --ps-navigation-shadow: 0 4px 8px rgb(0 0 0 / 12%);
   --ps-surface-shadow: 0 3px 8px rgb(0 0 0 / 12%);
 }

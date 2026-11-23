@@ -5033,6 +5033,10 @@
         <summary>Type declaration</summary>
         <pre><code
             >interface <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> &#123;
+  /** Cards, icon buttons and grouped controls. Use transparent to hide. */
+  border?: string;
+  /** Panels, navigation and popups. Use transparent to hide. */
+  panelBorder?: string;
   background?: string; ink?: string; body?: string; accent?: string; onAccent?: string;
   standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string;
   footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;
@@ -5045,6 +5049,16 @@
         <table>
           <thead><tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr></thead><tbody
             ><tr
+              ><td><code>border</code></td><td><code>string</code></td><td>Optional</td><td
+                >Cards, icon buttons and grouped controls. Use transparent to hide.</td
+              ></tr
+            >
+            <tr
+              ><td><code>panelBorder</code></td><td><code>string</code></td><td>Optional</td><td
+                >Panels, navigation and popups. Use transparent to hide.</td
+              ></tr
+            >
+            <tr
               ><td><code>background</code></td><td><code>string</code></td><td>Optional</td><td
                 >See the declared value shape and the linked types.</td
               ></tr

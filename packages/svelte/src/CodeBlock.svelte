@@ -66,6 +66,7 @@
   .tools { grid-column: 2; grid-row: 1; display: flex; align-items: center; gap: .35rem; padding: .5rem .5rem .5rem 0; font: .7rem/1.2 var(--ps-font-family); }
   .language { max-width: 9ch; overflow: hidden; text-overflow: ellipsis; color: var(--ps-body); }
   button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: .35rem; background: transparent; color: var(--ps-body); cursor: pointer; }
+  button { outline: 1px solid var(--ps-border); outline-offset: -1px; }
   button:hover { background: var(--ps-section-standard); color: var(--ps-accent); }
   button:disabled { opacity: .5; cursor: default; }
   button:focus-visible, pre:focus-visible { outline: 2px solid var(--ps-accent); outline-offset: -2px; }

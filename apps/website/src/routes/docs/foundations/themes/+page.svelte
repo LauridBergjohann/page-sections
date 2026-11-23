@@ -109,6 +109,8 @@
             </tr>
           </thead>
           <tbody>
+            <tr><td><code>border</code></td><td><code>--ps-border</code></td></tr>
+            <tr><td><code>panelBorder</code></td><td><code>--ps-panel-border</code></td></tr>
             <tr>
               <td><code>footerBackground</code></td><td><code>--ps-footer-background</code></td>
             </tr>
@@ -169,8 +171,10 @@
           >themeStyle</code
         >
         core helper performs the mapping and rejects unknown keys and values containing declaration delimiters.
-        It is not a full CSS value validator. Variables outside this table, such as
-        <code>--ps-border</code>, can be set in CSS.
+        It is not a full CSS value validator. Use <code>border</code> for cards and controls, and
+        <code>panelBorder</code>
+        for panels and navigation. Set either to <code>transparent</code> to hide that edge without changing
+        layout. Other CSS variables can be set directly in CSS.
       </p>
     </div></Section
   >

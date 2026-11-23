@@ -134,7 +134,12 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             <tr>
               <td><code>--ps-border</code></td>
               <td>color-mix(in srgb, var(--ps-ink) 18%, transparent)</td>
-              <td>Borders</td>
+              <td>Cards, icon buttons, ButtonGroups and inputs; transparent hides the edge</td>
+            </tr>
+            <tr>
+              <td><code>--ps-panel-border</code></td>
+              <td>color-mix(in srgb, var(--ps-ink) 12%, transparent)</td>
+              <td>Panels, popups and navigation; docked headers have a bottom edge only</td>
             </tr>
             <tr>
               <td><code>--ps-navigation-shadow</code></td>

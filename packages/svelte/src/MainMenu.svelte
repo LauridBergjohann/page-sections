@@ -175,7 +175,7 @@
     max-width: calc(100vw - 32px);
     padding: 1rem;
     background: var(--ps-section-standard);
-    border: 1px solid var(--ps-border);
+    border: 1px solid var(--ps-panel-border);
     border-radius: var(--ps-radius);
     box-shadow: var(--ps-navigation-shadow);
     z-index: 2;
