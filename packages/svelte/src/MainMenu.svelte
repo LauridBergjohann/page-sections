@@ -128,8 +128,11 @@
   }
   .ps-main-menu > li {
     position: relative;
+    flex: none;
   }
+  .ps-main-menu { flex-wrap: nowrap; }
   .ps-main-menu > li > a {
+    white-space: nowrap;
     min-height: var(--ps-menu-height);
     border-radius: 0;
   }

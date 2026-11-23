@@ -1,5 +1,6 @@
 <script lang="ts">
   import { fitSidebar } from './fitSidebar.js';
+  import { popupLayer } from './popupLayer.js';
   import { onMount } from 'svelte';
   import { resolveActiveContentSection, type SectionNavigationItem } from '@page-sections/core';
   let {
@@ -97,7 +98,7 @@
 {/snippet}
 
 <div class="desktop ps-sidebar-scroll" use:fitSidebar>{@render links()}</div>
-<details bind:this={popup} class="mobile" data-enhanced={ready}>
+<details use:popupLayer bind:this={popup} class="mobile" data-enhanced={ready}>
   <!-- svelte-ignore a11y_no_redundant_roles (Keep styled disclosures exposed as buttons in browser accessibility trees.) -->
   <summary role="button" aria-label={label} title={label}
     ><svg

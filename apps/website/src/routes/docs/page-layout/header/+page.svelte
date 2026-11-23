@@ -143,6 +143,21 @@
         closes open menus when the host changes routes.
       </p>
       <p>
+        Open menus and settings keep their controls sharp while blurring the page behind them. The
+        burger and settings buttons use the accent and tab-background colors while open. Clicking
+        the same button, clicking outside or pressing Escape closes the popup. Scrolling or resizing
+        also closes it, so the popup cannot become detached from its control. The content menu
+        follows the same behavior.
+      </p>
+      <p>
+        For a custom popup such as search, keep its markup inside Header or PageShell and set
+        <code>data-ps-popup</code> on its absolutely positioned panel only while it is open. The shell
+        supplies top-layer placement and a shared backdrop; your component manages its open state, active
+        trigger, outside-click and Escape handlers. On compact screens, put the search input and results
+        inside that one panel. The backdrop exists only while a popup is open and does not add a scroll
+        animation or rendering loop.
+      </p>
+      <p>
         By default, <code>scrollBehavior="delayed"</code> keeps the header and its satellites in
         place for the first 32 pixels of downward scrolling. They then scroll out together with the
         page, and return along the same path when scrolling up. This uses CSS sticky positioning and

@@ -317,22 +317,22 @@ test('desktop page links reveal only the second level and retain native navigati
   await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(9);
   await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(9);
   await expect(menu.locator('.ps-submenu .ps-submenu')).toHaveCount(0);
-  await expect(page.locator('.menu-backdrop')).toBeVisible();
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('transition-duration', /^0\.18s(?:, 0\.18s)*$/);
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toBeVisible();
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('transition-duration', '0s');
   await page.mouse.move(0, 500);
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
   await docs.hover();
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('backdrop-filter', 'blur(3px)');
   await page.keyboard.press('Escape');
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
   await menu.getByRole('link', { name: 'About', exact: true }).focus();
   await docs.focus();
   await expect(menu.getByRole('link', { name: 'Hero', exact: true })).toBeVisible();
   await menu.getByRole('link', { name: 'Hero', exact: true }).focus();
   await page.keyboard.press('Escape');
   await expect(docs).toBeFocused();
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
   const opened = page.context().waitForEvent('page');
   await docs.click({ modifiers: ['Control'] });
   const newTab = await opened;
@@ -350,40 +350,37 @@ test('desktop page links reveal only the second level and retain native navigati
   await expect(page.locator('.reading-path [rel="next"]')).toContainText('Image');
 });
 
-test('mobile menus animate the page blur and restore it on every dismissal path', async ({ page }) => {
+test('mobile menus allocate the page blur only while open and restore it on every dismissal path', async ({ page }) => {
   await page.goto('/docs/foundations/installation/');
-  const backdrop = page.locator('.website-header .menu-backdrop');
+  const backdrop = page.locator('[data-ps-popup-backdrop]:popover-open');
   const burger = page.locator('.website-header .mobile-menu > summary');
   for (const width of [320, 600, 840]) {
     await page.setViewportSize({ width, height: 900 });
     await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true }).locator('ol')).toHaveCSS('font-size', '12px');
-    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
-    await expect(backdrop).toHaveCSS('transition-property', /(?:^|, )backdrop-filter$/);
-    await expect(backdrop).toHaveCSS('transition-duration', /^0\.18s(?:, 0\.18s)*$/);
+    await expect(backdrop).toHaveCount(0);
     await burger.click();
     await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
     await burger.click();
-    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+    await expect(backdrop).toHaveCount(0);
     await burger.click();
     await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
     await page.keyboard.press('Escape');
-    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+    await expect(backdrop).toHaveCount(0);
   }
   await burger.click();
   await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
   await page.locator('.site-footer').click({ position: { x: 5, y: 5 } });
-  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(backdrop).toHaveCount(0);
   await burger.click();
   await page.setViewportSize({ width: 1600, height: 900 });
-  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(backdrop).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 900 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(backdrop).toHaveCSS('transition-duration', '0s');
   await burger.click();
   await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
   await page.locator('.mobile-panel').getByRole('link', { name: 'Documentation', exact: true }).click();
   await expect(page).toHaveURL(/\/docs\/$/);
-  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(backdrop).toHaveCount(0);
 });
 
 test('touch and mobile users can reach deep pages through real parent pages', async ({ browser }) => {
@@ -428,7 +425,7 @@ for (const width of [390, 1600]) {
       await burger.click();
       await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
       await burger.click();
-      await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+      await expect(page.locator('.menu-backdrop')).toBeHidden();
     }
     await page.screenshot({ path: `.artifacts/website-no-js-${width}.png`, fullPage: true });
     await context.close();
@@ -633,7 +630,7 @@ for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
     const header = await page.locator('.website-header .header').boundingBox();
     expect(header!.height).toBe(width < 1600 ? 66 : 64);
     const input = page.getByRole('combobox', { name: 'Search documentation' });
-    if (width < 800 || (width >= 1200 && width < 1400)) {
+    if (width < 800 || (width >= 1200 && width < 1600)) {
       await page.getByRole('button', { name: 'Open search', exact: true }).click();
     } else await input.click();
     await expect(input).toBeFocused();
@@ -642,7 +639,7 @@ for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await input.press('Escape');
     await expect(page.getByRole('listbox')).toHaveCount(0);
-    if (width < 800 || (width >= 1200 && width < 1400)) await expect(page.getByRole('button', { name: 'Open search', exact: true })).toBeFocused();
+    if (width < 800 || (width >= 1200 && width < 1600)) await expect(page.getByRole('button', { name: 'Open search', exact: true })).toBeFocused();
     await page.keyboard.press('Control+k');
     await expect(input).toBeFocused();
     await input.fill('CodeBlock');
