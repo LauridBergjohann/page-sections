@@ -199,8 +199,8 @@
   }
   .appearance-expanded h3 {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 650;
+    font-size: 0.875rem;
+    font-weight: 500;
   }
   .appearance-compact {
     display: none;

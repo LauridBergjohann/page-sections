@@ -194,7 +194,7 @@
   summary::-webkit-details-marker {
     display: none;
   }
-  .desktop { border: 1px solid var(--ps-panel-border); border-inline-start-width: var(--ps-content-menu-border-start, 0px); margin-inline-start: var(--ps-content-menu-overlap, -1px); }
+  .desktop { border: 1px solid var(--ps-panel-border); border-inline-start-width: var(--ps-content-menu-border-start, 0px); }
   .popup {
     position: absolute;
     top: calc(100% + 8px);

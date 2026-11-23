@@ -17,7 +17,7 @@
   .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot {
     --ps-content-menu-radius: var(--ps-radius);
     --ps-content-menu-border-start: 1px;
-    --ps-content-menu-overlap: 0px;
+
     --ps-content-menu-shadow: var(--ps-surface-shadow);
     margin-inline-start: var(--ps-sidebar-gap);
     width: calc(var(--ps-sidebar-right-width) - var(--ps-sidebar-gap));

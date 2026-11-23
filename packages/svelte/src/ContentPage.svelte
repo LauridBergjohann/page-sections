@@ -162,7 +162,7 @@
       z-index: 2;
     }
     .sidebar-panel {
-      outline: 1px solid var(--ps-panel-border); outline-offset: -1px;
+      border: 1px solid var(--ps-panel-border);
       position: sticky;
       top: var(--ps-sidebar-sticky-top);
       max-height: var(--ps-sidebar-available-height, calc(100dvh - var(--ps-nav-height) - var(--ps-breadcrumb-height) - var(--ps-sidebar-sticky-top)));
@@ -183,7 +183,7 @@
       height: auto;
       padding-block: var(--ps-content-menu-offset);
       pointer-events: auto;
-      z-index: 2;
+      z-index: 0;
     }
   }
 </style>

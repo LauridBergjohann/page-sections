@@ -198,6 +198,13 @@ for (const width of [390, 1000, 1920]) {
       await header.locator('.settings > summary').click();
       await surface('.settings-panel');
       await expect(page.locator('.settings-panel').getByRole('heading', { name: 'Appearance' })).toBeVisible();
+      const hierarchy = await page.locator('.settings-panel').evaluate(panel => {
+        const title = getComputedStyle(panel.querySelector('strong')!);
+        const label = getComputedStyle(panel.querySelector('h3')!);
+        return { titleSize: parseFloat(title.fontSize), labelSize: parseFloat(label.fontSize), titleWeight: Number(title.fontWeight), labelWeight: Number(label.fontWeight) };
+      });
+      expect(hierarchy.titleSize).toBeGreaterThan(hierarchy.labelSize);
+      expect(hierarchy.titleWeight).toBeGreaterThan(hierarchy.labelWeight);
       await expect(page.locator('.settings-panel').getByRole('button', { name: 'Light', exact: true })).toHaveText('Light');
       await expect(page.locator('.settings-panel').getByRole('button', { name: 'Dark', exact: true })).toHaveText('Dark');
       await page.keyboard.press('Escape');

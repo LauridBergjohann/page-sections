@@ -961,6 +961,21 @@ test('content menu omits only its docked edge and transparent sections stay unfr
   const menu = page.locator('.ps-content-menu-slot .desktop');
   await expect(menu).toHaveCSS('border-left-width', '0px');
   await expect(menu).toHaveCSS('border-right-width', '1px');
+  const surface = page.locator('#page-heading > .ps-section-surface');
+  await expect(surface).toHaveCSS('border-right-width', '1px');
+  await expect(surface).not.toHaveCSS('box-shadow', 'none');
+  await expect(page.locator('.ps-content-menu-slot')).toHaveCSS('z-index', '0');
+  const sectionBox = (await surface.boundingBox())!;
+  const menuBox = (await menu.boundingBox())!;
+  expect(Math.abs(sectionBox.x + sectionBox.width - menuBox.x)).toBeLessThan(0.1);
+  const sidebar = page.locator('.sidebar-panel');
+  await expect(sidebar).toHaveCSS('border-left-width', '1px');
+  const sidebarBox = (await sidebar.boundingBox())!;
+  for (const active of await sidebar.locator('a.active').all()) {
+    const activeBox = (await active.boundingBox())!;
+    expect(activeBox.x).toBeGreaterThanOrEqual(sidebarBox.x + 1);
+    expect(activeBox.x + activeBox.width).toBeLessThanOrEqual(sidebarBox.x + sidebarBox.width - 1);
+  }
   expect(await menu.evaluate(el => {
     const rect = el.getBoundingClientRect();
     return el.contains(document.elementFromPoint(rect.left + 0.5, rect.top + 24));
