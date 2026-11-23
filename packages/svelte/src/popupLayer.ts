@@ -8,14 +8,15 @@ type Controller = { retain(root: HTMLElement): () => void };
 
 function createController(): Controller {
   const roots = new Map<HTMLElement, { count: number; observer: MutationObserver }>();
-  const originals = new Map<HTMLElement, string | null>();
+  const viewport = () => ({ x: scrollX, y: scrollY, width: innerWidth, height: innerHeight });
+  const originals = new Map<HTMLElement, { style: string | null; viewport: ReturnType<typeof viewport> }>();
   let backdrop: HTMLDivElement | undefined;
   let queued = false;
   function restore(panel: HTMLElement) {
     if (!originals.has(panel)) return;
     if (panel.matches(':popover-open')) panel.hidePopover();
     panel.removeAttribute('popover');
-    const original = originals.get(panel);
+    const original = originals.get(panel)!.style;
     if (original === null) panel.removeAttribute('style');
     else panel.setAttribute('style', original!);
     originals.delete(panel);
@@ -114,7 +115,7 @@ function createController(): Controller {
         const mobileMenu = panel.classList.contains('mobile-panel') && headerRect;
         const width = Math.min(mobileMenu ? headerRect.width - 24 : rect.width, innerWidth - 24);
         const left = mobileMenu ? headerRect.left + 12 : rect.left;
-        originals.set(panel, panel.getAttribute('style'));
+        originals.set(panel, { style: panel.getAttribute('style'), viewport: viewport() });
         panel.popover = 'manual';
         Object.assign(panel.style, {
           position: 'fixed',
@@ -150,6 +151,15 @@ function createController(): Controller {
   }
   function closeOnViewportChange() {
     if (!originals.size) return;
+    const current = viewport();
+    // Scroll notifications are queued. A trigger can open its popup after the
+    // viewport has moved but before that scroll event is delivered (including
+    // focus/scrollIntoView). Only dismiss if the positioning geometry changed
+    // since opening, not simply because an older notification arrived.
+    if (![...originals.values()].some(({ viewport: positioned }) =>
+      positioned.x !== current.x || positioned.y !== current.y ||
+      positioned.width !== current.width || positioned.height !== current.height
+    )) return;
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     for (const panel of originals.keys()) {
       const details = panel.parentElement;

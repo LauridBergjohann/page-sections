@@ -8,6 +8,8 @@
 
 ### Patch Changes
 
+- Keep newly opened popups visible when an earlier scroll notification arrives after opening. Dismiss them only when viewport geometry changes after positioning. Run local browser tests with the same Playwright Chromium revision as CI.
+
 - 57d7105: Add shared CSS controls for shadow color, size and intensity, popup and card-hover shadow overrides, and scalable section shadow clipping. Complete role tokens remain supported as overrides; their defaults now resolve at each surface, so ancestor and local theme controls work consistently.
 - 223f28a: Attach header popups without a pointer gap. Outline connected standard-width section surfaces with the panel border, omit internal seams and the attached content-menu edge, and preserve separate borders for floating menus.
 - 87f0ff4: Unify header and content-menu popups with an on-demand page blur, active disclosure triggers and native top-layer placement. Repair reopening a mobile menu after outside dismissal, preserve native disclosure behavior without JavaScript, and prevent desktop menu labels from wrapping.
