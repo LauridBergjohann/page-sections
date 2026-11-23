@@ -192,10 +192,12 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
     }}
     ><div class="prose">
       <p>
-        Standard-width sections with standard or muted backgrounds receive a subtle shadow, whether
-        or not the page has sidebars. Joined surfaces clip internal shadow edges. Transparent and
-        full-width backgrounds do not receive this shadow. Full backgrounds still paint across the
-        viewport when a sidebar makes the content column asymmetric.
+        Standard-width sections with standard or muted backgrounds receive a subtle shadow and an
+        outer edge in <code>--ps-panel-border</code>, whether or not the page has sidebars.
+        Connected sections share one outline: there are no borders or shadow seams between them. Set
+        the token to transparent to hide the edge. Transparent and full-width backgrounds receive
+        neither this border nor this shadow. Full backgrounds still paint across the viewport when a
+        sidebar makes the content column asymmetric.
       </p>
     </div></Section
   >

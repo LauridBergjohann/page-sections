@@ -287,7 +287,7 @@
   }
   .search-panel {
     position: absolute;
-    top: calc(100% + 8px);
+    top: 100%;
     right: 0;
     z-index: 5;
     width: 30rem;
@@ -295,6 +295,7 @@
     background: var(--ps-section-standard);
     color: var(--ps-ink);
     border: 1px solid var(--ps-panel-border);
+    border-top: 0;
     border-radius: var(--ps-radius);
     box-shadow: var(--ps-navigation-shadow);
     overflow: hidden;
@@ -388,13 +389,14 @@
     .opened .search-surface {
       display: block;
       position: absolute;
-      top: calc(100% + 8px);
+      top: 100%;
       left: 12px;
       right: 12px;
       z-index: 5;
       background: var(--ps-section-standard);
       color: var(--ps-ink);
       border: 1px solid var(--ps-panel-border);
+      border-top: 0;
       border-radius: var(--ps-radius);
       box-shadow: var(--ps-navigation-shadow);
       overflow: auto;

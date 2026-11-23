@@ -183,7 +183,7 @@
       height: auto;
       padding-block: var(--ps-content-menu-offset);
       pointer-events: auto;
-      z-index: 0;
+      z-index: 2;
     }
   }
 </style>

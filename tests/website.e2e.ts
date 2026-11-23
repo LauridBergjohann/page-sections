@@ -619,10 +619,16 @@ for (const javaScriptEnabled of [false, true]) {
     const radius = await page.locator('.ps-shell').evaluate(element => getComputedStyle(element).getPropertyValue('--ps-radius').trim());
     await expect(corners).toHaveCSS('border-top-left-radius', radius);
     await expect(corners).toHaveCSS('border-bottom-left-radius', '0px');
+    await expect(corners).toHaveCSS('border-top-width', '1px');
+    await expect(corners).toHaveCSS('border-bottom-width', '0px');
     for (const [index, slug] of sectionSlugs.entries()) {
       await expect(page.locator(`#${slug}`)).toHaveAttribute('data-background-color', index % 2 ? 'standard' : 'muted');
       const surface = page.locator(`#${slug} > .ps-section-surface`);
       await expect(surface).toHaveCSS('border-top-left-radius', '0px');
+      await expect(surface).toHaveCSS('border-top-width', '0px');
+      await expect(surface).toHaveCSS('border-bottom-width', index === sectionSlugs.length - 1 ? '1px' : '0px');
+      await expect(surface).toHaveCSS('border-left-width', '1px');
+      await expect(surface).toHaveCSS('border-right-width', '1px');
       await expect(surface).toHaveCSS('border-bottom-left-radius', index === sectionSlugs.length - 1 ? radius : '0px');
     }
     const tokens = page.locator('#code-example .code-line > span[style*="--ps-code-light"]');
@@ -946,4 +952,30 @@ test('compact header keeps the brand and prioritizes search and settings', async
   await expect(header).toHaveCSS('border-width', '0px');
   await expect(page.locator('.satellite.right')).toHaveCSS('outline-style', 'none');
   await page.screenshot({path: test.info().outputPath('navigation-dark.png')});
+});
+
+
+test('content menu omits only its docked edge and transparent sections stay unframed', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/docs/foundations/installation/');
+  const menu = page.locator('.ps-content-menu-slot .desktop');
+  await expect(menu).toHaveCSS('border-left-width', '0px');
+  await expect(menu).toHaveCSS('border-right-width', '1px');
+  expect(await menu.evaluate(el => {
+    const rect = el.getBoundingClientRect();
+    return el.contains(document.elementFromPoint(rect.left + 0.5, rect.top + 24));
+  })).toBe(true);
+  for (const width of [390, 1000]) {
+    await page.setViewportSize({ width, height: 900 });
+    const surface = page.locator('#page-heading > .ps-section-surface');
+    await expect(surface).toHaveCSS('border-left-width', '0px');
+    await expect(surface).toHaveCSS('border-right-width', '0px');
+  }
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/docs/design-system/backgrounds/');
+  await expect(menu).toHaveCSS('border-left-width', '1px');
+  for (const surface of await page.locator('.ps-section:is([data-background-color="transparent"], [data-background-size="full"]) > .ps-section-surface').all()) {
+    await expect(surface).toHaveCSS('border-left-width', '0px');
+    await expect(surface).toHaveCSS('border-top-width', '0px');
+  }
 });

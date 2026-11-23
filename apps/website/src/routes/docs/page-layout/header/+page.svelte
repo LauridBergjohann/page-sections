@@ -353,8 +353,11 @@
       <p>
         Header links use neutral <code>--ps-ink</code>; content links retain
         <code>--ps-accent</code>. Header and satellites share <code>--ps-navigation-shadow</code>.
-        Set this token on a navigation ancestor to customize or disable elevation. The header and
-        satellite containers have no border or outline; shadows separate them from the page.
+        Set this token on a navigation ancestor to customize or disable elevation. The header uses
+        <code>--ps-panel-border</code> around its floating surface, or only along the bottom when
+        docked to the viewport. Header icon buttons have no decorative border. Button groups use
+        <code>--ps-border</code>. Set either border token to transparent to hide its edges. Header
+        popups meet the header directly, without a gap or a border along the attached top edge.
       </p>
       <p>
         The current page and its ancestors retain a muted background in both menus. Only the current

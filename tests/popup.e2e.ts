@@ -155,18 +155,19 @@ for (const width of [390, 1000, 1920]) {
     const header = page.locator('.website-header .header');
     const headerBox = (await header.boundingBox())!;
     let appearance: unknown;
-    async function surface(selector: string, anchorBottom = headerBox.y + headerBox.height) {
+    async function surface(selector: string, anchorBottom = headerBox.y + headerBox.height, gap = 0) {
       const popup = page.locator(selector + ':popover-open');
       await expect(popup).toBeVisible();
       const box = (await popup.boundingBox())!;
-      expect(Math.abs(box.y - anchorBottom - 8)).toBeLessThan(1);
+      expect(Math.abs(box.y - anchorBottom - gap)).toBeLessThan(1);
       expect(box.x).toBeGreaterThanOrEqual(12);
       expect(box.x + box.width).toBeLessThanOrEqual(width - 12);
       const css = await popup.evaluate(el => {
         const s = getComputedStyle(el);
-        return { border: s.borderTopWidth, radius: s.borderRadius, color: s.borderColor, background: s.backgroundColor, shadow: s.boxShadow };
+        return { border: s.borderRightWidth, radius: s.borderRadius, color: s.borderColor, background: s.backgroundColor, shadow: s.boxShadow };
       });
       expect(css.border).toBe('1px');
+      await expect(popup).toHaveCSS('border-top-width', gap === 0 ? '0px' : '1px');
       expect(css.radius).toBe('12px');
       if (appearance) expect(css).toEqual(appearance);
       else appearance = css;
@@ -185,13 +186,20 @@ for (const width of [390, 1000, 1920]) {
       await page.keyboard.press('Escape');
     } else {
       await header.locator('.desktop-menu').getByRole('link', { name: 'Documentation', exact: true }).hover();
-      await surface('.ps-submenu');
+      const submenu = await surface('.ps-submenu');
+      const menuBox = (await submenu.boundingBox())!;
+      await page.mouse.move(menuBox.x + menuBox.width / 2, menuBox.y + 2, { steps: 15 });
+      await page.waitForTimeout(250);
+      await expect(submenu).toBeVisible();
       await page.mouse.move(5, 800);
       await expect(page.locator('.ps-submenu:popover-open')).toHaveCount(0);
     }
     if (width < 1600) {
       await header.locator('.settings > summary').click();
       await surface('.settings-panel');
+      await expect(page.locator('.settings-panel').getByRole('heading', { name: 'Appearance' })).toBeVisible();
+      await expect(page.locator('.settings-panel').getByRole('button', { name: 'Light', exact: true })).toHaveText('Light');
+      await expect(page.locator('.settings-panel').getByRole('button', { name: 'Dark', exact: true })).toHaveText('Dark');
       await page.keyboard.press('Escape');
     }
     if (width < 800) await header.getByRole('button', { name: 'Open search', exact: true }).click();
@@ -202,7 +210,7 @@ for (const width of [390, 1000, 1920]) {
       const trigger = page.locator('.ps-content-menu-slot summary');
       const box = (await trigger.boundingBox())!;
       await trigger.click();
-      const popup = await surface('.ps-content-menu-slot .popup', box.y + box.height);
+      const popup = await surface('.ps-content-menu-slot .popup', box.y + box.height, 8);
       await expect(popup.getByRole('button', { name: 'Close content menu' })).toHaveCount(0);
       await trigger.click();
       await expect(popup).toBeHidden();

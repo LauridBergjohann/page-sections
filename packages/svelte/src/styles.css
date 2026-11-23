@@ -16,6 +16,8 @@
 @media (min-width: 1600px) {
   .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot {
     --ps-content-menu-radius: var(--ps-radius);
+    --ps-content-menu-border-start: 1px;
+    --ps-content-menu-overlap: 0px;
     --ps-content-menu-shadow: var(--ps-surface-shadow);
     margin-inline-start: var(--ps-sidebar-gap);
     width: calc(var(--ps-sidebar-right-width) - var(--ps-sidebar-gap));
@@ -57,3 +59,11 @@
 .ps-sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
 .ps-sidebar-scroll::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ps-body) 35%, transparent); border-radius: 999px; }
 .ps-sidebar-scroll::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--ps-body) 60%, transparent); }
+
+/* Full content columns touch the viewport on small screens; keep those edges open.
+   Narrow, nested and custom-width surfaces retain their own panel outline. */
+@media (max-width: 1536px) {
+  .ps-page-content .sections[data-body-layout='wide'] .ps-section[data-nested='false']:is([data-layout='inherit'], [data-layout='wide']):not([style*='--ps-section-width']) > .ps-section-surface {
+    border-inline-width: 0;
+  }
+}

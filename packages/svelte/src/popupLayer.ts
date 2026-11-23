@@ -104,7 +104,7 @@ function createController(): Controller {
         const top = Math.max(
           12,
           headerRect
-            ? headerRect.bottom + 8
+            ? headerRect.bottom
             : trigger
               ? trigger.getBoundingClientRect().bottom + 8
               : rect.top
@@ -125,6 +125,7 @@ function createController(): Controller {
           padding,
           boxSizing: 'border-box',
           border: '1px solid var(--ps-panel-border)',
+          borderTopWidth: headerRect ? '0px' : '1px',
           borderRadius: 'var(--ps-radius)',
           boxShadow: 'var(--ps-navigation-shadow)',
           background: 'var(--ps-section-standard)',

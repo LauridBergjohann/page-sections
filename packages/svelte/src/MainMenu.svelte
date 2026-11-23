@@ -168,14 +168,14 @@
   }
   .ps-submenu {
     position: absolute;
-    top: calc(100% + 8px);
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     width: max-content;
     max-width: calc(100vw - 32px);
     padding: 1rem;
     background: var(--ps-section-standard);
-    border: 1px solid var(--ps-panel-border);
+    border: 1px solid var(--ps-panel-border); border-top: 0;
     border-radius: var(--ps-radius);
     box-shadow: var(--ps-navigation-shadow);
     z-index: 2;

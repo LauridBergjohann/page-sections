@@ -41,6 +41,22 @@
   const items = $derived(resolveNavigation(navigationTree, { pathname: page.url.pathname }).items);
 </script>
 
+{#snippet appearance(iconOnly: boolean)}
+  <ButtonGroup
+    label="Appearance"
+    {iconOnly}
+    items={[
+      { id: 'light', label: 'Light', selected: mode === 'light', disabled: !ready },
+      { id: 'dark', label: 'Dark', selected: mode === 'dark', disabled: !ready }
+    ]}
+    onselect={(item) => setMode(item.id)}
+  >
+    {#snippet icon(item)}
+      {#if item.id === 'light'}<Sun size={18} />{:else}<Moon size={18} />{/if}
+    {/snippet}
+  </ButtonGroup>
+{/snippet}
+
 {#snippet githubIcon()}<Github />{/snippet}
 {#snippet linkedinIcon()}<LinkedIn />{/snippet}
 {#snippet npmIcon()}<BrandMark kind="npm" />{/snippet}
@@ -85,19 +101,11 @@
         </div>
       {/snippet}
       {#snippet right()}
-        <ButtonGroup
-          label="Appearance"
-          iconOnly
-          items={[
-            { id: 'light', label: 'Light', selected: mode === 'light', disabled: !ready },
-            { id: 'dark', label: 'Dark', selected: mode === 'dark', disabled: !ready }
-          ]}
-          onselect={(item) => setMode(item.id)}
-        >
-          {#snippet icon(item)}
-            {#if item.id === 'light'}<Sun size={18} />{:else}<Moon size={18} />{/if}
-          {/snippet}
-        </ButtonGroup>
+        <div class="appearance-expanded">
+          <h3>Appearance</h3>
+          {@render appearance(false)}
+        </div>
+        <div class="appearance-compact">{@render appearance(true)}</div>
       {/snippet}
     </Header>
     <div id="main-content" tabindex="-1">{@render children()}</div>
@@ -185,6 +193,26 @@
 {/if}
 
 <style>
+  .appearance-expanded {
+    display: grid;
+    gap: 12px;
+  }
+  .appearance-expanded h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 650;
+  }
+  .appearance-compact {
+    display: none;
+  }
+  @media (min-width: 1600px) {
+    .appearance-expanded {
+      display: none;
+    }
+    .appearance-compact {
+      display: block;
+    }
+  }
   .header-tools {
     display: flex;
     align-items: center;

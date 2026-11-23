@@ -103,8 +103,8 @@
   summary:hover { background: var(--ps-selection, var(--ps-section-muted)); }
   details[open] > summary { color: var(--ps-accent); background: var(--ps-selection, var(--ps-section-muted)); }
   @media (prefers-reduced-motion: reduce) { summary { transition: none; } }
-  .settings-panel { position: absolute; top: calc(100% + 8px); right: 12px; width: min(280px, calc(100vw - 24px)); display: grid; gap: 16px; padding: 20px; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); z-index: 2; }
-  .mobile-panel { position: absolute; top: calc(100% + 8px); inset-inline: 12px; border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); max-height: calc(100dvh - var(--ps-nav-height)); overflow: auto; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); padding: 12px; z-index: 2; }
+  .settings-panel { position: absolute; top: 100%; right: 12px; width: min(280px, calc(100vw - 24px)); display: grid; gap: 16px; padding: 20px; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); z-index: 2; }
+  .mobile-panel { position: absolute; top: 100%; inset-inline: 12px; border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); max-height: calc(100dvh - var(--ps-nav-height)); overflow: auto; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; padding: 12px; z-index: 2; }
   .mobile-panel :global(ul) { flex-direction: column; align-items: stretch; }
   .desktop-menu { display: none; }
   @media (max-width: 1599.98px) { .header { width: 100%; } }
