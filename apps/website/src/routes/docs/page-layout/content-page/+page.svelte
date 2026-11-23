@@ -282,8 +282,10 @@
     ><div class="prose">
       <p>
         On wide screens, the sidebars sit beside the content. In smaller windows, the content menu
-        moves into a sticky popup. Long sidebars scroll independently, while the main content stays
-        readable.
+        moves into a sticky popup. The content menu stops at the end of the sections, before related
+        pages or reading links in <code>pageEnd</code>. An attached menu keeps 16px of space at both
+        ends of the section column; a detached menu ends flush with it. Long sidebars scroll
+        independently, while the main content stays readable.
       </p>
       <p>
         The <a href={base + '/docs/design-system/responsive-layout/'}>responsive design system</a> explains

@@ -95,8 +95,8 @@
           </div>
         </div>
       </SectionSurfaceGroup>
-      {@render (pageEnd ?? footer)?.()}
     </div>
+    {#if pageEnd || footer}<div class="ps-page-end">{@render (pageEnd ?? footer)?.()}</div>{/if}
     <!-- After sections register, including during SSR. -->
     {#if showContentMenu && sections().length}<aside class="ps-content-menu-slot">
         <ContentMenu items={sections()} {host} label={contentMenuLabel} />
@@ -129,6 +129,7 @@
     grid-row: 2;
     min-width: 0;
   }
+  .ps-page-end { grid-column: 2; grid-row: 3; min-width: 0; }
   .breadcrumbs {
     min-width: 0;
     min-height: var(--ps-breadcrumb-height);
@@ -142,11 +143,10 @@
   .ps-content-menu-slot {
     grid-column: 2;
     grid-row: 2;
-    position: sticky;
-    top: 0;
-    align-self: start;
+    position: relative;
+    align-self: stretch;
     justify-self: end;
-    height: 0;
+    pointer-events: none;
     z-index: 5;
   }
   @media (min-width: 1600px) {
@@ -180,7 +180,8 @@
       justify-self: start;
       width: var(--ps-sidebar-right-width);
       height: auto;
-      padding-top: var(--ps-content-menu-offset);
+      padding-block: var(--ps-content-menu-offset);
+      pointer-events: auto;
       z-index: 0;
     }
   }

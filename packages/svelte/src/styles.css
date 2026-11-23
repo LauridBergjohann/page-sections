@@ -18,7 +18,7 @@
     --ps-content-menu-shadow: var(--ps-surface-shadow);
     margin-inline-start: var(--ps-sidebar-gap);
     width: calc(var(--ps-sidebar-right-width) - var(--ps-sidebar-gap));
-    padding-top: 0;
+    padding-block: 0;
     z-index: 2;
   }
 }
@@ -46,7 +46,7 @@
 
 /* Keep the compact contents control reachable while a persistent header is visible. */
 @media (max-width: 1599.98px) {
-  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot { top: var(--ps-nav-height); }
+  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .mobile { top: calc(var(--ps-nav-height) + 12px); }
   .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }
 }
 

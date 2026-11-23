@@ -170,7 +170,9 @@
     text-decoration: underline;
   }
   .mobile {
-    position: relative;
+    position: sticky;
+    top: 12px;
+    pointer-events: auto;
     margin-block-start: 12px;
     margin-inline-end: 12px;
   }
