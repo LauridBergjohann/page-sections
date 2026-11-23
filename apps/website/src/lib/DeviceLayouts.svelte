@@ -57,14 +57,14 @@
         </svg>
         <strong>{device.key.toUpperCase()}</strong>
         <span>{device.name}</span>
-        <small
-          >{index === 0
+        <small>
+          {index === 0
             ? 'Below 600'
             : index === devices.length - 1
               ? `${layoutTokens.layoutMinWidths[device.key]}+`
               : `${layoutTokens.layoutMinWidths[device.key]}–${layoutTokens.layoutMinWidths[devices[index + 1].key] - 1}`}
-          CSS px</small
-        >
+          CSS px
+        </small>
       </div>
     {/each}
   </div>

@@ -8,9 +8,9 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -37,7 +37,8 @@
       headline: 'Introduce the page container',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         You have seen Section, which groups one topic. ContentPage groups the main content of an
         entire page and renders the HTML main landmark. Its page prop describes the page; the
@@ -49,8 +50,8 @@
         level by default.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'read-the-example',
@@ -58,21 +59,22 @@
       headline: 'Read the example',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The h1 names the page. Each section supplies a unique id and a short title; headline
         displays the longer topic heading. Paragraphs remain ordinary HTML, so you can add lists,
         links and other semantic markup inside a section.
       </p>
       <p>
-        The page object follows <a href={base + '/docs/reference/types/#content-page-data'}
-          >ContentPageData</a
-        >. The section object follows
+        The page object follows <a href={base + '/docs/reference/types/#content-page-data'}>
+          ContentPageData
+        </a>. The section object follows
         <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>. Click
         these type names whenever you need to inspect their fields.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'add-an-index',
@@ -80,7 +82,8 @@
       headline: 'Let readers jump between topics',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Add showContentMenu to ContentPage to create an on-page index from sections with h2 or h3
         headlines. The index uses each section title for its label and id for its destination. You
@@ -91,8 +94,8 @@
         changes; the visible heading stays the same. Keep IDs stable so saved links continue to
         work.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'continue',
@@ -100,13 +103,14 @@
       headline: 'Choose the appearance next',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
-      <p>
-        Now that the structure works, continue with <a href={base + '/docs/foundations/themes/'}
-          >Theming</a
-        >. Later, <a href={base + '/docs/page-layout/'}>Page layout</a> explains where headers and footers
-        belong around your main content.
-      </p>
-    </div></Section
   >
+    <div class="prose">
+      <p>
+        Now that the structure works, continue with <a href={base + '/docs/foundations/themes/'}>
+          Theming
+        </a>. Later, <a href={base + '/docs/page-layout/'}>Page layout</a> explains where headers and
+        footers belong around your main content.
+      </p>
+    </div>
+  </Section>
 </WebsitePage>

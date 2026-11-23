@@ -60,7 +60,8 @@ test('cards animate optional shadows and restore their original border on mouse 
   await toggle.check();
   await expect(surface).toHaveCSS('box-shadow',light);
   await card.hover();
-  await expect(surface).toHaveCSS('box-shadow','rgba(0, 0, 0, 0.2) 0px 8px 20px 0px');
+  // color-mix may serialize as color(srgb ...) instead of rgba(...).
+  await expect(surface).toHaveCSS('box-shadow', /(?:rgba\(0, 0, 0, 0\.2\)|color\(srgb 0 0 0 \/ 0\.2\)) 0px 8px 20px 0px/);
   await expect(surface).toHaveCSS('border-color',accent);
   await page.mouse.move(0,0);
   await expect(surface).toHaveCSS('box-shadow',light);

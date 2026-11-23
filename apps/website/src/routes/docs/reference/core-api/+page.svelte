@@ -39,8 +39,8 @@ console.log(background.cssBackground);`
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -63,15 +63,16 @@ console.log(background.cssBackground);`
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
-      <p>
-        All runtime functions, constants, classes and types below are exported from <code
-          >@page-sections/core</code
-        >. The package has no runtime dependencies, DOM requirement or rendering implementation.
-        Svelte re-exports its types only.
-      </p>
-    </div></Section
   >
+    <div class="prose">
+      <p>
+        All runtime functions, constants, classes and types below are exported from <code>
+          @page-sections/core
+        </code>. The package has no runtime dependencies, DOM requirement or rendering
+        implementation. Svelte re-exports its types only.
+      </p>
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -80,7 +81,8 @@ console.log(background.cssBackground);`
       headline: 'Layout constants and types',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -104,96 +106,97 @@ console.log(background.cssBackground);`
               <td>Readonly tuple: xs, s, m, l, xl, 2xl, 3xl</td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#content-grid-size'}>ContentGridSize</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#content-grid-size'}>ContentGridSize</a>
+                </code>
+              </td>
               <td>Union of contentGridSizes values</td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#viewport-layout-size'}
-                    >ViewportLayoutSize</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#viewport-layout-size'}>
+                    ViewportLayoutSize
+                  </a>
+                </code>
+              </td>
               <td>Union of viewportLayoutSizes values</td>
             </tr>
             <tr>
-              <td
-                ><code><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></code
-                ></td
-              >
-              <td
-                >number or Partial&lt;Record&lt;<a
-                  href={base + '/docs/reference/types/#content-grid-size'}>ContentGridSize</a
-                >, number&gt;&gt;</td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></code>
+              </td>
+              <td>
+                number or Partial&lt;Record&lt;<a
+                  href={base + '/docs/reference/types/#content-grid-size'}
+                >
+                  ContentGridSize
+                </a>, number&gt;&gt;
+              </td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#layout-card-size'}>LayoutCardSize</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#layout-card-size'}>LayoutCardSize</a>
+                </code>
+              </td>
               <td>keyof layoutTokens.cards: s, m, l</td>
             </tr>
             <tr>
-              <td
-                ><code><a href={base + '/docs/reference/types/#layout-rect'}>LayoutRect</a></code
-                ></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#layout-rect'}>LayoutRect</a></code>
+              </td>
               <td>x, y, width, height: number</td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#layout-insets'}>LayoutInsets</a></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#layout-insets'}>LayoutInsets</a>
+                </code>
+              </td>
               <td>top, right, bottom, left: number</td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#responsive-layout-input'}
-                    >ResponsiveLayoutInput</a
-                  ></code
-                ></td
-              >
-              <td
-                >Required width/height: number; optional scrollbarWidth: number, safeArea:
-                Partial&lt;<a href={base + '/docs/reference/types/#layout-insets'}>LayoutInsets</a
-                >&gt;</td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#responsive-layout-input'}>
+                    ResponsiveLayoutInput
+                  </a>
+                </code>
+              </td>
+              <td>
+                Required width/height: number; optional scrollbarWidth: number, safeArea:
+                Partial&lt;<a href={base + '/docs/reference/types/#layout-insets'}>
+                  LayoutInsets
+                </a>&gt;
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
       <p>
-        <code
-          >resolvePageLayout(input: <a
-            href={base + '/docs/reference/types/#responsive-layout-input'}>ResponsiveLayoutInput</a
-          >)</code
-        >
+        <code>
+          resolvePageLayout(input: <a
+            href={base + '/docs/reference/types/#responsive-layout-input'}
+          >
+            ResponsiveLayoutInput
+          </a>)
+        </code>
         returns
-        <code
-          >&#123; layout, content: &#123; x, width &#125;, menu: &#123; x, y, width, height &#125;
-          &#125;</code
-        >. It accounts for a reserved scrollbar and safe-area insets while classifying the original
-        viewport width. The host owns those measurements; native Header assumes a full-width
-        containing block.
+        <code>
+          &#123; layout, content: &#123; x, width &#125;, menu: &#123; x, y, width, height &#125;
+          &#125;
+        </code>. It accounts for a reserved scrollbar and safe-area insets while classifying the
+        original viewport width. The host owns those measurements; native Header assumes a
+        full-width containing block.
       </p>
       <p>
         <code>resolveMenuOffset(scrollY: number, fixed = false)</code> returns zero until 32px, then
         <code>32 - scrollY</code>; fixed mode always returns zero.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -202,7 +205,8 @@ console.log(background.cssBackground);`
       headline: 'Layout functions',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -214,60 +218,64 @@ console.log(background.cssBackground);`
           </thead>
           <tbody>
             <tr>
-              <td
-                ><code
-                  >resolveViewportLayout(width: number): <a
+              <td>
+                <code>
+                  resolveViewportLayout(width: number): <a
                     href={base + '/docs/reference/types/#viewport-layout-size'}
-                    >ViewportLayoutSize</a
-                  ></code
-                ></td
-              >
+                  >
+                    ViewportLayoutSize
+                  </a>
+                </code>
+              </td>
               <td>Greatest matching viewport threshold; negative/nonfinite input becomes zero</td>
             </tr>
             <tr>
               <td><code>resolveContentGrid(width: number)</code></td>
-              <td
-                >size, width, minWidth, columns, gap, headlineSize, headlineLineHeight, bodySize,
-                bodyLineHeight, headlineGap, columnWidth; width clamps to 0–1536</td
-              >
+              <td>
+                size, width, minWidth, columns, gap, headlineSize, headlineLineHeight, bodySize,
+                bodyLineHeight, headlineGap, columnWidth; width clamps to 0–1536
+              </td>
             </tr>
             <tr>
-              <td
-                ><code
-                  >resolveContentSpan(span: <a href={base + '/docs/reference/types/#content-span'}
-                    >ContentSpan</a
-                  >
+              <td>
+                <code>
+                  resolveContentSpan(span: <a href={base + '/docs/reference/types/#content-span'}>
+                    ContentSpan
+                  </a>
                   | undefined, grid:
                   <a href={base + '/docs/reference/types/#content-grid-size'}>ContentGridSize</a>):
-                  number</code
-                ></td
-              >
-              <td
-                >Mobile-first inheritance, full-row default, integer validation and column-count
-                clamp</td
-              >
+                  number
+                </code>
+              </td>
+              <td>
+                Mobile-first inheritance, full-row default, integer validation and column-count
+                clamp
+              </td>
             </tr>
             <tr>
               <td><code>contentSpanWidth(width: number, span: number): number</code></td>
-              <td
-                >Pixel width for a numeric span including internal gaps, excluding outer gutters</td
-              >
+              <td>
+                Pixel width for a numeric span including internal gaps, excluding outer gutters
+              </td>
             </tr>
             <tr>
-              <td
-                ><code
-                  >resolveCardLayout(containerWidth: number, cardSize: <a
-                    href={base + '/docs/reference/types/#layout-card-size'}>LayoutCardSize</a
+              <td>
+                <code>
+                  resolveCardLayout(containerWidth: number, cardSize: <a
+                    href={base + '/docs/reference/types/#layout-card-size'}
                   >
+                    LayoutCardSize
+                  </a>
                   = 'm', options:
-                  <a href={base + '/docs/reference/types/#card-layout-options'}>CardLayoutOptions</a
-                  > = &#123;&#125;)</code
-                ></td
-              >
-              <td
-                >Card token fields plus span, width, height, textHeight, eyebrowRows, mediaFrame and
-                media: <a href={base + '/docs/reference/types/#layout-rect'}>LayoutRect</a></td
-              >
+                  <a href={base + '/docs/reference/types/#card-layout-options'}>
+                    CardLayoutOptions
+                  </a> = &#123;&#125;)
+                </code>
+              </td>
+              <td>
+                Card token fields plus span, width, height, textHeight, eyebrowRows, mediaFrame and
+                media: <a href={base + '/docs/reference/types/#layout-rect'}>LayoutRect</a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -287,8 +295,8 @@ console.log(background.cssBackground);`
         when attaching a renderer.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -297,7 +305,8 @@ console.log(background.cssBackground);`
       headline: 'SectionRegistry and SECTION_REGISTRY',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>new SectionRegistry(changed?: () =&gt; void)</code> creates a navigation registry.
         <code>SECTION_REGISTRY</code> is its exported context-key symbol, not a singleton registry.
@@ -314,31 +323,31 @@ console.log(background.cssBackground);`
           <tbody>
             <tr>
               <td><code>sections</code> getter</td>
-              <td
-                >Fresh <a href={base + '/docs/reference/types/#section-navigation-item'}
-                  >SectionNavigationItem</a
-                >[] with detached item copies, in registry order</td
-              >
+              <td>
+                Fresh <a href={base + '/docs/reference/types/#section-navigation-item'}>
+                  SectionNavigationItem
+                </a>[] with detached item copies, in registry order
+              </td>
             </tr>
             <tr>
-              <td
-                ><code
-                  >register(section: <a href={base + '/docs/reference/types/#section-definition'}
-                    >SectionDefinition</a
-                  >)</code
-                ></td
-              >
-              <td
-                >Returns update(next: <a href={base + '/docs/reference/types/#section-definition'}
-                  >SectionDefinition</a
-                >) and unregister() lifecycle methods</td
-              >
+              <td>
+                <code>
+                  register(section: <a href={base + '/docs/reference/types/#section-definition'}>
+                    SectionDefinition
+                  </a>)
+                </code>
+              </td>
+              <td>
+                Returns update(next: <a href={base + '/docs/reference/types/#section-definition'}>
+                  SectionDefinition
+                </a>) and unregister() lifecycle methods
+              </td>
             </tr>
             <tr>
               <td><code>order(ids: readonly string[])</code></td>
-              <td
-                >Sorts by supplied IDs; unspecified registrations follow in their existing order</td
-              >
+              <td>
+                Sorts by supplied IDs; unspecified registrations follow in their existing order
+              </td>
             </tr>
           </tbody>
         </table>
@@ -351,8 +360,8 @@ console.log(background.cssBackground);`
         this automatically.
       </p>
       <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -361,70 +370,78 @@ console.log(background.cssBackground);`
       headline: 'Background normalization',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        <code
-          >normalizeSectionBackground(background: <a
-            href={base + '/docs/reference/types/#section-background'}>SectionBackground</a
+        <code>
+          normalizeSectionBackground(background: <a
+            href={base + '/docs/reference/types/#section-background'}
           >
+            SectionBackground
+          </a>
           | undefined, context:
-          <a href={base + '/docs/reference/types/#section-background-context'}
-            >SectionBackgroundContext</a
-          >
+          <a href={base + '/docs/reference/types/#section-background-context'}>
+            SectionBackgroundContext
+          </a>
           = &#123;&#125;):
-          <a href={base + '/docs/reference/types/#resolved-section-background'}
-            >ResolvedSectionBackground</a
-          ></code
-        >
+          <a href={base + '/docs/reference/types/#resolved-section-background'}>
+            ResolvedSectionBackground
+          </a>
+        </code>
         returns effective background values. <code>context.pageKind?: 'content' | 'detail'</code>;
         detail forces standard size. Svelte Section inherits pageKind from SectionSurfaceGroup and
         forwards it to the normalizer. Its optional onDiagnostic callback receives deduplicated
         diagnostics.
       </p>
       <p>
-        <code
-          ><a href={base + '/docs/reference/types/#resolved-section-background'}
-            >ResolvedSectionBackground</a
-          ></code
-        >
+        <code>
+          <a href={base + '/docs/reference/types/#resolved-section-background'}>
+            ResolvedSectionBackground
+          </a>
+        </code>
         has color:
-        <a href={base + '/docs/reference/types/#section-background-color'}>SectionBackgroundColor</a
-        >, size: standard/full, gradient: boolean, cssBackground: string and optional diagnostic:
-        <a href={base + '/docs/reference/types/#section-background-diagnostic'}
-          >SectionBackgroundDiagnostic</a
-        >.
+        <a href={base + '/docs/reference/types/#section-background-color'}>
+          SectionBackgroundColor
+        </a>, size: standard/full, gradient: boolean, cssBackground: string and optional diagnostic:
+        <a href={base + '/docs/reference/types/#section-background-diagnostic'}>
+          SectionBackgroundDiagnostic
+        </a>.
       </p>
       <p>
-        <a href={base + '/docs/reference/types/#section-background-diagnostic'}
-          >SectionBackgroundDiagnostic</a
-        >
+        <a href={base + '/docs/reference/types/#section-background-diagnostic'}>
+          SectionBackgroundDiagnostic
+        </a>
         fields: code (<code>gradient-requires-full-background</code>), message: string,
         requestedColor:
-        <a href={base + '/docs/reference/types/#section-background-color'}>SectionBackgroundColor</a
-        >, requestedSize: standard/full, pageKind: content/detail/undefined, effectiveColor:
+        <a href={base + '/docs/reference/types/#section-background-color'}>
+          SectionBackgroundColor
+        </a>, requestedSize: standard/full, pageKind: content/detail/undefined, effectiveColor:
         transparent/standard/muted. Gradients with an effective standard size resolve to their end
         color.
       </p>
       <p>
-        <code
-          >createSectionBackgroundNormalizer(report?: (diagnostic: <a
+        <code>
+          createSectionBackgroundNormalizer(report?: (diagnostic: <a
             href={base + '/docs/reference/types/#section-background-diagnostic'}
-            >SectionBackgroundDiagnostic</a
-          >) =&gt; void)</code
-        >
+          >
+            SectionBackgroundDiagnostic
+          </a>) =&gt; void)
+        </code>
         returns
-        <code
-          >(background, context) =&gt; <a
+        <code>
+          (background, context) =&gt; <a
             href={base + '/docs/reference/types/#resolved-section-background'}
-            >ResolvedSectionBackground</a
-          ></code
-        >. Unlike the direct function, the returned function's context argument is required (pass
+          >
+            ResolvedSectionBackground
+          </a>
+        </code>. Unlike the direct function, the returned function's context argument is required
+        (pass
         <code>&#123;&#125;</code>). It reports each requested-color/size/pageKind combination once
         per normalizer instance. No global state or automatic console logger is used.
       </p>
       <CodeBlock {...examples[2]} highlighted={data.highlights[2]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -433,19 +450,21 @@ console.log(background.cssBackground);`
       headline: 'SectionSurfaceRegistry and SECTION_SURFACES',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>new SectionSurfaceRegistry(changed?: () =&gt; void)</code> tracks presentation order.
         <code>SECTION_SURFACES</code> is the exported context-key symbol.
       </p>
       <ul>
         <li>
-          <code
-            >register(surface: Pick&lt;<a
+          <code>
+            register(surface: Pick&lt;<a
               href={base + '/docs/reference/types/#resolved-section-background'}
-              >ResolvedSectionBackground</a
-            >, 'color' | 'size'&gt;)</code
-          > returns a numeric id, update(next) and unregister(). IDs increase within that instance.
+            >
+              ResolvedSectionBackground
+            </a>, 'color' | 'size'&gt;)
+          </code> returns a numeric id, update(next) and unregister(). IDs increase within that instance.
         </li>
         <li>
           <code>order(ids: readonly number[])</code> deduplicates known IDs and appends unspecified registrations.
@@ -463,12 +482,12 @@ console.log(background.cssBackground);`
       </ul>
       <p>
         The input alias Surface is internal and is not a named package export. Use the structural
-        Pick type above. See <a href={base + '/docs/design-system/backgrounds/'}
-          >Section Backgrounds and Surface Groups</a
-        >.
+        Pick type above. See <a href={base + '/docs/design-system/backgrounds/'}>
+          Section Backgrounds and Surface Groups
+        </a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -477,12 +496,13 @@ console.log(background.cssBackground);`
       headline: 'Theme and URL helpers',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        <code
-          >themeStyle(theme: <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> = &#123;&#125;):
-          string</code
-        >
+        <code>
+          themeStyle(theme: <a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a> = &#123;&#125;):
+          string
+        </code>
         maps recognized fields to semicolon-separated <code>--ps-*</code> declarations. Unknown keys
         or values containing
         <code>;</code>, <code>&#123;</code>, <code>&#125;</code>, <code>&lt;</code> or
@@ -495,8 +515,8 @@ console.log(background.cssBackground);`
         characters for the scheme check but returns the original accepted string. It is not URL normalization,
         domain allowlisting or comprehensive untrusted-content validation.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -505,7 +525,8 @@ console.log(background.cssBackground);`
       headline: 'Content type index',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>Every public content type is covered here or on its linked component page:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -518,160 +539,149 @@ console.log(background.cssBackground);`
           </thead>
           <tbody>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#section-navigation-item'}
-                    >SectionNavigationItem</a
-                  ></code
-                ></td
-              >
-              <td
-                ><a href={base + '/docs/components/grids/'}>Section fields</a>; navigation item is
-                Pick&lt;<a href={base + '/docs/reference/types/#section-definition'}
-                  >SectionDefinition</a
-                >, id/title&gt;</td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#section-navigation-item'}>
+                    SectionNavigationItem
+                  </a>
+                </code>
+              </td>
+              <td>
+                <a href={base + '/docs/components/grids/'}>Section fields</a>; navigation item is
+                Pick&lt;<a href={base + '/docs/reference/types/#section-definition'}>
+                  SectionDefinition
+                </a>, id/title&gt;
+              </td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#section-background-color'}
-                    >SectionBackgroundColor</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#section-background-color'}>
+                    SectionBackgroundColor
+                  </a>
+                </code>
+              </td>
               <td><a href={base + '/docs/design-system/backgrounds/'}>Backgrounds</a></td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#section-background-context'}
-                    >SectionBackgroundContext</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#section-background-diagnostic'}
-                    >SectionBackgroundDiagnostic</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#resolved-section-background'}
-                    >ResolvedSectionBackground</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#section-background-context'}>
+                    SectionBackgroundContext
+                  </a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#section-background-diagnostic'}>
+                    SectionBackgroundDiagnostic
+                  </a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#resolved-section-background'}>
+                    ResolvedSectionBackground
+                  </a>
+                </code>
+              </td>
               <td>Background normalization above</td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#content-page-data'}>ContentPageData</a
-                  ></code
-                >, <code><a href={base + '/docs/reference/types/#page-data'}>PageData</a></code></td
-              >
-              <td
-                ><a href={base + '/docs/page-layout/content-page/'}>Page props</a> and
-                <a href={base + '/docs/advanced/data-and-custom-sections/'}>data models</a></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#content-page-data'}>ContentPageData</a>
+                </code>,
+                <code><a href={base + '/docs/reference/types/#page-data'}>PageData</a></code>
+              </td>
+              <td>
+                <a href={base + '/docs/page-layout/content-page/'}>Page props</a> and
+                <a href={base + '/docs/advanced/data-and-custom-sections/'}>data models</a>
+              </td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a
-                  ></code
-                >,
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a>
+                </code>,
                 <code><a href={base + '/docs/reference/types/#section-data'}>SectionData</a></code>,
-                <code
-                  ><a href={base + '/docs/reference/types/#grid-section-data'}>GridSectionData</a
-                  ></code
-                ></td
-              >
-              <td
-                ><a href={base + '/docs/advanced/data-and-custom-sections/'}
-                  >Data models and extension</a
-                ></td
-              >
+                <code>
+                  <a href={base + '/docs/reference/types/#grid-section-data'}>GridSectionData</a>
+                </code>
+              </td>
+              <td>
+                <a href={base + '/docs/advanced/data-and-custom-sections/'}>
+                  Data models and extension
+                </a>
+              </td>
             </tr>
             <tr>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#hero-section-data'}>HeroSectionData</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#rich-text-section-data'}
-                    >RichTextSectionData</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#image-section-data'}>ImageSectionData</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#video-section-data'}>VideoSectionData</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#card-grid-section-data'}
-                    >CardGridSectionData</a
-                  ></code
-                >,
-                <code
-                  ><a href={base + '/docs/reference/types/#carousel-section-data'}
-                    >CarouselSectionData</a
-                  ></code
-                ></td
-              >
-              <td
-                ><a href={base + '/docs/advanced/data-and-custom-sections/'}>Built-in model table</a
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#hero-section-data'}>HeroSectionData</a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#rich-text-section-data'}>
+                    RichTextSectionData
+                  </a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#image-section-data'}>ImageSectionData</a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#video-section-data'}>VideoSectionData</a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#card-grid-section-data'}>
+                    CardGridSectionData
+                  </a>
+                </code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#carousel-section-data'}>
+                    CarouselSectionData
+                  </a>
+                </code>
+              </td>
+              <td>
+                <a href={base + '/docs/advanced/data-and-custom-sections/'}>Built-in model table</a>
+              </td>
             </tr>
             <tr>
-              <td
-                ><code><a href={base + '/docs/reference/types/#card-item'}>CardItem</a></code>,
+              <td>
+                <code><a href={base + '/docs/reference/types/#card-item'}>CardItem</a></code>,
                 <code><a href={base + '/docs/reference/types/#card-size'}>CardSize</a></code>,
                 <code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code>,
-                <code><a href={base + '/docs/reference/types/#image-aspect'}>ImageAspect</a></code
-                ></td
-              >
+                <code><a href={base + '/docs/reference/types/#image-aspect'}>ImageAspect</a></code>
+              </td>
               <td><a href={base + '/docs/components/card/'}>Card and Image</a></td>
             </tr>
             <tr>
-              <td
-                ><code><a href={base + '/docs/reference/types/#video-data'}>VideoData</a></code></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#video-data'}>VideoData</a></code>
+              </td>
               <td><a href={base + '/sections/video/'}>VideoSection</a></td>
             </tr>
             <tr>
-              <td
-                ><code><a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a></code>,
-                <code
-                  ><a href={base + '/docs/reference/types/#button-group-item'}>ButtonGroupItem</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a></code>,
+                <code>
+                  <a href={base + '/docs/reference/types/#button-group-item'}>ButtonGroupItem</a>
+                </code>
+              </td>
               <td><a href={base + '/docs/page-layout/header/'}>Header and Satellites</a></td>
             </tr>
             <tr>
-              <td
-                ><code><a href={base + '/docs/reference/types/#breadcrumb'}>Breadcrumb</a></code
-                ></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#breadcrumb'}>Breadcrumb</a></code>
+              </td>
               <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs</a></td>
             </tr>
             <tr>
-              <td
-                ><code><a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a></code></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#page-theme'}>PageTheme</a></code>
+              </td>
               <td><a href={base + '/docs/foundations/themes/'}>Themes and Styling</a></td>
             </tr>
           </tbody>
@@ -682,8 +692,8 @@ console.log(background.cssBackground);`
         content. See <a href={base + '/docs/reference/tokens/'}>CSS Variables and Layout Tokens</a> for
         all token values.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -692,7 +702,8 @@ console.log(background.cssBackground);`
       headline: 'Structured content types (0.2)',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ul>
         <li>
           <code><a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a></code>: 1
@@ -703,19 +714,18 @@ console.log(background.cssBackground);`
           detail; controls background normalization and large detail-pane corners.
         </li>
         <li>
-          <code
-            ><a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a></code
-          >: 3/2, 4/3 or 1/1; applies to the media frame only.
+          <code>
+            <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>
+          </code>: 3/2, 4/3 or 1/1; applies to the media frame only.
         </li>
         <li>
           <code><a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a></code>:
           contain or cover; independent from the frame ratio.
         </li>
         <li>
-          <code
-            ><a href={base + '/docs/reference/types/#card-layout-options'}>CardLayoutOptions</a
-            ></code
-          >: mediaAspect, mediaFit and reserveEyebrow for base card measurements.
+          <code>
+            <a href={base + '/docs/reference/types/#card-layout-options'}>CardLayoutOptions</a>
+          </code>: mediaAspect, mediaFit and reserveEyebrow for base card measurements.
         </li>
         <li>
           <code><a href={base + '/docs/reference/types/#inline-text'}>InlineText</a></code>: string
@@ -728,10 +738,10 @@ console.log(background.cssBackground);`
           label, href, optional variant (primary, secondary, text).
         </li>
         <li>
-          <code
-            ><a href={base + '/docs/reference/types/#rich-text-content-data'}>RichTextContentData</a
-            ></code
-          >: either body with optional format, or blocks; the two sources are mutually exclusive.
+          <code>
+            <a href={base + '/docs/reference/types/#rich-text-content-data'}>RichTextContentData</a>
+          </code>: either body with optional format, or blocks; the two sources are mutually
+          exclusive.
         </li>
         <li>
           <code><a href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a></code>:
@@ -739,9 +749,9 @@ console.log(background.cssBackground);`
           optional ordered), panel (optional title/tone/actions, blocks). Panels can nest.
         </li>
         <li>
-          <code
-            ><a href={base + '/docs/reference/types/#panel-section-data'}>PanelSectionData</a></code
-          >: shared
+          <code>
+            <a href={base + '/docs/reference/types/#panel-section-data'}>PanelSectionData</a>
+          </code>: shared
           <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>, type
           panel, required blocks, optional tone and actions.
         </li>
@@ -759,8 +769,8 @@ console.log(background.cssBackground);`
         surrounding
         <a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -769,7 +779,8 @@ console.log(background.cssBackground);`
       headline: 'Code models',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code><a href={base + '/docs/reference/types/#code-data'}>CodeData</a></code> contains
         source and presentation options.
@@ -781,8 +792,8 @@ console.log(background.cssBackground);`
         describe optional derived syntax tokens. See the
         <a href={base + '/sections/code/'}>complete code reference</a> for fields, defaults and examples.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -790,13 +801,16 @@ console.log(background.cssBackground);`
       title: 'Header and page frames',
       headline: 'Header and page frames'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        <code
-          >resolveNavigation(tree, location: <a
-            href={base + '/docs/reference/types/#navigation-location'}>NavigationLocation</a
-          >)</code
-        >
+        <code>
+          resolveNavigation(tree, location: <a
+            href={base + '/docs/reference/types/#navigation-location'}
+          >
+            NavigationLocation
+          </a>)
+        </code>
         derives active items, the current root, sidebarItems and breadcrumbs from a tree of page links.
         <a href={base + '/docs/reference/types/#navigation-location'}>NavigationLocation</a>
         accepts pathname or currentId.
@@ -811,18 +825,20 @@ console.log(background.cssBackground);`
         insets are included.
       </p>
       <p>
-        <code
-          >resolveActiveContentSection(sections: <a
-            href={base + '/docs/reference/types/#content-section-bounds'}>ContentSectionBounds</a
-          >[], readingTop, readingBottom, scrollY, maxScrollY)</code
-        >
+        <code>
+          resolveActiveContentSection(sections: <a
+            href={base + '/docs/reference/types/#content-section-bounds'}
+          >
+            ContentSectionBounds
+          </a>[], readingTop, readingBottom, scrollY, maxScrollY)
+        </code>
         returns the active ID or undefined.
         <a href={base + '/docs/reference/types/#content-section-bounds'}>ContentSectionBounds</a> contains
         id, top and bottom. Coordinates are relative to the reading viewport; the function has no DOM
         dependency.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'heading-models',
@@ -837,9 +853,9 @@ console.log(background.cssBackground);`
       xl, independent of <a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a>.
       <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>.headingSize
       selects the visual size.
-      <code
-        ><a href={base + '/docs/reference/types/#heading-section-data'}>HeadingSectionData</a></code
-      >
+      <code>
+        <a href={base + '/docs/reference/types/#heading-section-data'}>HeadingSectionData</a>
+      </code>
       extends <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
       with type: 'heading'. It is part of
       <a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a>

@@ -34,12 +34,12 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
 </script>
 
 <script lang="ts">
-  import BackgroundDiagram from '$lib/BackgroundDiagram.svelte';
+  import BackgroundDiagram from '#lib/BackgroundDiagram.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import SurfacePlayground from '$lib/SurfacePlayground.svelte';
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import SurfacePlayground from '#lib/SurfacePlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -64,8 +64,10 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       title: 'Surfaces at a glance',
       headline: 'Color and width are independent',
       background: { color: 'standard' }
-    }}><BackgroundDiagram /></Section
+    }}
   >
+    <BackgroundDiagram />
+  </Section>
   <HeadingSection
     section={{
       id: 'playground',
@@ -82,14 +84,15 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Backgrounds separate a section's content layout from its visual surface. Use a standard
         background for a contained panel and a full background for a page-wide transition.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -98,7 +101,8 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       headline: 'SectionBackground',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -112,13 +116,13 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
           <tbody>
             <tr>
               <td><code>color</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#section-background-color'}
-                    >SectionBackgroundColor</a
-                  ></code
-                >, required when the object is supplied</td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#section-background-color'}>
+                    SectionBackgroundColor
+                  </a>
+                </code>, required when the object is supplied
+              </td>
               <td>Omitting the entire object means transparent</td>
             </tr>
             <tr>
@@ -143,8 +147,8 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
         section should use standard size.
       </p>
       <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -153,7 +157,8 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       headline: 'SectionSurfaceGroup',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Props are optional <code>children: Snippet</code> and
         <code>pageKind: <a href={base + '/docs/reference/types/#page-kind'}>PageKind</a></code>
@@ -171,9 +176,9 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       </p>
       <p>
         Rules are emitted after registration during SSR, and nested groups have isolated scopes.
-        Client updates and keyed DOM moves are reconciled by the registry/MutationObserver. The core <code
-          >SectionSurfaceRegistry</code
-        >
+        Client updates and keyed DOM moves are reconciled by the registry/MutationObserver. The core <code>
+          SectionSurfaceRegistry
+        </code>
         exposes equivalent ordering and corner data for another renderer; see
         <a href={base + '/docs/reference/core-api/'}>Core API</a>.
       </p>
@@ -181,8 +186,8 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
         Related: <a href={base + '/docs/components/grids/'}>Section and ContentGrid</a>,
         <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -190,7 +195,8 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       title: 'Contained surface shadows',
       headline: 'Contained surface shadows'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Standard-width sections with standard or muted backgrounds receive a subtle shadow and an
         outer edge in <code>--ps-panel-border</code>, whether or not the page has sidebars.
@@ -199,8 +205,8 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
         neither this border nor this shadow. Full backgrounds still paint across the viewport when a
         sidebar makes the content column asymmetric.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'shadow-controls',

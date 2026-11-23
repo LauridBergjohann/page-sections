@@ -16,9 +16,9 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -45,21 +45,22 @@
       headline: 'Start with a content pattern',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Suppose several pages need a quotation and attribution. Section already handles the region,
         anchor, heading, background and inherited layout. Your component only needs to describe the
         quote content and place it inside that base container.
       </p>
       <p>
-        Define the section prop as <a href={base + '/docs/reference/types/#section-definition'}
-          >SectionDefinition</a
-        > plus the two fields your content requires. The following file is a complete QuoteSection.svelte
+        Define the section prop as <a href={base + '/docs/reference/types/#section-definition'}>
+          SectionDefinition
+        </a> plus the two fields your content requires. The following file is a complete QuoteSection.svelte
         component.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'use-it',
@@ -67,14 +68,15 @@
       headline: 'Use it like any other section',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Import your new component and give it a unique ID, a navigation label and quote content. The
         example includes a headline so it appears in the page’s on-page index.
       </p>
       <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'preserve-behavior',
@@ -82,7 +84,8 @@
       headline: 'Keep the base behavior intact',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Forward the complete section object to Section. Use ordinary semantic markup for the
         quotation and attribution. Avoid adding another main landmark, another section registry or a
@@ -93,8 +96,8 @@
         container, long text and light/dark themes. Check the section link and the on-page index as
         well as its appearance.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'from-markup-to-data',
@@ -102,17 +105,20 @@
       headline: 'Add a data renderer when needed',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         This component works directly in Svelte without registering a new type. If a CMS must choose
         it from a section array, add a type discriminator and extend <a
-          href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a
+          href={base + '/docs/reference/types/#section-type-map'}
         >
+          SectionTypeMap
+        </a>
         as shown in
-        <a href={base + '/docs/advanced/data-and-custom-sections/#add-a-custom-section'}
-          >Data and custom renderers</a
-        >. The renderer map connects that data type to your component.
+        <a href={base + '/docs/advanced/data-and-custom-sections/#add-a-custom-section'}>
+          Data and custom renderers
+        </a>. The renderer map connects that data type to your component.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

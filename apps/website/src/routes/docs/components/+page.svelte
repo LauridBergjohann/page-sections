@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
 </script>
 
 <WebsitePage
@@ -25,18 +25,20 @@
       headline: 'Choose the level you need',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The <a href={base + '/docs/design-system/atomic-design/'}>atomic design chapter</a>
-        introduced atoms, molecules and organisms. Here is the complete component catalog. Import
-        any component from <code>@page-sections/svelte</code>, or use the layer entry points. These
-        are organizational groups, not restrictions: you can use a single button, compose a custom
-        card or render a complete section.
+        introduced atoms, molecules and organisms. Here is the complete component catalog. Import any
+        component from <code>@page-sections/svelte</code>, or use the layer entry points. These are
+        organizational groups, not restrictions: you can use a single button, compose a custom card
+        or render a complete section.
       </p>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{ id: 'atoms', title: 'Atoms', headline: 'Atoms', background: { color: 'standard' } }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ul>
         <li><a href={base + '/docs/components/buttons/'}>PrimaryButton</a></li>
         <li><a href={base + '/docs/components/buttons/'}>SecondaryButton</a></li>
@@ -45,15 +47,16 @@
         <li><a href={base + '/docs/components/image/'}>Image</a></li>
         <li><a href={base + '/docs/reference/svelte-api/'}>InlineTextContent</a></li>
       </ul>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'molecules',
       title: 'Molecules',
       headline: 'Molecules',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ul>
         <li><a href={base + '/docs/components/button-group/'}>ButtonGroup</a></li>
         <li><a href={base + '/docs/components/card/'}>Card</a></li>
@@ -67,15 +70,16 @@
         <li><a href={base + '/docs/page-layout/header/'}>SidebarNavigation</a></li>
         <li><a href={base + '/docs/reference/svelte-api/'}>SectionNavigation</a></li>
       </ul>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'organisms',
       title: 'Organisms',
       headline: 'Organisms',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ul>
         <li><a href={base + '/docs/page-layout/header/'}>Header</a></li>
         <li>
@@ -95,15 +99,16 @@
         <li><a href={base + '/sections/'}>CodeSection</a></li>
         <li><a href={base + '/sections/'}>Sections</a></li>
       </ul>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'layouts',
       title: 'Page composition',
       headline: 'Page composition',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ul>
         <li><a href={base + '/docs/reference/svelte-api/'}>PageShell</a></li>
         <li><a href={base + '/docs/reference/svelte-api/'}>ContentPage</a></li>
@@ -111,23 +116,24 @@
         <li><a href={base + '/docs/components/grids/'}>ContentBlock</a></li>
         <li><a href={base + '/docs/reference/svelte-api/'}>SectionSurfaceGroup</a></li>
       </ul>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'data',
       title: 'Data and properties',
       headline: 'Data and properties',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        Props that contain objects link to the <a href={base + '/docs/reference/types/'}
-          >data type reference</a
-        >. Start with the button, popup and card guides, or consult the
+        Props that contain objects link to the <a href={base + '/docs/reference/types/'}>
+          data type reference
+        </a>. Start with the button, popup and card guides, or consult the
         <a href={base + '/docs/reference/svelte-api/'}>complete Svelte API index</a>.
         <a href={base + '/sections/'}>The section gallery</a> includes live controls for every ready-made
         section.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

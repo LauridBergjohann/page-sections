@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
   import { Popup, IconButton } from '@page-sections/svelte';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { afterNavigate } from '$app/navigation';
   import Search from '@lucide/svelte/icons/search';
   import { documents } from './catalog';
@@ -250,9 +250,9 @@
       {/if}
     </Popup>
   {:else}
-    <a class="search-fallback" href={base + '/docs/'} aria-label="Browse documentation"
-      ><Search size={18} aria-hidden="true" /><span>Browse documentation</span></a
-    >
+    <a class="search-fallback" href={base + '/docs/'} aria-label="Browse documentation">
+      <Search size={18} aria-hidden="true" /><span>Browse documentation</span>
+    </a>
   {/if}
 </div>
 

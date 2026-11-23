@@ -14,7 +14,10 @@
     "@page-sections/svelte": "*"
   },
   "devDependencies": {
-    "@sveltejs/adapter-static": "^3.0.11",
-    "@sveltejs/kit": "^2.70.4"
+    "@sveltejs/adapter-static": "^4.0.1",
+    "@sveltejs/kit": "^3.4.0"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
   }
 }

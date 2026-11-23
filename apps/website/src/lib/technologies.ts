@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { base } from '#lib/paths.js';
 
 export const technologies = [
   {

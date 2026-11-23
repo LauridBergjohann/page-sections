@@ -6,7 +6,6 @@ body {
 }
 .ps-shell {
   min-height: 100vh;
-  --ps-shadow-color: #000;
   --ps-shadow-size: 1;
   --ps-shadow-intensity: 1;
   background: var(--ps-background);
@@ -22,30 +21,32 @@ body {
   --ps-body: #666666;
   --ps-accent: #007b5e;
   --ps-on-accent: #ffffff;
-  --ps-panel-border: color-mix(in srgb, var(--ps-ink) 12%, transparent);
-  --ps-border: #d1d1d1;
+  --ps-panel-border: #dbdbdb;
+  --ps-border: #dbdbdb;
   --ps-radius: 12px;
   --ps-footer-background: #007b5e;
   --ps-footer-bar-background: #bdbdbd;
   --ps-footer-bar-ink: #333333;
   --ps-footer-ink: #ffffff;
+  --ps-shadow-color: #000;
 }
 .ps-shell[data-ps-theme='dark'] {
-  --ps-background: hsl(220, 10%, 12%);
-  --ps-section-standard: hsl(225, 8%, 20%);
-  --ps-section-muted: hsl(220, 8%, 28%);
+  --ps-background: #282b31;
+  --ps-section-standard: #1f2126;
+  --ps-section-muted: #23272e;
   --ps-selection: rgba(72, 77, 83, 0.5);
   --ps-ink: hsl(220, 2%, 90%);
-  --ps-body: #fff;
+  --ps-body: #e6e6e6;
   --ps-accent: #2bc093;
   --ps-on-accent: hsl(220, 10%, 12%);
-  --ps-panel-border: color-mix(in srgb, var(--ps-ink) 12%, transparent);
-  --ps-border: hsl(219, 10%, 34%);
+  --ps-panel-border: #2a2c33;
+  --ps-border: #2a2c33;
   --ps-radius: 12px;
-  --ps-footer-background: rgb(53, 58, 65);
-  --ps-footer-bar-background: hsl(230, 7%, 16%);
+  --ps-footer-background: #212126;
+  --ps-footer-bar-background: #262a30;
   --ps-footer-bar-ink: hsl(220, 5%, 65%);
   --ps-footer-ink: hsl(216, 10%, 80%);
+  --ps-shadow-color: #3f434b;
 }
 .site-brand {
   display: inline-flex;

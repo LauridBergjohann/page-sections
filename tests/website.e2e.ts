@@ -268,7 +268,7 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await expect(docs).toHaveCSS('border-radius', '0px');
   const headerBox = (await page.locator('.website-header .header').boundingBox())!;
   expect((await docs.boundingBox())!.height).toBe(headerBox.height);
-  await expect(page.locator('.satellite.right [aria-pressed="true"]')).toHaveCSS('color', colors.accent);
+  await expect(page.locator('.satellite.right [aria-pressed="true"]:visible')).toHaveCSS('color', colors.accent);
   await docs.hover();
   const overlay = page.locator('.ps-submenu:visible');
   const linkBox = (await docs.boundingBox())!;
@@ -706,14 +706,18 @@ const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image
 
 test('documentation teaches concepts in order and chapter landing pages explain their scope', async ({ page }) => {
   await page.goto('/docs/');
-  for (const [slug, title] of [
-    ['foundations', 'Foundations'], ['page-layout', 'Page layout'],
-    ['building-blocks', 'Components'], ['design-system', 'Design system'],
-    ['advanced', 'Advanced'], ['reference', 'Reference']
+  for (const [slug, title, purpose] of [
+    ['foundations', 'Foundations', 'A section groups related content'],
+    ['page-layout', 'Page layout', 'The body contains the visible document'],
+    ['design-system', 'Design system', 'A design system is a shared set'],
+    ['components', 'Components', 'complete component catalog'],
+    ['advanced', 'Advanced', 'These guides assume'],
+    ['reference', 'Reference', 'A type describes the values']
   ]) {
     await page.goto(`/docs/${slug}/`);
     await expect(page.locator('main h1')).toHaveText(title);
-    expect(await page.locator('main .prose p').count()).toBeGreaterThanOrEqual(3);
+    await expect(page.locator('main .prose p').first()).toBeVisible();
+    await expect(page.locator('main .prose p').first()).toContainText(purpose);
     await expect(page.getByRole('navigation', { name: `Pages in ${title}`, exact: true })).toBeVisible();
     for (const width of [390, 1920]) {
       await page.setViewportSize({ width, height: 1000 });
@@ -774,8 +778,8 @@ test('previous documentation URLs retain permanent redirects to their new chapte
     ['building-blocks/navigation', 'page-layout/header'],
     ['building-blocks/breadcrumbs', 'page-layout/breadcrumbs'],
     ['building-blocks/footer', 'page-layout/footer'],
-    ['building-blocks/card-and-image', 'building-blocks/card'],
-    ['foundations/content-grid', 'building-blocks/grids'],
+    ['building-blocks/card-and-image', 'components/card'],
+    ['foundations/content-grid', 'components/grids'],
     ['foundations/responsive-layout', 'design-system/responsive-layout'],
     ['foundations/backgrounds', 'design-system/backgrounds']
   ]) {

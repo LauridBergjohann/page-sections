@@ -7,15 +7,15 @@
     CardGridSection
   } from '@page-sections/svelte';
 
-  import { landscape } from '$lib/content';
+  import { landscape } from '#lib/content.js';
 </script>
 
-<svelte:head
-  ><meta
+<svelte:head>
+  <meta
     name="description"
     content="Explore Page Sections: reusable sections, responsive layouts and data-driven content for Svelte and SvelteKit."
-  /></svelte:head
->
+  />
+</svelte:head>
 <ContentPage
   page={{ title: 'Space for your ideas.', pageTitle: 'Page Sections — A place for your content' }}
 >

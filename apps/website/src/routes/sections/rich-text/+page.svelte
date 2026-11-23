@@ -39,10 +39,10 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
-  import SectionPlayground from '$lib/SectionPlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
+  import SectionPlayground from '#lib/SectionPlayground.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -66,8 +66,10 @@
       title: 'Try it',
       headline: 'Try it yourself',
       background: { color: 'standard', size: 'standard' }
-    }}><SectionPlayground kind="rich-text" /></Section
+    }}
   >
+    <SectionPlayground kind="rich-text" />
+  </Section>
   <SectionAnatomy kind="rich-text" />
   <Section
     section={{
@@ -76,14 +78,15 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Render Markdown, literal text or structured blocks. Use blocks for addresses, inline
         emphasis, lists and panels without custom section components.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -92,11 +95,12 @@
       headline: 'Props and configuration',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        The required section combines <a href={base + '/docs/reference/types/#section-definition'}
-          >SectionDefinition</a
-        >
+        The required section combines <a href={base + '/docs/reference/types/#section-definition'}>
+          SectionDefinition
+        </a>
         and <a href={base + '/docs/reference/types/#rich-text-content-data'}>RichTextContentData</a> without
         a required type discriminator. The serialized discriminator is richText. Choose exactly one source:
       </p>
@@ -119,33 +123,34 @@
           <tbody>
             <tr>
               <td>paragraph</td>
-              <td
-                >text: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>;
-                optional variant: default/lead/muted</td
-              >
+              <td>
+                text: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>; optional
+                variant: default/lead/muted
+              </td>
             </tr>
             <tr>
               <td>address</td>
-              <td
-                >name: string; lines: <a href={base + '/docs/reference/types/#inline-text'}
-                  >InlineText</a
-                >[]</td
-              >
+              <td>
+                name: string; lines: <a href={base + '/docs/reference/types/#inline-text'}>
+                  InlineText
+                </a>[]
+              </td>
             </tr>
             <tr>
               <td>list</td>
-              <td
-                >items: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>[];
-                optional ordered: boolean</td
-              >
+              <td>
+                items: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>[];
+                optional ordered: boolean
+              </td>
             </tr>
             <tr>
               <td>panel</td>
-              <td
-                >blocks: <a href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a
-                >[]; optional title, tone (standard/muted), actions:
-                <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>[]</td
-              >
+              <td>
+                blocks: <a href={base + '/docs/reference/types/#rich-text-block'}>
+                  RichTextBlock
+                </a>[]; optional title, tone (standard/muted), actions:
+                <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>[]
+              </td>
             </tr>
           </tbody>
         </table>
@@ -157,8 +162,8 @@
         String values in blocks are literal text, not Markdown. Paragraph whitespace preserves line breaks.
         Panels can nest and increment their heading level, capped at h6.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -167,7 +172,8 @@
       headline: 'Low-level content components',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>RichTextContent</code> accepts required content:
         <a href={base + '/docs/reference/types/#rich-text-content-data'}>RichTextContentData</a>
@@ -175,8 +181,8 @@
         required text: <a href={base + '/docs/reference/types/#inline-text'}>InlineText</a>. Neither
         adds a page heading, registry entry, arbitrary HTML parser or application dependency.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -185,7 +191,8 @@
       headline: 'Rendering and styling',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Markdown uses markdown-it with html=false, linkify=true and typographer=false. Plain text
         uses escaped text with preserved line breaks. Raw Markdown HTML is escaped; dangerous links
@@ -201,6 +208,6 @@
         <a href={base + '/docs/components/grids/'}>Section and grids</a>,
         <a href={base + '/docs/advanced/data-and-custom-sections/'}>Data models</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

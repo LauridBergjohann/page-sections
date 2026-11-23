@@ -11,8 +11,8 @@ export const prerender = true;`
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -38,14 +38,15 @@ export const prerender = true;`
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Page Sections components can render meaningful HTML on the server. The host application must
         enable SSR or prerendering; importing the library into a client-only application does not
         provide either automatically.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -54,7 +55,8 @@ export const prerender = true;`
       headline: 'What works without application JavaScript?',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -120,8 +122,8 @@ export const prerender = true;`
         avoid smooth movement when reduced motion is requested. No alternate copy of the cards is
         created for SSR or failure fallback.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -130,7 +132,8 @@ export const prerender = true;`
       headline: 'Host responsibilities',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Use SvelteKit's normal server rendering or prerendering, or supply a server-render/prerender
         pipeline for plain Svelte. Ensure your initial data is available at render time and use the
@@ -143,8 +146,8 @@ export const prerender = true;`
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>This export is a host configuration, not a Page Sections prop.</p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -153,7 +156,8 @@ export const prerender = true;`
       headline: 'Demo reference',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The SvelteKit 2 demo in <code>apps/demo</code> uses adapter-static and
         <code>prerender = true</code>
@@ -167,8 +171,8 @@ export const prerender = true;`
         375/840/1600px widths, native carousel keyboard scrolling and a hydrated environment without
         WebGPU. The package has no WebGPU dependency or GPU detection behavior.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -177,7 +181,8 @@ export const prerender = true;`
       headline: 'Accessibility limits',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         ContentPage's generated navigation comes after sections in DOM order and is moved visually
         with CSS. Native scrolling is not a live-region slideshow. The library does not
@@ -190,9 +195,10 @@ export const prerender = true;`
         <a href={base + '/docs/foundations/installation/'}>Installation</a>,
         <a
           href="https://github.com/LauridBergjohann/page-sections/blob/main/docs/development/demo.md"
-          >demo development guide</a
-        >.
+        >
+          demo development guide
+        </a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

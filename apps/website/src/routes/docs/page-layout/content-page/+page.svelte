@@ -78,12 +78,12 @@
 </script>
 
 <script lang="ts">
-  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
-  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
-  import { base } from '$app/paths';
+  import PageLayoutDiagram from '#lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '#lib/PageLayoutPreview.svelte';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -148,9 +148,9 @@
         menu moves into a sticky popup.
       </p>
       <fieldset>
-        <legend>Visible sidebars</legend><label
-          ><input type="checkbox" bind:checked={left} /> Left sidebar</label
-        > <label><input type="checkbox" bind:checked={right} /> Content menu</label>
+        <legend>Visible sidebars</legend><label>
+          <input type="checkbox" bind:checked={left} /> Left sidebar
+        </label> <label><input type="checkbox" bind:checked={right} /> Content menu</label>
       </fieldset>
       <CodeBlock
         language="svelte"
@@ -178,12 +178,12 @@
       headline: 'ContentPage props',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        <code
-          >page: <a href={base + '/docs/reference/types/#content-page-data'}>ContentPageData</a
-          ></code
-        >
+        <code>
+          page: <a href={base + '/docs/reference/types/#content-page-data'}>ContentPageData</a>
+        </code>
         is required. It supplies the title, optional pageTitle, and breadcrumbs.
         <code>children</code>
         contains the sections.
@@ -213,8 +213,8 @@
           <code>theme</code>, <code>class</code> and standard main-element attributes are supported.
         </li>
       </ul>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'custom-page-headers-and-host-metadata',
@@ -222,7 +222,8 @@
       headline: 'Headers and breadcrumbs',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Place a HeadingSection or HeroSection with headingLevel: 1 directly in the page content. It
         controls its own background, position and typography, like every other section. Breadcrumbs
@@ -235,8 +236,8 @@
         Supply exactly one h1. The main landmark uses page.title as its accessible label, unless
         aria-label or aria-labelledby is provided.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'pageshell-props',
@@ -244,7 +245,8 @@
       headline: 'PageShell',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         PageShell optionally wraps Header, ContentPage and Footer to share <code>theme</code>
         and
@@ -270,8 +272,8 @@
         remove any surrounding header element. Rename ContentPage's footer snippet to pageEnd;
         footer remains a fallback, and pageEnd wins if both are passed.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'layout-and-accessibility',
@@ -279,7 +281,8 @@
       headline: 'Responsive layout and scrolling',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         On wide screens, the sidebars sit beside the content. In smaller windows, the content menu
         moves into a sticky popup. The content menu stops at the end of the sections, before related
@@ -292,6 +295,6 @@
         the layout sizes, breakpoints and sidebar widths. Topic links also work without JavaScript; JavaScript
         adds active-topic tracking and keyboard focus restoration.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

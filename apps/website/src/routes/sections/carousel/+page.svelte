@@ -22,10 +22,10 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import CollectionPlayground from '$lib/CollectionPlayground.svelte';
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
+  import CollectionPlayground from '#lib/CollectionPlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -50,8 +50,10 @@
       title: 'Try it',
       headline: 'Try it yourself',
       variant: 'content'
-    }}><CollectionPlayground kind="carousel" /></Section
+    }}
   >
+    <CollectionPlayground kind="carousel" />
+  </Section>
   <SectionAnatomy kind="carousel" />
   <Section
     section={{
@@ -60,7 +62,8 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         A native horizontal collection using the same card sizes as CardGridSection. It is
         progressively enhanced with previous/next buttons and selection callbacks; it does not
@@ -72,8 +75,8 @@
         <code>&quot;muted&quot;</code>, also through JSON section data. They use the same palette as
         panels and are independent of the section background.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -82,7 +85,8 @@
       headline: 'Props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Generic over T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>.
         Required section:
@@ -98,8 +102,8 @@
         are enhancements; SSR starts at the first item. oncardready has the same lifecycle as
         <a href={base + '/docs/components/card/'}>Card</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -108,7 +112,8 @@
       headline: 'Layout and interaction',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Each slide takes the canonical S/M/L column span, with the same container width, outer
         gutters and gap as CardGridSection. Slides share equal heights. Cards use the selected media
@@ -127,8 +132,8 @@
         track; reduced motion disables smooth scrolling. RTL reverses scrolling direction and
         selection-edge calculations.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -137,7 +142,8 @@
       headline: 'Accessibility and SSR',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Supply translated region and button labels. The component is a scrollable collection, not a
         live slideshow; there is no autoplay or live announcement. Cards inherit their heading level
@@ -148,6 +154,6 @@
         <a href={base + '/docs/reference/core-api/'}>Core API</a>,
         <a href={base + '/docs/design-system/responsive-layout/'}>shared layout reference</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

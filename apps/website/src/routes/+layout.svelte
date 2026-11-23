@@ -1,19 +1,19 @@
 <script lang="ts">
   import { onMount, type Snippet } from 'svelte';
   import { page } from '$app/state';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { ButtonGroup, Footer, Header, PageShell } from '@page-sections/svelte';
   import Menu from '@lucide/svelte/icons/menu';
   import Settings from '@lucide/svelte/icons/settings';
   import Sun from '@lucide/svelte/icons/sun';
   import Moon from '@lucide/svelte/icons/moon';
   import Globe from '@lucide/svelte/icons/globe';
-  import Github from '$lib/GitHubMark.svelte';
-  import LinkedIn from '$lib/LinkedInMark.svelte';
-  import BrandMark from '$lib/BrandMark.svelte';
-  import SiteSearch from '$lib/SiteSearch.svelte';
-  import NavigationIcon from '$lib/NavigationIcon.svelte';
-  import { navigationTree } from '$lib/navigation';
+  import Github from '#lib/GitHubMark.svelte';
+  import LinkedIn from '#lib/LinkedInMark.svelte';
+  import BrandMark from '#lib/BrandMark.svelte';
+  import SiteSearch from '#lib/SiteSearch.svelte';
+  import NavigationIcon from '#lib/NavigationIcon.svelte';
+  import { navigationTree } from '#lib/navigation.js';
   import { resolveNavigation } from '@page-sections/core';
   import { version } from '../../../../packages/svelte/package.json';
   import '../app.css';
@@ -88,16 +88,20 @@
             rel="noopener noreferrer"
             href="https://github.com/LauridBergjohann/page-sections"
             aria-label="Page Sections on GitHub"
-            title="Source on GitHub"><Github /></a
+            title="Source on GitHub"
           >
+            <Github />
+          </a>
           <a
             class="github-link"
             target="_blank"
             rel="noopener noreferrer"
             href="https://www.npmjs.com/package/@page-sections/svelte"
             aria-label="Page Sections on NPM"
-            title="Package on NPM"><BrandMark kind="npm" /></a
+            title="Package on NPM"
           >
+            <BrandMark kind="npm" />
+          </a>
         </div>
       {/snippet}
       {#snippet right()}

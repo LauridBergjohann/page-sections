@@ -39,9 +39,9 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import GridPlayground from '$lib/GridPlayground.svelte';
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import GridPlayground from '#lib/GridPlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -70,8 +70,10 @@
       title: 'Try it',
       headline: 'Try it yourself',
       variant: 'content'
-    }}><GridPlayground /></Section
+    }}
   >
+    <GridPlayground />
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -79,15 +81,16 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Section gives ordinary content a semantic region, anchor, spacing and optional background.
         ContentGrid and ContentBlock arrange explicit content inside it. Use them when a page needs
         an article/aside pair, feature columns or other layouts that vary with available width.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -96,13 +99,14 @@
       headline: 'Section props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        <code
-          >section: <a href={base + '/docs/reference/types/#section-definition'}
-            >SectionDefinition</a
-          ></code
-        >
+        <code>
+          section: <a href={base + '/docs/reference/types/#section-definition'}>
+            SectionDefinition
+          </a>
+        </code>
         is required. <code>children?: Snippet</code>
         supplies content. Section also accepts <code>HTMLAttributes&lt;HTMLElement&gt;</code> except
         <code>id</code>
@@ -151,53 +155,52 @@
             </tr>
             <tr>
               <td><code>headingLevel</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a></code
-                > (1-6)</td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a>
+                </code> (1-6)
+              </td>
               <td>Inherited; standalone 2</td>
             </tr>
             <tr>
               <td><code>headingSize</code></td>
-              <td
-                ><code><a href={base + '/docs/reference/types/#heading-size'}>HeadingSize</a></code
-                >: m, l, xl</td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#heading-size'}>HeadingSize</a></code>:
+                m, l, xl
+              </td>
               <td>Independent of semantics; l by default, m for the content variant</td>
             </tr>
             <tr>
               <td><code>background</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a>
+                </code>
+              </td>
               <td>Transparent, standard width</td>
             </tr>
             <tr>
               <td><code>layout</code></td>
-              <td
-                ><code>'full'</code>, <code>'wide'</code>, <code>'narrow'</code>,
-                <code>'inherit'</code></td
-              >
+              <td>
+                <code>'full'</code>, <code>'wide'</code>, <code>'narrow'</code>,
+                <code>'inherit'</code>
+              </td>
               <td>inherit</td>
             </tr>
             <tr>
               <td><code>spacing</code></td>
-              <td
-                ><code>'none'</code>, <code>'tight'</code>, <code>'normal'</code>,
-                <code>'loose'</code>, <code>'spacious'</code></td
-              >
+              <td>
+                <code>'none'</code>, <code>'tight'</code>, <code>'normal'</code>,
+                <code>'loose'</code>, <code>'spacious'</code>
+              </td>
               <td>normal; nested sections default to none</td>
             </tr>
             <tr>
               <td><code>divider</code></td>
-              <td
-                ><code>'none'</code>, <code>'top'</code>, <code>'bottom'</code>,
-                <code>'both'</code></td
-              >
+              <td>
+                <code>'none'</code>, <code>'top'</code>, <code>'bottom'</code>,
+                <code>'both'</code>
+              </td>
               <td>none</td>
             </tr>
             <tr>
@@ -228,8 +231,8 @@
         spacing none. Dividers are 1px borders using <code>--ps-border</code>. Variants select
         default grid headings, content headings or larger feature headings.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -238,7 +241,8 @@
       headline: 'ContentGrid and ContentBlock props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -251,18 +255,17 @@
           <tbody>
             <tr>
               <td>ContentGrid</td>
-              <td
-                >Optional <code>children: Snippet</code> and standard div HTML attributes, including class/style</td
-              >
+              <td>
+                Optional <code>children: Snippet</code> and standard div HTML attributes, including class/style
+              </td>
             </tr>
             <tr>
               <td>ContentBlock</td>
-              <td
-                >The same, plus optional <code
-                  >span: <a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a
-                  ></code
-                ></td
-              >
+              <td>
+                The same, plus optional <code>
+                  span: <a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a>
+                </code>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -271,11 +274,13 @@
         <a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a> is
         <code>number</code>
         or
-        <code
-          >Partial&lt;Record&lt;<a href={base + '/docs/reference/types/#content-grid-size'}
-            >ContentGridSize</a
-          >, number&gt;&gt;</code
-        >, where <a href={base + '/docs/reference/types/#content-grid-size'}>ContentGridSize</a> is
+        <code>
+          Partial&lt;Record&lt;<a href={base + '/docs/reference/types/#content-grid-size'}>
+            ContentGridSize
+          </a>, number&gt;&gt;
+        </code>, where
+        <a href={base + '/docs/reference/types/#content-grid-size'}>ContentGridSize</a>
+        is
         <code>xs</code>, <code>s</code>, <code>m</code>, <code>l</code>. Missing spans fill a row.
         An object inherits the last smaller configured span; before its first configured value, it
         fills the row. Positive integers clamp to available columns; invalid numbers fill the row.
@@ -295,15 +300,15 @@
         component introduces a heading or landmark. CSS layout works in the first SSR response.
       </p>
       <p>
-        Related: <a href={base + '/docs/design-system/responsive-layout/'}
-          >Responsive Layout and Breakpoints</a
-        >,
-        <a href={base + '/docs/design-system/backgrounds/'}
-          >Section Backgrounds and Surface Groups</a
-        >.
+        Related: <a href={base + '/docs/design-system/responsive-layout/'}>
+          Responsive Layout and Breakpoints
+        </a>,
+        <a href={base + '/docs/design-system/backgrounds/'}>
+          Section Backgrounds and Surface Groups
+        </a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -312,7 +317,8 @@
       headline: 'Nested sections and diagnostics',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>renderHeader</code> defaults to true; disable it only when a specialized renderer
         supplies the matching headline ID itself. <code>inset</code> defaults to true for top-level sections
@@ -321,15 +327,16 @@
         none/tight/normal/loose/spacious are 0/0.5/1/2/4 times the active grid gap.
       </p>
       <p>
-        <code
-          >onDiagnostic?: (diagnostic: <a
+        <code>
+          onDiagnostic?: (diagnostic: <a
             href={base + '/docs/reference/types/#section-background-diagnostic'}
-            >SectionBackgroundDiagnostic</a
-          >) =&gt; void</code
-        > receives normalization diagnostics after hydration, once per requested color/size/context combination.
-        It can update host state. Page kind is inherited from SectionSurfaceGroup; normalization itself
-        also applies during SSR.
+          >
+            SectionBackgroundDiagnostic
+          </a>) =&gt; void
+        </code> receives normalization diagnostics after hydration, once per requested color/size/context
+        combination. It can update host state. Page kind is inherited from SectionSurfaceGroup; normalization
+        itself also applies during SSR.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

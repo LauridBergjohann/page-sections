@@ -1,5 +1,28 @@
 # @page-sections/svelte
 
+## 0.6.0
+
+### Minor Changes
+
+- 6a43f3c: Expose PrimaryButton, SecondaryButton, IconButton and Popup and grouped atoms, molecules, organisms and layouts entry points. Reuse Popup across header navigation, settings, content navigation and website search, including shared heading typography and dismissal. Keep all existing root imports compatible. Center compact header controls and document the atomic design learning path with live examples and updated device illustrations.
+
+### Patch Changes
+
+- 57d7105: Add shared CSS controls for shadow color, size and intensity, popup and card-hover shadow overrides, and scalable section shadow clipping. Complete role tokens remain supported as overrides; their defaults now resolve at each surface, so ancestor and local theme controls work consistently.
+- 223f28a: Attach header popups without a pointer gap. Outline connected standard-width section surfaces with the panel border, omit internal seams and the attached content-menu edge, and preserve separate borders for floating menus.
+- 87f0ff4: Unify header and content-menu popups with an on-demand page blur, active disclosure triggers and native top-layer placement. Repair reopening a mobile menu after outside dismissal, preserve native disclosure behavior without JavaScript, and prevent desktop menu labels from wrapping.
+
+  Constrain the content menu to the sections, excluding pageEnd navigation. Attached menus preserve matching 16px top/bottom insets; detached menus end flush, and compact controls also scroll away with the content.
+
+  Use the responsive grid inset for content-page breadcrumbs: 12px at XS and 16px at S and M.
+
+- 6e15aa7: Use consistent popup spacing, radius, border and shadow. Reset native popover borders and omit the redundant content-menu close button. Keep header icon triggers borderless while preserving keyboard focus indicators.
+- 76b7755: Preserve the section edge and shadow in front of docked content menus. Contain sidebar navigation highlights within the panel border and clarify settings heading hierarchy.
+- de4a878: Add independent border and panelBorder theme colors for controls and surfaces. Icon buttons and ButtonGroups share the card border; panels and navigation use the panel border, with bottom-only edges on docked headers. Transparent colors disable edges without changing layout.
+- Update markdown-it to 15.0.3 and refresh the development toolchain. Migrate the example, test and documentation apps to SvelteKit 3. Verify published package downloads and retry transient registry installation failures during propagation.
+- Updated dependencies [de4a878]
+  - @page-sections/core@0.6.0
+
 ## 0.5.1
 
 ### Patch Changes

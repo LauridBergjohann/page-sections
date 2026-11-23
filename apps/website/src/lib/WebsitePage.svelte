@@ -5,7 +5,7 @@
   import { resolveNavigation, type MenuItem } from '@page-sections/core';
   import { navigationTree, readingNeighbors } from './navigation';
   import { documents } from './catalog';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import NavigationIcon from './NavigationIcon.svelte';
   import ChevronDown from '@lucide/svelte/icons/chevron-down';
   let {
@@ -59,10 +59,9 @@
                 {#if item.icon}<NavigationIcon name={item.icon} />{/if}
                 <span class="chapter-copy">
                   <strong>{item.label}</strong>
-                  <small
-                    >{documents.find((document) => base + document.href === item.href)
-                      ?.description}</small
-                  >
+                  <small>
+                    {documents.find((document) => base + document.href === item.href)?.description}
+                  </small>
                 </span>
               </a>
             </li>{/each}
@@ -71,12 +70,12 @@
     {/if}
     {#if neighbors.previous || neighbors.next}
       <nav class="reading-path" aria-label="Reading order">
-        {#if neighbors.previous}<a rel="prev" href={neighbors.previous.href}
-            ><small>← Previous</small>{neighbors.previous.label}</a
-          >{/if}
-        {#if neighbors.next}<a rel="next" href={neighbors.next.href}
-            ><small>Next →</small>{neighbors.next.label}</a
-          >{/if}
+        {#if neighbors.previous}<a rel="prev" href={neighbors.previous.href}>
+            <small>← Previous</small>{neighbors.previous.label}
+          </a>{/if}
+        {#if neighbors.next}<a rel="next" href={neighbors.next.href}>
+            <small>Next →</small>{neighbors.next.label}
+          </a>{/if}
       </nav>
     {/if}
   {/snippet}

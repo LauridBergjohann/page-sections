@@ -8,10 +8,10 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
-  import AtomicPreview from '$lib/AtomicPreview.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
+  import AtomicPreview from '#lib/AtomicPreview.svelte';
 </script>
 
 <WebsitePage page={{ title: 'Popup', pageTitle: 'Popup · Page Sections' }} showContentMenu>
@@ -32,7 +32,8 @@
       headline: 'One popup foundation',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Popup is the molecule used by header navigation, Settings, search suggestions and On this
         page. It shares panel borders, background, radius, shadow and title typography. It does not
@@ -45,62 +46,65 @@
         non-modal: a popup is neither a focus-trapped dialog nor an ARIA menu by default. Search and
         navigation provide their own correct semantics inside it.
       </p>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'try-it-yourself',
       title: 'Try it yourself',
       headline: 'Try it yourself',
       background: { color: 'standard' }
-    }}><div class="prose"><AtomicPreview kind="popup" /></div></Section
-  ><Section
+    }}
+  >
+    <div class="prose"><AtomicPreview kind="popup" /></div>
+  </Section><Section
     section={{
       id: 'props',
       title: 'Popup properties',
       headline: 'Popup properties',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing property tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Popup properties">
         <table>
-          <thead><tr><th>Field</th><th>Type / default</th><th>Purpose</th></tr></thead><tbody
-            ><tr
-              ><td>title</td><td>string, optional</td><td
-                >Shared heading and accessible label for the surface.</td
-              ></tr
-            ><tr
-              ><td>children</td><td>Svelte Snippet</td><td
-                >Panel content; keep the appropriate navigation, list or form semantics.</td
-              ></tr
-            ><tr
-              ><td>open</td><td>boolean, bindable; true</td><td
-                >Visibility. Bind it so outside dismissal also updates your trigger.</td
-              ></tr
-            ><tr
-              ><td>anchor</td><td>HTMLElement, optional</td><td
-                >Excludes trigger clicks from outside dismissal and receives focus after Escape.</td
-              ></tr
-            ><tr
-              ><td>onclose</td><td>() =&gt; void, optional</td><td
-                >Notifies the parent when dismissal occurs.</td
-              ></tr
-            ><tr
-              ><td>disclosure</td><td>boolean, false</td><td
-                >For internal/native details composition: a direct parent details controls
-                visibility; its summary is the trigger.</td
-              ></tr
-            ><tr
-              ><td>inline</td><td>boolean, false</td><td
-                >Shares title typography in an existing panel without a new floating surface,
-                border, blur or dismissal.</td
-              ></tr
-            ><tr
-              ><td>element</td><td>HTMLDivElement, bindable</td><td
-                >Read the surface element for integration.</td
-              ></tr
-            ></tbody
-          >
+          <thead><tr><th>Field</th><th>Type / default</th><th>Purpose</th></tr></thead><tbody>
+            <tr>
+              <td>title</td><td>string, optional</td><td>
+                Shared heading and accessible label for the surface.
+              </td>
+            </tr><tr>
+              <td>children</td><td>Svelte Snippet</td><td>
+                Panel content; keep the appropriate navigation, list or form semantics.
+              </td>
+            </tr><tr>
+              <td>open</td><td>boolean, bindable; true</td><td>
+                Visibility. Bind it so outside dismissal also updates your trigger.
+              </td>
+            </tr><tr>
+              <td>anchor</td><td>HTMLElement, optional</td><td>
+                Excludes trigger clicks from outside dismissal and receives focus after Escape.
+              </td>
+            </tr><tr>
+              <td>onclose</td><td>() =&gt; void, optional</td><td>
+                Notifies the parent when dismissal occurs.
+              </td>
+            </tr><tr>
+              <td>disclosure</td><td>boolean, false</td><td>
+                For internal/native details composition: a direct parent details controls
+                visibility; its summary is the trigger.
+              </td>
+            </tr><tr>
+              <td>inline</td><td>boolean, false</td><td>
+                Shares title typography in an existing panel without a new floating surface, border,
+                blur or dismissal.
+              </td>
+            </tr><tr>
+              <td>element</td><td>HTMLDivElement, bindable</td><td>
+                Read the surface element for integration.
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
       <p>
@@ -110,22 +114,25 @@
         customized with class/style. The native top-layer enhancement clamps the floating surface
         within the viewport.
       </p>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'example',
       title: 'Connect a trigger',
       headline: 'Connect a trigger',
       background: { color: 'standard' }
-    }}><div class="prose"><CodeBlock language="svelte" code={examples[0].code} /></div></Section
-  ><Section
+    }}
+  >
+    <div class="prose"><CodeBlock language="svelte" code={examples[0].code} /></div>
+  </Section><Section
     section={{
       id: 'theme',
       title: 'Theme the surface',
       headline: 'Theme the surface',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Use <code>--ps-panel-border</code>, <code>--ps-radius</code>,
         <code>--ps-section-standard</code>
@@ -135,6 +142,6 @@
         the shared selection color. The desktop On this page panel uses the same title typography while
         its surrounding sticky layout owns docking and scrolling.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { base } from '#lib/paths.js';
 import type { MenuItem } from '@page-sections/core';
 import { documents } from './catalog';
 import { sectionCatalog } from './sectionCatalog';

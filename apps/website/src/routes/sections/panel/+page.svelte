@@ -25,10 +25,10 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
-  import SectionPlayground from '$lib/SectionPlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
+  import SectionPlayground from '#lib/SectionPlayground.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -52,8 +52,10 @@
       title: 'Try it',
       headline: 'Try it yourself',
       background: { color: 'standard', size: 'standard' }
-    }}><SectionPlayground kind="panel" /></Section
+    }}
   >
+    <SectionPlayground kind="panel" />
+  </Section>
   <SectionAnatomy kind="panel" />
   <Section
     section={{
@@ -62,14 +64,15 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Panels group short facts, notes, contact information or a call to action. Use them directly,
         in a data-driven grid or as nested rich-text blocks.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -78,11 +81,12 @@
       headline: 'PanelSection props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        Required section: Omit&lt;<a href={base + '/docs/reference/types/#panel-section-data'}
-          >PanelSectionData</a
-        >, 'type'&gt;. Shared
+        Required section: Omit&lt;<a href={base + '/docs/reference/types/#panel-section-data'}>
+          PanelSectionData
+        </a>, 'type'&gt;. Shared
         <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
         fields apply; additional fields are blocks:
         <a href={base + '/docs/reference/types/#rich-text-block'}>RichTextBlock</a>[] (required),
@@ -98,8 +102,8 @@
         Both follow the active theme. For example, a standard section with a muted panel provides a
         distinct inset surface. This API already exists in 0.2.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -108,15 +112,16 @@
       headline: 'ContentPanel props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         ContentPanel is the lower-level wrapper without a section or registry entry. Optional props:
         title, titleId, headingLevel (inherited; standalone h2), tone (muted), actions and children:
         Snippet. Its title increments the level inherited by nested panels. Padding follows the
         active grid gap; radius, colors and borders follow the theme.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -125,11 +130,12 @@
       headline: 'Actions props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        Actions accepts optional actions: <a href={base + '/docs/reference/types/#content-action'}
-          >ContentAction</a
-        >[]. An empty/omitted list renders nothing. Each action has label, href and optional
+        Actions accepts optional actions: <a href={base + '/docs/reference/types/#content-action'}>
+          ContentAction
+        </a>[]. An empty/omitted list renders nothing. Each action has label, href and optional
         variant: primary/secondary/text (default text). Primary uses accent and onAccent; secondary
         uses the standard surface. URLs pass through safeHref. Actions are ordinary anchors,
         available in SSR, and introduce no router or icon-library dependency.
@@ -139,6 +145,6 @@
         <a href={base + '/docs/foundations/themes/'}>Themes</a>,
         <a href={base + '/docs/advanced/data-and-custom-sections/'}>Data models</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

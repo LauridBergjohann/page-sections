@@ -8,9 +8,9 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -37,7 +37,8 @@
       headline: 'One topic, one section',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Think of an article with an introduction, a planting guide and opening hours. Each topic can
         be a section. The Section component renders an HTML section element around the content you
@@ -49,8 +50,8 @@
         content region.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'names-and-headings',
@@ -58,7 +59,8 @@
       headline: 'ID, title and headline',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <dl>
         <dt><code>id</code></dt>
         <dd>
@@ -75,13 +77,13 @@
         </dd>
       </dl>
       <p>
-        These fields belong to <a href={base + '/docs/reference/types/#section-definition'}
-          >SectionDefinition</a
-        >, the shared data type describing a section. Its other fields are optional; you can learn
-        them as you need them.
+        These fields belong to <a href={base + '/docs/reference/types/#section-definition'}>
+          SectionDefinition
+        </a>, the shared data type describing a section. Its other fields are optional; you can
+        learn them as you need them.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'ready-made-sections',
@@ -89,7 +91,8 @@
       headline: 'Base container and ready-made sections',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Use Section when you want to write the contents yourself. Ready-made components add a
         particular content structure: RichTextSection renders text, ImageSection pairs an image with
@@ -103,6 +106,6 @@
       <p>
         Next, <a href={base + '/docs/foundations/first-page/'}>use sections in a small page</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

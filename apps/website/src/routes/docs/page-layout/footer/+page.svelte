@@ -47,11 +47,11 @@
 </script>
 
 <script lang="ts">
-  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
-  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
+  import PageLayoutDiagram from '#lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '#lib/PageLayoutPreview.svelte';
   import { Footer, HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import { base } from '$app/paths';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -114,36 +114,35 @@
       <ul>
         <li><code>brand?: Snippet</code>: your logo, home link and short description.</li>
         <li>
-          <code
-            >social?: readonly <a href={base + '/docs/reference/types/#footer-social-link'}
-              >FooterSocialLink</a
-            >[]</code
-          >: each entry requires <code>label</code>,
+          <code>
+            social?: readonly <a href={base + '/docs/reference/types/#footer-social-link'}>
+              FooterSocialLink
+            </a>[]
+          </code>: each entry requires <code>label</code>,
           <code>href</code>
           and an <code>icon: Snippet</code>. Icons are decorative; the visible label names the link.
           Supply icons from your own library.
         </li>
         <li>
-          <code
-            >menu?: readonly <a href={base + '/docs/reference/types/#footer-menu-group'}
-              >FooterMenuGroup</a
-            >[]</code
-          >: at most four groups, each with a label, optional href and any number of links. Each
-          link needs label and href. More than four groups throws an error instead of silently
+          <code>
+            menu?: readonly <a href={base + '/docs/reference/types/#footer-menu-group'}>
+              FooterMenuGroup
+            </a>[]
+          </code>: at most four groups, each with a label, optional href and any number of links.
+          Each link needs label and href. More than four groups throws an error instead of silently
           hiding content.
         </li>
         <li><code>footnote: string | Snippet</code>: required copyright or other short text.</li>
         <li>
-          <code
-            >links: readonly <a href={base + '/docs/reference/types/#footer-link'}>FooterLink</a
-            >[]</code
-          >: required list of important links, available at every viewport size.
+          <code>
+            links: readonly <a href={base + '/docs/reference/types/#footer-link'}>FooterLink</a>[]
+          </code>: required list of important links, available at every viewport size.
         </li>
       </ul>
       <p>
-        Empty optional arrays behave like omitted props. Customize navigation landmark names with <code
-          >socialLabel</code
-        >
+        Empty optional arrays behave like omitted props. Customize navigation landmark names with <code>
+          socialLabel
+        </code>
         (Social media), <code>menuLabel</code> (Footer navigation) and <code>linksLabel</code>
         (Important links). Standard HTML attributes such as id, class and lang are forwarded to the footer.
         Links use the shared safeHref policy. Social links open in a new tab with
@@ -171,8 +170,10 @@
       </p>
       <p>
         For precise widths and breakpoints, see the <a
-          href={base + '/docs/design-system/responsive-layout/'}>responsive design system</a
-        >.
+          href={base + '/docs/design-system/responsive-layout/'}
+        >
+          responsive design system
+        </a>.
       </p>
     </div>
   </Section>
@@ -229,8 +230,10 @@
       <p>
         Bottom-bar separators inherit the text color at 30% opacity. Footer links and their focus
         outlines inherit the relevant region's text color. See the <a
-          href={base + '/docs/foundations/themes/'}>complete theme mapping</a
-        >.
+          href={base + '/docs/foundations/themes/'}
+        >
+          complete theme mapping
+        </a>.
       </p>
     </div>
   </Section>

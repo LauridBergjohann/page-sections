@@ -11,8 +11,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -41,7 +41,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         CSS variables customize presentation; <code>layoutTokens</code> supplies canonical numeric values
         for core calculations and generated grid CSS. Changing CSS does not mutate the token object. This
@@ -54,8 +55,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         these measurements yourself. Use <code>--ps-selection</code> for its color and
         <code>--ps-radius</code> for the ButtonGroup's outer corners.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -64,7 +65,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       headline: 'Theme and component variables',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -144,10 +146,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             <tr>
               <td><code>--ps-navigation-shadow</code></td>
               <td>0 4px 8px rgb(0 0 0 / 12%)</td>
-              <td
-                >Header and satellite elevation; popups inherit it unless overridden; none disables
-                it</td
-              >
+              <td>
+                Header and satellite elevation; popups inherit it unless overridden; none disables
+                it
+              </td>
             </tr>
             <tr>
               <td><code>--ps-scroll-offset</code></td>
@@ -172,8 +174,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         Legacy card minimum-width and carousel-width variables were removed in 0.2. Card geometry is
         generated from the same tokens as core.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -182,7 +184,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       headline: 'Generated grid variables',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The ps-grid-scope class resolves the active container size. These generated values are
         read-only layout contracts, not theme inputs: --ps-grid-columns, --ps-grid-gap,
@@ -259,8 +262,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         parity tests when revising geometry; overriding columns/gaps only in a host stylesheet
         breaks the shared contract.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -269,7 +272,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       headline: 'Internal resolved variables',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         ContentBlock writes <code>--ps-content-block-span-xs</code>,
         <code>--ps-content-block-span-s</code>, <code>--ps-content-block-span-m</code>,
@@ -282,8 +286,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         default to 0px. Image uses private <code>--image-ratio</code> and <code>--image-fit</code>
         variables; configure <a href={base + '/docs/reference/types/#image-data'}>ImageData</a> instead.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -292,7 +296,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       headline: 'Complete numeric token groups',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>layoutTokens</code> is exported from core; no JSON deep import is required. The groups below
         describe its entire structure. Treat it as canonical read-only configuration in application code;
@@ -314,10 +319,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td><code>layoutMinWidths</code></td>
-              <td
-                >xs=0, s=600, m=840, l=1200, xl=1600, 2xl=1809, 3xl=2300; viewport classification
-                and selected CSS rules</td
-              >
+              <td>
+                xs=0, s=600, m=840, l=1200, xl=1600, 2xl=1809, 3xl=2300; viewport classification and
+                selected CSS rules
+              </td>
             </tr>
             <tr>
               <td><code>grid</code></td>
@@ -337,10 +342,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td><code>menu</code></td>
-              <td
-                >height=66, wideHeight=64, wideTop=16, scrollThreshold=32; generated header
-                dimensions and delayed scrolling</td
-              >
+              <td>
+                height=66, wideHeight=64, wideTop=16, scrollThreshold=32; generated header
+                dimensions and delayed scrolling
+              </td>
             </tr>
             <tr>
               <td><code>satellite</code></td>
@@ -405,9 +410,9 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       </div>
       <p>
         These feed resolveCardLayout and Svelte cards. Descriptions use natural title height;
-        descriptions and additional content make the final height content-dependent. <code
-          >breadcrumb</code
-        > contains:
+        descriptions and additional content make the final height content-dependent. <code>
+          breadcrumb
+        </code> contains:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -465,13 +470,13 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
         Related: <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>,
-        <a href={base + '/docs/design-system/responsive-layout/'}
-          >Responsive Layout and Breakpoints</a
-        >,
+        <a href={base + '/docs/design-system/responsive-layout/'}>
+          Responsive Layout and Breakpoints
+        </a>,
         <a href={base + '/docs/reference/core-api/'}>Core API</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -480,7 +485,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       headline: 'Generated component variables',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         These variables are implementation outputs. Configure component props or canonical tokens
         instead of assigning them in a host theme.
@@ -504,10 +510,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>32px delayed-scroll interval; override on Header or an ancestor</td>
             </tr>
             <tr>
-              <td
-                >--ps-satellite-width, --ps-satellite-height, --ps-satellite-inset,
-                --ps-satellite-top</td
-              >
+              <td>
+                --ps-satellite-width, --ps-satellite-height, --ps-satellite-inset,
+                --ps-satellite-top
+              </td>
               <td>80px, 40px, 28px, 28px</td>
             </tr>
             <tr>
@@ -553,8 +559,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
           </tbody>
         </table>
       </div>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -563,14 +569,15 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       headline: 'Derived syntax colors',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>--ps-code-light</code> and <code>--ps-code-dark</code> are per-token values emitted by CodeBlock
         from its optional highlighted input. They are presentation internals, not global theme settings.
         Code surfaces use the existing standard/muted palette and border/radius tokens.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'shadows',
@@ -588,22 +595,22 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         <table>
           <thead><tr><th>Variable</th><th>Default</th><th>Effect</th></tr></thead>
           <tbody>
-            <tr
-              ><td><code>--ps-shadow-color</code></td><td>#000</td><td
-                >Shadow color. Prefer an opaque color; its alpha, if supplied, also reduces opacity.</td
-              ></tr
-            >
-            <tr
-              ><td><code>--ps-shadow-size</code></td><td>1</td><td
-                >Nonnegative multiplier for offset and blur. 2 doubles their size.</td
-              ></tr
-            >
-            <tr
-              ><td><code>--ps-shadow-intensity</code></td><td>1</td><td
-                >Nonnegative opacity multiplier. 0 hides standard shadows, 0.5 halves their opacity,
-                2 doubles it. Opacity is capped at 100%.</td
-              ></tr
-            >
+            <tr>
+              <td><code>--ps-shadow-color</code></td><td>#000</td><td>
+                Shadow color. Prefer an opaque color; its alpha, if supplied, also reduces opacity.
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-shadow-size</code></td><td>1</td><td>
+                Nonnegative multiplier for offset and blur. 2 doubles their size.
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-shadow-intensity</code></td><td>1</td><td>
+                Nonnegative opacity multiplier. 0 hides standard shadows, 0.5 halves their opacity,
+                2 doubles it. Opacity is capped at 100%.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -619,30 +626,29 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         <table>
           <thead><tr><th>Override</th><th>Default appearance</th><th>Surfaces</th></tr></thead>
           <tbody>
-            <tr
-              ><td><code>--ps-navigation-shadow</code></td><td>0 4px 8px, 12% opacity</td><td
-                >Header and satellites</td
-              ></tr
-            >
-            <tr
-              ><td><code>--ps-surface-shadow</code></td><td>0 3px 8px, 12% opacity</td><td
-                >Contained sections, sidebars, the contents trigger, and cards with shadow enabled</td
-              ></tr
-            >
-            <tr
-              ><td><code>--ps-popup-shadow</code></td><td>Navigation shadow</td><td
-                >Menu, settings, search and contents popups</td
-              ></tr
-            >
-            <tr
-              ><td><code>--ps-card-hover-shadow</code></td><td>0 8px 20px, 20% opacity</td><td
-                >Hover and keyboard focus on cards with shadow enabled</td
-              ></tr
-            >
-            <tr
-              ><td><code>--ps-footer-shadow</code></td><td>Surface shadow</td><td>Footer panel</td
-              ></tr
-            >
+            <tr>
+              <td><code>--ps-navigation-shadow</code></td><td>0 4px 8px, 12% opacity</td><td>
+                Header and satellites
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-surface-shadow</code></td><td>0 3px 8px, 12% opacity</td><td>
+                Contained sections, sidebars, the contents trigger, and cards with shadow enabled
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-popup-shadow</code></td><td>Navigation shadow</td><td>
+                Menu, settings, search and contents popups
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-card-hover-shadow</code></td><td>0 8px 20px, 20% opacity</td><td>
+                Hover and keyboard focus on cards with shadow enabled
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-footer-shadow</code></td><td>Surface shadow</td><td>Footer panel</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -656,9 +662,9 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         the public controls above rather than setting these internal values.
       </p>
       <p>
-        The role variables are optional overrides, rather than precomputed values on <code
-          >:root</code
-        >. When using them for your own components, supply a fallback, for example
+        The role variables are optional overrides, rather than precomputed values on <code>
+          :root
+        </code>. When using them for your own components, supply a fallback, for example
         <code>box-shadow: var(--ps-surface-shadow, 0 3px 8px rgb(0 0 0 / 12%))</code>.
       </p>
       <p>
@@ -678,7 +684,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       title: 'Sidebar tokens',
       headline: 'Sidebar tokens'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>layoutTokens.sidebars</code> defines stickyTop (16), contentMenuOffset (16), xl (outer 12,
         gap 12, panelWidth 248), wide (outer 28, gap 28, panelWidth 248) and extraWide (outer 28, gap
@@ -704,8 +711,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         and <code>--ps-content-menu-shadow</code>
         switch the right panel between docked and freestanding surfaces.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'selection-surface',

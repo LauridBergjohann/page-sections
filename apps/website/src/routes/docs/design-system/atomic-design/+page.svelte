@@ -8,9 +8,9 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
 </script>
 
 <WebsitePage
@@ -34,7 +34,8 @@
       headline: 'From atoms to complete pages',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Atomic design describes composition, not visual size. An <strong>atom</strong> does one
         small job, such as showing an image or offering a button. A <strong>molecule</strong>
@@ -59,15 +60,16 @@
           belongs to your application.
         </li>
       </ol>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'composition',
       title: 'One interaction, shared building blocks',
       headline: 'One interaction, shared building blocks',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <figure class="composition">
         <div>IconButton<br /><small>Trigger / atom</small></div>
         <span aria-hidden="true">→</span>
@@ -84,15 +86,16 @@
         navigation, search or settings. A card combines an image, text and a destination. The
         ready-made card grid arranges cards inside a section. You can use any level directly.
       </p>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'shared-rules',
       title: 'Shared rules at every level',
       headline: 'Shared rules at every level',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         All levels read the same theme variables. Controls and cards use <code>--ps-border</code>;
         panels and popups use <code>--ps-panel-border</code>. Selection uses
@@ -102,28 +105,30 @@
         without component-specific overrides.
       </p>
       <p>
-        Continue with <a href={base + '/docs/design-system/responsive-layout/'}>responsive layout</a
-        >
+        Continue with <a href={base + '/docs/design-system/responsive-layout/'}>
+          responsive layout
+        </a>
         and <a href={base + '/docs/design-system/backgrounds/'}>backgrounds</a>. Then the
         <a href={base + '/docs/components/'}>component catalog</a> shows the concrete APIs and live examples.
       </p>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'imports',
       title: 'Choose the level you need',
       headline: 'Choose the level you need',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Import from the package root, or from the optional atoms, molecules, organisms and layouts
         entry points. Both paths refer to the same components; existing root imports keep working.
         Import the shared stylesheet once in your root layout.
       </p>
       <CodeBlock language="svelte" code={examples[0].code} />
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>
 
 <style>

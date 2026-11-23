@@ -22,9 +22,9 @@
   }));
 </script>
 
-{#snippet icon()}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-    ><path d="M4 4h16v12H8l-4 4V4Z" /></svg
-  >{/snippet}
+{#snippet icon()}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M4 4h16v12H8l-4 4V4Z" />
+  </svg>{/snippet}
 {#snippet brand()}<a href="/" class:customBrand={custom}><strong>Example brand</strong></a>
   <p>Composable Svelte components for content-driven websites.</p>{/snippet}
 

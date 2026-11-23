@@ -35,11 +35,11 @@
 </script>
 
 <script lang="ts">
-  import ComponentPlayground from '$lib/ComponentPlayground.svelte';
+  import ComponentPlayground from '#lib/ComponentPlayground.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -72,7 +72,8 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         These low-level building blocks are useful when composing a custom section. Card supplies
         the same article used by the two collection components; Image supplies shared responsive and
@@ -85,8 +86,8 @@
         <code>cardTone</code> option to this prop. The selected surface follows the theme; custom surface
         snippets retain control over their own paint.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -95,15 +96,16 @@
       headline: 'Card props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        Generic <code
-          >T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a></code
-        >; required item. Optional cardSize (m), shadow (false), mediaAspect (3/2; also 4/3 or 1/1),
-        mediaFit (contain), reserveEyebrow (otherwise follows the item), textAlign (start/center),
-        headingLevel (inherited, standalone h2), media(item), surface(item), children(item) and
-        onready(parts). Card forwards HTMLElement attributes, including class and event callbacks;
-        card identity/accessibility attributes remain component-owned.
+        Generic <code>
+          T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>
+        </code>; required item. Optional cardSize (m), shadow (false), mediaAspect (3/2; also 4/3 or
+        1/1), mediaFit (contain), reserveEyebrow (otherwise follows the item), textAlign
+        (start/center), headingLevel (inherited, standalone h2), media(item), surface(item),
+        children(item) and onready(parts). Card forwards HTMLElement attributes, including class and
+        event callbacks; card identity/accessibility attributes remain component-owned.
       </p>
       <h3 id="complete-carditem-model">
         Complete <a href={base + '/docs/reference/types/#card-item'}>CardItem</a> model
@@ -127,9 +129,9 @@
             <tr>
               <td><code>title</code></td>
               <td><code>string</code>, required</td>
-              <td
-                >Inherited heading; its native link covers the entire card when href is supplied</td
-              >
+              <td>
+                Inherited heading; its native link covers the entire card when href is supplied
+              </td>
             </tr>
             <tr>
               <td><code>itemKey</code></td>
@@ -158,27 +160,25 @@
             </tr>
             <tr>
               <td><code>image</code></td>
-              <td
-                ><code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code>
+              </td>
               <td>Optional default media</td>
             </tr>
             <tr>
               <td><code>footer</code></td>
-              <td
-                ><code><a href={base + '/docs/reference/types/#inline-text'}>InlineText</a></code
-                ></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#inline-text'}>InlineText</a></code>
+              </td>
               <td>Optional footer</td>
             </tr>
             <tr>
               <td><code>actions</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#content-action'}>ContentAction</a
-                  >[]</code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>[]
+                </code>
+              </td>
               <td>Independent action links</td>
             </tr>
           </tbody>
@@ -203,10 +203,11 @@
         the slot; standalone Image behavior is unchanged. Cards without media omit the image frame.
       </p>
       <p>
-        <code
-          >onready?: (parts: <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a
-          >&lt;T&gt;) =&gt; void | (() =&gt; void)</code
-        >
+        <code>
+          onready?: (parts: <a href={base + '/docs/reference/types/#card-elements'}>
+            CardElements
+          </a>&lt;T&gt;) =&gt; void | (() =&gt; void)
+        </code>
         supplies item, root, surface, media, copy and title elements after mount. Its returned cleanup
         runs when the item/callback changes or the card unmounts. Keyed moves and media-format changes
         preserve the same occurrence. The media element is the inner fitting rectangle; media-frame is
@@ -217,8 +218,8 @@
         children remain separate native controls; no anchors are nested. These hooks support external
         enhancements without a rendering-engine dependency.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -227,7 +228,8 @@
       headline: 'Accessibility and SSR',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Enable <code>shadow</code> for a subtle resting shadow. Hover animates the border to the accent
         color and strengthens the shadow; cards without a resting shadow gain a light one. Leaving restores
@@ -244,6 +246,6 @@
         <a href={base + '/sections/card-grid/'}>CardGridSection</a>,
         <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

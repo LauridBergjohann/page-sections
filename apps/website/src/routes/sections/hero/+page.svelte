@@ -35,10 +35,10 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
-  import SectionPlayground from '$lib/SectionPlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
+  import SectionPlayground from '#lib/SectionPlayground.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -62,8 +62,10 @@
       title: 'Try it',
       headline: 'Try it yourself',
       background: { color: 'standard', size: 'standard' }
-    }}><SectionPlayground kind="hero" /></Section
+    }}
   >
+    <SectionPlayground kind="hero" />
+  </Section>
   <SectionAnatomy kind="hero" />
   <Section
     section={{
@@ -72,14 +74,15 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Use HeroSection for a prominent introduction or call to action. It combines an optional
         image with a readable copy area; omit the image for a text-led hero.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -88,7 +91,8 @@
       headline: 'Props and configuration',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -102,13 +106,13 @@
           <tbody>
             <tr>
               <td><code>section</code></td>
-              <td
-                ><code
-                  >Omit&lt;<a href={base + '/docs/reference/types/#hero-section-data'}
-                    >HeroSectionData</a
-                  >, 'type'&gt;</code
-                ></td
-              >
+              <td>
+                <code>
+                  Omit&lt;<a href={base + '/docs/reference/types/#hero-section-data'}>
+                    HeroSectionData
+                  </a>, 'type'&gt;
+                </code>
+              </td>
               <td>Required</td>
             </tr>
             <tr>
@@ -120,8 +124,9 @@
         </table>
       </div>
       <p>
-        Section accepts all <a href={base + '/docs/components/section/'}>SectionDefinition fields</a
-        >, with these additions and specific behaviors:
+        Section accepts all <a href={base + '/docs/components/section/'}>
+          SectionDefinition fields
+        </a>, with these additions and specific behaviors:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -136,9 +141,9 @@
           <tbody>
             <tr>
               <td><code>image</code></td>
-              <td
-                ><code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code>
+              </td>
               <td>Optional; loaded eagerly</td>
             </tr>
             <tr>
@@ -153,12 +158,11 @@
             </tr>
             <tr>
               <td><code>actions</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#content-action'}>ContentAction</a
-                  >[]</code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>[]
+                </code>
+              </td>
               <td>Optional native primary/secondary/text links</td>
             </tr>
             <tr>
@@ -183,15 +187,15 @@
             </tr>
             <tr>
               <td><code>headingLevel</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a></code
-                > (1-6)</td
-              >
-              <td
-                >Inherits the surrounding level; standalone h2; set headingLevel: 1 for the page
-                title</td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a>
+                </code> (1-6)
+              </td>
+              <td>
+                Inherits the surrounding level; standalone h2; set headingLevel: 1 for the page
+                title
+              </td>
             </tr>
           </tbody>
         </table>
@@ -200,8 +204,8 @@
         The outer Section suppresses its duplicate header and references the hero heading for its
         accessible label. The data-driven discriminator is <code>type: 'hero'</code>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -210,12 +214,13 @@
       headline: 'Styling, responsive behavior and accessibility',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Copy uses responsive padding/margins and a maximum width of 44rem. The heading scales from
-        2rem to 2.75rem at the default xl size. The optional panel mixes <code
-          >--ps-section-standard</code
-        >
+        2rem to 2.75rem at the default xl size. The optional panel mixes <code>
+          --ps-section-standard
+        </code>
         with transparency; corners use <code>--ps-radius</code>. The image fills the hero's
         background area, respecting
         <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>'s fit choice. Content can
@@ -241,6 +246,6 @@
         text and an independent headingSize (m/l/xl, default xl). Actions start 32px below the
         heading group. The composition size remains independent of the heading size.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

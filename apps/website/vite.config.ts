@@ -1,9 +1,11 @@
+import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { fileURLToPath } from 'node:url';
 
 export default defineConfig(({ command }) => ({
-  plugins: [sveltekit()],
+  plugins: [sveltekit({ preprocess: vitePreprocess(), adapter: adapter({ pages: 'build', assets: 'build' }), paths: { base: (process.env.BASE_PATH ?? '') as '' | `/${string}`, relative: false } })],
   // Develop against the workspace sources. Production still consumes the built package.
   resolve:
     command === 'serve'

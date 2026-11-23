@@ -44,8 +44,10 @@
         active={open}
         aria-expanded={open}
         aria-controls="example-settings"
-        onclick={() => (open = !open)}><Settings size={20} /></IconButton
+        onclick={() => (open = !open)}
       >
+        <Settings size={20} />
+      </IconButton>
       <Popup id="example-settings" title="Settings" bind:open {anchor}>
         <h3>Appearance</h3>
         <ButtonGroup

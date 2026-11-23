@@ -10,10 +10,10 @@
     type CardElements
   } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
-  import { catalogItems } from '$lib/examples';
+  import { catalogItems } from '#lib/examples.js';
   import type { CardMediaAspect } from '@page-sections/core';
   let mediaAspect: CardMediaAspect = $state('1/1');
   const integrationItems = catalogItems.map((item) => ({
@@ -48,16 +48,16 @@
   <p>Native card content remains available when an enhancement attaches to its elements.</p>
   <button onclick={() => (items = items.toReversed())}>Reverse items</button>
   <button onclick={() => (items = items.slice(1))}>Remove item</button>
-  <output data-testid="attached">{attached}</output><output data-testid="detached"
-    >{detached}</output
-  >
-  <label
-    >Media format <select bind:value={mediaAspect}
-      ><option value="3/2">3:2</option><option value="4/3">4:3</option><option value="1/1"
-        >1:1</option
-      ></select
-    ></label
-  >
+  <output data-testid="attached">{attached}</output><output data-testid="detached">
+    {detached}
+  </output>
+  <label>
+    Media format <select bind:value={mediaAspect}>
+      <option value="3/2">3:2</option><option value="4/3">4:3</option><option value="1/1">
+        1:1
+      </option>
+    </select>
+  </label>
   <CardGridSection
     section={{ id: 'adapter-cards', title: 'Adapter cards' }}
     list={items}
@@ -88,8 +88,9 @@
   <Section
     section={{ id: 'diagnostic', title: 'Diagnostic', background: { color: 'standardToMuted' } }}
     onDiagnostic={() => (diagnostics += 1)}
-    ><output data-testid="diagnostics">{diagnostics}</output></Section
   >
+    <output data-testid="diagnostics">{diagnostics}</output>
+  </Section>
   <Header
     label="Nested menu example"
     items={[

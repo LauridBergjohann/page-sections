@@ -8,10 +8,10 @@
 </script>
 
 <script lang="ts">
-  import ComponentPlayground from '$lib/ComponentPlayground.svelte';
-  import { base } from '$app/paths';
+  import ComponentPlayground from '#lib/ComponentPlayground.svelte';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -45,16 +45,19 @@
       headline: 'An image inside your content',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Image renders a picture and img using an <a
-          href={base + '/docs/reference/types/#image-data'}>ImageData</a
-        > object. The src and alt fields are required. Describe the image’s purpose in alt, or use an
-        empty string for a purely decorative image.
+          href={base + '/docs/reference/types/#image-data'}
+        >
+          ImageData
+        </a> object. The src and alt fields are required. Describe the image’s purpose in alt, or use
+        an empty string for a purely decorative image.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'image-props-and-complete-imagedata-model',
@@ -62,7 +65,8 @@
       headline: 'Props and image fields',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The image prop is required. eager is an optional boolean, default false, which switches
         loading from lazy to eager. The component has no children or general HTML attribute
@@ -74,8 +78,8 @@
         image within the frame. srcset and sizes are forwarded to the fallback img; provide your own
         image assets and responsive variants.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'color-mode',
@@ -83,14 +87,15 @@
       headline: 'Light and dark sources',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         srcDark supplies an alternative for dark mode. An ancestor PageShell provides an explicit
         light or dark mode; without that context the image follows the browser color preference.
         Setting a CSS theme attribute alone does not provide this Svelte context.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'choose',
@@ -98,15 +103,16 @@
       headline: 'Image or ImageSection?',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        Use Image inside your own markup or a card. Use <a href={base + '/sections/image/'}
-          >ImageSection</a
-        >
+        Use Image inside your own markup or a card. Use <a href={base + '/sections/image/'}>
+          ImageSection
+        </a>
         for a complete page region with a heading and optional accompanying text. When composing standalone
         low-level components, import the shared stylesheet once as explained in
         <a href={base + '/docs/foundations/installation/'}>Installation</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

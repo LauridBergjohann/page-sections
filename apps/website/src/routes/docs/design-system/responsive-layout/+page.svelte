@@ -24,11 +24,11 @@
 </script>
 
 <script lang="ts">
-  import DeviceLayouts from '$lib/DeviceLayouts.svelte';
+  import DeviceLayouts from '#lib/DeviceLayouts.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -76,15 +76,16 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Page Sections distinguishes <strong>viewport width</strong> from
         <strong>content-container width</strong>. A narrow article in a wide window should still use
         a narrow content grid. Dimensions are CSS pixels; physical screen size and device pixel
         ratio do not select a breakpoint.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -93,7 +94,8 @@
       headline: 'Viewport classification and page width',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -144,19 +146,19 @@
         </table>
       </div>
       <p>
-        The 1536px cap is canonical. <code
-          >resolvePageLayout(<a href={base + '/docs/reference/types/#responsive-layout-input'}
-            >ResponsiveLayoutInput</a
-          >)</code
-        > resolves content/menu positions, including optional scrollbar and safe-area reservations. The
-        native navigation uses the available containing-block width; mount it at the viewport level.
+        The 1536px cap is canonical. <code>
+          resolvePageLayout(<a href={base + '/docs/reference/types/#responsive-layout-input'}>
+            ResponsiveLayoutInput
+          </a>)
+        </code> resolves content/menu positions, including optional scrollbar and safe-area reservations.
+        The native navigation uses the available containing-block width; mount it at the viewport level.
       </p>
       <p>
         Header shows its item disclosure below 1200px and satellites at 1600px. ContentPage uses its
         sidebars from 1600px. Image/video pairs split at a 600px container; artwork heroes at 840px.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -165,7 +167,8 @@
       headline: 'Content grids',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -226,15 +229,15 @@
         wide selects m before its 32px total horizontal padding is subtracted.
       </p>
       <p>
-        For container width c, column count n and gap g, column width is <code
-          >max(0, (c - (n + 1) * g) / n)</code
-        >. A span of s columns occupies <code>s * columnWidth + (s - 1) * g</code>, capped by
+        For container width c, column count n and gap g, column width is <code>
+          max(0, (c - (n + 1) * g) / n)
+        </code>. A span of s columns occupies <code>s * columnWidth + (s - 1) * g</code>, capped by
         container width. Numeric core resolution caps c at 1536px and normalizes negative/nonfinite
         input to zero. The section content wrapper also caps at 1536px; full layout can extend its
         outer surface.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -243,7 +246,8 @@
       headline: 'Explicit responsive blocks',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
         Below 600px the blocks stack as full rows. On s they split evenly; on m and l the first is
@@ -252,8 +256,8 @@
         client warnings for invalid/clamped values. Visual order follows source order; no dense
         placement is applied.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -262,7 +266,8 @@
       headline: 'Card layout',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Cards use the same media-plus-text layout in CardGridSection and CarouselSection: S/M span 2
         columns, L spans 4 (3 on the S grid). Media ratios are 3/2 (default), 4/3 or 1/1; titles
@@ -281,16 +286,16 @@
       </p>
       <p>
         Nested text and panels omit redundant outer gutters. A nested grid or card collection
-        establishes a new grid and owns one gutter pair; nested declarative grids should use <code
-          >&lt;Section inset&gt;</code
-        >. Breakpoint selection always uses that section container before padding.
+        establishes a new grid and owns one gutter pair; nested declarative grids should use <code>
+          &lt;Section inset&gt;
+        </code>. Breakpoint selection always uses that section container before padding.
       </p>
       <p>
         See <a href={base + '/docs/reference/core-api/'}>Core API</a> and
         <a href={base + '/docs/reference/tokens/'}>CSS Variables and Layout Tokens</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -298,7 +303,8 @@
       title: 'Sidebar geometry',
       headline: 'Sidebar geometry'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>resolveContentPageLayout</code> keeps the main-menu geometry independent. Below 1600px no
         desktop rail is reserved. XL uses 248px panels with 12px gaps and outer margins. The unoccupied
@@ -307,6 +313,6 @@
         at 1536px. A docked content menu includes the gap in its surface; set contentMenuDetached to true
         for the freestanding rectangle.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

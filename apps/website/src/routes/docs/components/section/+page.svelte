@@ -8,10 +8,10 @@
 </script>
 
 <script lang="ts">
-  import SectionCatalog from '$lib/SectionCatalog.svelte';
-  import { base } from '$app/paths';
+  import SectionCatalog from '#lib/SectionCatalog.svelte';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -35,15 +35,16 @@
       headline: 'Write your content inside Section',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Section renders a semantic section element. Its section prop contains the shared metadata;
         its children are ordinary Svelte markup. Use it for a content structure that does not need a
         dedicated ready-made component.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'configuration',
@@ -51,13 +52,14 @@
       headline: 'Configure the region',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        The required section prop is a <a href={base + '/docs/reference/types/#section-definition'}
-          >SectionDefinition</a
-        >. It requires id and title. Add headline for a visible heading, then optionally eyebrow and
-        introduction for supporting text. The type reference lists every field, including layout,
-        spacing, divider and the nested
+        The required section prop is a <a href={base + '/docs/reference/types/#section-definition'}>
+          SectionDefinition
+        </a>. It requires id and title. Add headline for a visible heading, then optionally eyebrow
+        and introduction for supporting text. The type reference lists every field, including
+        layout, spacing, divider and the nested
         <a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a> object.
       </p>
       <p>
@@ -65,8 +67,8 @@
         full, wide, narrow or inherit. spacing can be none, tight, normal, loose or spacious.
         Top-level sections default to normal spacing; nested sections default to none.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'component-props',
@@ -74,7 +76,8 @@
       headline: 'Component-only props',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <dl>
         <dt><code>children</code></dt>
         <dd>
@@ -95,16 +98,17 @@
         <dd>
           Optional callback for background normalization diagnostics; see <a
             href={base + '/docs/reference/types/#section-background-diagnostic'}
-            >SectionBackgroundDiagnostic</a
-          >.
+          >
+            SectionBackgroundDiagnostic
+          </a>.
         </dd>
       </dl>
       <p>
         Standard HTML attributes, class and event callbacks are forwarded to the section element.
         Set its identity through section.id, not a separate id prop.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'composition',
@@ -112,16 +116,19 @@
       headline: 'Compose with the page and its theme',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Inside ContentPage, sections register their labels and anchors and inherit heading context.
         They also participate in connected background surfaces. Read <a
-          href={base + '/docs/design-system/backgrounds/'}>Backgrounds and groups</a
+          href={base + '/docs/design-system/backgrounds/'}
         >
+          Backgrounds and groups
+        </a>
         for surface behavior and
         <a href={base + '/docs/advanced/create-your-own-section/'}>Create your own section</a> to wrap
         the base component in a reusable design.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

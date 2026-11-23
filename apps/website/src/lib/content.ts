@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { base } from '#lib/paths.js';
 import type { CardItem, ImageData, PageData } from '@page-sections/core';
 
 export const landscape: ImageData = {

@@ -1,5 +1,11 @@
 # @page-sections/core
 
+## 0.6.0
+
+### Patch Changes
+
+- de4a878: Add independent border and panelBorder theme colors for controls and surfaces. Icon buttons and ButtonGroups share the card border; panels and navigation use the panel border, with bottom-only edges on docked headers. Transparent colors disable edges without changing layout.
+
 ## 0.5.1
 
 ### Patch Changes

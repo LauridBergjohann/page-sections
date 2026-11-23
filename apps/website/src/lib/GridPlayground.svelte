@@ -17,25 +17,25 @@
 
 <div class="playground">
   <div class="playground-controls">
-    <label
-      >Container<select bind:value={narrow} disabled={!ready}
-        ><option value={false}>Available width</option><option value={true}>590px maximum</option
-        ></select
-      ></label
-    >
-    <label
-      >Emphasis<select bind:value={reverse} disabled={!ready}
-        ><option value={false}>First block</option><option value={true}>Second block</option
-        ></select
-      ></label
-    >
+    <label>
+      Container<select bind:value={narrow} disabled={!ready}>
+        <option value={false}>Available width</option><option value={true}>590px maximum</option>
+      </select>
+    </label>
+    <label>
+      Emphasis<select bind:value={reverse} disabled={!ready}>
+        <option value={false}>First block</option><option value={true}>Second block</option>
+      </select>
+    </label>
   </div>
   <div style:max-width={narrow ? '590px' : '100%'} class="grid-preview">
-    <ContentGrid
-      ><ContentBlock span={first}><div class="sample">Main story</div></ContentBlock><ContentBlock
-        span={second}><div class="sample">Related thought</div></ContentBlock
-      ></ContentGrid
-    >
+    <ContentGrid>
+      <ContentBlock span={first}><div class="sample">Main story</div></ContentBlock><ContentBlock
+        span={second}
+      >
+        <div class="sample">Related thought</div>
+      </ContentBlock>
+    </ContentGrid>
   </div>
 </div>
 <LiveCode code={source} />

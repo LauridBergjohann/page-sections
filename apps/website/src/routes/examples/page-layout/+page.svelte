@@ -9,8 +9,8 @@
     SidebarNavigation,
     Footer
   } from '@page-sections/svelte';
-  import { base } from '$app/paths';
-  import NavigationIcon from '$lib/NavigationIcon.svelte';
+  import { base } from '#lib/paths.js';
+  import NavigationIcon from '#lib/NavigationIcon.svelte';
   let kind = $state('content-page');
   let enabled = $state(true);
   onMount(() => {

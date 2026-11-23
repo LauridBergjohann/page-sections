@@ -8,10 +8,10 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
-  import AtomicPreview from '$lib/AtomicPreview.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
+  import AtomicPreview from '#lib/AtomicPreview.svelte';
 </script>
 
 <WebsitePage
@@ -35,7 +35,8 @@
       headline: 'Related choices',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         A ButtonGroup is a molecule: it combines a list of controls, shared borders and an animated
         selection indicator. Your application owns the selected value. Give the group a label and
@@ -48,29 +49,34 @@
         the indicator. Items with href are links. The optional icon snippet receives the same item; iconOnly
         hides the visible label but keeps its accessible name.
       </p>
-    </div></Section
-  ><Section
+    </div>
+  </Section><Section
     section={{
       id: 'try-it-yourself',
       title: 'Try it yourself',
       headline: 'Try it yourself',
       background: { color: 'standard' }
-    }}><div class="prose"><AtomicPreview kind="group" /></div></Section
-  ><Section
+    }}
+  >
+    <div class="prose"><AtomicPreview kind="group" /></div>
+  </Section><Section
     section={{
       id: 'example',
       title: 'Keep the selection in application state',
       headline: 'Keep the selection in application state',
       background: { color: 'standard' }
-    }}><div class="prose"><CodeBlock language="svelte" code={examples[0].code} /></div></Section
-  ><Section
+    }}
+  >
+    <div class="prose"><CodeBlock language="svelte" code={examples[0].code} /></div>
+  </Section><Section
     section={{
       id: 'behavior',
       title: 'Focus and appearance',
       headline: 'Focus and appearance',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Tab moves between native controls and Space activates a button. Disabled items cannot be
         activated. The selected background follows the first and last corner shapes, with no inner
@@ -82,6 +88,6 @@
         Use <a href={base + '/docs/components/popup/'}>Popup</a> to place choices in a floating settings
         panel.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

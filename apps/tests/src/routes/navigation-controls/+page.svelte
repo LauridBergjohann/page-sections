@@ -31,10 +31,9 @@
       />
     </div>
     <label><input type="checkbox" bind:checked={longLabels} /> Longer labels</label>
-    <label
-      >Direction<select bind:value={direction}><option>ltr</option><option>rtl</option></select
-      ></label
-    >
+    <label>
+      Direction<select bind:value={direction}><option>ltr</option><option>rtl</option></select>
+    </label>
     <ButtonGroup
       label="Native links"
       items={[

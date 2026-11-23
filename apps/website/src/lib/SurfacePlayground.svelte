@@ -23,26 +23,28 @@
   }}
 >
   <div class="playground-controls">
-    <label
-      >Background<select bind:value={color} disabled={!ready}
-        >{#each ['transparent', 'standard', 'muted', 'standardToMuted', 'mutedToStandard', 'transparentToStandard', 'standardToTransparent', 'transparentToMuted', 'mutedToTransparent'] as value}<option
-            >{value}</option
-          >{/each}</select
-      ></label
-    >
-    <label
-      >Background size<select bind:value={size} disabled={!ready}
-        ><option>standard</option><option>full</option></select
-      ></label
-    >
+    <label>
+      Background<select bind:value={color} disabled={!ready}>
+        {#each ['transparent', 'standard', 'muted', 'standardToMuted', 'mutedToStandard', 'transparentToStandard', 'standardToTransparent', 'transparentToMuted', 'mutedToTransparent'] as value}<option>
+            {value}
+          </option>{/each}
+      </select>
+    </label>
+    <label>
+      Background size<select bind:value={size} disabled={!ready}>
+        <option>standard</option><option>full</option>
+      </select>
+    </label>
     <button
       type="button"
       disabled={!ready}
       onclick={() => {
         color = 'transparentToStandard';
         size = 'full';
-      }}>Reset</button
+      }}
     >
+      Reset
+    </button>
   </div>
   <p>
     The next two sections are part of this page. Select full to paint across the viewport, including
@@ -82,9 +84,11 @@
     <span>Content edge</span>
   </div>
 </Section>
-<Section section={{ id: 'surface-source', title: 'Live source', background: { color: 'standard' } }}
-  ><LiveCode code={source} /></Section
+<Section
+  section={{ id: 'surface-source', title: 'Live source', background: { color: 'standard' } }}
 >
+  <LiveCode code={source} />
+</Section>
 
 <style>
   p {

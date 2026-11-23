@@ -8,11 +8,11 @@
 </script>
 
 <script lang="ts">
-  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
-  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
-  import { base } from '$app/paths';
+  import PageLayoutDiagram from '#lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '#lib/PageLayoutPreview.svelte';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -62,7 +62,8 @@
       headline: 'Structure before appearance',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Use one h1 to identify the page, h2 for its main topics and h3 for subtopics. Choose the
         level by the relationship between topics. Choose the visual size separately: headingLevel
@@ -74,8 +75,8 @@
         level. You can set headingLevel explicitly when your content requires it.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'anchors',
@@ -83,7 +84,8 @@
       headline: 'Make every topic addressable',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The section id becomes its HTML id. Use a stable lowercase slug and keep it unique across
         all sections on the page, including nested ones. Link to it with href="#soil" or append
@@ -93,8 +95,8 @@
         The title is the concise navigation label. The headline is the visible heading; omitting it
         on a base Section also omits that section from the automatic h2/h3 content index.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'index',
@@ -102,7 +104,8 @@
       headline: 'Let the page build its index',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         ContentPage with showContentMenu collects sections with h2 and h3 headings. The resulting
         ContentMenu is the “On this page” navigation; it tracks the active section after JavaScript
@@ -110,10 +113,12 @@
       </p>
       <p>
         For a manually supplied list, SectionNavigation accepts <a
-          href={base + '/docs/reference/types/#section-navigation-item'}>SectionNavigationItem[]</a
-        >. For a ready-made page title, see
+          href={base + '/docs/reference/types/#section-navigation-item'}
+        >
+          SectionNavigationItem[]
+        </a>. For a ready-made page title, see
         <a href={base + '/sections/headings/'}>HeadingSection</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

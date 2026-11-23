@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
 </script>
 
 <WebsitePage page={{ title: 'Reference', pageTitle: 'Reference · Page Sections' }} showContentMenu>
@@ -23,12 +23,13 @@
       headline: 'Read a property type',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         A type describes the values a property accepts. string, number and boolean are simple
-        values. A name such as <a href={base + '/docs/reference/types/#content-action'}
-          >ContentAction</a
-        > describes an object with its own fields; click that name to inspect them. A suffix [] means
+        values. A name such as <a href={base + '/docs/reference/types/#content-action'}>
+          ContentAction
+        </a> describes an object with its own fields; click that name to inspect them. A suffix [] means
         an array, and a question mark marks an optional field. A union separated by | offers alternatives.
       </p>
       <p>
@@ -37,8 +38,8 @@
         already selects the renderer, so it does not need that discriminator; a data-driven section
         array does.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'references',
@@ -46,7 +47,8 @@
       headline: 'Choose a reference',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ul>
         <li>
           <a href={base + '/docs/reference/types/'}>Data types</a> — Objects, fields, required and optional
@@ -65,8 +67,8 @@
           breakpoints, dimensions and component variables.
         </li>
       </ul>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'common-lookups',
@@ -74,7 +76,8 @@
       headline: 'Common object properties',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a> describes a link
         action. <a href={base + '/docs/reference/types/#image-data'}>ImageData</a> describes an
@@ -82,6 +85,6 @@
         describes a surface. <a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a> describes
         one navigation entry and its children.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import {
     Card,
     Image,
@@ -67,46 +67,46 @@
 <div class="playground-controls">
   {#if kind === 'card'}
     <label>Card title<input bind:value={title} disabled={!ready} /></label>
-    <label class="toggle"
-      ><input type="checkbox" bind:checked={shadow} disabled={!ready} /> Card shadow</label
-    >
-    <label class="toggle"
-      ><input type="checkbox" bind:checked={description} disabled={!ready} /> Show description</label
-    >
-    <label
-      >Card size<select bind:value={cardSize} disabled={!ready}
-        ><option>s</option><option>m</option><option>l</option></select
-      ></label
-    >
-    <label
-      >Tone<select bind:value={tone} disabled={!ready}
-        ><option>standard</option><option>muted</option></select
-      ></label
-    >
-    <label
-      >Media aspect<select bind:value={mediaAspect} disabled={!ready}
-        ><option>3/2</option><option>4/3</option><option>1/1</option></select
-      ></label
-    >
+    <label class="toggle">
+      <input type="checkbox" bind:checked={shadow} disabled={!ready} /> Card shadow
+    </label>
+    <label class="toggle">
+      <input type="checkbox" bind:checked={description} disabled={!ready} /> Show description
+    </label>
+    <label>
+      Card size<select bind:value={cardSize} disabled={!ready}>
+        <option>s</option><option>m</option><option>l</option>
+      </select>
+    </label>
+    <label>
+      Tone<select bind:value={tone} disabled={!ready}>
+        <option>standard</option><option>muted</option>
+      </select>
+    </label>
+    <label>
+      Media aspect<select bind:value={mediaAspect} disabled={!ready}>
+        <option>3/2</option><option>4/3</option><option>1/1</option>
+      </select>
+    </label>
   {:else}
-    <label
-      >Image aspect<select bind:value={aspect} disabled={!ready}
-        ><option>none</option><option>4/3</option><option>16/9</option><option>2/1</option><option
-          >square</option
-        ></select
-      ></label
-    >
-    <label
-      >Preview color mode<select bind:value={mode} disabled={!ready}
-        ><option>light</option><option>dark</option></select
-      ></label
-    >
+    <label>
+      Image aspect<select bind:value={aspect} disabled={!ready}>
+        <option>none</option><option>4/3</option><option>16/9</option><option>2/1</option><option>
+          square
+        </option>
+      </select>
+    </label>
+    <label>
+      Preview color mode<select bind:value={mode} disabled={!ready}>
+        <option>light</option><option>dark</option>
+      </select>
+    </label>
   {/if}
-  <label
-    >Image fit<select bind:value={fit} disabled={!ready}
-      ><option>contain</option><option>cover</option></select
-    ></label
-  >
+  <label>
+    Image fit<select bind:value={fit} disabled={!ready}>
+      <option>contain</option><option>cover</option>
+    </select>
+  </label>
   <button type="button" onclick={reset} disabled={!ready}>Reset</button>
 </div>
 <p>
