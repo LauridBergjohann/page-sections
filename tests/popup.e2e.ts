@@ -199,7 +199,7 @@ for (const width of [390, 1000, 1920]) {
       await surface('.settings-panel');
       await expect(page.locator('.settings-panel').getByRole('heading', { name: 'Appearance' })).toBeVisible();
       const hierarchy = await page.locator('.settings-panel').evaluate(panel => {
-        const title = getComputedStyle(panel.querySelector('strong')!);
+        const title = getComputedStyle(panel.querySelector('.ps-popup-title')!);
         const label = getComputedStyle(panel.querySelector('h3')!);
         return { titleSize: parseFloat(title.fontSize), labelSize: parseFloat(label.fontSize), titleWeight: Number(title.fontWeight), labelWeight: Number(label.fontWeight) };
       });
@@ -224,3 +224,69 @@ for (const width of [390, 1000, 1920]) {
     }
   });
 }
+
+
+test('atomic popup headings, compact alignment and standalone dismissal stay consistent', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto('/docs/components/popup/');
+  const centered = await page.locator('.header').evaluate(header => {
+    const a = header.querySelector('.mobile-menu > summary')!.getBoundingClientRect();
+    const b = header.querySelector('.brand')!.getBoundingClientRect();
+    return Math.abs(a.y + a.height / 2 - b.y - b.height / 2);
+  });
+  expect(centered).toBeLessThanOrEqual(1);
+  await page.locator('.settings > summary').click();
+  const settingsTypography = await page.locator('.settings-panel > .ps-popup-title').evaluate(node => {
+    const style = getComputedStyle(node); return [style.fontSize, style.fontWeight, style.lineHeight];
+  });
+  await page.keyboard.press('Escape');
+  await page.locator('.ps-content-menu-slot summary').click();
+  const tocTypography = await page.locator('.ps-content-menu-slot .popup .ps-popup-title').evaluate(node => {
+    const style = getComputedStyle(node); return [style.fontSize, style.fontWeight, style.lineHeight];
+  });
+  expect(tocTypography).toEqual(settingsTypography);
+  await page.keyboard.press('Escape');
+  const trigger = page.getByRole('button', { name: 'Example settings', exact: true });
+  await trigger.scrollIntoViewIfNeeded();
+  for (const dismissal of ['escape', 'outside', 'toggle']) {
+    await trigger.click();
+    await expect(page.locator('#example-settings:popover-open')).toBeVisible();
+    await expect(blur(page)).toHaveCount(1);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await page.locator('#example-settings').getByRole('button', { name: 'Dark', exact: true }).click();
+    await expect(page.locator('#example-settings').getByRole('button', { name: 'Dark', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    if (dismissal === 'escape') { await page.keyboard.press('Escape'); await expect(trigger).toBeFocused(); }
+    else if (dismissal === 'toggle') await trigger.click();
+    else await page.mouse.click(3, 850);
+    await expect(blur(page)).toHaveCount(0);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  }
+});
+
+test('atomic documentation has a progressive path and preserves legacy links', async ({ page }) => {
+  await page.goto('/docs/building-blocks/card/');
+  await expect(page).toHaveURL(/\/docs\/components\/card\//);
+  await page.goto('/docs/components/buttons/');
+  await page.getByRole('button', { name: 'Primary action', exact: true }).click();
+  await expect(page.locator('[data-atomic-preview=buttons]').getByRole('status')).toContainText('1 times');
+  await page.getByRole('button', { name: 'Reset count', exact: true }).click();
+  await expect(page.locator('[data-atomic-preview=buttons]').getByRole('status')).toContainText('0 times');
+  await expect(page.getByRole('button', { name: 'Disabled', exact: true })).toBeDisabled();
+  await page.goto('/docs/');
+  const path = await page.locator('#learning-path ol a').allTextContents();
+  expect(path.indexOf('Design system')).toBeLessThan(path.indexOf('Components'));
+  await page.goto('/docs/components/');
+  for (const name of ['PrimaryButton', 'SecondaryButton', 'IconButton', 'Popup', 'Card', 'ButtonGroup', 'Header', 'Footer', 'Sections']) {
+    await expect(page.locator('main').getByRole('link', { name, exact: true })).toBeVisible();
+  }
+});
+
+
+test('atomic property tables stay inside a small viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  for (const route of ['buttons', 'popup']) {
+    await page.goto('/docs/components/' + route + '/');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await expect(page.locator('.table-scroll')).toHaveAttribute('tabindex', '0');
+  }
+});

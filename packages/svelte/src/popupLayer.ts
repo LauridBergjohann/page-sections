@@ -1,7 +1,9 @@
 /** Native top-layer enhancement. The semantic DOM and component state remain the owners. */
 const key = Symbol.for('page-sections.popup-layer.v1');
+/** Explicit triggers used by standalone Popup compositions. Weak keys need no global cleanup. */
+export const popupAnchors = new WeakMap<HTMLElement, HTMLElement>();
 const panelsSelector =
-  '.ps-submenu:not([hidden]), details[open] > .settings-panel, details[open] > .mobile-panel, details[open] > .popup, [data-ps-popup], [data-spatial-navigation-popup]';
+  'details[open] > .ps-popup, details[open] > .settings-panel, details[open] > .mobile-panel, details[open] > .popup, [data-ps-popup], [data-spatial-navigation-popup]';
 type Controller = { retain(root: HTMLElement): () => void };
 
 function createController(): Controller {
@@ -83,7 +85,7 @@ function createController(): Controller {
       document.querySelectorAll<HTMLElement>('.ps-navigation .header, .ps-navigation .satellite')
     );
     for (const panel of panels) {
-      const summary = panel.parentElement?.querySelector<HTMLElement>(':scope > summary');
+      const summary = popupAnchors.get(panel) ?? panel.parentElement?.querySelector<HTMLElement>(':scope > summary');
       if (summary && ![...clear].some((node) => node.contains(summary))) clear.add(summary);
     }
     const holes = [...clear]
@@ -124,12 +126,14 @@ function createController(): Controller {
           width: width + 'px',
           padding,
           boxSizing: 'border-box',
-          border: '1px solid var(--ps-panel-border)',
-          borderTopWidth: headerRect ? '0px' : '1px',
-          borderRadius: 'var(--ps-radius)',
-          boxShadow: 'var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)))',
-          background: 'var(--ps-section-standard)',
-          color: 'var(--ps-ink)',
+          // Preserve legacy adapter surfaces; new Popup owns its visual styling.
+          ...(panel.classList.contains('ps-popup') ? {} : {
+            border: '1px solid var(--ps-panel-border)',
+            borderTopWidth: headerRect ? '0px' : '1px',
+            borderRadius: 'var(--ps-radius)',
+            boxShadow: 'var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)))',
+            background: 'var(--ps-section-standard)', color: 'var(--ps-ink)'
+          }),
           maxHeight: Math.max(0, innerHeight - top - 12) + 'px',
           overflowY: 'auto'
         });

@@ -25,6 +25,12 @@ Requires Svelte `^5.56.4` and Node `>=22.12.0`. No SvelteKit, CSS framework, ico
 
 Start with [Getting started](https://page-sections.bergjohann.com/getting-started/), explore the [documentation](https://page-sections.bergjohann.com/docs/), or look up components in the [Svelte API reference](https://page-sections.bergjohann.com/docs/reference/svelte-api/).
 
+## Components and atomic design
+
+Use atoms (PrimaryButton, SecondaryButton, IconButton, Heading, Image), molecules (ButtonGroup, Card, Popup), and organisms (Header, Footer, Sections) independently or compose them. PageShell, ContentPage and the grid helpers provide page composition. All existing root imports remain available; optional `/atoms`, `/molecules`, `/organisms` and `/layouts` subpaths group the same components.
+
+See the [atomic design guide](https://page-sections.bergjohann.com/docs/design-system/atomic-design/) and [complete component catalog](https://page-sections.bergjohann.com/docs/components/) for live examples, data types and customization.
+
 ## License
 
 [Mozilla Public License 2.0](LICENSE). Attribution is retained in [NOTICE](NOTICE).

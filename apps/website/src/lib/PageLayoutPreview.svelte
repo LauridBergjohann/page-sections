@@ -36,7 +36,8 @@
     >Preview viewport<select bind:value={width} disabled={!ready}
       ><option value={0}>Fit available space</option><option value={390}>Phone · 390px</option
       ><option value={768}>Tablet · 768px</option><option value={1280}>Laptop · 1280px</option
-      ><option value={1920}>Desktop · 1920px</option><option value={2560}>Ultrawide · 2560px</option
+      ><option value={1920}>Desktop · 1920px</option><option value={2560}
+        >Wide desktop · 2560px</option
       ></select
     ></label
   >
@@ -47,9 +48,9 @@
 <p class="hint">
   This is a real page in its own viewport. Wide views are scaled to fit here; use the separate tab
   to inspect them at full size. Follow the topic links or open the menus to try their behavior.
-  {#if kind === 'header'}Choose Desktop or Ultrawide to see the satellites beside the header; in
-    smaller windows they appear inside Settings.{:else if kind === 'footer'}Choose Desktop or
-    Ultrawide to see the footer link groups. Scroll inside the preview to reach the footer.{/if}
+  {#if kind === 'header'}Choose Desktop or Wide desktop to see the satellites beside the header; in
+    smaller windows they appear inside Settings.{:else if kind === 'footer'}Choose Desktop or Wide
+    desktop to see the footer link groups. Scroll inside the preview to reach the footer.{/if}
 </p>
 <div class="preview-host" bind:this={host} style:height={`${680 * scale}px`}>
   <iframe

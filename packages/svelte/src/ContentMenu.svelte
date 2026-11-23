@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Popup from './Popup.svelte';
   import { fitSidebar } from './fitSidebar.js';
   import { popupLayer } from './popupLayer.js';
   import { onMount } from 'svelte';
@@ -79,7 +80,7 @@
 
 {#snippet links()}
   <nav aria-label={label}>
-    <p>{label}</p>
+    <Popup inline title={label}>
     <ul>
       {#each items as item (item.id)}
         <li data-heading-level={item.headingLevel}>
@@ -94,6 +95,7 @@
         </li>
       {/each}
     </ul>
+    </Popup>
   </nav>
 {/snippet}
 
@@ -111,9 +113,9 @@
       stroke-width="2"><path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1" /></svg
     ></summary
   >
-  <div class="popup ps-sidebar-scroll ps-shadow-popup">
+  <Popup class="popup ps-sidebar-scroll" disclosure>
     {@render links()}
-  </div>
+  </Popup>
 </details>
 
 <style>
@@ -123,10 +125,6 @@
   nav {
     padding: 1rem;
     font-size: 0.875rem;
-  }
-  p {
-    margin: 0 1.25rem 0.75rem 0;
-    font-weight: 650;
   }
   ul {
     list-style: none;
@@ -195,21 +193,7 @@
     display: none;
   }
   .desktop { border: 1px solid var(--ps-panel-border); border-inline-start-width: var(--ps-content-menu-border-start, 0px); }
-  .popup {
-    position: absolute;
-    top: calc(100% + 8px);
-    margin: 0;
-    padding: 0;
-    border: 1px solid var(--ps-panel-border);
-    right: 0;
-    width: min(280px, calc(100vw - 24px));
-    max-height: calc(100dvh - 96px);
-    overflow: auto;
-    overscroll-behavior: contain;
-    background: var(--ps-section-standard);
-    border-radius: var(--ps-radius);
-    box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)));
-  }
+  .mobile :global(.popup) { padding: 0; }
   @media (min-width: 1600px) {
     .mobile {
       display: none;

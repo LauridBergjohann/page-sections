@@ -1,4 +1,8 @@
 <script lang="ts">
+  import { PrimaryButton, SecondaryButton, IconButton } from '@page-sections/svelte/atoms';
+  import { Popup } from '@page-sections/svelte/molecules';
+  import { Header } from '@page-sections/svelte/organisms';
+  import { PageShell } from '@page-sections/svelte/layouts';
   import { ContentPage, HeadingSection, CardGridSection, CarouselSection, CodeSection, Sections, type InlineText } from '@page-sections/svelte';
   import { resolveCardLayout, type CardItem, type CardMediaAspect, type SurfaceTone } from '@page-sections/core';
   const cards: CardItem[] = [{ id: 'one', title: 'Independent consumer', href: '#collection' }];
@@ -19,3 +23,7 @@
   ] }]} />
   <CardGridSection section={{ id: 'editorial', title: 'Editorial' }} itemSpan={{ xs: 4, s: 3, m: 4, l: 4 }} list={[{ id: 'story', title: 'A full story', description: 'Readable copy', footer, actions: [{ label: 'Read more', href: '#collection' }] }]} />
 </ContentPage>
+
+<PageShell><Header>{#snippet brand()}Atomic consumer{/snippet}</Header>
+<PrimaryButton href="#collection">Primary</PrimaryButton><SecondaryButton>Secondary</SecondaryButton>
+<IconButton label="Settings">?</IconButton><Popup inline title="Shared popup">Popup content</Popup></PageShell>

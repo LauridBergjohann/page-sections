@@ -50,7 +50,27 @@
               <th>Reference</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody
+            ><tr
+              ><td><code>PrimaryButton</code></td><td
+                >Action atom; <a href={base + '/docs/components/buttons/#props'}>ButtonProps</a
+                >.</td
+              ><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td></tr
+            ><tr
+              ><td><code>SecondaryButton</code></td><td
+                >Action atom; <a href={base + '/docs/components/buttons/#props'}>ButtonProps</a
+                >.</td
+              ><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td></tr
+            ><tr
+              ><td><code>IconButton</code></td><td
+                >Action atom; <a href={base + '/docs/components/buttons/#props'}>IconButtonProps</a
+                >.</td
+              ><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td></tr
+            ><tr
+              ><td><code>Popup</code></td><td
+                >Shared floating panel; optional title, bindable open.</td
+              ><td><a href={base + '/docs/components/popup/'}>Popup</a></td></tr
+            >
             <tr>
               <td><code>ContentPage</code></td>
               <td>Main content; page</td>
@@ -73,17 +93,17 @@
             <tr>
               <td><code>Section</code></td>
               <td>General content region; section</td>
-              <td><a href={base + '/docs/building-blocks/section/'}>Section</a></td>
+              <td><a href={base + '/docs/components/section/'}>Section</a></td>
             </tr>
             <tr>
               <td><code>ContentGrid</code></td>
               <td>Responsive block grid; none</td>
-              <td><a href={base + '/docs/building-blocks/grids/'}>Content grids</a></td>
+              <td><a href={base + '/docs/components/grids/'}>Content grids</a></td>
             </tr>
             <tr>
               <td><code>ContentBlock</code></td>
               <td>Explicit grid span; none</td>
-              <td><a href={base + '/docs/building-blocks/grids/'}>Content grids</a></td>
+              <td><a href={base + '/docs/components/grids/'}>Content grids</a></td>
             </tr>
             <tr>
               <td><code>SectionSurfaceGroup</code></td>
@@ -148,12 +168,12 @@
             <tr>
               <td><code>Card</code></td>
               <td>Standalone article; item</td>
-              <td><a href={base + '/docs/building-blocks/card/'}>Card</a></td>
+              <td><a href={base + '/docs/components/card/'}>Card</a></td>
             </tr>
             <tr>
               <td><code>Image</code></td>
               <td>Shared picture/img renderer; image</td>
-              <td><a href={base + '/docs/building-blocks/image/'}>Image</a></td>
+              <td><a href={base + '/docs/components/image/'}>Image</a></td>
             </tr>
             <tr>
               <td><code>Header</code></td>

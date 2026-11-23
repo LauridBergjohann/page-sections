@@ -530,8 +530,8 @@ console.log(background.cssBackground);`
                 ></td
               >
               <td
-                ><a href={base + '/docs/building-blocks/grids/'}>Section fields</a>; navigation item
-                is Pick&lt;<a href={base + '/docs/reference/types/#section-definition'}
+                ><a href={base + '/docs/components/grids/'}>Section fields</a>; navigation item is
+                Pick&lt;<a href={base + '/docs/reference/types/#section-definition'}
                   >SectionDefinition</a
                 >, id/title&gt;</td
               >
@@ -643,7 +643,7 @@ console.log(background.cssBackground);`
                 <code><a href={base + '/docs/reference/types/#image-aspect'}>ImageAspect</a></code
                 ></td
               >
-              <td><a href={base + '/docs/building-blocks/card/'}>Card and Image</a></td>
+              <td><a href={base + '/docs/components/card/'}>Card and Image</a></td>
             </tr>
             <tr>
               <td

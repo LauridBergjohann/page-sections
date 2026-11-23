@@ -120,8 +120,7 @@
         </table>
       </div>
       <p>
-        Section accepts all <a href={base + '/docs/building-blocks/section/'}
-          >SectionDefinition fields</a
+        Section accepts all <a href={base + '/docs/components/section/'}>SectionDefinition fields</a
         >, with these additions and specific behaviors:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
@@ -229,7 +228,7 @@
         client initialization.
       </p>
       <p>
-        Related: <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>,
+        Related: <a href={base + '/docs/components/card/'}>Card and Image</a>,
         <a href={base + '/docs/page-layout/content-page/'}>ContentPage and PageShell</a>.
       </p>
       <p>

@@ -58,12 +58,12 @@
           page with a header, main content, sidebars and footer.
         </li>
         <li>
-          <a href={base + '/docs/building-blocks/'}>Components</a> — Explore the base Section, individual
-          cards, images and column layouts.
+          <a href={base + '/docs/design-system/'}>Design system</a> — Understand atomic design, widths,
+          viewport breakpoints, container responsiveness and connected backgrounds.
         </li>
         <li>
-          <a href={base + '/docs/design-system/'}>Design system</a> — Understand widths, viewport breakpoints,
-          container responsiveness and connected backgrounds.
+          <a href={base + '/docs/components/'}>Components</a> — Explore the base Section, individual cards,
+          images and column layouts.
         </li>
         <li>
           <a href={base + '/docs/advanced/'}>Advanced</a> — Build your own section, render content data

@@ -156,8 +156,8 @@
           links: [
             { label: 'Foundations', href: base + '/docs/foundations/' },
             { label: 'Page layout', href: base + '/docs/page-layout/' },
-            { label: 'Components', href: base + '/docs/building-blocks/' },
             { label: 'Design system', href: base + '/docs/design-system/' },
+            { label: 'Components', href: base + '/docs/components/' },
             { label: 'Advanced', href: base + '/docs/advanced/' },
             { label: 'Reference', href: base + '/docs/reference/' }
           ]

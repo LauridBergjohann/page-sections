@@ -178,7 +178,7 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
         <a href={base + '/docs/reference/core-api/'}>Core API</a>.
       </p>
       <p>
-        Related: <a href={base + '/docs/building-blocks/grids/'}>Section and ContentGrid</a>,
+        Related: <a href={base + '/docs/components/grids/'}>Section and ContentGrid</a>,
         <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>.
       </p>
     </div></Section

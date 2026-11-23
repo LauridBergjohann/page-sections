@@ -182,7 +182,7 @@ declare module '@page-sections/core' {
           <a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a>[keyof
           <a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a>]</code
         >. Every built-in entry extends the
-        <a href={base + '/docs/building-blocks/grids/'}>shared SectionDefinition</a>.
+        <a href={base + '/docs/components/grids/'}>shared SectionDefinition</a>.
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -414,7 +414,7 @@ declare module '@page-sections/core' {
       <p>
         <a href={base + '/docs/reference/types/#card-item'}>CardItem</a> and
         <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>
-        are fully documented in <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>;
+        are fully documented in <a href={base + '/docs/components/card/'}>Card and Image</a>;
         <a href={base + '/docs/reference/types/#video-data'}>VideoData</a>
         in <a href={base + '/sections/video/'}>VideoSection</a>. Header uses
         <a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a>,

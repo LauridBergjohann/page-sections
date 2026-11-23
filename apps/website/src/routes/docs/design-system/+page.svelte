@@ -70,6 +70,10 @@
     ><div class="prose">
       <ul>
         <li>
+          <a href={base + '/docs/design-system/atomic-design/'}>Atomic design</a> — Atoms, molecules,
+          organisms and page composition, with shared visual rules.
+        </li>
+        <li>
           <a href={base + '/docs/design-system/responsive-layout/'}
             >Layout sizes and responsiveness</a
           > — Viewport breakpoints, container grid sizes, card sizes and calculation helpers.

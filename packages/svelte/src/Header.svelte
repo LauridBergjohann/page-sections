@@ -1,4 +1,5 @@
 ﻿<script lang="ts">
+  import Popup from './Popup.svelte';
   import { tick, untrack, type Snippet } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import type { MenuItem } from '@page-sections/core';
@@ -55,7 +56,7 @@
         <nav class="mobile-navigation" aria-label={label}>
         <details bind:this={mobile} class="mobile-menu">
           <summary aria-label={menuLabel}>{#if menuIcon}{@render menuIcon()}{:else}<span aria-hidden="true">&#9776;</span>{/if}</summary>
-          <div class="mobile-panel ps-shadow-popup"><MainMenu {items} variant="mobile" icon={itemIcon} /></div>
+          <Popup class="mobile-panel" disclosure><MainMenu {items} variant="mobile" icon={itemIcon} /></Popup>
         </details>
         </nav>
       {/if}
@@ -67,11 +68,12 @@
           <summary aria-label={settingsLabel} title={settingsLabel}>
             {#if settingsIcon}{@render settingsIcon()}{:else}<span aria-hidden="true">&#9881;</span>{/if}
           </summary>
-          <div class="settings-panel ps-shadow-popup">
-            <strong>{settingsLabel}</strong>
+          <Popup class="settings-panel" disclosure title={settingsLabel}>
+            <div class="settings-panel-content">
             {#if left}<div>{@render left()}</div>{/if}
             {#if right}<div>{@render right()}</div>{/if}
-          </div>
+            </div>
+          </Popup>
         </details>
       {/if}
     </div>
@@ -91,7 +93,9 @@
   .ps-navigation { position: relative; padding-top: var(--ps-menu-top); min-height: var(--ps-nav-height); }
   .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; background: var(--ps-section-standard); box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
   .brand, .tools { flex-shrink: 0; }
-  .brand { min-width: 0; }
+  .brand { min-width: 0; display: flex; align-items: center; }
+  .mobile-navigation { display: flex; align-items: center; }
+  .mobile-menu, .settings { line-height: 1; }
   .menu { flex: 1; min-width: 0; }
   .satellite { display: none; }
   .header::after { content: ''; position: absolute; inset: 0; border: solid var(--ps-panel-border); border-width: 0 0 1px; border-radius: inherit; pointer-events: none; z-index: 3; }
@@ -103,10 +107,10 @@
   summary:hover { background: var(--ps-selection, var(--ps-section-muted)); }
   details[open] > summary { color: var(--ps-accent); background: var(--ps-selection, var(--ps-section-muted)); }
   @media (prefers-reduced-motion: reduce) { summary { transition: none; } }
-  .settings-panel > strong { font-size: 1.125rem; font-weight: 650; }
-  .settings-panel { position: absolute; top: 100%; right: 12px; width: min(280px, calc(100vw - 24px)); display: grid; gap: 20px; padding: 20px; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; border-radius: var(--ps-radius); box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))); z-index: 2; }
-  .mobile-panel { position: absolute; top: 100%; inset-inline: 12px; border-radius: var(--ps-radius); box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))); max-height: calc(100dvh - var(--ps-nav-height)); overflow: auto; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; padding: 12px; z-index: 2; }
-  .mobile-panel :global(ul) { flex-direction: column; align-items: stretch; }
+  .header :global(.settings-panel) { top: 100%; right: 12px; padding: 20px; border-top-width: 0; z-index: 2; }
+  .settings-panel-content { display: grid; gap: 20px; }
+  .header :global(.mobile-panel) { top: 100%; inset-inline: 12px; width: auto; padding: 12px; border-top-width: 0; z-index: 2; }
+  .header :global(.mobile-panel ul) { flex-direction: column; align-items: stretch; }
   .desktop-menu { display: none; }
   @media (max-width: 1599.98px) { .header { width: 100%; } }
   @media (max-width: 599.98px) { .header { gap: .25rem; } }

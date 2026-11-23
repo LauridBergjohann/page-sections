@@ -113,7 +113,7 @@
           </tbody>
         </table>
       </div>
-      <p>Alongside <a href={base + '/docs/building-blocks/section/'}>SectionDefinition</a>:</p>
+      <p>Alongside <a href={base + '/docs/components/section/'}>SectionDefinition</a>:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>

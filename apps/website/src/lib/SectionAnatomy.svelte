@@ -69,7 +69,7 @@
     <div class="prose">
       {#each notes[kind] as note}<p>{note}</p>{/each}
       <p>
-        All sections also share <a href={base + '/docs/building-blocks/section/'}
+        All sections also share <a href={base + '/docs/components/section/'}
           >layout, spacing and surface options</a
         >.
       </p>

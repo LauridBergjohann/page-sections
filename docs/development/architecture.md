@@ -37,3 +37,13 @@ Some foundational layout code carries upstream attribution. The legal and proven
 Structured blocks and panels share RichTextContent/InlineText/Actions. A private section context carries heading level, nesting and page kind; it is request-local and not a public deep import. CardElements callbacks provide external attachment boundaries without a GPU or application dependency.
 
 The optional @page-sections/svelte/highlight entry uses the Shiki peer. It is not imported by the main component entry. CodeBlock accepts derived tokens and always renders source as escaped text; CodeSection and JSON code records use the same implementation.
+
+## Atomic design layers
+
+The Svelte public API is grouped into atoms, molecules, organisms and layouts. Each layer has a source barrel in packages/svelte/src and a matching published subpath. The root index retains every existing component import. These barrels export the original implementations, not copies; internal relative imports remain direct to avoid circular barrel dependencies.
+
+Atoms (buttons, heading, image, inline text) have no application navigation state. Molecules compose related controls and content. Popup owns floating surface styling, title typography and common dismissal; popupLayer owns the shared native top layer and single blur backdrop. Header, MainMenu, ContentMenu and website search use Popup rather than redefining its appearance. Organisms compose complete page regions and sections. Layout components provide page/grid context without owning application content.
+
+Button.svelte is the internal common implementation behind PrimaryButton, SecondaryButton and IconButton. Actions uses the public atoms; native summary elements remain summaries so disclosures work before hydration. Native group controls preserve their grouped selection semantics.
+
+Document a new public component in the matching layer barrel, root index, website component catalog and Svelte API index. Put concepts in /docs/design-system/ before APIs in /docs/components/. Keep former /docs/building-blocks/ URLs as permanent redirects.

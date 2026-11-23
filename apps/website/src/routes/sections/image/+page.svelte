@@ -116,7 +116,7 @@
           </tbody>
         </table>
       </div>
-      <p>Alongside <a href={base + '/docs/building-blocks/section/'}>SectionDefinition</a>:</p>
+      <p>Alongside <a href={base + '/docs/components/section/'}>SectionDefinition</a>:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -170,7 +170,7 @@
         content, it stacks below 600px container width. At 600px and above, the media/text ratio is
         1.7:1; right places the image visually after the text. DOM reading order remains image then
         text. <code>srcDark</code>, dimensions, ratios and fit are implemented by Image, described
-        in <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>.
+        in <a href={base + '/docs/components/card/'}>Card and Image</a>.
       </p>
       <p>
         Images are lazy-loaded and decoded asynchronously. Supply intrinsic width/height to reserve

@@ -198,7 +198,7 @@
       </p>
       <p>
         Related: <a href={base + '/sections/panel/'}>Panels</a>,
-        <a href={base + '/docs/building-blocks/grids/'}>Section and grids</a>,
+        <a href={base + '/docs/components/grids/'}>Section and grids</a>,
         <a href={base + '/docs/advanced/data-and-custom-sections/'}>Data models</a>.
       </p>
     </div></Section

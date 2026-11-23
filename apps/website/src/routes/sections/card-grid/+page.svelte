@@ -280,9 +280,9 @@
         hydration.
       </p>
       <p>
-        Related: <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>,
+        Related: <a href={base + '/docs/components/card/'}>Card and Image</a>,
         <a href={base + '/sections/carousel/'}>CarouselSection</a>,
-        <a href={base + '/docs/building-blocks/grids/'}>Section and grids</a>.
+        <a href={base + '/docs/components/grids/'}>Section and grids</a>.
       </p>
     </div></Section
   >

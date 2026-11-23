@@ -1,15 +1,18 @@
 <script lang="ts">
+  import PrimaryButton from './PrimaryButton.svelte';
+  import SecondaryButton from './SecondaryButton.svelte';
   import { safeHref, type ContentAction } from '@page-sections/core';
   let { actions = [] }: { actions?: ContentAction[] } = $props();
 </script>
 {#if actions.length}<div class="ps-actions">
-  {#each actions as action}<a href={safeHref(action.href)} data-action={action.variant ?? 'text'}>{action.label}<span aria-hidden="true"> &rarr;</span></a>{/each}
+  {#each actions as action}
+    {#if action.variant === 'primary'}<PrimaryButton href={action.href} data-action="primary">{action.label}<span aria-hidden="true"> &rarr;</span></PrimaryButton>
+    {:else if action.variant === 'secondary'}<SecondaryButton href={action.href} data-action="secondary">{action.label}<span aria-hidden="true"> &rarr;</span></SecondaryButton>
+    {:else}<a href={safeHref(action.href)} data-action="text">{action.label}<span aria-hidden="true"> &rarr;</span></a>{/if}
+  {/each}
 </div>{/if}
 <style>
   .ps-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
   a { display: inline-block; font-weight: 600; text-underline-offset: .2em; }
-  [data-action='primary'], [data-action='secondary'] { padding: .75rem 1.25rem; border: 1px solid var(--ps-accent); border-radius: var(--ps-radius); text-decoration: none; }
-  [data-action='primary'] { background: var(--ps-accent); color: var(--ps-on-accent); }
-  [data-action='secondary'] { background: var(--ps-section-standard); color: var(--ps-accent); }
   a:hover { filter: brightness(.9); }
 </style>

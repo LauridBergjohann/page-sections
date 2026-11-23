@@ -10,8 +10,8 @@ const entry = (href: string, icon?: string): MenuItem => {
 const groups = [
   ['Foundations', 'foundations', 'layers'],
   ['Page layout', 'page-layout', 'panels-top-left'],
-  ['Components', 'building-blocks', 'blocks'],
   ['Design system', 'design-system', 'settings'],
+  ['Components', 'components', 'blocks'],
   ['Advanced', 'advanced', 'settings'],
   ['Reference', 'reference', 'book']
 ];

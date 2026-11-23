@@ -170,8 +170,8 @@ const highlighted = await highlightCode(code, 'typescript');
   >
     <div class="prose">
       <p>
-        Place a rich-text section and a code section in a <a
-          href={base + '/docs/building-blocks/grids/'}>grid</a
+        Place a rich-text section and a code section in a <a href={base + '/docs/components/grids/'}
+          >grid</a
         >. Reorder its blocks to put the code first. Small containers stack the blocks in reading
         order; larger containers display them side by side.
       </p>

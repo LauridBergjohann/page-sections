@@ -96,7 +96,7 @@
         onselectionchange reports the occurrence nearest the leading edge after a native scrollend;
         duplicate content identities require unique occurrence keys. Initial placement and callback
         are enhancements; SSR starts at the first item. oncardready has the same lifecycle as
-        <a href={base + '/docs/building-blocks/card/'}>Card</a>.
+        <a href={base + '/docs/components/card/'}>Card</a>.
       </p>
     </div></Section
   >

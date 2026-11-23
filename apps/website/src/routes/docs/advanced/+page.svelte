@@ -25,10 +25,9 @@
     }}
     ><div class="prose">
       <p>
-        These guides assume you have used <a href={base + '/docs/building-blocks/section/'}
-          >Section</a
-        > inside ContentPage and understand its shared fields. Start with a small custom Svelte component;
-        introduce a data model when your content needs to come from files or a CMS.
+        These guides assume you have used <a href={base + '/docs/components/section/'}>Section</a> inside
+        ContentPage and understand its shared fields. Start with a small custom Svelte component; introduce
+        a data model when your content needs to come from files or a CMS.
       </p>
     </div></Section
   >
