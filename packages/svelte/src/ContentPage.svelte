@@ -81,7 +81,7 @@
       <Breadcrumbs items={page.breadcrumbs ?? []} />
     </div>
     {#if leftSidebar}<aside class="ps-left-sidebar">
-        <div class="sidebar-panel ps-sidebar-scroll" use:fitSidebar>{@render leftSidebar()}</div>
+        <div class="sidebar-panel ps-sidebar-scroll ps-shadow-surface" use:fitSidebar>{@render leftSidebar()}</div>
       </aside>{/if}
     <div class="ps-page-content">
       <SectionSurfaceGroup>
@@ -171,7 +171,7 @@
       padding-block: 0.75rem;
       background: var(--ps-section-standard);
       border-radius: var(--ps-radius);
-      box-shadow: var(--ps-surface-shadow);
+      box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow));
     }
     .ps-content-menu-slot {
       grid-column: 3;

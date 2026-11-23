@@ -49,13 +49,13 @@
  <div class="ps-navigation-rack">
   <div class="menu-backdrop" aria-hidden="true"></div>
   <div bind:this={root} class="ps-navigation">
-    {#if left}<div class="satellite left">{@render left()}</div>{/if}
-    <div class="header ps-content-width">
+    {#if left}<div class="satellite left ps-shadow-navigation">{@render left()}</div>{/if}
+    <div class="header ps-content-width ps-shadow-navigation">
       {#if items}
         <nav class="mobile-navigation" aria-label={label}>
         <details bind:this={mobile} class="mobile-menu">
           <summary aria-label={menuLabel}>{#if menuIcon}{@render menuIcon()}{:else}<span aria-hidden="true">&#9776;</span>{/if}</summary>
-          <div class="mobile-panel"><MainMenu {items} variant="mobile" icon={itemIcon} /></div>
+          <div class="mobile-panel ps-shadow-popup"><MainMenu {items} variant="mobile" icon={itemIcon} /></div>
         </details>
         </nav>
       {/if}
@@ -67,7 +67,7 @@
           <summary aria-label={settingsLabel} title={settingsLabel}>
             {#if settingsIcon}{@render settingsIcon()}{:else}<span aria-hidden="true">&#9881;</span>{/if}
           </summary>
-          <div class="settings-panel">
+          <div class="settings-panel ps-shadow-popup">
             <strong>{settingsLabel}</strong>
             {#if left}<div>{@render left()}</div>{/if}
             {#if right}<div>{@render right()}</div>{/if}
@@ -75,7 +75,7 @@
         </details>
       {/if}
     </div>
-    {#if right}<div class="satellite right">{@render right()}</div>{/if}
+    {#if right}<div class="satellite right ps-shadow-navigation">{@render right()}</div>{/if}
   </div>
  </div>
 </header>
@@ -89,7 +89,7 @@
   [data-scroll='fixed'] { height: var(--ps-nav-height); }
   [data-scroll='fixed'] .ps-navigation-rack { position: fixed; inset: 0 0 auto; }
   .ps-navigation { position: relative; padding-top: var(--ps-menu-top); min-height: var(--ps-nav-height); }
-  .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; background: var(--ps-section-standard); box-shadow: var(--ps-navigation-shadow); }
+  .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; background: var(--ps-section-standard); box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
   .brand, .tools { flex-shrink: 0; }
   .brand { min-width: 0; }
   .menu { flex: 1; min-width: 0; }
@@ -104,8 +104,8 @@
   details[open] > summary { color: var(--ps-accent); background: var(--ps-selection, var(--ps-section-muted)); }
   @media (prefers-reduced-motion: reduce) { summary { transition: none; } }
   .settings-panel > strong { font-size: 1.125rem; font-weight: 650; }
-  .settings-panel { position: absolute; top: 100%; right: 12px; width: min(280px, calc(100vw - 24px)); display: grid; gap: 20px; padding: 20px; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); z-index: 2; }
-  .mobile-panel { position: absolute; top: 100%; inset-inline: 12px; border-radius: var(--ps-radius); box-shadow: var(--ps-navigation-shadow); max-height: calc(100dvh - var(--ps-nav-height)); overflow: auto; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; padding: 12px; z-index: 2; }
+  .settings-panel { position: absolute; top: 100%; right: 12px; width: min(280px, calc(100vw - 24px)); display: grid; gap: 20px; padding: 20px; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; border-radius: var(--ps-radius); box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))); z-index: 2; }
+  .mobile-panel { position: absolute; top: 100%; inset-inline: 12px; border-radius: var(--ps-radius); box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))); max-height: calc(100dvh - var(--ps-nav-height)); overflow: auto; background: var(--ps-section-standard); border: 1px solid var(--ps-panel-border); border-top: 0; padding: 12px; z-index: 2; }
   .mobile-panel :global(ul) { flex-direction: column; align-items: stretch; }
   .desktop-menu { display: none; }
   @media (max-width: 1599.98px) { .header { width: 100%; } }
@@ -114,7 +114,7 @@
   @media (min-width: 1600px) {
     .header::after { border-width: 1px; }
     .header { border-radius: var(--ps-radius); }
-    .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-section-standard); border-radius: 12px; box-shadow: var(--ps-navigation-shadow); }
+    .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-section-standard); border-radius: 12px; box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
     .left { left: var(--ps-satellite-inset); } .right { right: var(--ps-satellite-inset); }
     .settings { display: none; }
   }

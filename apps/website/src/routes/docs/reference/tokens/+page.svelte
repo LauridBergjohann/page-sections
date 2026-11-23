@@ -144,7 +144,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             <tr>
               <td><code>--ps-navigation-shadow</code></td>
               <td>0 4px 8px rgb(0 0 0 / 12%)</td>
-              <td>Header and satellite elevation; none disables it</td>
+              <td
+                >Header and satellite elevation; popups inherit it unless overridden; none disables
+                it</td
+              >
             </tr>
             <tr>
               <td><code>--ps-scroll-offset</code></td>
@@ -570,6 +573,106 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
   <Section
     section={{
+      id: 'shadows',
+      title: 'Shadows',
+      headline: 'Control shadows',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        Set these variables on <code>:root</code>, your <code>.ps-shell</code> theme or a local wrapper.
+        Defaults are resolved at each surface, so descendants inherit your controls without JavaScript.
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Variable</th><th>Default</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr
+              ><td><code>--ps-shadow-color</code></td><td>#000</td><td
+                >Shadow color. Prefer an opaque color; its alpha, if supplied, also reduces opacity.</td
+              ></tr
+            >
+            <tr
+              ><td><code>--ps-shadow-size</code></td><td>1</td><td
+                >Nonnegative multiplier for offset and blur. 2 doubles their size.</td
+              ></tr
+            >
+            <tr
+              ><td><code>--ps-shadow-intensity</code></td><td>1</td><td
+                >Nonnegative opacity multiplier. 0 hides standard shadows, 0.5 halves their opacity,
+                2 doubles it. Opacity is capped at 100%.</td
+              ></tr
+            >
+          </tbody>
+        </table>
+      </div>
+      <pre><code
+          >{'.ps-shell {\n  --ps-shadow-color: #172330;\n  --ps-shadow-size: 1.5;\n  --ps-shadow-intensity: 0.75;\n}\n\n.ps-shell[data-ps-theme="dark"] {\n  --ps-shadow-intensity: 1.5;\n}'}</code
+        ></pre>
+      <p>
+        For a different direction, spread or multiple shadow layers, use a complete CSS
+        <code>box-shadow</code> value in a role override. Set it to <code>none</code> to disable that
+        role. Complete overrides take precedence over the shared controls.
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Override</th><th>Default appearance</th><th>Surfaces</th></tr></thead>
+          <tbody>
+            <tr
+              ><td><code>--ps-navigation-shadow</code></td><td>0 4px 8px, 12% opacity</td><td
+                >Header and satellites</td
+              ></tr
+            >
+            <tr
+              ><td><code>--ps-surface-shadow</code></td><td>0 3px 8px, 12% opacity</td><td
+                >Contained sections, sidebars, the contents trigger, and cards with shadow enabled</td
+              ></tr
+            >
+            <tr
+              ><td><code>--ps-popup-shadow</code></td><td>Navigation shadow</td><td
+                >Menu, settings, search and contents popups</td
+              ></tr
+            >
+            <tr
+              ><td><code>--ps-card-hover-shadow</code></td><td>0 8px 20px, 20% opacity</td><td
+                >Hover and keyboard focus on cards with shadow enabled</td
+              ></tr
+            >
+            <tr
+              ><td><code>--ps-footer-shadow</code></td><td>Surface shadow</td><td>Footer panel</td
+              ></tr
+            >
+          </tbody>
+        </table>
+      </div>
+      <pre><code
+          >{'.ps-shell {\n  --ps-popup-shadow: 0 8px 24px rgb(0 0 0 / 18%);\n  --ps-footer-shadow: none;\n}'}</code
+        ></pre>
+      <p>
+        Internal <code>--ps-default-navigation-shadow</code>,
+        <code>--ps-default-surface-shadow</code>
+        and <code>--ps-default-card-hover-shadow</code> resolve the shared controls on each surface. Use
+        the public controls above rather than setting these internal values.
+      </p>
+      <p>
+        The role variables are optional overrides, rather than precomputed values on <code
+          >:root</code
+        >. When using them for your own components, supply a fallback, for example
+        <code>box-shadow: var(--ps-surface-shadow, 0 3px 8px rgb(0 0 0 / 12%))</code>.
+      </p>
+      <p>
+        Increasing the shared size also increases the section shadow's clipping allowance. For
+        unusually large complete <code>--ps-surface-shadow</code> overrides, set
+        <code>--ps-surface-shadow-extent</code> to a sufficient CSS length, such as
+        <code>48px</code>. Internal edges between joined sections remain clipped. Docked contents
+        panels remain flat, allowing the section shadow to fall across them. Controls do not add
+        shadows to surfaces that are intentionally flat, such as cards with shadow disabled at rest.
+      </p>
+    </div>
+  </Section>
+  <Section
+    section={{
       background: { color: 'standard', size: 'standard' },
       id: 'sidebar-tokens',
       title: 'Sidebar tokens',
@@ -591,11 +694,14 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       </p>
       <p>
         <code>--ps-surface-shadow</code> controls the subtle left-sidebar and contained section
-        shadow. Internal <code>--ps-shadow-top-clip</code> and <code>--ps-shadow-bottom-clip</code> prevent
-        seams between connected section surfaces.
+        shadow. Internal <code>--ps-shadow-top-clip</code> and <code>--ps-shadow-bottom-clip</code>
+        prevent seams between connected section surfaces. Internal
+        <code>--ps-section-border-top</code>, <code>--ps-section-border-bottom</code> and
+        <code>--ps-section-surface-overlap</code> keep their outline continuous.
       </p>
       <p>
-        Internal <code>--ps-content-menu-radius</code> and <code>--ps-content-menu-shadow</code>
+        Internal <code>--ps-content-menu-border-start</code>, <code>--ps-content-menu-radius</code>
+        and <code>--ps-content-menu-shadow</code>
         switch the right panel between docked and freestanding surfaces.
       </p>
     </div></Section

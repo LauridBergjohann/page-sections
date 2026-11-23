@@ -87,7 +87,7 @@
             >{/if}{item.label}</a
         >
         {#if item.children?.length}
-          <div class="ps-submenu" hidden={open !== item.id}>
+          <div class="ps-submenu ps-shadow-popup" hidden={open !== item.id}>
             <ul>
               {#each item.children as child (child.id)}
                 <li>
@@ -177,7 +177,7 @@
     background: var(--ps-section-standard);
     border: 1px solid var(--ps-panel-border); border-top: 0;
     border-radius: var(--ps-radius);
-    box-shadow: var(--ps-navigation-shadow);
+    box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)));
     z-index: 2;
   }
   .ps-submenu ul {

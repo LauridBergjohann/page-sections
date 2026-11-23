@@ -994,3 +994,50 @@ test('content menu omits only its docked edge and transparent sections stay unfr
     await expect(surface).toHaveCSS('border-top-width', '0px');
   }
 });
+
+
+test('shared shadow controls inherit locally and complete role overrides take precedence', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 900 });
+  await page.goto('/docs/foundations/installation/');
+  const header = page.locator('.website-header .header');
+  const surface = page.locator('#page-heading > .ps-section-surface');
+  await expect(header).toHaveCSS('box-shadow', /0px 4px 8px 0px/);
+  await expect(surface).toHaveCSS('box-shadow', /0px 3px 8px 0px/);
+  await page.locator('.ps-shell').evaluate(el => {
+    (el as HTMLElement).style.setProperty('--ps-shadow-color', '#ff0000');
+    (el as HTMLElement).style.setProperty('--ps-shadow-size', '2');
+    (el as HTMLElement).style.setProperty('--ps-shadow-intensity', '2');
+  });
+  await expect(header).toHaveCSS('box-shadow', /0px 8px 16px 0px/);
+  await expect(header).toHaveCSS('box-shadow', /color\(srgb 1 0 0 \/ 0.24\)/);
+  await expect(surface).toHaveCSS('box-shadow', /0px 6px 16px 0px/);
+  await expect(surface).toHaveCSS('clip-path', /-24px/);
+  await header.locator('.settings > summary').click();
+  const popup = page.locator('.settings-panel:popover-open');
+  await expect(popup).toHaveCSS('box-shadow', await header.evaluate(el => getComputedStyle(el).boxShadow));
+  await popup.evaluate(el => (el as HTMLElement).style.setProperty('--ps-shadow-color', '#00ff00'));
+  await expect(popup).toHaveCSS('box-shadow', /color\(srgb 0 1 0 \/ 0.24\)/);
+  await page.locator('.ps-shell').evaluate(el => {
+    (el as HTMLElement).style.setProperty('--ps-navigation-shadow', '1px 2px 3px blue');
+    (el as HTMLElement).style.setProperty('--ps-popup-shadow', 'none');
+    (el as HTMLElement).style.setProperty('--ps-shadow-intensity', '0');
+  });
+  await expect(header).toHaveCSS('box-shadow', 'rgb(0, 0, 255) 1px 2px 3px 0px');
+  await expect(popup).toHaveCSS('box-shadow', 'none');
+  await expect(surface).toHaveCSS('box-shadow', /\/ 0\)/);
+});
+
+test('card hover shadows follow shared controls and their own override', async ({ page }) => {
+  await page.goto('/sections/card-grid/');
+  await page.getByRole('checkbox', { name: 'Card shadow', exact: true }).check();
+  const card = page.locator('.playground .ps-card').first();
+  await page.locator('.ps-shell').evaluate(el => {
+    (el as HTMLElement).style.setProperty('--ps-shadow-size', '2');
+    (el as HTMLElement).style.setProperty('--ps-shadow-intensity', '0.5');
+  });
+  await card.hover();
+  await expect(card.locator('.surface')).toHaveCSS('box-shadow', /0px 16px 40px 0px/);
+  await expect(card.locator('.surface')).toHaveCSS('box-shadow', /0.1\)/);
+  await page.locator('.ps-shell').evaluate(el => (el as HTMLElement).style.setProperty('--ps-card-hover-shadow', 'none'));
+  await expect(card.locator('.surface')).toHaveCSS('box-shadow', 'none');
+});

@@ -6,9 +6,11 @@ body {
 }
 .ps-shell {
   min-height: 100vh;
+  --ps-shadow-color: #000;
+  --ps-shadow-size: 1;
+  --ps-shadow-intensity: 1;
   background: var(--ps-background);
   --ps-footer-radius: var(--ps-radius);
-  --ps-footer-shadow: var(--ps-surface-shadow);
 }
 /* Match bergjohann-com's neutral surfaces and green-teal link palette. */
 .ps-shell[data-ps-theme='light'] {

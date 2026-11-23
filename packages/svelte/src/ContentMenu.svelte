@@ -97,10 +97,10 @@
   </nav>
 {/snippet}
 
-<div class="desktop ps-sidebar-scroll" use:fitSidebar>{@render links()}</div>
+<div class="desktop ps-sidebar-scroll ps-shadow-surface" use:fitSidebar>{@render links()}</div>
 <details use:popupLayer bind:this={popup} class="mobile" data-enhanced={ready}>
   <!-- svelte-ignore a11y_no_redundant_roles (Keep styled disclosures exposed as buttons in browser accessibility trees.) -->
-  <summary role="button" aria-label={label} title={label}
+  <summary class="ps-shadow-surface" role="button" aria-label={label} title={label}
     ><svg
       aria-hidden="true"
       width="20"
@@ -111,7 +111,7 @@
       stroke-width="2"><path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1" /></svg
     ></summary
   >
-  <div class="popup ps-sidebar-scroll">
+  <div class="popup ps-sidebar-scroll ps-shadow-popup">
     {@render links()}
   </div>
 </details>
@@ -181,7 +181,7 @@
     border-radius: 0.5rem;
     color: var(--ps-ink);
     background: var(--ps-section-standard);
-    box-shadow: var(--ps-surface-shadow);
+    box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow));
     transition: color 180ms ease, background-color 180ms ease;
   }
   .mobile[open] > summary {
@@ -208,7 +208,7 @@
     overscroll-behavior: contain;
     background: var(--ps-section-standard);
     border-radius: var(--ps-radius);
-    box-shadow: var(--ps-navigation-shadow);
+    box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)));
   }
   @media (min-width: 1600px) {
     .mobile {

@@ -201,4 +201,22 @@ console.log(contained.color, contained.diagnostic?.code); // muted, gradient-req
       </p>
     </div></Section
   >
+  <Section
+    section={{
+      id: 'shadow-controls',
+      title: 'Adjust shadows',
+      headline: 'Adjust shadows',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        Use <code>--ps-shadow-color</code>, <code>--ps-shadow-size</code> and
+        <code>--ps-shadow-intensity</code> to coordinate shadows across sections, navigation and
+        popups. Size and intensity default to 1; an intensity of 0 hides them. Complete role
+        overrides let you customize individual surface types. See
+        <a href={base + '/docs/reference/tokens/#shadows'}>shadow variables and examples</a>.
+      </p>
+    </div>
+  </Section>
 </ContentPage>

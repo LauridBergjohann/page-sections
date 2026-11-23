@@ -33,7 +33,7 @@
 </script>
 <article {...rest} bind:this={root} aria-labelledby={titleId} class={['ps-card', className]} data-card-id={item.itemKey ?? item.id}
   data-ps-card-size={cardSize} data-tone={tone} data-shadow={shadow} data-media-fit={mediaFit} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
-  <div class="surface" bind:this={surfaceElement} data-ps-card-part="surface" aria-hidden="true">{@render surface?.(item)}</div>
+  <div class="surface ps-shadow-surface" bind:this={surfaceElement} data-ps-card-part="surface" aria-hidden="true">{@render surface?.(item)}</div>
   <div class="media-frame" class:no-media={!media && !item.image} data-ps-card-part="media-frame">
     <div class="media" bind:this={mediaElement} data-ps-card-part="media">
       {#if media}{@render media(item)}{:else if item.image}<Image image={item.image} />{/if}
@@ -54,12 +54,12 @@
   .ps-card { position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr; width: 100%; min-width: 0; height: 100%; color: var(--ps-ink); border-radius: var(--ps-radius); }
   .surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; background: var(--ps-section-standard); transition: box-shadow 150ms ease, border-color 150ms ease; }
   [data-tone='muted'] .surface { background: var(--ps-section-muted); }
-  [data-shadow='true'] .surface { box-shadow: var(--ps-surface-shadow); }
-  .ps-card:has(:focus-visible) > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow); }
-  .ps-card[data-shadow='true']:has(:focus-visible) > .surface { box-shadow: 0 8px 20px rgb(0 0 0 / 20%); }
+  [data-shadow='true'] .surface { box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
+  .ps-card:has(:focus-visible) > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
+  .ps-card[data-shadow='true']:has(:focus-visible) > .surface { box-shadow: var(--ps-card-hover-shadow, var(--ps-default-card-hover-shadow)); }
   @media (hover: hover) {
-    .ps-card:hover > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow); }
-    .ps-card[data-shadow='true']:hover > .surface { box-shadow: 0 8px 20px rgb(0 0 0 / 20%); }
+    .ps-card:hover > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
+    .ps-card[data-shadow='true']:hover > .surface { box-shadow: var(--ps-card-hover-shadow, var(--ps-default-card-hover-shadow)); }
   }
   @media (prefers-reduced-motion: reduce) { .surface { transition: none; } }
   .media, .text { min-width: 0; min-height: 0; }

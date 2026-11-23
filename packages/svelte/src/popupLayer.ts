@@ -127,7 +127,7 @@ function createController(): Controller {
           border: '1px solid var(--ps-panel-border)',
           borderTopWidth: headerRect ? '0px' : '1px',
           borderRadius: 'var(--ps-radius)',
-          boxShadow: 'var(--ps-navigation-shadow)',
+          boxShadow: 'var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)))',
           background: 'var(--ps-section-standard)',
           color: 'var(--ps-ink)',
           maxHeight: Math.max(0, innerHeight - top - 12) + 'px',

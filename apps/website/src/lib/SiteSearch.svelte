@@ -174,7 +174,7 @@
     >
       <Search size={20} aria-hidden="true" />
     </button>
-    <div class="search-surface" data-ps-popup={opened && compact ? '' : undefined}>
+    <div class="search-surface ps-shadow-popup" data-ps-popup={opened && compact ? '' : undefined}>
       <div class="search-field" id="site-search-field">
         <Search size={18} aria-hidden="true" />
         <input
@@ -202,7 +202,7 @@
         <kbd aria-hidden="true">Ctrl K</kbd>
       </div>
       {#if opened}
-        <div class="search-panel" data-ps-popup={!compact ? '' : undefined}>
+        <div class="search-panel ps-shadow-popup" data-ps-popup={!compact ? '' : undefined}>
           <p class="search-hint" role="status">
             {query.trim()
               ? `${found.length} matching ${found.length === 1 ? 'topic' : 'topics'}${found.length > 10 ? ' · showing the first 10' : ''}`
@@ -297,7 +297,10 @@
     border: 1px solid var(--ps-panel-border);
     border-top: 0;
     border-radius: var(--ps-radius);
-    box-shadow: var(--ps-navigation-shadow);
+    box-shadow: var(
+      --ps-popup-shadow,
+      var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))
+    );
     overflow: hidden;
   }
   ul {
@@ -398,7 +401,10 @@
       border: 1px solid var(--ps-panel-border);
       border-top: 0;
       border-radius: var(--ps-radius);
-      box-shadow: var(--ps-navigation-shadow);
+      box-shadow: var(
+        --ps-popup-shadow,
+        var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))
+      );
       overflow: auto;
       max-height: calc(100dvh - var(--ps-nav-height) - 24px);
     }
