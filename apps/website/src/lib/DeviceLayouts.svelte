@@ -3,15 +3,15 @@
   const devices = [
     { key: 'xs', name: 'Phone', w: 34, h: 60 },
     { key: 's', name: 'Small tablet', w: 52, h: 64 },
-    { key: 'm', name: 'Tablet / small window', w: 76, h: 54 },
-    { key: 'l', name: 'Laptop', w: 90, h: 54 },
-    { key: 'xl', name: 'Desktop', w: 102, h: 60 },
-    { key: '2xl', name: 'Wide desktop', w: 120, h: 56 },
-    { key: '3xl', name: 'Ultrawide', w: 144, h: 48 }
+    { key: 'm', name: 'Tablet', w: 76, h: 54 },
+    { key: 'l', name: 'Small laptop', w: 90, h: 54 },
+    { key: 'xl', name: 'Laptop', w: 102, h: 60 },
+    { key: '2xl', name: 'Desktop', w: 120, h: 56 },
+    { key: '3xl', name: 'Wide desktop', w: 144, h: 48 }
   ] as const;
 </script>
 
-<figure aria-label="Seven viewport sizes from phone to ultrawide">
+<figure aria-label="Seven viewport sizes from phone to wide desktop">
   <div class="devices">
     {#each devices as device, index}
       <div class="device">
@@ -43,13 +43,13 @@
             fill="var(--ps-accent)"
             opacity=".18"
           />
-          {#if index >= 4}<path
+          {#if index >= 5}<path
               d="M80 73v8m-18 0h36"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-            />{:else if index === 3}<path
-              d="M30 69h100l6 5H24z"
+            />{:else if index === 3 || index === 4}<path
+              d={`M${(160 - device.w) / 2 - 4} ${8 + (64 + device.h) / 2}h${device.w + 8}l6 5H${(160 - device.w) / 2 - 10}z`}
               fill="none"
               stroke="currentColor"
               stroke-width="2"
@@ -57,14 +57,14 @@
         </svg>
         <strong>{device.key.toUpperCase()}</strong>
         <span>{device.name}</span>
-        <small
-          >{index === 0
+        <small>
+          {index === 0
             ? 'Below 600'
             : index === devices.length - 1
               ? `${layoutTokens.layoutMinWidths[device.key]}+`
               : `${layoutTokens.layoutMinWidths[device.key]}–${layoutTokens.layoutMinWidths[devices[index + 1].key] - 1}`}
-          CSS px</small
-        >
+          CSS px
+        </small>
       </div>
     {/each}
   </div>

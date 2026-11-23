@@ -30,10 +30,10 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
-  import SectionPlayground from '$lib/SectionPlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
+  import SectionPlayground from '#lib/SectionPlayground.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -57,8 +57,10 @@
       title: 'Try it',
       headline: 'Try it yourself',
       background: { color: 'standard', size: 'standard' }
-    }}><SectionPlayground kind="video" /></Section
+    }}
   >
+    <SectionPlayground kind="video" />
+  </Section>
   <SectionAnatomy kind="video" />
   <Section
     section={{
@@ -67,13 +69,14 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Use VideoSection for a native video player or YouTube embed, optionally paired with text.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -82,7 +85,8 @@
       headline: 'Props and configuration',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -96,13 +100,13 @@
           <tbody>
             <tr>
               <td><code>section</code></td>
-              <td
-                ><code
-                  >Omit&lt;<a href={base + '/docs/reference/types/#video-section-data'}
-                    >VideoSectionData</a
-                  >, 'type'&gt;</code
-                ></td
-              >
+              <td>
+                <code>
+                  Omit&lt;<a href={base + '/docs/reference/types/#video-section-data'}>
+                    VideoSectionData
+                  </a>, 'type'&gt;
+                </code>
+              </td>
               <td>Required</td>
             </tr>
             <tr>
@@ -113,7 +117,7 @@
           </tbody>
         </table>
       </div>
-      <p>Alongside <a href={base + '/docs/building-blocks/section/'}>SectionDefinition</a>:</p>
+      <p>Alongside <a href={base + '/docs/components/section/'}>SectionDefinition</a>:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -127,10 +131,10 @@
           <tbody>
             <tr>
               <td><code>video</code></td>
-              <td
-                ><code><a href={base + '/docs/reference/types/#video-data'}>VideoData</a></code>,
-                required</td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#video-data'}>VideoData</a></code>,
+                required
+              </td>
               <td>No default</td>
             </tr>
             <tr>
@@ -186,8 +190,8 @@
         <code>preload=&quot;metadata&quot;</code>. There are no autoplay, loop, muted, arbitrary
         iframe attributes or custom-control props.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -196,7 +200,8 @@
       headline: 'YouTube',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The source accepts an 11-character ID, a youtu.be URL, or a URL on
         youtube.com/www.youtube.com/youtube-nocookie.com/www.youtube-nocookie.com. The parser takes
@@ -210,8 +215,8 @@
         behavior belong to the provider and host application; the library does not supply a consent
         manager.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -220,7 +225,8 @@
       headline: 'Layout and accessibility',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The player uses a 16:9 box and <code>--ps-radius</code>. Media/text stack below 600px
         container width and use a 1.7:1 split above it. Right changes visual order, not DOM order.
@@ -231,6 +237,6 @@
         Related: <a href={base + '/sections/image/'}>ImageSection</a>,
         <a href={base + '/docs/advanced/ssr/'}>SSR and Progressive Enhancement</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

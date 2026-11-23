@@ -7,8 +7,8 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -34,7 +34,8 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Import components from <code>@page-sections/svelte</code>. The public components are listed
         below. Component props are documented on the linked pages; this index shows where to start,
@@ -52,17 +53,36 @@
           </thead>
           <tbody>
             <tr>
+              <td><code>PrimaryButton</code></td><td>
+                Action atom; <a href={base + '/docs/components/buttons/#props'}>ButtonProps</a>.
+              </td><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td>
+            </tr><tr>
+              <td><code>SecondaryButton</code></td><td>
+                Action atom; <a href={base + '/docs/components/buttons/#props'}>ButtonProps</a>.
+              </td><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td>
+            </tr><tr>
+              <td><code>IconButton</code></td><td>
+                Action atom; <a href={base + '/docs/components/buttons/#props'}>IconButtonProps</a>.
+              </td><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td>
+            </tr><tr>
+              <td><code>Popup</code></td><td>
+                Shared floating panel; optional title, bindable open.
+              </td><td><a href={base + '/docs/components/popup/'}>Popup</a></td>
+            </tr>
+            <tr>
               <td><code>ContentPage</code></td>
               <td>Main content; page</td>
               <td><a href={base + '/docs/page-layout/content-page/'}>Pages</a></td>
             </tr>
             <tr>
               <td><code>Footer</code></td>
-              <td
-                >Site footer; footnote, links. Social entries use <a
-                  href={base + '/docs/reference/types/#footer-social-link'}>FooterSocialLink</a
-                > with an icon snippet.</td
-              >
+              <td>
+                Site footer; footnote, links. Social entries use <a
+                  href={base + '/docs/reference/types/#footer-social-link'}
+                >
+                  FooterSocialLink
+                </a> with an icon snippet.
+              </td>
               <td><a href={base + '/docs/page-layout/footer/'}>Footer</a></td>
             </tr>
             <tr>
@@ -73,17 +93,17 @@
             <tr>
               <td><code>Section</code></td>
               <td>General content region; section</td>
-              <td><a href={base + '/docs/building-blocks/section/'}>Section</a></td>
+              <td><a href={base + '/docs/components/section/'}>Section</a></td>
             </tr>
             <tr>
               <td><code>ContentGrid</code></td>
               <td>Responsive block grid; none</td>
-              <td><a href={base + '/docs/building-blocks/grids/'}>Content grids</a></td>
+              <td><a href={base + '/docs/components/grids/'}>Content grids</a></td>
             </tr>
             <tr>
               <td><code>ContentBlock</code></td>
               <td>Explicit grid span; none</td>
-              <td><a href={base + '/docs/building-blocks/grids/'}>Content grids</a></td>
+              <td><a href={base + '/docs/components/grids/'}>Content grids</a></td>
             </tr>
             <tr>
               <td><code>SectionSurfaceGroup</code></td>
@@ -148,12 +168,12 @@
             <tr>
               <td><code>Card</code></td>
               <td>Standalone article; item</td>
-              <td><a href={base + '/docs/building-blocks/card/'}>Card</a></td>
+              <td><a href={base + '/docs/components/card/'}>Card</a></td>
             </tr>
             <tr>
               <td><code>Image</code></td>
               <td>Shared picture/img renderer; image</td>
-              <td><a href={base + '/docs/building-blocks/image/'}>Image</a></td>
+              <td><a href={base + '/docs/components/image/'}>Image</a></td>
             </tr>
             <tr>
               <td><code>Header</code></td>
@@ -162,10 +182,10 @@
             </tr>
             <tr>
               <td><code>Navigation</code></td>
-              <td
-                >Deprecated compatibility export of Header; remove any surrounding header element
-                when migrating.</td
-              >
+              <td>
+                Deprecated compatibility export of Header; remove any surrounding header element
+                when migrating.
+              </td>
               <td><a href={base + '/docs/page-layout/header/'}>Header</a></td>
             </tr>
             <tr>
@@ -175,10 +195,10 @@
             </tr>
             <tr>
               <td><code>ButtonGroup</code></td>
-              <td
-                >Labelled controls/links with animated selection; items, label, onselect, icon,
-                iconOnly</td
-              >
+              <td>
+                Labelled controls/links with animated selection; items, label, onselect, icon,
+                iconOnly
+              </td>
               <td><a href={base + '/docs/page-layout/header/'}>Header</a></td>
             </tr>
             <tr>
@@ -196,21 +216,21 @@
               <td>Data-driven dispatcher; sections</td>
               <td><a href={base + '/docs/advanced/data-and-custom-sections/'}>Data models</a></td>
             </tr>
-            <tr
-              ><td><code>CodeBlock</code></td><td>Standalone source presentation; code</td><td
-                ><a href={base + '/sections/code/'}>Code</a></td
-              ></tr
-            >
-            <tr
-              ><td><code>CodeSection</code></td><td>Source with section metadata; section</td><td
-                ><a href={base + '/sections/code/'}>Code</a></td
-              ></tr
-            >
+            <tr>
+              <td><code>CodeBlock</code></td><td>Standalone source presentation; code</td><td>
+                <a href={base + '/sections/code/'}>Code</a>
+              </td>
+            </tr>
+            <tr>
+              <td><code>CodeSection</code></td><td>Source with section metadata; section</td><td>
+                <a href={base + '/sections/code/'}>Code</a>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -219,7 +239,8 @@
       headline: 'Props and snippets',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Svelte 5 snippets are used instead of named legacy slots. Header has
         menu/brand/left/right/tools/settingsIcon/menuIcon snippets. Card has
@@ -240,14 +261,15 @@
         metadata and CSS variables.
       </p>
       <p>
-        Most predefined components accept <code>section: Omit&lt;TheirSectionData, 'type'&gt;</code
-        >. CardGridSection and CarouselSection instead take shared
+        Most predefined components accept <code>
+          section: Omit&lt;TheirSectionData, 'type'&gt;
+        </code>. CardGridSection and CarouselSection instead take shared
         <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
         plus separate list/configuration props. <code>type</code> belongs to serialized sections rendered
         by Sections, not to a required declarative prop.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -256,13 +278,14 @@
       headline: 'Types and styles',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The root export includes <code>export type * from '@page-sections/core'</code> and the
         Svelte-specific
-        <code
-          ><a href={base + '/docs/reference/types/#card-elements'}>CardElements</a>&lt;T&gt;</code
-        > type (item, root, surface, media, copy, title). It does not re-export core runtime classes/functions/constants.
+        <code>
+          <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a>&lt;T&gt;
+        </code> type (item, root, surface, media, copy, title). It does not re-export core runtime classes/functions/constants.
         Component prop interfaces are not separately named exports; use Svelte's ComponentProps where
         applicable or the shared data interfaces.
       </p>
@@ -274,8 +297,8 @@
         import. See <a href={base + '/docs/foundations/installation/'}>Installation</a> for which components
         load shared CSS themselves.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -284,7 +307,8 @@
       headline: 'Rendering contract',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         These are Svelte source components compiled by the consuming toolchain. SSR requires host
         support. Text, native links and responsive layouts do not require hydration; button
@@ -295,8 +319,8 @@
         Related: <a href={base + '/docs/reference/core-api/'}>Core API</a>,
         <a href={base + '/docs/advanced/ssr/'}>SSR and Progressive Enhancement</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -304,7 +328,8 @@
       title: 'SidebarNavigation',
       headline: 'SidebarNavigation'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>SidebarNavigation</code> renders a recursive site tree with current-page markers and expandable
         ancestors. Pass it as ContentPage's leftSidebar snippet. ContentPage's showContentMenu flag supplies
@@ -312,8 +337,8 @@
         The deprecated footer snippet remains a fallback; pageEnd takes precedence when both are supplied.
         Header's itemIcon snippet supplies application-owned icons.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'heading-components',
@@ -325,13 +350,16 @@
   >
     <p>
       <code>Heading</code> accepts text, level (<a
-        href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a
-      >, default 2), size (<a href={base + '/docs/reference/types/#heading-size'}>HeadingSize</a>,
-      default m), id, eyebrow and introduction. It renders typography only.
+        href={base + '/docs/reference/types/#heading-level'}
+      >
+        HeadingLevel
+      </a>, default 2), size (<a href={base + '/docs/reference/types/#heading-size'}>
+        HeadingSize
+      </a>, default m), id, eyebrow and introduction. It renders typography only.
       <code>HeadingSection</code>
-      accepts section: Omit&lt;<a href={base + '/docs/reference/types/#heading-section-data'}
-        >HeadingSectionData</a
-      >, 'type'&gt; and adds section layout, surface and registration. See
+      accepts section: Omit&lt;<a href={base + '/docs/reference/types/#heading-section-data'}>
+        HeadingSectionData
+      </a>, 'type'&gt; and adds section layout, surface and registration. See
       <a href={base + '/sections/headings/'}>Headings</a>.
     </p>
     <p>

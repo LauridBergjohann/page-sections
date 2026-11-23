@@ -1,11 +1,14 @@
 @import './layout.generated.css';
+@import './shadows.css';
 :root {
   --ps-background: #f6f7f9; --ps-ink: #172330; --ps-body: #465564; --ps-accent: #125cb0; --ps-on-accent: #fff;
   --ps-section-standard: #fff; --ps-section-muted: #e8edf3; --ps-radius: 18px;
   --ps-font-family: system-ui, sans-serif; --ps-narrow-max: 780px;
   --ps-border: color-mix(in srgb, var(--ps-ink) 18%, transparent);
-  --ps-navigation-shadow: 0 4px 8px rgb(0 0 0 / 12%);
-  --ps-surface-shadow: 0 3px 8px rgb(0 0 0 / 12%);
+  --ps-panel-border: color-mix(in srgb, var(--ps-ink) 12%, transparent);
+  --ps-shadow-color: #000;
+  --ps-shadow-size: 1;
+  --ps-shadow-intensity: 1;
 }
 [data-ps-theme='dark'] { --ps-background: #151d27; --ps-ink: #f2f5fa; --ps-body: #bdcbdc; --ps-accent: #91baff; --ps-on-accent: #151d27; --ps-section-standard: #202d3b; --ps-section-muted: #28384a; }
 .ps-page, .ps-navigation, .ps-shell { font-family: var(--ps-font-family); color: var(--ps-ink); }
@@ -13,12 +16,13 @@
 /* A content menu only docks to a continuous column of contained, opaque surfaces.
    Evaluate rendered surfaces in CSS so SSR, no-JS and live background changes agree. */
 @media (min-width: 1600px) {
+  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot .desktop { box-shadow: var(--ps-content-menu-shadow, var(--ps-surface-shadow, var(--ps-default-surface-shadow))); }
   .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot {
     --ps-content-menu-radius: var(--ps-radius);
-    --ps-content-menu-shadow: var(--ps-surface-shadow);
+    --ps-content-menu-border-start: 1px;
     margin-inline-start: var(--ps-sidebar-gap);
     width: calc(var(--ps-sidebar-right-width) - var(--ps-sidebar-gap));
-    padding-top: 0;
+    padding-block: 0;
     z-index: 2;
   }
 }
@@ -46,7 +50,7 @@
 
 /* Keep the compact contents control reachable while a persistent header is visible. */
 @media (max-width: 1599.98px) {
-  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot { top: var(--ps-nav-height); }
+  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .mobile { top: calc(var(--ps-nav-height) + 12px); }
   .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }
 }
 
@@ -56,3 +60,11 @@
 .ps-sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
 .ps-sidebar-scroll::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ps-body) 35%, transparent); border-radius: 999px; }
 .ps-sidebar-scroll::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--ps-body) 60%, transparent); }
+
+/* Full content columns touch the viewport on small screens; keep those edges open.
+   Narrow, nested and custom-width surfaces retain their own panel outline. */
+@media (max-width: 1536px) {
+  .ps-page-content .sections[data-body-layout='wide'] .ps-section[data-nested='false']:is([data-layout='inherit'], [data-layout='wide']):not([style*='--ps-section-width']) > .ps-section-surface {
+    border-inline-width: 0;
+  }
+}

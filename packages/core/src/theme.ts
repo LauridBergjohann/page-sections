@@ -1,5 +1,5 @@
 import type { PageTheme } from './types.js';
-const properties: Record<keyof PageTheme, string> = { background: 'background', ink: 'ink', body: 'body', accent: 'accent', onAccent: 'on-accent', standard: 'section-standard', muted: 'section-muted', radius: 'radius', narrowMax: 'narrow-max', fontFamily: 'font-family', footerBackground: 'footer-background', footerInk: 'footer-ink', footerRadius: 'footer-radius', footerShadow: 'footer-shadow', footerBarBackground: 'footer-bar-background', footerBarInk: 'footer-bar-ink' };
+const properties: Record<keyof PageTheme, string> = { border: 'border', panelBorder: 'panel-border', background: 'background', ink: 'ink', body: 'body', accent: 'accent', onAccent: 'on-accent', standard: 'section-standard', muted: 'section-muted', radius: 'radius', narrowMax: 'narrow-max', fontFamily: 'font-family', footerBackground: 'footer-background', footerInk: 'footer-ink', footerRadius: 'footer-radius', footerShadow: 'footer-shadow', footerBarBackground: 'footer-bar-background', footerBarInk: 'footer-bar-ink' };
 export function themeStyle(theme: PageTheme = {}): string {
   return Object.entries(theme).map(([key, value]) => {
     if (!(key in properties) || /[;{}<>]/.test(value)) throw new Error(`Invalid theme property: ${key}`);

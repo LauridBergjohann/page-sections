@@ -1,10 +1,10 @@
 <script lang="ts">
-  import SectionCatalog from '$lib/SectionCatalog.svelte';
-  import { base } from '$app/paths';
+  import SectionCatalog from '#lib/SectionCatalog.svelte';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, Sections } from '@page-sections/svelte';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import { sectionCatalog } from '$lib/sectionCatalog';
-  import { sectionExample } from '$lib/sectionExamples';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import { sectionCatalog } from '#lib/sectionCatalog.js';
+  import { sectionExample } from '#lib/sectionExamples.js';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>

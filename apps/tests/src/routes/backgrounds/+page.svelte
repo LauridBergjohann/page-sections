@@ -41,11 +41,12 @@
       layout: 'narrow',
       spacing: 'loose'
     }}
-    ><p class="demo-copy">
+  >
+    <p class="demo-copy">
       Standard backgrounds stay inside the page column. Full backgrounds extend to the viewport
       edges while their content stays aligned. Transparent lets the page background show through.
-    </p></Section
-  >
+    </p>
+  </Section>
   {#each sizes as size}
     {#each solids as color}
       <Section
@@ -56,7 +57,8 @@
           background: { color, size },
           spacing: 'loose'
         }}
-        ><p class="demo-copy">
+      >
+        <p class="demo-copy">
           {size === 'full'
             ? 'The surface reaches both edges of the viewport.'
             : 'The surface follows the content column.'}
@@ -64,9 +66,8 @@
             ? 'The page colour remains visible.'
             : 'Its colour comes directly from the active Page Sections theme.'}
         </p>
-        <code class="demo-label">background: {'{'} color: '{color}', size: '{size}' {'}'}</code
-        ></Section
-      >
+        <code class="demo-label">background: {'{'} color: '{color}', size: '{size}' {'}'}</code>
+      </Section>
     {/each}
   {/each}
   <Section
@@ -77,11 +78,12 @@
       layout: 'narrow',
       spacing: 'spacious'
     }}
-    ><p class="demo-copy">
+  >
+    <p class="demo-copy">
       All six supported gradients are shown below. Gradients require a full-width background. These
       consecutive sections use matching endpoints to form a continuous sequence.
-    </p></Section
-  >
+    </p>
+  </Section>
   {#each transitions as transition}
     <Section
       section={{
@@ -91,13 +93,14 @@
         background: { color: transition.color, size: 'full' },
         spacing: 'spacious'
       }}
-      ><p class="demo-copy">
+    >
+      <p class="demo-copy">
         A native Page Sections gradient, with readable content aligned to the page.
       </p>
-      <code class="demo-label"
-        >background: {'{'} color: '{transition.color}', size: 'full' {'}'}</code
-      ></Section
-    >
+      <code class="demo-label">
+        background: {'{'} color: '{transition.color}', size: 'full' {'}'}
+      </code>
+    </Section>
   {/each}
   <Section
     section={{
@@ -107,12 +110,13 @@
       layout: 'narrow',
       spacing: 'spacious'
     }}
-    ><p class="demo-copy">
+  >
+    <p class="demo-copy">
       The next three sections belong to an explicit SectionSurfaceGroup. Adjacent opaque surfaces
       connect even when their colours differ: the first keeps its top corners, the last keeps its
       bottom corners, and the middle joins both. A transparent section separates the next surface.
-    </p></Section
-  >
+    </p>
+  </Section>
   <SectionSurfaceGroup>
     <Section
       section={{
@@ -121,8 +125,10 @@
         headline: '01 / An opening',
         background: { color: 'standard' },
         spacing: 'loose'
-      }}><p class="demo-copy">Rounded above, connected below.</p></Section
+      }}
     >
+      <p class="demo-copy">Rounded above, connected below.</p>
+    </Section>
     <Section
       section={{
         id: 'group-middle',
@@ -130,8 +136,10 @@
         headline: '02 / A continuation',
         background: { color: 'muted' },
         spacing: 'loose'
-      }}><p class="demo-copy">A different opaque colour, with no rounded seam.</p></Section
+      }}
     >
+      <p class="demo-copy">A different opaque colour, with no rounded seam.</p>
+    </Section>
     <Section
       section={{
         id: 'group-last',
@@ -139,15 +147,19 @@
         headline: '03 / A conclusion',
         background: { color: 'standard' },
         spacing: 'loose'
-      }}><p class="demo-copy">Connected above, rounded below.</p></Section
+      }}
     >
+      <p class="demo-copy">Connected above, rounded below.</p>
+    </Section>
     <Section
       section={{
         id: 'group-separator',
         title: 'Group: separation',
         background: { color: 'transparent' }
-      }}><p class="demo-copy">A transparent pause separates the two surfaces.</p></Section
+      }}
     >
+      <p class="demo-copy">A transparent pause separates the two surfaces.</p>
+    </Section>
     <Section
       section={{
         id: 'group-change',
@@ -156,9 +168,10 @@
         background: { color: 'muted' },
         spacing: 'loose'
       }}
-      ><p class="demo-copy">
-        After the transparent pause, this section has its own rounded surface.
-      </p></Section
     >
+      <p class="demo-copy">
+        After the transparent pause, this section has its own rounded surface.
+      </p>
+    </Section>
   </SectionSurfaceGroup>
 </ContentPage>

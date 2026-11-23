@@ -29,10 +29,10 @@
 		const corners = surfaces.corners.map(({ id, top, bottom }) =>
 			`[data-ps-surface-owner="${scope}"][data-ps-section-surface="${id}"] {` +
 			`--ps-section-top-radius:${top ? 'var(--ps-radius)' : '0px'};` +
-			`--ps-shadow-top-clip:${top ? '-12px' : '0px'};--ps-shadow-bottom-clip:${bottom ? '-12px' : '0px'};` +
+			`--ps-shadow-top-clip:${top ? 'calc(-1 * var(--ps-surface-shadow-extent, calc(12px * max(1, var(--ps-shadow-size, 1)))))' : '0px'};--ps-shadow-bottom-clip:${bottom ? 'calc(-1 * var(--ps-surface-shadow-extent, calc(12px * max(1, var(--ps-shadow-size, 1)))))' : '0px'};` +
 			`--ps-section-bottom-radius:${bottom ? 'var(--ps-radius)' : '0px'};}`
 		).join('\n');
-		const shadows = surfaces.corners.map(({ id, top, bottom }) => `[data-ps-surface-owner="${scope}"][data-ps-section-surface="${id}"] { --ps-shadow-top-clip:${top ? '-12px' : '0px'}; --ps-shadow-bottom-clip:${bottom ? '-12px' : '0px'}; }`).join('\n');
+		const shadows = surfaces.corners.map(({ id, top, bottom }) => `[data-ps-surface-owner="${scope}"][data-ps-section-surface="${id}"] { --ps-shadow-top-clip:${top ? 'calc(-1 * var(--ps-surface-shadow-extent, calc(12px * max(1, var(--ps-shadow-size, 1)))))' : '0px'}; --ps-shadow-bottom-clip:${bottom ? 'calc(-1 * var(--ps-surface-shadow-extent, calc(12px * max(1, var(--ps-shadow-size, 1)))))' : '0px'}; --ps-section-border-top:${top ? '1px' : '0px'}; --ps-section-border-bottom:${bottom ? '1px' : '0px'}; --ps-section-surface-overlap:${bottom ? '0px' : '1px'}; }`).join('\n');
 		return shadows + `@media (min-width:${layoutTokens.layoutMinWidths.xl}px) {${corners}}` +
 			((pageKind ?? context.pageKind) === 'detail' ? `@media (min-width:${layoutTokens.layoutMinWidths['3xl']}px) { [data-ps-surface-owner="${scope}"][data-ps-section-surface] { --ps-section-top-radius:0px; --ps-section-bottom-radius:0px; } }` : '');
 	});

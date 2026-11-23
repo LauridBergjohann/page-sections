@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { base } from '#lib/paths.js';
 import type { PageData, CardItem } from '@page-sections/core';
 import { coast, landscape } from './content';
 

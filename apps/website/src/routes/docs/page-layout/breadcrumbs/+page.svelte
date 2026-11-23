@@ -33,12 +33,12 @@
 </script>
 
 <script lang="ts">
-  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
-  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
-  import { base } from '$app/paths';
+  import PageLayoutDiagram from '#lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '#lib/PageLayoutPreview.svelte';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -104,7 +104,8 @@
       headline: 'Breadcrumbs',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Use the same navigation tree for the menu, sidebar and breadcrumbs. The first breadcrumb is
         the main-menu entry; Home is reachable through the logo. Breadcrumbs accepts items and an
@@ -112,8 +113,8 @@
         aria-current="page". The trail stays on one line. Labels that do not fit are shortened with
         an ellipsis; their full text remains available to assistive technology.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'automatic-navigation',
@@ -121,7 +122,8 @@
       headline: 'Automatic content menu',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>showContentMenu</code> registers section IDs and titles automatically. It displays a sticky
         right sidebar in wide windows or a sticky button with a popup in smaller windows. The active bullet
@@ -136,8 +138,8 @@
         Native anchor links work without JavaScript. The enhanced menu adds active-state tracking
         and Escape dismissal. No entries means no menu or reserved rail.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'sectionnavigation',
@@ -145,13 +147,14 @@
       headline: 'SectionNavigation',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         For a manually supplied list, SectionNavigation remains a small stateless building block. It
         accepts items (id and title), label (default “On this page”) and variant (horizontal or
         sidebar). It does not observe scrolling. ContentPage owns the complete automatic
         content-menu behavior.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

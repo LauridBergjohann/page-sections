@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { Sections } from '@page-sections/svelte';
   import type {
     SectionData,
@@ -176,87 +176,84 @@
   <fieldset disabled={!ready} class="controls">
     <legend>Configure the {name}</legend>
     <label>Headline<input bind:value={headline} /></label>
-    <label
-      >Surface<select bind:value={surface}
-        ><option>standard</option><option>muted</option><option>transparent</option></select
-      ></label
-    >
+    <label>
+      Surface<select bind:value={surface}>
+        <option>standard</option><option>muted</option><option>transparent</option>
+      </select>
+    </label>
     {#if kind === 'hero'}
-      <label
-        >Composition<select bind:value={composition}
-          ><option>artwork</option><option>overlay</option></select
-        ></label
-      >
-      <label
-        >Hero size<select bind:value={size}
-          ><option value="s">Small</option><option value="m">Medium</option><option value="l"
-            >Large</option
-          ></select
-        ></label
-      >
-      <label class="check"
-        ><input type="checkbox" bind:checked={textBackground} />Text background</label
-      >
+      <label>
+        Composition<select bind:value={composition}>
+          <option>artwork</option><option>overlay</option>
+        </select>
+      </label>
+      <label>
+        Hero size<select bind:value={size}>
+          <option value="s">Small</option><option value="m">Medium</option><option value="l">
+            Large
+          </option>
+        </select>
+      </label>
+      <label class="check">
+        <input type="checkbox" bind:checked={textBackground} />Text background
+      </label>
       <label class="check"><input type="checkbox" bind:checked={media} />Show image</label>
     {/if}
     {#if kind === 'hero' || kind === 'image' || kind === 'video'}
-      <label
-        >Media side<select bind:value={side}><option>left</option><option>right</option></select
-        ></label
-      >
+      <label>
+        Media side<select bind:value={side}><option>left</option><option>right</option></select>
+      </label>
     {/if}
     {#if kind === 'image'}
-      <label
-        >Image aspect<select bind:value={aspect}
-          ><option>none</option><option>4/3</option><option>16/9</option><option>2/1</option><option
-            >square</option
-          ></select
-        ></label
-      >
-      <label
-        >Image fit<select bind:value={fit}><option>cover</option><option>contain</option></select
-        ></label
-      >
+      <label>
+        Image aspect<select bind:value={aspect}>
+          <option>none</option><option>4/3</option><option>16/9</option><option>2/1</option><option>
+            square
+          </option>
+        </select>
+      </label>
+      <label>
+        Image fit<select bind:value={fit}><option>cover</option><option>contain</option></select>
+      </label>
       <label>Image alternative text<input bind:value={alt} /></label>
     {/if}
-    {#if kind === 'image' || kind === 'video'}<label class="check"
-        ><input type="checkbox" bind:checked={description} />Show description</label
-      >{/if}
-    {#if kind === 'panel'}<label
-        >Panel tone<select bind:value={tone}><option>standard</option><option>muted</option></select
-        ></label
-      >{/if}
-    {#if kind === 'hero' || kind === 'panel'}<label class="check"
-        ><input type="checkbox" bind:checked={actions} />Show action</label
-      >{/if}
-    {#if kind === 'rich-text'}<label
-        >Content format<select bind:value={format}
-          ><option>markdown</option><option>text</option><option>blocks</option></select
-        ></label
-      >{/if}
+    {#if kind === 'image' || kind === 'video'}<label class="check">
+        <input type="checkbox" bind:checked={description} />Show description
+      </label>{/if}
+    {#if kind === 'panel'}<label>
+        Panel tone<select bind:value={tone}><option>standard</option><option>muted</option></select>
+      </label>{/if}
+    {#if kind === 'hero' || kind === 'panel'}<label class="check">
+        <input type="checkbox" bind:checked={actions} />Show action
+      </label>{/if}
+    {#if kind === 'rich-text'}<label>
+        Content format<select bind:value={format}>
+          <option>markdown</option><option>text</option><option>blocks</option>
+        </select>
+      </label>{/if}
     {#if kind === 'panel' || (kind === 'rich-text' && format === 'blocks')}
-      <label
-        >Block type<select bind:value={content}
-          ><option>paragraph</option><option>list</option><option>address</option></select
-        ></label
-      >
+      <label>
+        Block type<select bind:value={content}>
+          <option>paragraph</option><option>list</option><option>address</option>
+        </select>
+      </label>
     {/if}
-    {#if kind === 'rich-text' && format !== 'blocks'}<label class="wide"
-        >Content<textarea rows="6" bind:value={body}></textarea></label
-      >{/if}
+    {#if kind === 'rich-text' && format !== 'blocks'}<label class="wide">
+        Content<textarea rows="6" bind:value={body}></textarea>
+      </label>{/if}
     {#if kind === 'video'}
-      <label
-        >Video provider<select bind:value={provider}
-          ><option value="html5">Native video</option><option value="youtube">YouTube</option
-          ></select
-        ></label
-      >
-      {#if provider === 'youtube'}<label>YouTube ID or URL<input bind:value={youtube} /></label
-        >{:else}
+      <label>
+        Video provider<select bind:value={provider}>
+          <option value="html5">Native video</option><option value="youtube">YouTube</option>
+        </select>
+      </label>
+      {#if provider === 'youtube'}<label>
+          YouTube ID or URL<input bind:value={youtube} />
+        </label>{:else}
         <label class="check"><input type="checkbox" bind:checked={media} />Show poster</label>
-        <label class="check"
-          ><input type="checkbox" bind:checked={captions} />Include captions</label
-        >
+        <label class="check">
+          <input type="checkbox" bind:checked={captions} />Include captions
+        </label>
       {/if}
     {/if}
     <button type="button" onclick={reset}>Reset example</button>

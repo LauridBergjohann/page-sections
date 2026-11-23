@@ -1,5 +1,7 @@
 <script lang="ts">
+  import Popup from './Popup.svelte';
   import { fitSidebar } from './fitSidebar.js';
+  import { popupLayer } from './popupLayer.js';
   import { onMount } from 'svelte';
   import { resolveActiveContentSection, type SectionNavigationItem } from '@page-sections/core';
   let {
@@ -78,7 +80,7 @@
 
 {#snippet links()}
   <nav aria-label={label}>
-    <p>{label}</p>
+    <Popup inline title={label}>
     <ul>
       {#each items as item (item.id)}
         <li data-heading-level={item.headingLevel}>
@@ -93,13 +95,14 @@
         </li>
       {/each}
     </ul>
+    </Popup>
   </nav>
 {/snippet}
 
-<div class="desktop ps-sidebar-scroll" use:fitSidebar>{@render links()}</div>
-<details bind:this={popup} class="mobile" data-enhanced={ready}>
+<div class="desktop ps-sidebar-scroll ps-shadow-surface" use:fitSidebar>{@render links()}</div>
+<details use:popupLayer bind:this={popup} class="mobile" data-enhanced={ready}>
   <!-- svelte-ignore a11y_no_redundant_roles (Keep styled disclosures exposed as buttons in browser accessibility trees.) -->
-  <summary role="button" aria-label={label} title={label}
+  <summary class="ps-shadow-surface" role="button" aria-label={label} title={label}
     ><svg
       aria-hidden="true"
       width="20"
@@ -110,15 +113,9 @@
       stroke-width="2"><path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1" /></svg
     ></summary
   >
-  <div class="popup ps-sidebar-scroll">
-    {#if ready}<button
-        class="close"
-        type="button"
-        aria-label="Close content menu"
-        onclick={() => close(true)}>×</button
-      >{/if}
+  <Popup class="popup ps-sidebar-scroll" disclosure>
     {@render links()}
-  </div>
+  </Popup>
 </details>
 
 <style>
@@ -128,10 +125,6 @@
   nav {
     padding: 1rem;
     font-size: 0.875rem;
-  }
-  p {
-    margin: 0 1.25rem 0.75rem 0;
-    font-weight: 650;
   }
   ul {
     list-style: none;
@@ -169,7 +162,9 @@
     text-decoration: underline;
   }
   .mobile {
-    position: relative;
+    position: sticky;
+    top: 12px;
+    pointer-events: auto;
     margin-block-start: 12px;
     margin-inline-end: 12px;
   }
@@ -184,7 +179,7 @@
     border-radius: 0.5rem;
     color: var(--ps-ink);
     background: var(--ps-section-standard);
-    box-shadow: var(--ps-surface-shadow);
+    box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow));
     transition: color 180ms ease, background-color 180ms ease;
   }
   .mobile[open] > summary {
@@ -197,30 +192,8 @@
   summary::-webkit-details-marker {
     display: none;
   }
-  .popup {
-    position: absolute;
-    top: 48px;
-    right: 0;
-    width: min(280px, calc(100vw - 24px));
-    max-height: calc(100dvh - 96px);
-    overflow: auto;
-    overscroll-behavior: contain;
-    background: var(--ps-section-standard);
-    border-radius: var(--ps-radius);
-    box-shadow: var(--ps-surface-shadow);
-  }
-  .close {
-    position: absolute;
-    right: 0.5rem;
-    top: 0.5rem;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font-size: 1.5rem;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-  }
+  .desktop { border: 1px solid var(--ps-panel-border); border-inline-start-width: var(--ps-content-menu-border-start, 0px); }
+  .mobile :global(.popup) { padding: 0; }
   @media (min-width: 1600px) {
     .mobile {
       display: none;

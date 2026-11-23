@@ -19,10 +19,10 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
-  import LiveCode from '$lib/LiveCode.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
+  import LiveCode from '#lib/LiveCode.svelte';
   import { onMount } from 'svelte';
   import { Section, HeadingSection, CodeBlock } from '@page-sections/svelte';
   import type { HeadingLevel, HeadingSize, SectionBackground } from '@page-sections/core';
@@ -78,23 +78,25 @@
       <label>Heading text<input bind:value={text} /></label>
       <label>Eyebrow<input bind:value={eyebrow} /></label>
       <label>Introduction<input bind:value={introduction} /></label>
-      <label
-        >Heading size <select bind:value={size}
-          ><option>m</option><option>l</option><option>xl</option></select
-        ></label
-      >
-      <label
-        >Heading level <select bind:value={level}
-          >{#each [1, 2, 3, 4, 5, 6] as value}<option {value}>h{value}</option>{/each}</select
-        ></label
-      >
-      <label
-        >Surface <select bind:value={color}
-          ><option value="standard">Standard</option><option value="muted">Muted</option><option
-            value="transparent">Transparent</option
-          ></select
-        ></label
-      >
+      <label>
+        Heading size <select bind:value={size}>
+          <option>m</option><option>l</option><option>xl</option>
+        </select>
+      </label>
+      <label>
+        Heading level <select bind:value={level}>
+          {#each [1, 2, 3, 4, 5, 6] as value}<option {value}>h{value}</option>{/each}
+        </select>
+      </label>
+      <label>
+        Surface <select bind:value={color}>
+          <option value="standard">Standard</option><option value="muted">Muted</option><option
+            value="transparent"
+          >
+            Transparent
+          </option>
+        </select>
+      </label>
       <button
         type="button"
         onclick={() => {
@@ -104,8 +106,10 @@
           size = 'l';
           level = 2;
           color = 'muted';
-        }}>Reset example</button
+        }}
       >
+        Reset example
+      </button>
     </fieldset>
     <HeadingSection section={example} />
     <details><summary>View and copy the Svelte source</summary><LiveCode code={source} /></details>
@@ -130,10 +134,9 @@
       <p>
         <code>HeadingSection</code> adds the normal Section layout, background, spacing and anchor.
         It accepts a <code>section</code> using
-        <code
-          ><a href={base + '/docs/reference/types/#heading-section-data'}>HeadingSectionData</a
-          ></code
-        >
+        <code>
+          <a href={base + '/docs/reference/types/#heading-section-data'}>HeadingSectionData</a>
+        </code>
         (without a required type when used directly). Its visible heading falls back to
         <code>title</code>. Use
         <code>headingSize</code>

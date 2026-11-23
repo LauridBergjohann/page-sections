@@ -17,8 +17,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -44,13 +44,14 @@ console.log(page.title, cards, resolveContentGrid(840));`
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Choose <code>@page-sections/svelte</code> for a Svelte website, or
         <code>@page-sections/core</code> for framework-independent data and calculations.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -59,7 +60,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
       headline: 'Svelte and SvelteKit',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Start with an existing Svelte 5 or SvelteKit application. Run the installation command in
         its project directory:
@@ -82,8 +84,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
         prebuilt browser script. Only <code>@page-sections/svelte</code> and
         <code>@page-sections/svelte/styles.css</code> are public entry points.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -92,7 +94,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
       headline: 'Styling',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Import the shared stylesheet once in your application entry or layout. It provides the theme
         defaults and layout rules used throughout the examples.
@@ -108,8 +111,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
         introduced in
         <a href={base + '/docs/foundations/themes/'}>Themes and Styling</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -118,7 +121,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
       headline: 'Core utilities',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <CodeBlock {...examples[2]} highlighted={data.highlights[2]} />
       <p>
         Core is the framework-independent package for data shapes and layout calculations. It has no
@@ -129,8 +133,8 @@ console.log(page.title, cards, resolveContentGrid(840));`
         Svelte page:
       </p>
       <CodeBlock {...examples[3]} highlighted={data.highlights[3]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -139,11 +143,12 @@ console.log(page.title, cards, resolveContentGrid(840));`
       headline: 'Example conventions',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        Svelte examples include their imports and data. Media URLs such as <code
-          >/images/garden.jpg</code
-        >
+        Svelte examples include their imports and data. Media URLs such as <code>
+          /images/garden.jpg
+        </code>
         and <code>/media/tour.mp4</code> are application assets: supply those files in Vite's
         <code>public/</code>
         or SvelteKit's <code>static/</code>, or replace the URLs. Example links refer to application
@@ -153,13 +158,15 @@ console.log(page.title, cards, resolveContentGrid(840));`
       <p>
         SSR and prerendering belong to the application. A client-only Vite app still requires
         JavaScript to show content. The <a
-          href="https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo">demo</a
+          href="https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo"
         >
+          demo
+        </a>
         demonstrates SvelteKit prerendering with adapter-static; see
         <a href={base + '/docs/advanced/ssr/'}>SSR and Progressive Enhancement</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'next-step',
@@ -167,12 +174,15 @@ console.log(page.title, cards, resolveContentGrid(840));`
       headline: 'Next: understand sections',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The package is installed. Continue with <a
-          href={base + '/docs/foundations/pages-and-sections/'}>What are sections?</a
-        > before building your first page.
+          href={base + '/docs/foundations/pages-and-sections/'}
+        >
+          What are sections?
+        </a> before building your first page.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

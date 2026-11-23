@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import {
     CardGridSection,
     CarouselSection,
@@ -83,39 +83,39 @@
 
 <div class="playground">
   <div class="playground-controls">
-    <label
-      >Card size<select bind:value={cardSize} disabled={!ready}
-        ><option value="s">Small</option><option value="m">Medium</option><option value="l"
-          >Large</option
-        ></select
-      ></label
-    >
-    <label
-      >Card tone<select bind:value={cardTone} disabled={!ready}
-        ><option>standard</option><option>muted</option></select
-      ></label
-    >
-    <label class="toggle"
-      ><input type="checkbox" bind:checked={cardShadow} disabled={!ready} /> Card shadow</label
-    >
-    <label class="toggle"
-      ><input type="checkbox" bind:checked={descriptions} disabled={!ready} /> Show descriptions</label
-    >
-    <label
-      >Media aspect<select bind:value={mediaAspect} disabled={!ready}
-        ><option>3/2</option><option>4/3</option><option>1/1</option></select
-      ></label
-    >
-    <label
-      >Media fit<select bind:value={mediaFit} disabled={!ready}
-        ><option>cover</option><option>contain</option></select
-      ></label
-    >
-    <label
-      >Text alignment<select bind:value={textAlign} disabled={!ready}
-        ><option>start</option><option>center</option></select
-      ></label
-    >
+    <label>
+      Card size<select bind:value={cardSize} disabled={!ready}>
+        <option value="s">Small</option><option value="m">Medium</option><option value="l">
+          Large
+        </option>
+      </select>
+    </label>
+    <label>
+      Card tone<select bind:value={cardTone} disabled={!ready}>
+        <option>standard</option><option>muted</option>
+      </select>
+    </label>
+    <label class="toggle">
+      <input type="checkbox" bind:checked={cardShadow} disabled={!ready} /> Card shadow
+    </label>
+    <label class="toggle">
+      <input type="checkbox" bind:checked={descriptions} disabled={!ready} /> Show descriptions
+    </label>
+    <label>
+      Media aspect<select bind:value={mediaAspect} disabled={!ready}>
+        <option>3/2</option><option>4/3</option><option>1/1</option>
+      </select>
+    </label>
+    <label>
+      Media fit<select bind:value={mediaFit} disabled={!ready}>
+        <option>cover</option><option>contain</option>
+      </select>
+    </label>
+    <label>
+      Text alignment<select bind:value={textAlign} disabled={!ready}>
+        <option>start</option><option>center</option>
+      </select>
+    </label>
     <button type="button" onclick={reset} disabled={!ready}>Reset example</button>
   </div>
   <div data-preview>

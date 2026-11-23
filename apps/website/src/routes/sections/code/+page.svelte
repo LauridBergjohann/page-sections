@@ -76,11 +76,11 @@ const highlighted = await highlightCode(code, 'typescript');
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
 
-  import CodePlayground from '$lib/CodePlayground.svelte';
+  import CodePlayground from '#lib/CodePlayground.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -104,8 +104,10 @@ const highlighted = await highlightCode(code, 'typescript');
       title: 'Try it',
       headline: 'Try the presentation',
       variant: 'content'
-    }}><CodePlayground /></Section
+    }}
   >
+    <CodePlayground />
+  </Section>
   <SectionAnatomy kind="code" />
   <Section
     section={{
@@ -136,9 +138,9 @@ const highlighted = await highlightCode(code, 'typescript');
   >
     <div class="prose">
       <p>
-        Plain code works without a highlighting dependency. For syntax colors, install the optional <code
-          >shiki</code
-        >
+        Plain code works without a highlighting dependency. For syntax colors, install the optional <code>
+          shiki
+        </code>
         peer and import <code>highlightCode</code> from the separate entry point. This supports Shiki's
         bundled languages and aliases; unknown languages fall back to plain text.
       </p>
@@ -171,8 +173,10 @@ const highlighted = await highlightCode(code, 'typescript');
     <div class="prose">
       <p>
         Place a rich-text section and a code section in a <a
-          href={base + '/docs/building-blocks/grids/'}>grid</a
-        >. Reorder its blocks to put the code first. Small containers stack the blocks in reading
+          href={base + '/docs/components/grids/'}
+        >
+          grid
+        </a>. Reorder its blocks to put the code first. Small containers stack the blocks in reading
         order; larger containers display them side by side.
       </p>
       <CodeBlock {...examples[2]} highlighted={data.highlights[2]} />
@@ -192,70 +196,69 @@ const highlighted = await highlightCode(code, 'typescript');
       <div class="table-scroll" tabindex="0" role="region" aria-label="Code options">
         <table>
           <thead><tr><th>Option</th><th>Default</th><th>Meaning</th></tr></thead><tbody>
-            <tr
-              ><td><code>code: string</code></td><td>Required</td><td
-                >Original source. Copy preserves it exactly.</td
-              ></tr
-            >
-            <tr
-              ><td><code>language: string</code></td><td>text</td><td
-                >Visible language label and highlighting language.</td
-              ></tr
-            >
-            <tr
-              ><td><code>filename: string</code></td><td>Unset</td><td
-                >Optional file or terminal label.</td
-              ></tr
-            >
-            <tr
-              ><td
-                ><code
-                  >tone: <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a
-                  ></code
-                ></td
-              ><td>muted</td><td>standard or muted theme surface.</td></tr
-            >
-            <tr
-              ><td><code>lineNumbers: boolean</code></td><td>false</td><td
-                >Visual line numbers, excluded from speech and copied source.</td
-              ></tr
-            >
-            <tr
-              ><td><code>highlightLines: number[]</code></td><td>[]</td><td
-                >One-based line markers. Invalid and out-of-range numbers have no effect.</td
-              ></tr
-            >
-            <tr
-              ><td><code>wrap: boolean</code></td><td>false</td><td
-                >Wrap long lines instead of horizontal scrolling.</td
-              ></tr
-            >
+            <tr>
+              <td><code>code: string</code></td><td>Required</td><td>
+                Original source. Copy preserves it exactly.
+              </td>
+            </tr>
+            <tr>
+              <td><code>language: string</code></td><td>text</td><td>
+                Visible language label and highlighting language.
+              </td>
+            </tr>
+            <tr>
+              <td><code>filename: string</code></td><td>Unset</td><td>
+                Optional file or terminal label.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>
+                  tone: <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a>
+                </code>
+              </td><td>muted</td><td>standard or muted theme surface.</td>
+            </tr>
+            <tr>
+              <td><code>lineNumbers: boolean</code></td><td>false</td><td>
+                Visual line numbers, excluded from speech and copied source.
+              </td>
+            </tr>
+            <tr>
+              <td><code>highlightLines: number[]</code></td><td>[]</td><td>
+                One-based line markers. Invalid and out-of-range numbers have no effect.
+              </td>
+            </tr>
+            <tr>
+              <td><code>wrap: boolean</code></td><td>false</td><td>
+                Wrap long lines instead of horizontal scrolling.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
       <p>
-        Additional component props: <code
-          >highlighted?: <a href={base + '/docs/reference/types/#highlighted-code'}
-            >HighlightedCode</a
-          ></code
-        >, <code>copy</code>
+        Additional component props: <code>
+          highlighted?: <a href={base + '/docs/reference/types/#highlighted-code'}>
+            HighlightedCode
+          </a>
+        </code>, <code>copy</code>
         (true), <code>label</code> (“Code example”), <code>copyLabel</code> (“Copy code”),
         <code>copiedLabel</code>
         (“Copied”), and <code>copyErrorLabel</code>. Set these labels when localizing the host.
       </p>
       <p>
         <code>CodeSection</code> accepts
-        <code
-          >section: Omit&lt;<a href={base + '/docs/reference/types/#code-section-data'}
-            >CodeSectionData</a
-          >, 'type'&gt;</code
-        >
+        <code>
+          section: Omit&lt;<a href={base + '/docs/reference/types/#code-section-data'}>
+            CodeSectionData
+          </a>, 'type'&gt;
+        </code>
         and optional <code>highlighted</code>.
         <code><a href={base + '/docs/reference/types/#code-section-data'}>CodeSectionData</a></code>
         extends
-        <code
-          ><a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a></code
-        >
+        <code>
+          <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
+        </code>
         and <code><a href={base + '/docs/reference/types/#code-data'}>CodeData</a></code> with
         <code>type: 'code'</code>.
         <code><a href={base + '/docs/reference/types/#code-token'}>CodeToken</a></code>

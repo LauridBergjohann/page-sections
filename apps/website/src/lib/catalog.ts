@@ -86,45 +86,17 @@ export const documents = [
     category: ''
   },
   {
-    title: 'Components',
-    href: '/docs/building-blocks/',
-    description: 'Section, Card, Image, ContentGrid and ContentBlock.',
-    group: 'Overview',
-    category: ''
-  },
-  {
-    title: 'Section',
-    href: '/docs/building-blocks/section/',
-    description: 'The base section container and its shared properties.',
-    group: 'Components',
-    category: ''
-  },
-  {
-    title: 'Card',
-    href: '/docs/building-blocks/card/',
-    description: 'Present an item with an image, title, optional description and links.',
-    group: 'Components',
-    category: ''
-  },
-  {
-    title: 'Image',
-    href: '/docs/building-blocks/image/',
-    description: 'Responsive, accessible and theme-aware image rendering.',
-    group: 'Components',
-    category: ''
-  },
-  {
-    title: 'ContentGrid and ContentBlock',
-    href: '/docs/building-blocks/grids/',
-    description: 'Arrange content with responsive column spans.',
-    group: 'Components',
-    category: ''
-  },
-  {
     title: 'Design system',
     href: '/docs/design-system/',
-    description: 'Layout sizes and responsiveness, Backgrounds and groups.',
+    description: 'Atomic design, layout sizes, responsiveness and backgrounds.',
     group: 'Overview',
+    category: ''
+  },
+  {
+    title: 'Atomic design',
+    href: '/docs/design-system/atomic-design/',
+    description: 'Atoms, molecules, organisms and shared composition.',
+    group: 'Design system',
     category: ''
   },
   {
@@ -139,6 +111,62 @@ export const documents = [
     href: '/docs/design-system/backgrounds/',
     description: 'Surface colors, widths, transitions and connected groups.',
     group: 'Design system',
+    category: ''
+  },
+  {
+    title: 'Components',
+    href: '/docs/components/',
+    description: 'Atoms, molecules, organisms and page composition.',
+    group: 'Overview',
+    category: ''
+  },
+  {
+    title: 'Buttons',
+    href: '/docs/components/buttons/',
+    description: 'Primary, secondary and icon actions.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'ButtonGroup',
+    href: '/docs/components/button-group/',
+    description: 'Related choices and animated selected states.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'Popup',
+    href: '/docs/components/popup/',
+    description: 'Shared floating surfaces, titles and dismissal.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'Section',
+    href: '/docs/components/section/',
+    description: 'The base section container and its shared properties.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'Card',
+    href: '/docs/components/card/',
+    description: 'Present an item with an image, title, optional description and links.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'Image',
+    href: '/docs/components/image/',
+    description: 'Responsive, accessible and theme-aware image rendering.',
+    group: 'Components',
+    category: ''
+  },
+  {
+    title: 'ContentGrid and ContentBlock',
+    href: '/docs/components/grids/',
+    description: 'Arrange content with responsive column spans.',
+    group: 'Components',
     category: ''
   },
   {

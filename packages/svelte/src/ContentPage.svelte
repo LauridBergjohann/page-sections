@@ -77,11 +77,11 @@
   aria-label={rest['aria-label'] ?? (!rest['aria-labelledby'] ? page.title : undefined)}
 >
   <div class="ps-page-frame">
-    <div class="breadcrumbs">
+    <div class="breadcrumbs ps-grid-scope">
       <Breadcrumbs items={page.breadcrumbs ?? []} />
     </div>
     {#if leftSidebar}<aside class="ps-left-sidebar">
-        <div class="sidebar-panel ps-sidebar-scroll" use:fitSidebar>{@render leftSidebar()}</div>
+        <div class="sidebar-panel ps-sidebar-scroll ps-shadow-surface" use:fitSidebar>{@render leftSidebar()}</div>
       </aside>{/if}
     <div class="ps-page-content">
       <SectionSurfaceGroup>
@@ -95,8 +95,8 @@
           </div>
         </div>
       </SectionSurfaceGroup>
-      {@render (pageEnd ?? footer)?.()}
     </div>
+    {#if pageEnd || footer}<div class="ps-page-end">{@render (pageEnd ?? footer)?.()}</div>{/if}
     <!-- After sections register, including during SSR. -->
     {#if showContentMenu && sections().length}<aside class="ps-content-menu-slot">
         <ContentMenu items={sections()} {host} label={contentMenuLabel} />
@@ -129,6 +129,7 @@
     grid-row: 2;
     min-width: 0;
   }
+  .ps-page-end { grid-column: 2; grid-row: 3; min-width: 0; }
   .breadcrumbs {
     min-width: 0;
     min-height: var(--ps-breadcrumb-height);
@@ -142,11 +143,10 @@
   .ps-content-menu-slot {
     grid-column: 2;
     grid-row: 2;
-    position: sticky;
-    top: 0;
-    align-self: start;
+    position: relative;
+    align-self: stretch;
     justify-self: end;
-    height: 0;
+    pointer-events: none;
     z-index: 5;
   }
   @media (min-width: 1600px) {
@@ -162,6 +162,7 @@
       z-index: 2;
     }
     .sidebar-panel {
+      border: 1px solid var(--ps-panel-border);
       position: sticky;
       top: var(--ps-sidebar-sticky-top);
       max-height: var(--ps-sidebar-available-height, calc(100dvh - var(--ps-nav-height) - var(--ps-breadcrumb-height) - var(--ps-sidebar-sticky-top)));
@@ -170,7 +171,7 @@
       padding-block: 0.75rem;
       background: var(--ps-section-standard);
       border-radius: var(--ps-radius);
-      box-shadow: var(--ps-surface-shadow);
+      box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow));
     }
     .ps-content-menu-slot {
       grid-column: 3;
@@ -180,7 +181,8 @@
       justify-self: start;
       width: var(--ps-sidebar-right-width);
       height: auto;
-      padding-top: var(--ps-content-menu-offset);
+      padding-block: var(--ps-content-menu-offset);
+      pointer-events: auto;
       z-index: 0;
     }
   }

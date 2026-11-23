@@ -1,19 +1,19 @@
 <script lang="ts">
   import { onMount, type Snippet } from 'svelte';
   import { page } from '$app/state';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { ButtonGroup, Footer, Header, PageShell } from '@page-sections/svelte';
   import Menu from '@lucide/svelte/icons/menu';
   import Settings from '@lucide/svelte/icons/settings';
   import Sun from '@lucide/svelte/icons/sun';
   import Moon from '@lucide/svelte/icons/moon';
   import Globe from '@lucide/svelte/icons/globe';
-  import Github from '$lib/GitHubMark.svelte';
-  import LinkedIn from '$lib/LinkedInMark.svelte';
-  import BrandMark from '$lib/BrandMark.svelte';
-  import SiteSearch from '$lib/SiteSearch.svelte';
-  import NavigationIcon from '$lib/NavigationIcon.svelte';
-  import { navigationTree } from '$lib/navigation';
+  import Github from '#lib/GitHubMark.svelte';
+  import LinkedIn from '#lib/LinkedInMark.svelte';
+  import BrandMark from '#lib/BrandMark.svelte';
+  import SiteSearch from '#lib/SiteSearch.svelte';
+  import NavigationIcon from '#lib/NavigationIcon.svelte';
+  import { navigationTree } from '#lib/navigation.js';
   import { resolveNavigation } from '@page-sections/core';
   import { version } from '../../../../packages/svelte/package.json';
   import '../app.css';
@@ -40,6 +40,22 @@
   }
   const items = $derived(resolveNavigation(navigationTree, { pathname: page.url.pathname }).items);
 </script>
+
+{#snippet appearance(iconOnly: boolean)}
+  <ButtonGroup
+    label="Appearance"
+    {iconOnly}
+    items={[
+      { id: 'light', label: 'Light', selected: mode === 'light', disabled: !ready },
+      { id: 'dark', label: 'Dark', selected: mode === 'dark', disabled: !ready }
+    ]}
+    onselect={(item) => setMode(item.id)}
+  >
+    {#snippet icon(item)}
+      {#if item.id === 'light'}<Sun size={18} />{:else}<Moon size={18} />{/if}
+    {/snippet}
+  </ButtonGroup>
+{/snippet}
 
 {#snippet githubIcon()}<Github />{/snippet}
 {#snippet linkedinIcon()}<LinkedIn />{/snippet}
@@ -72,32 +88,28 @@
             rel="noopener noreferrer"
             href="https://github.com/LauridBergjohann/page-sections"
             aria-label="Page Sections on GitHub"
-            title="Source on GitHub"><Github /></a
+            title="Source on GitHub"
           >
+            <Github />
+          </a>
           <a
             class="github-link"
             target="_blank"
             rel="noopener noreferrer"
             href="https://www.npmjs.com/package/@page-sections/svelte"
             aria-label="Page Sections on NPM"
-            title="Package on NPM"><BrandMark kind="npm" /></a
+            title="Package on NPM"
           >
+            <BrandMark kind="npm" />
+          </a>
         </div>
       {/snippet}
       {#snippet right()}
-        <ButtonGroup
-          label="Appearance"
-          iconOnly
-          items={[
-            { id: 'light', label: 'Light', selected: mode === 'light', disabled: !ready },
-            { id: 'dark', label: 'Dark', selected: mode === 'dark', disabled: !ready }
-          ]}
-          onselect={(item) => setMode(item.id)}
-        >
-          {#snippet icon(item)}
-            {#if item.id === 'light'}<Sun size={18} />{:else}<Moon size={18} />{/if}
-          {/snippet}
-        </ButtonGroup>
+        <div class="appearance-expanded">
+          <h3>Appearance</h3>
+          {@render appearance(false)}
+        </div>
+        <div class="appearance-compact">{@render appearance(true)}</div>
       {/snippet}
     </Header>
     <div id="main-content" tabindex="-1">{@render children()}</div>
@@ -148,8 +160,8 @@
           links: [
             { label: 'Foundations', href: base + '/docs/foundations/' },
             { label: 'Page layout', href: base + '/docs/page-layout/' },
-            { label: 'Components', href: base + '/docs/building-blocks/' },
             { label: 'Design system', href: base + '/docs/design-system/' },
+            { label: 'Components', href: base + '/docs/components/' },
             { label: 'Advanced', href: base + '/docs/advanced/' },
             { label: 'Reference', href: base + '/docs/reference/' }
           ]
@@ -185,6 +197,26 @@
 {/if}
 
 <style>
+  .appearance-expanded {
+    display: grid;
+    gap: 12px;
+  }
+  .appearance-expanded h3 {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .appearance-compact {
+    display: none;
+  }
+  @media (min-width: 1600px) {
+    .appearance-expanded {
+      display: none;
+    }
+    .appearance-compact {
+      display: block;
+    }
+  }
   .header-tools {
     display: flex;
     align-items: center;
@@ -197,6 +229,10 @@
     height: 40px;
     border-radius: 0.5rem;
     color: var(--ps-ink);
+  }
+  .github-link:focus-visible {
+    outline: 2px solid var(--ps-accent);
+    outline-offset: 2px;
   }
   .github-link:hover {
     background: var(--ps-selection, var(--ps-section-muted));

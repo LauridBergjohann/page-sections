@@ -18,8 +18,10 @@
   </div>
   <div class="swatches">
     <span class="transparent">transparent</span><span class="standard">standard</span><span
-      class="muted">muted</span
-    ><span class="transition">transparentToStandard ↓</span>
+      class="muted"
+    >
+      muted
+    </span><span class="transition">transparentToStandard ↓</span>
   </div>
   <figcaption>
     Transparent reveals the page background. Standard and muted use theme colors; gradients blend

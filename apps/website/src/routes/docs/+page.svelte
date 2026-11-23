@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
 </script>
 
 <WebsitePage
@@ -26,7 +26,8 @@
       headline: 'Start with the basics',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Page Sections is a Svelte toolkit for composing content websites. A section is a meaningful
         part of a page, such as an introduction, a text passage or an image with a caption. You
@@ -38,8 +39,8 @@
         wherever you need them.
       </p>
       <p><a href={base + '/docs/foundations/installation/'}>Start with installation</a></p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'learning-path',
@@ -47,7 +48,8 @@
       headline: 'Your learning path',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ol>
         <li>
           <a href={base + '/docs/foundations/'}>Foundations</a> — Install the library, understand what
@@ -58,12 +60,12 @@
           page with a header, main content, sidebars and footer.
         </li>
         <li>
-          <a href={base + '/docs/building-blocks/'}>Components</a> — Explore the base Section, individual
-          cards, images and column layouts.
+          <a href={base + '/docs/design-system/'}>Design system</a> — Understand atomic design, widths,
+          viewport breakpoints, container responsiveness and connected backgrounds.
         </li>
         <li>
-          <a href={base + '/docs/design-system/'}>Design system</a> — Understand widths, viewport breakpoints,
-          container responsiveness and connected backgrounds.
+          <a href={base + '/docs/components/'}>Components</a> — Explore the base Section, individual cards,
+          images and column layouts.
         </li>
         <li>
           <a href={base + '/docs/advanced/'}>Advanced</a> — Build your own section, render content data
@@ -74,8 +76,8 @@
           core utilities and exact design tokens.
         </li>
       </ol>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'find-an-answer',
@@ -83,7 +85,8 @@
       headline: 'Find a specific answer',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Already know the basics? The <a href={base + '/sections/'}>section gallery</a> shows
         ready-made text, media and collection layouts. The
@@ -94,6 +97,6 @@
         The documentation follows the package version shown in the footer. Examples use application
         routes and media files that you provide.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

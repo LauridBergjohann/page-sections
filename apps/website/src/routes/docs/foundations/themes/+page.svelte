@@ -46,8 +46,8 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -73,7 +73,8 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         A theme is a set of shared visual values such as colors, typeface and corner radius.
         PageShell is an optional wrapper that applies those values and a color mode to all
@@ -87,8 +88,8 @@
         content.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -97,7 +98,8 @@
       headline: 'Complete PageTheme mapping',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>Every property is an optional CSS string, including units where needed.</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -109,17 +111,19 @@
             </tr>
           </thead>
           <tbody>
+            <tr><td><code>border</code></td><td><code>--ps-border</code></td></tr>
+            <tr><td><code>panelBorder</code></td><td><code>--ps-panel-border</code></td></tr>
             <tr>
               <td><code>footerBackground</code></td><td><code>--ps-footer-background</code></td>
             </tr>
             <tr><td><code>footerInk</code></td><td><code>--ps-footer-ink</code></td></tr>
             <tr><td><code>footerRadius</code></td><td><code>--ps-footer-radius</code></td></tr>
             <tr><td><code>footerShadow</code></td><td><code>--ps-footer-shadow</code></td></tr>
-            <tr
-              ><td><code>footerBarBackground</code></td><td
-                ><code>--ps-footer-bar-background</code></td
-              ></tr
-            >
+            <tr>
+              <td><code>footerBarBackground</code></td><td>
+                <code>--ps-footer-bar-background</code>
+              </td>
+            </tr>
             <tr><td><code>footerBarInk</code></td><td><code>--ps-footer-bar-ink</code></td></tr>
             <tr>
               <td><code>background</code></td>
@@ -165,15 +169,17 @@
         </table>
       </div>
       <p>
-        PageShell applies these to its div; ContentPage.theme applies them to its main element. The <code
-          >themeStyle</code
-        >
+        PageShell applies these to its div; ContentPage.theme applies them to its main element. The <code>
+          themeStyle
+        </code>
         core helper performs the mapping and rejects unknown keys and values containing declaration delimiters.
-        It is not a full CSS value validator. Variables outside this table, such as
-        <code>--ps-border</code>, can be set in CSS.
+        It is not a full CSS value validator. Use <code>border</code> for cards and controls, and
+        <code>panelBorder</code>
+        for panels and navigation. Set either to <code>transparent</code> to hide that edge without changing
+        layout. Other CSS variables can be set directly in CSS.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -182,7 +188,8 @@
       headline: 'Light and dark modes',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         PageShell accepts <code>mode: 'light' | 'dark'</code>. Dark mode changes the palette
         variables listed in the <a href={base + '/docs/reference/tokens/'}>CSS reference</a>. An
@@ -195,8 +202,8 @@
         explicitly supply a light palette. Image uses the nearest PageShell's mode context for
         srcDark; absent an explicit mode, its picture source uses the OS preference independently.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -205,7 +212,8 @@
       headline: 'Integrate an existing design system',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
       <p>
         Place this class on an ancestor around the components and define the host variables. Shared
@@ -225,15 +233,17 @@
         Section variant selects default grid typography, content headings or larger feature
         headings. Most high-level components do not forward arbitrary class/style props; use the
         documented theme and section fields or ancestor CSS. See the <a
-          href={base + '/docs/reference/svelte-api/'}>Svelte API</a
-        > for forwarding exceptions.
+          href={base + '/docs/reference/svelte-api/'}
+        >
+          Svelte API
+        </a> for forwarding exceptions.
       </p>
       <p>
-        Related: <a href={base + '/docs/design-system/backgrounds/'}
-          >Section Backgrounds and Surface Groups</a
-        >,
+        Related: <a href={base + '/docs/design-system/backgrounds/'}>
+          Section Backgrounds and Surface Groups
+        </a>,
         <a href={base + '/docs/reference/tokens/'}>CSS Variables and Layout Tokens</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

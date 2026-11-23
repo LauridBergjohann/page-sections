@@ -1,5 +1,5 @@
 import { highlightCode } from '@page-sections/svelte/highlight';
-import { sectionExample } from '$lib/sectionExamples';
+import { sectionExample } from '#lib/sectionExamples.js';
 
 export async function load() {
   const example = sectionExample('code');

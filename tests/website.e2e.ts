@@ -1,5 +1,38 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+test('control and panel edges are independent and preserve header geometry', async ({ page }) => {
+  await page.goto('/docs/');
+  await page.addStyleTag({ content: ':root, .ps-shell { --ps-border: rgb(200, 50, 30) !important; --ps-panel-border: rgb(30, 60, 200) !important; }' });
+  const header = page.locator('.website-header .header');
+  for (const width of [390, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    const edge = await header.evaluate(el => {
+      const css = getComputedStyle(el, '::after');
+      return { color: css.borderBottomColor, top: css.borderTopWidth, bottom: css.borderBottomWidth };
+    });
+    expect(edge).toEqual({ color: 'rgb(30, 60, 200)', top: width < 1600 ? '0px' : '1px', bottom: '1px' });
+    const before = await header.boundingBox();
+    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: transparent !important; }' });
+    expect(await header.boundingBox()).toEqual(before);
+    await page.addStyleTag({ content: ':root, .ps-shell { --ps-panel-border: rgb(30, 60, 200) !important; }' });
+  }
+  await expect(page.locator('.satellite .ps-button-group').first()).toHaveCSS('outline-color', 'rgb(200, 50, 30)');
+});
+
+test('breadcrumbs follow the responsive content inset', async ({ page }) => {
+  await page.goto('/docs/foundations/installation/');
+  const breadcrumbs = page.locator('.breadcrumbs');
+  const content = page.locator('.ps-page-content .ps-section-content').first();
+  for (const [width, inset] of [[390, 12], [599, 12], [600, 16], [839, 16], [840, 16], [1199, 16], [1200, 24], [1599, 24]]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(breadcrumbs).toHaveCSS('padding-left', `${inset}px`);
+    await expect(breadcrumbs).toHaveCSS('padding-right', `${inset}px`);
+    const breadcrumbStart = await breadcrumbs.locator('nav').evaluate(el => el.getBoundingClientRect().left);
+    const contentStart = await content.evaluate(el => el.getBoundingClientRect().left + parseFloat(getComputedStyle(el).paddingLeft));
+    expect(Math.abs(breadcrumbStart - contentStart)).toBeLessThan(1);
+  }
+});
+
 for (const width of [390, 1599]) {
   for (const javaScriptEnabled of [false, true]) {
     test(`compact content menu docks and reflects its open state at ${width}px, JS=${javaScriptEnabled}`, async ({ browser, baseURL }) => {
@@ -35,14 +68,13 @@ for (const width of [390, 1599]) {
         node.style.setProperty('--ps-selection', 'rgb(50, 60, 70)');
       });
       const normal = await button.evaluate(node => ({ color: getComputedStyle(node).color, background: getComputedStyle(node).backgroundColor }));
-      for (const dismissal of javaScriptEnabled ? ['toggle', 'escape', 'close', 'outside'] : ['toggle']) {
+      for (const dismissal of javaScriptEnabled ? ['toggle', 'escape', 'outside'] : ['toggle']) {
         await button.click();
         await expect(popup).toBeVisible();
         await expect(button).toHaveCSS('color', 'rgb(4, 180, 120)');
         await expect(button.locator('svg')).toHaveCSS('stroke', 'rgb(4, 180, 120)');
         await expect(button).toHaveCSS('background-color', 'rgb(50, 60, 70)');
         if (dismissal === 'escape') await page.keyboard.press('Escape');
-        else if (dismissal === 'close') await popup.getByRole('button', { name: 'Close content menu' }).click();
         else if (dismissal === 'outside') await content.locator('h1').click();
         else await button.click();
         await expect(popup).toBeHidden();
@@ -236,7 +268,7 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await expect(docs).toHaveCSS('border-radius', '0px');
   const headerBox = (await page.locator('.website-header .header').boundingBox())!;
   expect((await docs.boundingBox())!.height).toBe(headerBox.height);
-  await expect(page.locator('.satellite.right [aria-pressed="true"]')).toHaveCSS('color', colors.accent);
+  await expect(page.locator('.satellite.right [aria-pressed="true"]:visible')).toHaveCSS('color', colors.accent);
   await docs.hover();
   const overlay = page.locator('.ps-submenu:visible');
   const linkBox = (await docs.boundingBox())!;
@@ -317,22 +349,22 @@ test('desktop page links reveal only the second level and retain native navigati
   await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(9);
   await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(9);
   await expect(menu.locator('.ps-submenu .ps-submenu')).toHaveCount(0);
-  await expect(page.locator('.menu-backdrop')).toBeVisible();
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('transition-duration', /^0\.18s(?:, 0\.18s)*$/);
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toBeVisible();
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('transition-duration', '0s');
   await page.mouse.move(0, 500);
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
   await docs.hover();
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('backdrop-filter', 'blur(3px)');
   await page.keyboard.press('Escape');
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
   await menu.getByRole('link', { name: 'About', exact: true }).focus();
   await docs.focus();
   await expect(menu.getByRole('link', { name: 'Hero', exact: true })).toBeVisible();
   await menu.getByRole('link', { name: 'Hero', exact: true }).focus();
   await page.keyboard.press('Escape');
   await expect(docs).toBeFocused();
-  await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
   const opened = page.context().waitForEvent('page');
   await docs.click({ modifiers: ['Control'] });
   const newTab = await opened;
@@ -350,40 +382,37 @@ test('desktop page links reveal only the second level and retain native navigati
   await expect(page.locator('.reading-path [rel="next"]')).toContainText('Image');
 });
 
-test('mobile menus animate the page blur and restore it on every dismissal path', async ({ page }) => {
+test('mobile menus allocate the page blur only while open and restore it on every dismissal path', async ({ page }) => {
   await page.goto('/docs/foundations/installation/');
-  const backdrop = page.locator('.website-header .menu-backdrop');
+  const backdrop = page.locator('[data-ps-popup-backdrop]:popover-open');
   const burger = page.locator('.website-header .mobile-menu > summary');
   for (const width of [320, 600, 840]) {
     await page.setViewportSize({ width, height: 900 });
     await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true }).locator('ol')).toHaveCSS('font-size', '12px');
-    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
-    await expect(backdrop).toHaveCSS('transition-property', /(?:^|, )backdrop-filter$/);
-    await expect(backdrop).toHaveCSS('transition-duration', /^0\.18s(?:, 0\.18s)*$/);
+    await expect(backdrop).toHaveCount(0);
     await burger.click();
     await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
     await burger.click();
-    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+    await expect(backdrop).toHaveCount(0);
     await burger.click();
     await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
     await page.keyboard.press('Escape');
-    await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+    await expect(backdrop).toHaveCount(0);
   }
   await burger.click();
   await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
   await page.locator('.site-footer').click({ position: { x: 5, y: 5 } });
-  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(backdrop).toHaveCount(0);
   await burger.click();
   await page.setViewportSize({ width: 1600, height: 900 });
-  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(backdrop).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 900 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(backdrop).toHaveCSS('transition-duration', '0s');
   await burger.click();
   await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(3px)');
   await page.locator('.mobile-panel').getByRole('link', { name: 'Documentation', exact: true }).click();
   await expect(page).toHaveURL(/\/docs\/$/);
-  await expect(backdrop).toHaveCSS('backdrop-filter', 'blur(0px)');
+  await expect(backdrop).toHaveCount(0);
 });
 
 test('touch and mobile users can reach deep pages through real parent pages', async ({ browser }) => {
@@ -428,7 +457,7 @@ for (const width of [390, 1600]) {
       await burger.click();
       await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(3px)');
       await burger.click();
-      await expect(page.locator('.menu-backdrop')).toHaveCSS('backdrop-filter', 'blur(0px)');
+      await expect(page.locator('.menu-backdrop')).toBeHidden();
     }
     await page.screenshot({ path: `.artifacts/website-no-js-${width}.png`, fullPage: true });
     await context.close();
@@ -590,10 +619,16 @@ for (const javaScriptEnabled of [false, true]) {
     const radius = await page.locator('.ps-shell').evaluate(element => getComputedStyle(element).getPropertyValue('--ps-radius').trim());
     await expect(corners).toHaveCSS('border-top-left-radius', radius);
     await expect(corners).toHaveCSS('border-bottom-left-radius', '0px');
+    await expect(corners).toHaveCSS('border-top-width', '1px');
+    await expect(corners).toHaveCSS('border-bottom-width', '0px');
     for (const [index, slug] of sectionSlugs.entries()) {
       await expect(page.locator(`#${slug}`)).toHaveAttribute('data-background-color', index % 2 ? 'standard' : 'muted');
       const surface = page.locator(`#${slug} > .ps-section-surface`);
       await expect(surface).toHaveCSS('border-top-left-radius', '0px');
+      await expect(surface).toHaveCSS('border-top-width', '0px');
+      await expect(surface).toHaveCSS('border-bottom-width', index === sectionSlugs.length - 1 ? '1px' : '0px');
+      await expect(surface).toHaveCSS('border-left-width', '1px');
+      await expect(surface).toHaveCSS('border-right-width', '1px');
       await expect(surface).toHaveCSS('border-bottom-left-radius', index === sectionSlugs.length - 1 ? radius : '0px');
     }
     const tokens = page.locator('#code-example .code-line > span[style*="--ps-code-light"]');
@@ -633,7 +668,7 @@ for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
     const header = await page.locator('.website-header .header').boundingBox();
     expect(header!.height).toBe(width < 1600 ? 66 : 64);
     const input = page.getByRole('combobox', { name: 'Search documentation' });
-    if (width < 800 || (width >= 1200 && width < 1400)) {
+    if (width < 800 || (width >= 1200 && width < 1600)) {
       await page.getByRole('button', { name: 'Open search', exact: true }).click();
     } else await input.click();
     await expect(input).toBeFocused();
@@ -642,7 +677,7 @@ for (const width of [320, 600, 840, 1200, 1400, 1600, 1700, 2300]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await input.press('Escape');
     await expect(page.getByRole('listbox')).toHaveCount(0);
-    if (width < 800 || (width >= 1200 && width < 1400)) await expect(page.getByRole('button', { name: 'Open search', exact: true })).toBeFocused();
+    if (width < 800 || (width >= 1200 && width < 1600)) await expect(page.getByRole('button', { name: 'Open search', exact: true })).toBeFocused();
     await page.keyboard.press('Control+k');
     await expect(input).toBeFocused();
     await input.fill('CodeBlock');
@@ -671,14 +706,18 @@ const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image
 
 test('documentation teaches concepts in order and chapter landing pages explain their scope', async ({ page }) => {
   await page.goto('/docs/');
-  for (const [slug, title] of [
-    ['foundations', 'Foundations'], ['page-layout', 'Page layout'],
-    ['building-blocks', 'Components'], ['design-system', 'Design system'],
-    ['advanced', 'Advanced'], ['reference', 'Reference']
+  for (const [slug, title, purpose] of [
+    ['foundations', 'Foundations', 'A section groups related content'],
+    ['page-layout', 'Page layout', 'The body contains the visible document'],
+    ['design-system', 'Design system', 'A design system is a shared set'],
+    ['components', 'Components', 'complete component catalog'],
+    ['advanced', 'Advanced', 'These guides assume'],
+    ['reference', 'Reference', 'A type describes the values']
   ]) {
     await page.goto(`/docs/${slug}/`);
     await expect(page.locator('main h1')).toHaveText(title);
-    expect(await page.locator('main .prose p').count()).toBeGreaterThanOrEqual(3);
+    await expect(page.locator('main .prose p').first()).toBeVisible();
+    await expect(page.locator('main .prose p').first()).toContainText(purpose);
     await expect(page.getByRole('navigation', { name: `Pages in ${title}`, exact: true })).toBeVisible();
     for (const width of [390, 1920]) {
       await page.setViewportSize({ width, height: 1000 });
@@ -739,8 +778,8 @@ test('previous documentation URLs retain permanent redirects to their new chapte
     ['building-blocks/navigation', 'page-layout/header'],
     ['building-blocks/breadcrumbs', 'page-layout/breadcrumbs'],
     ['building-blocks/footer', 'page-layout/footer'],
-    ['building-blocks/card-and-image', 'building-blocks/card'],
-    ['foundations/content-grid', 'building-blocks/grids'],
+    ['building-blocks/card-and-image', 'components/card'],
+    ['foundations/content-grid', 'components/grids'],
     ['foundations/responsive-layout', 'design-system/responsive-layout'],
     ['foundations/backgrounds', 'design-system/backgrounds']
   ]) {
@@ -917,4 +956,92 @@ test('compact header keeps the brand and prioritizes search and settings', async
   await expect(header).toHaveCSS('border-width', '0px');
   await expect(page.locator('.satellite.right')).toHaveCSS('outline-style', 'none');
   await page.screenshot({path: test.info().outputPath('navigation-dark.png')});
+});
+
+
+test('content menu omits only its docked edge and transparent sections stay unframed', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/docs/foundations/installation/');
+  const menu = page.locator('.ps-content-menu-slot .desktop');
+  await expect(menu).toHaveCSS('border-left-width', '0px');
+  await expect(menu).toHaveCSS('border-right-width', '1px');
+  const surface = page.locator('#page-heading > .ps-section-surface');
+  await expect(surface).toHaveCSS('border-right-width', '1px');
+  await expect(surface).not.toHaveCSS('box-shadow', 'none');
+  await expect(page.locator('.ps-content-menu-slot')).toHaveCSS('z-index', '0');
+  const sectionBox = (await surface.boundingBox())!;
+  const menuBox = (await menu.boundingBox())!;
+  expect(Math.abs(sectionBox.x + sectionBox.width - menuBox.x)).toBeLessThan(0.1);
+  const sidebar = page.locator('.sidebar-panel');
+  await expect(sidebar).toHaveCSS('border-left-width', '1px');
+  const sidebarBox = (await sidebar.boundingBox())!;
+  for (const active of await sidebar.locator('a.active').all()) {
+    const activeBox = (await active.boundingBox())!;
+    expect(activeBox.x).toBeGreaterThanOrEqual(sidebarBox.x + 1);
+    expect(activeBox.x + activeBox.width).toBeLessThanOrEqual(sidebarBox.x + sidebarBox.width - 1);
+  }
+  expect(await menu.evaluate(el => {
+    const rect = el.getBoundingClientRect();
+    return el.contains(document.elementFromPoint(rect.left + 0.5, rect.top + 24));
+  })).toBe(true);
+  for (const width of [390, 1000]) {
+    await page.setViewportSize({ width, height: 900 });
+    const surface = page.locator('#page-heading > .ps-section-surface');
+    await expect(surface).toHaveCSS('border-left-width', '0px');
+    await expect(surface).toHaveCSS('border-right-width', '0px');
+  }
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/docs/design-system/backgrounds/');
+  await expect(menu).toHaveCSS('border-left-width', '1px');
+  for (const surface of await page.locator('.ps-section:is([data-background-color="transparent"], [data-background-size="full"]) > .ps-section-surface').all()) {
+    await expect(surface).toHaveCSS('border-left-width', '0px');
+    await expect(surface).toHaveCSS('border-top-width', '0px');
+  }
+});
+
+
+test('shared shadow controls inherit locally and complete role overrides take precedence', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 900 });
+  await page.goto('/docs/foundations/installation/');
+  const header = page.locator('.website-header .header');
+  const surface = page.locator('#page-heading > .ps-section-surface');
+  await expect(header).toHaveCSS('box-shadow', /0px 4px 8px 0px/);
+  await expect(surface).toHaveCSS('box-shadow', /0px 3px 8px 0px/);
+  await page.locator('.ps-shell').evaluate(el => {
+    (el as HTMLElement).style.setProperty('--ps-shadow-color', '#ff0000');
+    (el as HTMLElement).style.setProperty('--ps-shadow-size', '2');
+    (el as HTMLElement).style.setProperty('--ps-shadow-intensity', '2');
+  });
+  await expect(header).toHaveCSS('box-shadow', /0px 8px 16px 0px/);
+  await expect(header).toHaveCSS('box-shadow', /color\(srgb 1 0 0 \/ 0.24\)/);
+  await expect(surface).toHaveCSS('box-shadow', /0px 6px 16px 0px/);
+  await expect(surface).toHaveCSS('clip-path', /-24px/);
+  await header.locator('.settings > summary').click();
+  const popup = page.locator('.settings-panel:popover-open');
+  await expect(popup).toHaveCSS('box-shadow', await header.evaluate(el => getComputedStyle(el).boxShadow));
+  await popup.evaluate(el => (el as HTMLElement).style.setProperty('--ps-shadow-color', '#00ff00'));
+  await expect(popup).toHaveCSS('box-shadow', /color\(srgb 0 1 0 \/ 0.24\)/);
+  await page.locator('.ps-shell').evaluate(el => {
+    (el as HTMLElement).style.setProperty('--ps-navigation-shadow', '1px 2px 3px blue');
+    (el as HTMLElement).style.setProperty('--ps-popup-shadow', 'none');
+    (el as HTMLElement).style.setProperty('--ps-shadow-intensity', '0');
+  });
+  await expect(header).toHaveCSS('box-shadow', 'rgb(0, 0, 255) 1px 2px 3px 0px');
+  await expect(popup).toHaveCSS('box-shadow', 'none');
+  await expect(surface).toHaveCSS('box-shadow', /\/ 0\)/);
+});
+
+test('card hover shadows follow shared controls and their own override', async ({ page }) => {
+  await page.goto('/sections/card-grid/');
+  await page.getByRole('checkbox', { name: 'Card shadow', exact: true }).check();
+  const card = page.locator('.playground .ps-card').first();
+  await page.locator('.ps-shell').evaluate(el => {
+    (el as HTMLElement).style.setProperty('--ps-shadow-size', '2');
+    (el as HTMLElement).style.setProperty('--ps-shadow-intensity', '0.5');
+  });
+  await card.hover();
+  await expect(card.locator('.surface')).toHaveCSS('box-shadow', /0px 16px 40px 0px/);
+  await expect(card.locator('.surface')).toHaveCSS('box-shadow', /0.1\)/);
+  await page.locator('.ps-shell').evaluate(el => (el as HTMLElement).style.setProperty('--ps-card-hover-shadow', 'none'));
+  await expect(card.locator('.surface')).toHaveCSS('box-shadow', 'none');
 });

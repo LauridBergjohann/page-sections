@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { base } from '#lib/paths.js';
 import type { MenuItem } from '@page-sections/core';
 import { documents } from './catalog';
 import { sectionCatalog } from './sectionCatalog';
@@ -10,8 +10,8 @@ const entry = (href: string, icon?: string): MenuItem => {
 const groups = [
   ['Foundations', 'foundations', 'layers'],
   ['Page layout', 'page-layout', 'panels-top-left'],
-  ['Components', 'building-blocks', 'blocks'],
   ['Design system', 'design-system', 'settings'],
+  ['Components', 'components', 'blocks'],
   ['Advanced', 'advanced', 'settings'],
   ['Reference', 'reference', 'book']
 ];

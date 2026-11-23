@@ -16,10 +16,10 @@
     Sections
   } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
-  import { cards, landscape, coast, editorial } from '$lib/content';
+  import { cards, landscape, coast, editorial } from '#lib/content.js';
 </script>
 
 <ContentPage
@@ -137,20 +137,20 @@
       screens and share a row when more room is available.
     </p>
     <ContentGrid>
-      <ContentBlock span={{ xs: 4, s: 3, m: 5, l: 8 }}
-        ><div class="demo-sample" data-testid="primary-block">
+      <ContentBlock span={{ xs: 4, s: 3, m: 5, l: 8 }}>
+        <div class="demo-sample" data-testid="primary-block">
           <span class="demo-label">4 → 3 → 5 → 8 columns</span>
           <h3>The main story</h3>
           <p>A flexible area for the content that deserves the most attention.</p>
-        </div></ContentBlock
-      >
-      <ContentBlock span={{ xs: 4, s: 3, m: 3, l: 4 }}
-        ><div class="demo-sample" data-testid="secondary-block">
+        </div>
+      </ContentBlock>
+      <ContentBlock span={{ xs: 4, s: 3, m: 3, l: 4 }}>
+        <div class="demo-sample" data-testid="secondary-block">
           <span class="demo-label">4 → 3 → 3 → 4 columns</span>
           <h3>A related thought</h3>
           <p>A companion to the main story, with its own responsive span.</p>
-        </div></ContentBlock
-      >
+        </div>
+      </ContentBlock>
     </ContentGrid>
   </Section>
   <Section
@@ -161,18 +161,19 @@
       layout: 'narrow',
       background: { color: 'standard' }
     }}
-    ><p class="demo-copy">
+  >
+    <p class="demo-copy">
       This section uses the narrow layout, capped at 780px by the default theme. Its grid responds
       to that smaller container, even on a wide screen.
     </p>
-    <ContentGrid
-      ><ContentBlock span={{ xs: 4, s: 3 }}
-        ><div class="demo-sample">A note in the margin.</div></ContentBlock
-      ><ContentBlock span={{ xs: 4, s: 3 }}
-        ><div class="demo-sample">A second perspective.</div></ContentBlock
-      ></ContentGrid
-    ></Section
-  >
+    <ContentGrid>
+      <ContentBlock span={{ xs: 4, s: 3 }}>
+        <div class="demo-sample">A note in the margin.</div>
+      </ContentBlock><ContentBlock span={{ xs: 4, s: 3 }}>
+        <div class="demo-sample">A second perspective.</div>
+      </ContentBlock>
+    </ContentGrid>
+  </Section>
   <Section
     section={{
       id: 'wide',
@@ -184,8 +185,8 @@
     }}
   >
     <ContentGrid>
-      <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
-        ><h3>Card</h3>
+      <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}>
+        <h3>Card</h3>
         <Card
           item={{
             id: 'standalone',
@@ -194,10 +195,10 @@
             href: base + '/showcase/backgrounds/',
             image: coast
           }}
-        /></ContentBlock
-      >
-      <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
-        ><h3>Image</h3>
+        />
+      </ContentBlock>
+      <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}>
+        <h3>Image</h3>
         <figure>
           <Image image={{ ...landscape, aspect: '2/1' }} />
           <figcaption>A standalone Image with a 2:1 crop and a native figure caption.</figcaption>
@@ -210,8 +211,8 @@
             { id: 'home', label: 'Home', href: base + '/' },
             { id: 'surfaces', label: 'Surfaces', href: base + '/showcase/backgrounds/' }
           ]}
-        /></ContentBlock
-      >
+        />
+      </ContentBlock>
     </ContentGrid>
   </Section>
   <Section
@@ -223,11 +224,12 @@
       background: { color: 'standard', size: 'full' },
       spacing: 'loose'
     }}
-    ><p class="demo-copy">
+  >
+    <p class="demo-copy">
       The section surface uses full width; its content retains the canonical maximum. On the
       backgrounds page, full-width surfaces keep their content inside the normal page column.
-    </p></Section
-  >
+    </p>
+  </Section>
   <Section
     section={{
       id: 'data',
@@ -235,11 +237,12 @@
       headline: 'Sections: rendering content from data',
       spacing: 'loose'
     }}
-    ><p class="demo-copy">
+  >
+    <p class="demo-copy">
       The following two sections come from a typed, serializable PageData object in
       src/lib/content.ts. Sections chooses the renderer from each record's type.
     </p>
-    <pre class="demo-code">{JSON.stringify(editorial.sections[0], null, 2)}</pre></Section
-  >
+    <pre class="demo-code">{JSON.stringify(editorial.sections[0], null, 2)}</pre>
+  </Section>
   <Sections sections={editorial.sections} />
 </ContentPage>

@@ -56,13 +56,17 @@
         <a
           href="https://github.com/LauridBergjohann/page-sections/tree/main/apps/website"
           aria-label="Documentation"
-          title="Documentation"><BookOpen size={18} aria-hidden="true" /></a
+          title="Documentation"
         >
+          <BookOpen size={18} aria-hidden="true" />
+        </a>
         <a
           href="https://github.com/LauridBergjohann/page-sections/tree/main/apps/demo"
           aria-label="Source code"
-          title="Source code"><Code size={18} aria-hidden="true" /></a
+          title="Source code"
         >
+          <Code size={18} aria-hidden="true" />
+        </a>
       </div>
     {/snippet}
     {#snippet right()}
@@ -73,24 +77,28 @@
           title="Light"
           aria-pressed={mode === 'light'}
           disabled={!ready}
-          onclick={() => (mode = 'light')}><Sun size={18} aria-hidden="true" /></button
+          onclick={() => (mode = 'light')}
         >
+          <Sun size={18} aria-hidden="true" />
+        </button>
         <button
           type="button"
           aria-label="Dark"
           title="Dark"
           aria-pressed={mode === 'dark'}
           disabled={!ready}
-          onclick={() => (mode = 'dark')}><Moon size={18} aria-hidden="true" /></button
+          onclick={() => (mode = 'dark')}
         >
+          <Moon size={18} aria-hidden="true" />
+        </button>
       </div>
     {/snippet}
   </Header>
   <div id="main-content" tabindex="-1">{@render children()}</div>
   <footer class="demo-footer">
-    <span class="footer-brand"
-      ><img src="/page-sections-logo.svg" width="24" height="24" alt="" />Page Sections · Built from
-      ordinary content.</span
-    ><a href="https://github.com/LauridBergjohann/page-sections">Explore the project ↗</a>
+    <span class="footer-brand">
+      <img src="/page-sections-logo.svg" width="24" height="24" alt="" />Page Sections · Built from
+      ordinary content.
+    </span><a href="https://github.com/LauridBergjohann/page-sections">Explore the project ↗</a>
   </footer>
 </PageShell>

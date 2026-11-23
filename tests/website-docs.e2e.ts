@@ -60,7 +60,8 @@ test('cards animate optional shadows and restore their original border on mouse 
   await toggle.check();
   await expect(surface).toHaveCSS('box-shadow',light);
   await card.hover();
-  await expect(surface).toHaveCSS('box-shadow','rgba(0, 0, 0, 0.2) 0px 8px 20px 0px');
+  // color-mix may serialize as color(srgb ...) instead of rgba(...).
+  await expect(surface).toHaveCSS('box-shadow', /(?:rgba\(0, 0, 0, 0\.2\)|color\(srgb 0 0 0 \/ 0\.2\)) 0px 8px 20px 0px/);
   await expect(surface).toHaveCSS('border-color',accent);
   await page.mouse.move(0,0);
   await expect(surface).toHaveCSS('box-shadow',light);
@@ -259,7 +260,7 @@ test('visual guides and ready-made catalog remain useful without JavaScript', as
   const context = await browser.newContext({javaScriptEnabled:false,baseURL});
   const page=await context.newPage();
   await page.goto('/docs/design-system/responsive-layout/');
-  await expect(page.getByRole('figure',{name:'Seven viewport sizes from phone to ultrawide'})).toContainText('Ultrawide');
+  await expect(page.getByRole('figure',{name:'Seven viewport sizes from phone to wide desktop'})).toContainText('Wide desktop');
   await expect(page.locator('#every-screen svg')).toHaveCount(7);
   await page.goto('/docs/building-blocks/section/');
   await expect(page.locator('#section-catalog .ps-card')).toHaveCount(9);

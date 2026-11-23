@@ -52,24 +52,26 @@
 
 <div class="playground">
   <div class="playground-controls">
-    <label
-      >Language<select bind:value={language} disabled={!ready}
-        >{#each Object.keys(samples) as lang}<option>{lang}</option>{/each}</select
-      ></label
-    >
-    <label
-      >Code position<select bind:value={layout} disabled={!ready}
-        ><option value="right">Right of text</option><option value="left">Left of text</option
-        ><option value="alone">Standalone</option></select
-      ></label
-    >
-    <label
-      >Code tone<select bind:value={tone} disabled={!ready}
-        ><option>standard</option><option>muted</option></select
-      ></label
-    >
-    <label>Line numbers<input type="checkbox" bind:checked={lineNumbers} disabled={!ready} /></label
-    >
+    <label>
+      Language<select bind:value={language} disabled={!ready}>
+        {#each Object.keys(samples) as lang}<option>{lang}</option>{/each}
+      </select>
+    </label>
+    <label>
+      Code position<select bind:value={layout} disabled={!ready}>
+        <option value="right">Right of text</option><option value="left">
+          Left of text
+        </option><option value="alone">Standalone</option>
+      </select>
+    </label>
+    <label>
+      Code tone<select bind:value={tone} disabled={!ready}>
+        <option>standard</option><option>muted</option>
+      </select>
+    </label>
+    <label>
+      Line numbers<input type="checkbox" bind:checked={lineNumbers} disabled={!ready} />
+    </label>
     <label>Wrap long lines<input type="checkbox" bind:checked={wrap} disabled={!ready} /></label>
   </div>
   <div class="preview" data-code-preview>
@@ -84,11 +86,11 @@
       />{/snippet}
     {#if layout === 'alone'}{@render example()}
     {:else}<ContentGrid>
-        {#if layout === 'left'}<ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
-            >{@render example()}</ContentBlock
-          >{/if}
-        <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
-          ><div class="prose">
+        {#if layout === 'left'}<ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}>
+            {@render example()}
+          </ContentBlock>{/if}
+        <ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}>
+          <div class="prose">
             <h3>Explain the idea beside the code.</h3>
             <p>
               A code example can stand on its own or share a row with a description. The same
@@ -98,18 +100,18 @@
               Resize the window: the blocks stack when there is not enough room. Change the language
               to compare syntax colors.
             </p>
-          </div></ContentBlock
-        >
-        {#if layout === 'right'}<ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}
-            >{@render example()}</ContentBlock
-          >{/if}
+          </div>
+        </ContentBlock>
+        {#if layout === 'right'}<ContentBlock span={{ xs: 4, s: 3, m: 4, l: 6 }}>
+            {@render example()}
+          </ContentBlock>{/if}
       </ContentGrid>{/if}
   </div>
 </div>
 <p>
-  The composition below uses the current settings. Add precomputed tokens with <code
-    >highlighted</code
-  > for syntax colors.
+  The composition below uses the current settings. Add precomputed tokens with <code>
+    highlighted
+  </code> for syntax colors.
 </p>
 <LiveCode code={source} />
 

@@ -1,0 +1,9 @@
+/* Resolve defaults on each shadow surface so theme and local overrides inherit correctly.
+   Public role tokens remain optional complete box-shadow overrides. */
+.ps-shadow-navigation, .ps-shadow-popup, [data-ps-popups-enhanced] [popover] {
+  --ps-default-navigation-shadow: 0 calc(4px * max(0, var(--ps-shadow-size, 1))) calc(8px * max(0, var(--ps-shadow-size, 1))) color-mix(in srgb, var(--ps-shadow-color, #000) clamp(0%, calc(12% * var(--ps-shadow-intensity, 1)), 100%), transparent);
+}
+.ps-shadow-surface {
+  --ps-default-surface-shadow: 0 calc(3px * max(0, var(--ps-shadow-size, 1))) calc(8px * max(0, var(--ps-shadow-size, 1))) color-mix(in srgb, var(--ps-shadow-color, #000) clamp(0%, calc(12% * var(--ps-shadow-intensity, 1)), 100%), transparent);
+  --ps-default-card-hover-shadow: 0 calc(8px * max(0, var(--ps-shadow-size, 1))) calc(20px * max(0, var(--ps-shadow-size, 1))) color-mix(in srgb, var(--ps-shadow-color, #000) clamp(0%, calc(20% * var(--ps-shadow-intensity, 1)), 100%), transparent);
+}

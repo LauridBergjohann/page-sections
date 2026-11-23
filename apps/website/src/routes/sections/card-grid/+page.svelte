@@ -27,10 +27,10 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import CollectionPlayground from '$lib/CollectionPlayground.svelte';
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import SectionAnatomy from '$lib/SectionAnatomy.svelte';
+  import CollectionPlayground from '#lib/CollectionPlayground.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import SectionAnatomy from '#lib/SectionAnatomy.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -55,8 +55,10 @@
       title: 'Try it',
       headline: 'Try it yourself',
       variant: 'content'
-    }}><CollectionPlayground /></Section
+    }}
   >
+    <CollectionPlayground />
+  </Section>
   <SectionAnatomy kind="card-grid" />
   <Section
     section={{
@@ -65,14 +67,15 @@
       title: 'Overview',
       spacing: 'tight'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Cards share one layout in the container-based ContentGrid. Supply a description when an item
         needs more context; it appears below the title automatically.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -81,11 +84,12 @@
       headline: 'Props',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
-        Generic over <code
-          >T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a></code
-        >.
+        Generic over <code>
+          T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>
+        </code>.
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -100,12 +104,11 @@
           <tbody>
             <tr>
               <td><code>section</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a
-                  ></code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
+                </code>
+              </td>
               <td>Required</td>
             </tr>
             <tr>
@@ -119,42 +122,41 @@
               <td>m; uniform card size</td>
             </tr>
             <tr>
-              <td><code>cardShadow</code></td><td>boolean</td><td>false; optional resting shadow</td
-              >
+              <td><code>cardShadow</code></td><td>boolean</td><td>
+                false; optional resting shadow
+              </td>
             </tr>
             <tr>
               <td><code>cardTone</code></td>
-              <td
-                ><code><a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a></code
-                >: standard/muted</td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a></code>:
+                standard/muted
+              </td>
               <td>standard</td>
             </tr>
             <tr>
               <td><code>mediaAspect</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a
-                  ></code
-                >: 3/2, 4/3, 1/1</td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>
+                </code>: 3/2, 4/3, 1/1
+              </td>
               <td>3/2; uniform media frame</td>
             </tr>
             <tr>
               <td><code>mediaFit</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a></code
-                >: contain/cover</td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a>
+                </code>: contain/cover
+              </td>
               <td>contain</td>
             </tr>
             <tr>
               <td><code>itemSpan</code></td>
-              <td
-                ><code><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></code
-                ></td
-              >
+              <td>
+                <code><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></code>
+              </td>
               <td>Optional override; otherwise cardSize determines the span</td>
             </tr>
             <tr>
@@ -174,29 +176,32 @@
             </tr>
             <tr>
               <td><code>card</code></td>
-              <td
-                ><code
-                  >Snippet&lt;[T, &#123; cardSize: <a
-                    href={base + '/docs/reference/types/#card-size'}>CardSize</a
-                  >; shadow: boolean; tone:
+              <td>
+                <code>
+                  Snippet&lt;[T, &#123; cardSize: <a
+                    href={base + '/docs/reference/types/#card-size'}
+                  >
+                    CardSize
+                  </a>; shadow: boolean; tone:
                   <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a>; textAlign:
                   'start' | 'center'; mediaAspect:
                   <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>;
                   mediaFit:
                   <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a>;
-                  reserveEyebrow: boolean &#125;]&gt;</code
-                ></td
-              >
+                  reserveEyebrow: boolean &#125;]&gt;
+                </code>
+              </td>
               <td>Optional complete card replacement</td>
             </tr>
             <tr>
               <td><code>oncardready</code></td>
-              <td
-                ><code
-                  >(parts: <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a
-                  >&lt;T&gt;) =&gt; void | (() =&gt; void)</code
-                ></td
-              >
+              <td>
+                <code>
+                  (parts: <a href={base + '/docs/reference/types/#card-elements'}>
+                    CardElements
+                  </a>&lt;T&gt;) =&gt; void | (() =&gt; void)
+                </code>
+              </td>
               <td>Attachment/cleanup hook for default Card</td>
             </tr>
           </tbody>
@@ -206,8 +211,8 @@
         A complete card replacement owns its markup, accessibility and enhancement lifecycle.
         Media/surface snippets retain the default Card and its measured elements.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -216,7 +221,8 @@
       headline: 'Layout and styling',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Set <code>cardTone=&quot;muted&quot;</code> to distinguish cards from a standard section
         background. JSON sections use <code>cardTone: &quot;muted&quot;</code>. This chooses the
@@ -247,8 +253,9 @@
       <p>
         Use mediaFit=&quot;contain&quot; for complete objects with an 8px media inset, or
         mediaFit=&quot;cover&quot; for edge-to-edge cropped photos. Both use the same selected
-        mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>ImageData</a
-        >.aspect/objectFit do not override this collection-level contract. Compare 3:2 and 1:1 in
+        mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>
+          ImageData
+        </a>.aspect/objectFit do not override this collection-level contract. Compare 3:2 and 1:1 in
         the interactive example above.
       </p>
       <p>
@@ -258,11 +265,13 @@
       </p>
       <p>
         Per-item size and the old auto-fit minimum widths were removed in 0.2. See <a
-          href={base + '/docs/design-system/responsive-layout/'}>shared layout reference</a
-        >.
+          href={base + '/docs/design-system/responsive-layout/'}
+        >
+          shared layout reference
+        </a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -271,7 +280,8 @@
       headline: 'Accessibility and SSR',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         A card with href has a native title link stretched over its entire surface, including its
         image. Additional actions and footer links remain independently clickable without nested
@@ -280,10 +290,10 @@
         hydration.
       </p>
       <p>
-        Related: <a href={base + '/docs/building-blocks/card/'}>Card and Image</a>,
+        Related: <a href={base + '/docs/components/card/'}>Card and Image</a>,
         <a href={base + '/sections/carousel/'}>CarouselSection</a>,
-        <a href={base + '/docs/building-blocks/grids/'}>Section and grids</a>.
+        <a href={base + '/docs/components/grids/'}>Section and grids</a>.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

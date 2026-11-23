@@ -48,12 +48,12 @@
 </script>
 
 <script lang="ts">
-  import PageLayoutDiagram from '$lib/PageLayoutDiagram.svelte';
-  import PageLayoutPreview from '$lib/PageLayoutPreview.svelte';
+  import PageLayoutDiagram from '#lib/PageLayoutDiagram.svelte';
+  import PageLayoutPreview from '#lib/PageLayoutPreview.svelte';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -110,9 +110,9 @@
         the brand, menu and tools snippets to customize those areas.
       </p>
       <p>
-        In the complete example below, a <a href={base + '/docs/reference/types/#menu-item'}
-          >MenuItem</a
-        >
+        In the complete example below, a <a href={base + '/docs/reference/types/#menu-item'}>
+          MenuItem
+        </a>
         is one labeled navigation link with optional child links. The helper
         <code>resolveNavigation</code>
         selects the current page from that tree and produces breadcrumbs and sidebar entries.
@@ -128,7 +128,8 @@
       headline: 'Header',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         <code>items: <a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a>[]</code> supplies
         the site tree. Every entry requires a stable id, label and href; children are recursive. Optional
@@ -141,6 +142,21 @@
         move into settings when space is limited. The optional menu snippet replaces the desktop
         menu; items still supplies the mobile tree. <code>closeKey</code>
         closes open menus when the host changes routes.
+      </p>
+      <p>
+        Open menus and settings keep their controls sharp while blurring the page behind them. The
+        burger and settings buttons use the accent and tab-background colors while open. Clicking
+        the same button, clicking outside or pressing Escape closes the popup. Scrolling or resizing
+        also closes it, so the popup cannot become detached from its control. The content menu
+        follows the same behavior.
+      </p>
+      <p>
+        For a custom popup such as search, keep its markup inside Header or PageShell and set
+        <code>data-ps-popup</code> on its absolutely positioned panel only while it is open. The shell
+        supplies top-layer placement and a shared backdrop; your component manages its open state, active
+        trigger, outside-click and Escape handlers. On compact screens, put the search input and results
+        inside that one panel. The backdrop exists only while a popup is open and does not add a scroll
+        animation or rendering loop.
       </p>
       <p>
         By default, <code>scrollBehavior="delayed"</code> keeps the header and its satellites in
@@ -158,15 +174,16 @@
         other HTML attributes directly to Header. The documentation URL remains unchanged.
       </p>
       <p>
-        <code
-          >itemIcon?: Snippet&lt;[<a href={base + '/docs/reference/types/#menu-item'}>MenuItem</a
-          >]&gt;</code
-        > renders icons before the label at every menu level, including the main entries at every screen
-        size. Supply an icon key on each item and render it through this snippet. The website uses Lucide;
-        the library has no icon dependency.
+        <code>
+          itemIcon?: Snippet&lt;[<a href={base + '/docs/reference/types/#menu-item'}>
+            MenuItem
+          </a>]&gt;
+        </code> renders icons before the label at every menu level, including the main entries at every
+        screen size. Supply an icon key on each item and render it through this snippet. The website uses
+        Lucide; the library has no icon dependency.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'mainmenu',
@@ -174,7 +191,8 @@
       headline: 'MainMenu and interaction',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         In smaller windows, the burger contains every hierarchy level. A page link and a separate
         native disclosure control keep navigation distinct from expanding children. In wider
@@ -193,8 +211,8 @@
         Standalone <code>MainMenu</code> accepts items, icon, variant (desktop/mobile), closeKey and onOpenChange.
         Use Header for the complete header, satellites and backdrop.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'sidebar-navigation',
@@ -202,12 +220,13 @@
       headline: 'SidebarNavigation',
       background: { color: 'standard', size: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         Supply items, optional activeId, an accessible label and an optional icon snippet. The
-        active page receives an accent line; its ancestors open automatically. The usual items are <code
-          >resolveNavigation(tree, location).sidebarItems</code
-        >, representing the second and subsequent levels of the selected main entry.
+        active page receives an accent line; its ancestors open automatically. The usual items are <code>
+          resolveNavigation(tree, location).sidebarItems
+        </code>, representing the second and subsequent levels of the selected main entry.
       </p>
       <p>
         <code>resolveNavigation</code> accepts pathname or currentId. Explicit IDs also support detail
@@ -215,8 +234,8 @@
         without changing the supplied tree. The tree starts at the main-menu entries; keep Home as the
         brand link.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       background: { color: 'standard', size: 'standard' },
@@ -225,7 +244,8 @@
       headline: 'ButtonGroup',
       variant: 'content'
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -239,12 +259,11 @@
           <tbody>
             <tr>
               <td><code>items</code></td>
-              <td
-                ><code
-                  ><a href={base + '/docs/reference/types/#button-group-item'}>ButtonGroupItem</a
-                  >[]</code
-                ></td
-              >
+              <td>
+                <code>
+                  <a href={base + '/docs/reference/types/#button-group-item'}>ButtonGroupItem</a>[]
+                </code>
+              </td>
               <td>Required</td>
             </tr>
             <tr>
@@ -254,27 +273,27 @@
             </tr>
             <tr>
               <td><code>onselect</code></td>
-              <td
-                ><code
-                  >(item: <a href={base + '/docs/reference/types/#button-group-item'}
-                    >ButtonGroupItem</a
-                  >) =&gt; void</code
-                ></td
-              >
+              <td>
+                <code>
+                  (item: <a href={base + '/docs/reference/types/#button-group-item'}>
+                    ButtonGroupItem
+                  </a>) =&gt; void
+                </code>
+              </td>
               <td>Optional callback for button activation</td>
             </tr>
-            <tr
-              ><td><code>icon</code></td><td
-                >Snippet&lt;[<a href={base + '/docs/reference/types/#button-group-item'}
-                  >ButtonGroupItem</a
-                >]&gt;</td
-              ><td>Optional icon rendered for each item</td></tr
-            >
-            <tr
-              ><td><code>iconOnly</code></td><td>boolean</td><td
-                >false; with an icon, use the item label as the accessible name and tooltip</td
-              ></tr
-            >
+            <tr>
+              <td><code>icon</code></td><td>
+                Snippet&lt;[<a href={base + '/docs/reference/types/#button-group-item'}>
+                  ButtonGroupItem
+                </a>]&gt;
+              </td><td>Optional icon rendered for each item</td>
+            </tr>
+            <tr>
+              <td><code>iconOnly</code></td><td>boolean</td><td>
+                false; with an icon, use the item label as the accessible name and tooltip
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -283,9 +302,9 @@
         <table>
           <thead>
             <tr>
-              <th
-                ><a href={base + '/docs/reference/types/#button-group-item'}>ButtonGroupItem</a> field</th
-              >
+              <th>
+                <a href={base + '/docs/reference/types/#button-group-item'}>ButtonGroupItem</a> field
+              </th>
               <th>Type</th>
               <th>Behavior</th>
             </tr>
@@ -330,16 +349,19 @@
         stylesheet explicitly when using them elsewhere.
       </p>
       <p>
-        Site navigation, <a href={base + '/docs/page-layout/breadcrumbs/'}
-          >breadcrumbs and section navigation</a
-        > answer different questions: where can I go, where am I in the site, and what is on this page?
+        Site navigation, <a href={base + '/docs/page-layout/breadcrumbs/'}>
+          breadcrumbs and section navigation
+        </a> answer different questions: where can I go, where am I in the site, and what is on this page?
         Give each landmark a suitable label.
       </p>
       <p>
         Header links use neutral <code>--ps-ink</code>; content links retain
         <code>--ps-accent</code>. Header and satellites share <code>--ps-navigation-shadow</code>.
-        Set this token on a navigation ancestor to customize or disable elevation. The header and
-        satellite containers have no border or outline; shadows separate them from the page.
+        Set this token on a navigation ancestor to customize or disable elevation. The header uses
+        <code>--ps-panel-border</code> around its floating surface, or only along the bottom when
+        docked to the viewport. Header icon buttons have no decorative border. Button groups use
+        <code>--ps-border</code>. Set either border token to transparent to hide its edges. Header
+        popups meet the header directly, without a gap or a border along the attached top edge.
       </p>
       <p>
         The current page and its ancestors retain a muted background in both menus. Only the current
@@ -354,6 +376,6 @@
         route changes; font weight changes immediately. Reduced-motion preferences disable these
         animations.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
 </ContentPage>

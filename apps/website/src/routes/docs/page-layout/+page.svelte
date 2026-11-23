@@ -8,9 +8,9 @@
 </script>
 
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section, CodeBlock } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 </script>
@@ -37,7 +37,8 @@
       headline: 'Start with the HTML document',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         The body contains the visible document. Inside it, a site-level header introduces the site
         and its navigation, main contains this page’s unique content, and a site-level footer closes
@@ -58,8 +59,8 @@
         HTML also permits a footer inside an article for attribution; that is different from the
         site footer.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'library-mapping',
@@ -67,7 +68,8 @@
       headline: 'Use the same structure in Svelte',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         You already know ContentPage and Section. Header renders the site header, and Footer renders
         the site footer. PageShell is an optional div wrapper: it shares a theme and color mode
@@ -75,8 +77,8 @@
         body.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'chapters',
@@ -84,7 +86,8 @@
       headline: 'Build the page from top to bottom',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ol>
         <li>
           <a href={base + '/docs/page-layout/header/'}>Header and satellites</a>: Add site identity,
@@ -99,15 +102,15 @@
           page content, site navigation and the on-page index.
         </li>
         <li>
-          <a href={base + '/docs/page-layout/headings-and-anchors/'}
-            >Heading levels and anchor links</a
-          >: Keep the document outline and section destinations predictable.
+          <a href={base + '/docs/page-layout/headings-and-anchors/'}>
+            Heading levels and anchor links
+          </a>: Keep the document outline and section destinations predictable.
         </li>
         <li>
           <a href={base + '/docs/page-layout/footer/'}>Footer</a>: Finish the document with shared
           links and attribution.
         </li>
       </ol>
-    </div></Section
-  >
+    </div>
+  </Section>
 </WebsitePage>

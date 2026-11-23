@@ -1,9 +1,9 @@
 <script lang="ts">
   import { HeroSection, ImageSection, CardGridSection } from '@page-sections/svelte';
 
-  import { base } from '$app/paths';
-  import ContentPage from '$lib/WebsitePage.svelte';
-  import { technologies } from '$lib/technologies';
+  import { base } from '#lib/paths.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
+  import { technologies } from '#lib/technologies.js';
   const illustration = (name: string, alt: string) => ({
     src: base + `/illustrations/${name}.svg`,
     alt,
@@ -12,12 +12,12 @@
   });
 </script>
 
-<svelte:head
-  ><meta
+<svelte:head>
+  <meta
     name="description"
     content="Build content-driven websites with Page Sections. Explore live examples, learn the basics and try every layout."
-  /></svelte:head
->
+  />
+</svelte:head>
 <ContentPage page={{ title: 'Give your ideas a place.' }}>
   <HeroSection
     section={{
@@ -39,12 +39,14 @@
           height: 1049
         },
         imageSide: 'left',
+        textBackground: false,
         actions: [
           { label: 'Get started', href: base + '/getting-started/', variant: 'primary' },
           { label: 'Explore sections', href: base + '/sections/', variant: 'secondary' }
         ]
       },
-      headingLevel: 1
+      headingLevel: 1,
+      background: { color: 'transparentToStandard', size: 'full' }
     }}
   />
   <ImageSection

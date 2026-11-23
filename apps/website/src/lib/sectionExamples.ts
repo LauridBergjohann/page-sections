@@ -1,4 +1,4 @@
-import { base } from '$app/paths';
+import { base } from '#lib/paths.js';
 import type { SectionData } from '@page-sections/core';
 import { sectionCards } from './sectionCatalog';
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Popup from './Popup.svelte';
   import { onDestroy, type Snippet } from 'svelte';
   import { safeHref, type MenuItem } from '@page-sections/core';
   import SidebarNavigation from './SidebarNavigation.svelte';
@@ -87,7 +88,7 @@
             >{/if}{item.label}</a
         >
         {#if item.children?.length}
-          <div class="ps-submenu" hidden={open !== item.id}>
+          <Popup class="ps-submenu" open={open === item.id} onclose={() => open = undefined}>
             <ul>
               {#each item.children as child (child.id)}
                 <li>
@@ -105,7 +106,7 @@
                 </li>
               {/each}
             </ul>
-          </div>
+          </Popup>
         {/if}
       </li>
     {/each}
@@ -128,8 +129,11 @@
   }
   .ps-main-menu > li {
     position: relative;
+    flex: none;
   }
+  .ps-main-menu { flex-wrap: nowrap; }
   .ps-main-menu > li > a {
+    white-space: nowrap;
     min-height: var(--ps-menu-height);
     border-radius: 0;
   }
@@ -163,26 +167,16 @@
     border-radius: 2px;
     background: var(--ps-accent);
   }
-  .ps-submenu {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: max-content;
-    max-width: calc(100vw - 32px);
-    padding: 1rem;
-    background: var(--ps-section-standard);
-    border: 1px solid var(--ps-border);
-    border-radius: var(--ps-radius);
-    box-shadow: var(--ps-navigation-shadow);
-    z-index: 2;
+  .ps-main-menu :global(.ps-submenu) {
+    top: 100%; left: 50%; right: auto; transform: translateX(-50%);
+    width: max-content; max-width: calc(100vw - 24px); border-top-width: 0;
   }
-  .ps-submenu ul {
+  :global(.ps-submenu) ul {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
   }
-  .ps-submenu a {
+  :global(.ps-submenu) a {
     height: 100%;
     min-height: 48px;
   }

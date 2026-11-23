@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { HeadingSection, Section } from '@page-sections/svelte';
-  import WebsitePage from '$lib/WebsitePage.svelte';
+  import WebsitePage from '#lib/WebsitePage.svelte';
 </script>
 
 <WebsitePage
@@ -26,7 +26,8 @@
       headline: 'From installation to your first section',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <p>
         A section groups related content within a page. Page Sections supplies a base container and
         ready-made versions for common content. You can start with a paragraph and add richer pieces
@@ -36,8 +37,8 @@
         The first four chapters build on one another. Install the package, learn the section model,
         use it in a page, then customize its appearance.
       </p>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'chapters',
@@ -45,7 +46,8 @@
       headline: 'Read in this order',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
+  >
+    <div class="prose">
       <ol>
         <li>
           <a href={base + '/docs/foundations/installation/'}>Installation</a>: Add the package and
@@ -64,8 +66,8 @@
           and light or dark mode.
         </li>
       </ol>
-    </div></Section
-  >
+    </div>
+  </Section>
   <Section
     section={{
       id: 'next-stage',
@@ -73,12 +75,13 @@
       headline: 'After the foundations',
       background: { color: 'standard' }
     }}
-    ><div class="prose">
-      <p>
-        You will have a working content page. Continue with <a href={base + '/docs/page-layout/'}
-          >Page layout</a
-        > to understand the HTML landmarks around it and add navigation.
-      </p>
-    </div></Section
   >
+    <div class="prose">
+      <p>
+        You will have a working content page. Continue with <a href={base + '/docs/page-layout/'}>
+          Page layout
+        </a> to understand the HTML landmarks around it and add navigation.
+      </p>
+    </div>
+  </Section>
 </WebsitePage>

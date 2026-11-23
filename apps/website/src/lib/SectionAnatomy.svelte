@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Section } from '@page-sections/svelte';
-  import { base } from '$app/paths';
+  import { base } from '#lib/paths.js';
   import { sectionCatalog } from './sectionCatalog';
   let { kind }: { kind: string } = $props();
   const item = $derived(sectionCatalog.find((item) => item.slug === kind)!);
@@ -69,9 +69,9 @@
     <div class="prose">
       {#each notes[kind] as note}<p>{note}</p>{/each}
       <p>
-        All sections also share <a href={base + '/docs/building-blocks/section/'}
-          >layout, spacing and surface options</a
-        >.
+        All sections also share <a href={base + '/docs/components/section/'}>
+          layout, spacing and surface options
+        </a>.
       </p>
     </div>
   </div>

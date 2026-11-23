@@ -22,8 +22,8 @@
 <script lang="ts">
   import { HeadingSection, Section, CodeBlock, CardGridSection } from '@page-sections/svelte';
 
-  import { nextStepCards } from '$lib/sectionCatalog';
-  import ContentPage from '$lib/WebsitePage.svelte';
+  import { nextStepCards } from '#lib/sectionCatalog.js';
+  import ContentPage from '#lib/WebsitePage.svelte';
 
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
@@ -64,9 +64,9 @@
     </p>
     <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
     <p>
-      Or try it now in the <a href="https://svelte.dev/playground/f110f1e79b614ab7984adb25eef69c5b"
-        >Svelte Playground</a
-      >!
+      Or try it now in the <a href="https://svelte.dev/playground/f110f1e79b614ab7984adb25eef69c5b">
+        Svelte Playground
+      </a>!
     </p>
   </Section>
   <CardGridSection
