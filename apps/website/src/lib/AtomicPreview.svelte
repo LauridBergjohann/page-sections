@@ -48,11 +48,15 @@
       >
         <Settings size={20} />
       </IconButton>
-      <Popup id="example-settings" title="Settings" bind:open {anchor}>
+      <Popup closable id="example-settings" title="Settings" bind:open {anchor}>
         <h3>Appearance</h3>
         <ButtonGroup
           label="Example appearance"
-          onselect={(item) => (value = item.id)}
+          onselect={(item) => {
+            value = item.id;
+            open = false;
+            anchor?.focus();
+          }}
           items={[
             { id: 'light', label: 'Light', selected: value === 'light' },
             { id: 'dark', label: 'Dark', selected: value === 'dark' }

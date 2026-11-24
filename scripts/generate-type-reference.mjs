@@ -22,6 +22,13 @@ const anchor = name => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('{', '&#123;').replaceAll('}', '&#125;');
 const linked = value => escape(value).replace(/\b[A-Z]\w*\b/g, name => names.has(name) ? `<a href={base + '/docs/reference/types/#${anchor(name)}'}>${name}</a>` : name);
 const descriptions = {
+  TimelineDate: 'Strict UTC calendar date: YYYY, YYYY-MM or YYYY-MM-DD, years 0001?9999. Missing parts mean the start of that period; labels preserve input precision.',
+  TimelineSectionData: 'Shared section metadata plus categories on one proportional date scale, ascending by default or descending for newest-first timelines. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.',
+  TimelineCategory: 'A named, colored time strand. IDs must be unique. Icon is a built-in Lucide key or an application key resolved to a Lucide component by the optional Svelte icon snippet.',
+  TimelineEvent: 'A point with date or a period with start and optional end. Event IDs must be unique within their category.',
+  TimelineEventBase: 'Shared serializable event details. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.',
+  TimelinePointEvent: 'A calendar milestone rendered as a circular marker.',
+  TimelinePeriodEvent: 'A start-inclusive, end-exclusive interval rendered as a rounded bar. Omit end to mark it as ongoing.',
   ContentAction: 'A link styled as an action, used by HeroSection, panels and cards. Every action requires a visible label and a destination. It renders a native link, not a JavaScript callback.',
   SectionDefinition: 'Shared metadata for the base Section and every ready-made section. The ID is its anchor; title labels the region and navigation; headline controls its visible heading.',
   SectionBackground: 'The visual surface behind a section. Color and painted width are independent of the content layout. Gradient colors require a full background.',

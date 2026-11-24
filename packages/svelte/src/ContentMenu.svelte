@@ -1,5 +1,6 @@
 <script lang="ts">
   import Popup from './Popup.svelte';
+  import { tooltip } from './tooltip.js';
   import { fitSidebar } from './fitSidebar.js';
   import { popupLayer } from './popupLayer.js';
   import { onMount } from 'svelte';
@@ -80,7 +81,6 @@
 
 {#snippet links()}
   <nav aria-label={label}>
-    <Popup inline title={label}>
     <ul>
       {#each items as item (item.id)}
         <li data-heading-level={item.headingLevel}>
@@ -95,14 +95,15 @@
         </li>
       {/each}
     </ul>
-    </Popup>
   </nav>
 {/snippet}
 
-<div class="desktop ps-sidebar-scroll ps-shadow-surface" use:fitSidebar>{@render links()}</div>
+<div class="desktop ps-sidebar-scroll ps-shadow-surface" use:fitSidebar>
+  <Popup inline title={label}>{@render links()}</Popup>
+</div>
 <details use:popupLayer bind:this={popup} class="mobile" data-enhanced={ready}>
   <!-- svelte-ignore a11y_no_redundant_roles (Keep styled disclosures exposed as buttons in browser accessibility trees.) -->
-  <summary class="ps-shadow-surface" role="button" aria-label={label} title={label}
+  <summary class="ps-shadow-surface" role="button" aria-label={label} use:tooltip={label}
     ><svg
       aria-hidden="true"
       width="20"
@@ -113,7 +114,7 @@
       stroke-width="2"><path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1" /></svg
     ></summary
   >
-  <Popup class="popup ps-sidebar-scroll" disclosure>
+  <Popup class="popup ps-sidebar-scroll" disclosure closable title={label}>
     {@render links()}
   </Popup>
 </details>
@@ -123,7 +124,6 @@
     display: none;
   }
   nav {
-    padding: 1rem;
     font-size: 0.875rem;
   }
   ul {
@@ -180,8 +180,9 @@
     color: var(--ps-ink);
     background: var(--ps-section-standard);
     box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow));
-    transition: color 180ms ease, background-color 180ms ease;
+    transition: color 300ms cubic-bezier(.2,.4,.3,1), background-color 300ms cubic-bezier(.2,.4,.3,1);
   }
+  summary:hover { background: var(--ps-selection, var(--ps-section-muted)); }
   .mobile[open] > summary {
     color: var(--ps-accent);
     background: var(--ps-selection, var(--ps-section-muted));
@@ -192,8 +193,7 @@
   summary::-webkit-details-marker {
     display: none;
   }
-  .desktop { border: 1px solid var(--ps-panel-border); border-inline-start-width: var(--ps-content-menu-border-start, 0px); }
-  .mobile :global(.popup) { padding: 0; }
+  .desktop { padding: 1rem; border: 1px solid var(--ps-panel-border); border-inline-start-width: var(--ps-content-menu-border-start, 0px); }
   @media (min-width: 1600px) {
     .mobile {
       display: none;

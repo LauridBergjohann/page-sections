@@ -2,7 +2,7 @@
   export const examples = [
     {
       language: 'svelte',
-      code: '<script>\n  import { IconButton, Popup } from \'@page-sections/svelte\';\n  let open = $state(false);\n  let anchor = $state();\n<\/script>\n<div style="position: relative; width: fit-content">\n  <IconButton label="Settings" bind:element={anchor} active={open}\n    aria-expanded={open} aria-controls="settings-example" onclick={() => open = !open}>\n    <span aria-hidden="true">⚙</span>\n  </IconButton>\n  <Popup id="settings-example" title="Settings" bind:open {anchor}>\n    <p>Your settings controls go here.</p>\n  </Popup>\n</div>'
+      code: '<script>\n  import { IconButton, Popup } from \'@page-sections/svelte\';\n  import Settings from \'@lucide/svelte/icons/settings\';\n  let open = $state(false);\n  let anchor = $state();\n<\/script>\n<div style="position: relative; width: fit-content">\n  <IconButton label="Settings" bind:element={anchor} active={open}\n    aria-expanded={open} aria-controls="settings-example" onclick={() => open = !open}>\n    <Settings size={20} aria-hidden="true" />\n  </IconButton>\n  <Popup id="settings-example" title="Settings" closable bind:open {anchor}>\n    <p>Your settings controls go here.</p>\n  </Popup>\n</div>'
     }
   ];
 </script>
@@ -36,13 +36,24 @@
     <div class="prose">
       <p>
         Popup is the molecule used by header navigation, Settings, search suggestions and On this
-        page. It shares panel borders, background, radius, shadow and title typography. It does not
-        add a close button. Clicking outside, pressing Escape, scrolling the document or resizing
-        closes a floating popup. Escape returns focus to its anchor.
+        page. It shares panel borders, background, radius, shadow and title typography. Set
+        <code>closable</code> to add the shared Lucide close button. The website enables it for
+        floating panels except search, the titleless hamburger menu and hover-open main-menu
+        submenus. Pass the heading through <code>title</code> so it shares a vertically centered row with
+        the close button. Clicking outside, pressing Escape, scrolling the document or resizing closes
+        a floating popup. Escape and the close button return focus to its anchor.
+      </p>
+      <p>
+        Document-scroll dismissal is owned by Popup itself, including standalone compositions and
+        browsers without native popovers. It closes without moving focus or scrolling back to the
+        trigger. Scrolling inside the popup leaves it open; queued notifications without an actual
+        change in document position are ignored. Inline content is unaffected.
       </p>
       <p>
         Native popovers place open surfaces above page content. One shared blur backdrop exists only
-        while a popup is open; there is no continuous scroll-position animation. The page remains
+        while a popup is open or briefly fading out. The panel scales from its trigger over 360 ms
+        and closes over 260 ms, without changing its final position. Only opacity and scale animate;
+        the blur radius stays fixed. Reduced motion skips these animations. The page remains
         non-modal: a popup is neither a focus-trapped dialog nor an ARIA menu by default. Search and
         navigation provide their own correct semantics inside it.
       </p>
@@ -80,6 +91,25 @@
             </tr><tr>
               <td>open</td><td>boolean, bindable; true</td><td>
                 Visibility. Bind it so outside dismissal also updates your trigger.
+              </td>
+            </tr><tr>
+              <td>closable</td><td>boolean; false</td><td>
+                Show a shared Lucide X button on floating surfaces. Inline content omits it.
+              </td>
+            </tr><tr>
+              <td>closeLabel</td><td>string; Close popup</td><td>
+                Accessible label for the close button; provide a localized label as needed.
+              </td>
+            </tr><tr>
+              <td>placement</td><td>'default' | 'side'; default</td><td>
+                Side placement uses the anchor, flips left/right and clamps to the viewport.
+                Scrolling an anchor container closes native disclosures.
+              </td>
+            </tr><tr>
+              <td>anchorPoint</td><td>Optional object with x and y numbers</td><td>
+                Viewport coordinates within a large anchor, for example the clicked point on a long
+                timeline bar. Used by side placement; focus still returns to the anchor or its
+                closest focusable parent.
               </td>
             </tr><tr>
               <td>anchor</td><td>HTMLElement, optional</td><td>

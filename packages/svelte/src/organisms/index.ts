@@ -1,3 +1,4 @@
+export { default as TimelineSection } from '../TimelineSection.svelte';
 export { default as Header } from '../Header.svelte';
 export { default as Navigation } from '../Header.svelte';
 export { default as Footer } from '../Footer.svelte';

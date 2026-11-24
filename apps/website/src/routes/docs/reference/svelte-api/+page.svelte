@@ -53,6 +53,17 @@
           </thead>
           <tbody>
             <tr>
+              <td><code>Chip</code></td><td>
+                Native selection chip; label, selected, color, icon, trailingIcon, title and button
+                attributes
+              </td><td><a href={base + '/docs/components/chip/'}>Chip</a></td>
+            </tr>
+            <tr>
+              <td><code>TimelineSection</code></td><td>
+                Parallel date-based events; section and optional icon snippet.
+              </td><td><a href={base + '/sections/timeline/'}>Timeline</a></td>
+            </tr>
+            <tr>
               <td><code>PrimaryButton</code></td><td>
                 Action atom; <a href={base + '/docs/components/buttons/#props'}>ButtonProps</a>.
               </td><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td>
@@ -64,6 +75,11 @@
               <td><code>IconButton</code></td><td>
                 Action atom; <a href={base + '/docs/components/buttons/#props'}>IconButtonProps</a>.
               </td><td><a href={base + '/docs/components/buttons/'}>Buttons</a></td>
+            </tr><tr>
+              <td><code>Tooltip</code></td><td>
+                Text hint with one focusable child; text, children. The tooltip action enhances
+                native controls.
+              </td><td><a href={base + '/docs/components/tooltip/'}>Tooltip</a></td>
             </tr><tr>
               <td><code>Popup</code></td><td>
                 Shared floating panel; optional title, bindable open.
@@ -255,10 +271,10 @@
         attributes except id/children; ContentGrid and ContentBlock forward div attributes.
         ContentPage forwards main attributes (including id, lang and ARIA attributes), except style;
         use theme and class for styling. Card also forwards HTMLElement attributes, including class
-        and event callbacks. Header and Footer forward HTML attributes, including class, style and
-        ARIA attributes, to their header/footer root. Other components do not accept general
-        class/style or arbitrary HTML attributes. Configure them through documented props, section
-        metadata and CSS variables.
+        and event callbacks. Chip forwards native button attributes. Header and Footer forward HTML
+        attributes, including class, style and ARIA attributes, to their header/footer root. Other
+        components do not accept general class/style or arbitrary HTML attributes. Configure them
+        through documented props, section metadata and CSS variables.
       </p>
       <p>
         Most predefined components accept <code>

@@ -44,6 +44,10 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
     <div class="prose">
       <p>
+        Timeline: <code>--ps-timeline-sticky-offset</code> reserves navigation height (default 0px). Category
+        headers stick below that offset; the timeline grows with the page without an internal scroll region.
+      </p>
+      <p>
         CSS variables customize presentation; <code>layoutTokens</code> supplies canonical numeric values
         for core calculations and generated grid CSS. Changing CSS does not mutate the token object. This
         page distinguishes public theme controls, generated layout variables and implementation details.
@@ -137,6 +141,36 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td><code>--ps-border</code></td>
               <td>color-mix(in srgb, var(--ps-ink) 18%, transparent)</td>
               <td>Cards, icon buttons, ButtonGroups and inputs; transparent hides the edge</td>
+            </tr>
+            <tr>
+              <td><code>--ps-chip-color</code></td><td>var(--ps-accent)</td><td>
+                Chip accent; the color prop overrides this inherited default.
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-button-group-divider</code></td><td>var(--ps-border)</td><td>
+                Separators between grouped options
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-tooltip-background</code></td><td>var(--ps-ink)</td><td>
+                Contrasting tooltip surface
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-tooltip-ink</code></td><td>var(--ps-section-standard)</td><td>
+                Tooltip text
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-tooltip-border</code></td><td>
+                24% standard surface, transparent
+              </td><td>Tooltip outline</td>
+            </tr>
+            <tr>
+              <td><code>--ps-footer-border</code></td><td>24% footer ink, footer background</td><td>
+                Independent footer outline
+              </td>
             </tr>
             <tr>
               <td><code>--ps-panel-border</code></td>

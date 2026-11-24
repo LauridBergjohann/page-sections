@@ -37,7 +37,7 @@ it('accepts four groups and rejects a fifth instead of dropping content', () => 
   expect(() => render(FooterExample, { props: { groups: [...groups, groups[0]] } }).body).toThrow('at most four');
 });
 
-it('maps and validates all six footer theme settings', () => {
-  expect(themeStyle({ footerBackground: '#123', footerInk: '#fff', footerRadius: '12px', footerShadow: 'none', footerBarBackground: '#ddd', footerBarInk: '#333' })).toBe('--ps-footer-background:#123;--ps-footer-ink:#fff;--ps-footer-radius:12px;--ps-footer-shadow:none;--ps-footer-bar-background:#ddd;--ps-footer-bar-ink:#333');
+it('maps and validates all seven footer theme settings', () => {
+  expect(themeStyle({ footerBorder: '#456', footerBackground: '#123', footerInk: '#fff', footerRadius: '12px', footerShadow: 'none', footerBarBackground: '#ddd', footerBarInk: '#333' })).toBe('--ps-footer-border:#456;--ps-footer-background:#123;--ps-footer-ink:#fff;--ps-footer-radius:12px;--ps-footer-shadow:none;--ps-footer-bar-background:#ddd;--ps-footer-bar-ink:#333');
   expect(() => themeStyle({ footerBackground: 'red;color:black' })).toThrow('Invalid theme property');
 });

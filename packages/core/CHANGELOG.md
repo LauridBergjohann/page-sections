@@ -1,5 +1,17 @@
 # @page-sections/core
 
+## 0.8.0
+
+### Minor Changes
+
+- Add a serializable TimelineSection model and SSR-first timeline organism with shared date scales, automatic overlap lanes, category filters, accessible native disclosures, optional images/actions, and responsive anchored detail popups. Extend Popup with opt-in side placement, viewport flipping and container-scroll dismissal.
+
+## 0.7.0
+
+### Minor Changes
+
+- Add themed, keyboard-accessible Tooltip components and native tooltip actions. Introduce brief trigger-oriented popup transitions, a softly fading blur backdrop, immediate button and navigation hover feedback, subtle card elevation, ButtonGroup separators, and an independent footer border theme color. Respect reduced motion and close header settings after selecting a preference.
+
 ## 0.6.0
 
 ### Patch Changes

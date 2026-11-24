@@ -1,6 +1,28 @@
 // Shared chapter metadata for navigation, search and reading order.
 export const documents = [
   {
+    title: 'Chip',
+    href: '/docs/components/chip/',
+    description: 'Reusable labeled selection chips with optional Lucide icons.',
+    group: 'Components',
+    category: 'Atoms'
+  },
+  {
+    title: 'Timeline',
+    href: '/sections/timeline/',
+    description:
+      'Parallel journeys with shared dates, category filters and anchored event details.',
+    group: 'Sections',
+    category: 'Collections'
+  },
+  {
+    title: 'Tooltip',
+    href: '/docs/components/tooltip/',
+    description: 'Accessible themed hints for pointer and keyboard users.',
+    group: 'Components',
+    category: 'Atoms'
+  },
+  {
     title: 'Overview',
     href: '/docs/',
     description: 'A guided map of the components, layouts and interactive examples.',

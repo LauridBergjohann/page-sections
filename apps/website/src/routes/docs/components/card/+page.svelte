@@ -79,6 +79,14 @@
         the same article used by the two collection components; Image supplies shared responsive and
         theme-aware image rendering.
       </p>
+      <p>
+        On pointer hover, interactive cards enlarge only their image. The card background, text and
+        layout keep their original size and position; the border and shadow still highlight the
+        card. With <code>mediaFit="contain"</code>, the image expands through its reserved padding
+        to the edges of the media area, preserving its proportions and the complete image. With
+        <code>mediaFit="cover"</code>, a stronger zoom stays clipped to the media frame and cannot
+        cover the text. Reduced motion disables image enlargement.
+      </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
         Card accepts <code>tone=&quot;standard&quot;</code> (default) or

@@ -67,6 +67,8 @@
 </nav>
 
 <style>
+  a, summary { transition: background-color 300ms cubic-bezier(.2,.4,.3,1), color 300ms cubic-bezier(.2,.4,.3,1); }
+  @media (prefers-reduced-motion: reduce) { a, summary { transition: none; } }
   ul {
     list-style: none;
     padding: 0;

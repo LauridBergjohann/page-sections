@@ -2,7 +2,7 @@
   import { onMount, type Snippet } from 'svelte';
   import { page } from '$app/state';
   import { base } from '#lib/paths.js';
-  import { ButtonGroup, Footer, Header, PageShell } from '@page-sections/svelte';
+  import { ButtonGroup, Footer, Header, PageShell, tooltip } from '@page-sections/svelte';
   import Menu from '@lucide/svelte/icons/menu';
   import Settings from '@lucide/svelte/icons/settings';
   import Sun from '@lucide/svelte/icons/sun';
@@ -88,7 +88,7 @@
             rel="noopener noreferrer"
             href="https://github.com/LauridBergjohann/page-sections"
             aria-label="Page Sections on GitHub"
-            title="Source on GitHub"
+            use:tooltip={'Source on GitHub'}
           >
             <Github />
           </a>
@@ -98,7 +98,7 @@
             rel="noopener noreferrer"
             href="https://www.npmjs.com/package/@page-sections/svelte"
             aria-label="Page Sections on NPM"
-            title="Package on NPM"
+            use:tooltip={'Package on NPM'}
           >
             <BrandMark kind="npm" />
           </a>

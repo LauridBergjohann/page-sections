@@ -1,5 +1,6 @@
 ﻿<script lang="ts">
   import Popup from './Popup.svelte';
+  import { tooltip } from './tooltip.js';
   import { tick, untrack, type Snippet } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import type { MenuItem } from '@page-sections/core';
@@ -29,6 +30,9 @@
     if (!(event.target instanceof Element)) return;
     if (!root?.contains(event.target)) { closeAll(); return; }
     if (!settings?.contains(event.target)) close(settings);
+    else if (event.target.closest('button[aria-pressed]:not(:disabled), [role=radio]')) {
+      await tick(); close(settings, true);
+    }
     if (!mobile?.contains(event.target)) close(mobile);
     if (event.target.closest('a') && root?.contains(event.target)) { await tick(); closeAll(); }
   }
@@ -55,7 +59,7 @@
       {#if items}
         <nav class="mobile-navigation" aria-label={label}>
         <details bind:this={mobile} class="mobile-menu">
-          <summary aria-label={menuLabel}>{#if menuIcon}{@render menuIcon()}{:else}<span aria-hidden="true">&#9776;</span>{/if}</summary>
+          <summary aria-label={menuLabel} use:tooltip={menuLabel}>{#if menuIcon}{@render menuIcon()}{:else}<span aria-hidden="true">&#9776;</span>{/if}</summary>
           <Popup class="mobile-panel" disclosure><MainMenu {items} variant="mobile" icon={itemIcon} /></Popup>
         </details>
         </nav>
@@ -65,10 +69,10 @@
       {#if tools}<div class="tools">{@render tools()}</div>{/if}
       {#if left || right}
         <details bind:this={settings} class="settings">
-          <summary aria-label={settingsLabel} title={settingsLabel}>
+          <summary aria-label={settingsLabel} use:tooltip={settingsLabel}>
             {#if settingsIcon}{@render settingsIcon()}{:else}<span aria-hidden="true">&#9881;</span>{/if}
           </summary>
-          <Popup class="settings-panel" disclosure title={settingsLabel}>
+          <Popup class="settings-panel" disclosure closable title={settingsLabel}>
             <div class="settings-panel-content">
             {#if left}<div>{@render left()}</div>{/if}
             {#if right}<div>{@render right()}</div>{/if}
@@ -103,7 +107,7 @@
   summary { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; list-style: none; }
   summary:focus-visible { outline: 2px solid var(--ps-accent); outline-offset: 2px; }
   summary::-webkit-details-marker { display: none; }
-  summary { transition: color 180ms ease, background-color 180ms ease; }
+  summary { transition: color 300ms cubic-bezier(.2,.4,.3,1), background-color 300ms cubic-bezier(.2,.4,.3,1); }
   summary:hover { background: var(--ps-selection, var(--ps-section-muted)); }
   details[open] > summary { color: var(--ps-accent); background: var(--ps-selection, var(--ps-section-muted)); }
   @media (prefers-reduced-motion: reduce) { summary { transition: none; } }

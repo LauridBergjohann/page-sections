@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Component } from 'svelte';
   import type { SectionData, HighlightedCode } from '@page-sections/core';
+  import TimelineSection from './TimelineSection.svelte';
   import CodeSection from './CodeSection.svelte';
   import HeroSection from './HeroSection.svelte';
   import HeadingSection from './HeadingSection.svelte';
@@ -21,6 +22,7 @@
 {#each sections as section (section.id)}
   {@const Custom = renderers[section.type]}
   {#if Custom}<Custom {section} />
+  {:else if section.type === 'timeline'}<TimelineSection {section} />
   {:else if section.type === 'hero'}<HeroSection {section} />
   {:else if section.type === 'heading'}<HeadingSection {section} />
   {:else if section.type === 'richText'}<RichTextSection {section} />

@@ -19,6 +19,8 @@ test('top-level icons precede labels at every layout size and open parents stay 
   }
   const parent = page.locator('.desktop-menu [data-menu-id="sections"]');
   await parent.hover();
+  await expect(parent).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await parent.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
   const color = await parent.evaluate(el => getComputedStyle(el).backgroundColor);
   expect(color).not.toBe('rgba(0, 0, 0, 0)');
   await page.locator('.desktop-menu .ps-submenu:not([hidden]) a').first().hover();
@@ -49,7 +51,7 @@ test('cards animate optional shadows and restore their original border on mouse 
   const border = await surface.evaluate(el=>getComputedStyle(el).borderColor);
   const accent = await card.locator('.eyebrow').evaluate(el=>getComputedStyle(el).color);
   await expect(surface).toHaveCSS('box-shadow','none');
-  await expect(surface).toHaveCSS('transition-duration','0.15s, 0.15s');
+  await expect(surface).toHaveCSS('transition-duration','0.28s, 0.28s');
   await card.hover();
   await expect(surface).toHaveCSS('border-color',accent);
   await expect(surface).not.toHaveCSS('box-shadow','none');
@@ -132,12 +134,12 @@ test('all card sizes keep descriptions close, scale their text and fill each gri
   expect(sizes.m).toBeLessThan(sizes.l);
 });
 
-test('section illustrations have transparent surroundings', async ({page,request}) => {
+test('section illustrations share frameless art and transparent surroundings', async ({page,request}) => {
   await page.goto('/sections/');
   for (const img of await page.locator('#section-catalog img').all()) {
     const response=await request.get((await img.getAttribute('src'))!);
     const svg=await response.text();
-    expect(svg).toContain('id="window-shadow"');
+    expect(svg).not.toContain('id="window-shadow"');
     expect(svg).not.toMatch(/<rect[^>]*(?:width="800"|height="500")/);
   }
   for (const width of [390,1440]) {
@@ -263,7 +265,7 @@ test('visual guides and ready-made catalog remain useful without JavaScript', as
   await expect(page.getByRole('figure',{name:'Seven viewport sizes from phone to wide desktop'})).toContainText('Wide desktop');
   await expect(page.locator('#every-screen svg')).toHaveCount(7);
   await page.goto('/docs/building-blocks/section/');
-  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(9);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(10);
   await page.goto('/docs/page-layout/header/');
   await expect(page.getByRole('figure',{name:'Page anatomy'})).toBeVisible();
   await expect(page.getByLabel('Preview viewport')).toBeDisabled();

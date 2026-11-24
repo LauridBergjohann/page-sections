@@ -1,12 +1,17 @@
 <script lang="ts">
   import {
     ButtonGroup,
+    IconButton,
+    Popup,
+    Tooltip,
     ContentPage,
     HeadingSection,
     Section,
     Breadcrumbs
   } from '@page-sections/svelte';
   let selected = $state('first');
+  let popupOpen = $state(false);
+  let anchor = $state<HTMLButtonElement | HTMLAnchorElement>();
   let longLabels = $state(false);
   let direction = $state<'ltr' | 'rtl'>('ltr');
   const choices = $derived([
@@ -23,6 +28,23 @@
 <ContentPage page={{ title: 'Navigation controls' }} showContentMenu>
   <HeadingSection section={{ id: 'heading', title: 'Navigation controls', headingLevel: 1 }} />
   <Section section={{ id: 'controls', title: 'Selections', headline: 'Selections' }}>
+    <Tooltip text="Helpful context without a browser title">
+      <button type="button" aria-describedby="existing-description">Tooltip example</button>
+    </Tooltip>
+    <span id="existing-description">Existing description</span>
+    <div style="position: relative; width: fit-content">
+      <IconButton
+        label="Motion example"
+        bind:element={anchor}
+        aria-expanded={popupOpen}
+        onclick={() => (popupOpen = !popupOpen)}
+      >
+        +
+      </IconButton>
+      <Popup id="motion-popup" bind:open={popupOpen} {anchor} title="Motion preview">
+        <button type="button">Popup action</button>
+      </Popup>
+    </div>
     <div dir={direction}>
       <ButtonGroup
         label="Choose an option"

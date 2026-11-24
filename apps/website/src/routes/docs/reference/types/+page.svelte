@@ -169,6 +169,21 @@
           </li>
           <li><a href={base + '/docs/reference/types/#section-type-map'}>SectionTypeMap</a></li>
           <li><a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a></li>
+          <li><a href={base + '/docs/reference/types/#timeline-category'}>TimelineCategory</a></li>
+          <li><a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a></li>
+          <li><a href={base + '/docs/reference/types/#timeline-event'}>TimelineEvent</a></li>
+          <li>
+            <a href={base + '/docs/reference/types/#timeline-event-base'}>TimelineEventBase</a>
+          </li>
+          <li>
+            <a href={base + '/docs/reference/types/#timeline-period-event'}>TimelinePeriodEvent</a>
+          </li>
+          <li>
+            <a href={base + '/docs/reference/types/#timeline-point-event'}>TimelinePointEvent</a>
+          </li>
+          <li>
+            <a href={base + '/docs/reference/types/#timeline-section-data'}>TimelineSectionData</a>
+          </li>
           <li><a href={base + '/docs/reference/types/#video-data'}>VideoData</a></li>
           <li><a href={base + '/docs/reference/types/#video-section-data'}>VideoSectionData</a></li>
           <li>
@@ -5187,7 +5202,7 @@
   panelBorder?: string;
   background?: string; ink?: string; body?: string; accent?: string; onAccent?: string;
   standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string;
-  footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;
+  footerBorder?: string; footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;
   footerBarBackground?: string; footerBarInk?: string;
 &#125;</code
           ></pre>
@@ -5255,6 +5270,11 @@
             </tr>
             <tr>
               <td><code>fontFamily</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>footerBorder</code></td><td><code>string</code></td><td>Optional</td><td>
                 See the declared value shape and the linked types.
               </td>
             </tr>
@@ -6596,6 +6616,8 @@
               >CarouselSectionData</a
             >; grid: <a href={base + '/docs/reference/types/#grid-section-data'}>GridSectionData</a
             >; code: <a href={base + '/docs/reference/types/#code-section-data'}>CodeSectionData</a
+            >; timeline: <a href={base + '/docs/reference/types/#timeline-section-data'}
+              >TimelineSectionData</a
             > &#125;</code
           ></pre>
       </details>
@@ -6680,6 +6702,15 @@
               <td><code>code</code></td><td>
                 <code>
                   <a href={base + '/docs/reference/types/#code-section-data'}>CodeSectionData</a>
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>timeline</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-section-data'}>
+                    TimelineSectionData
+                  </a>
                 </code>
               </td><td>Required</td><td>See the declared value shape and the linked types.</td>
             </tr>
@@ -7004,6 +7035,869 @@
               <td><code>__@iterator@35</code></td><td>
                 <code>StringIterator&lt;string&gt;</code>
               </td><td>Required</td><td>Iterator</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'timeline-category',
+      title: 'TimelineCategory',
+      headline: 'TimelineCategory',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        A named, colored time strand. IDs must be unique. Icon is a built-in Lucide key or an
+        application key resolved to a Lucide component by the optional Svelte icon snippet.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            >interface <a href={base + '/docs/reference/types/#timeline-category'}
+              >TimelineCategory</a
+            > &#123;
+  id: string;
+  title: string;
+  color: string;
+  /** Lucide icon key: graduation-cap, briefcase or bike; use the icon snippet for other Lucide icons. */
+  icon?: string;
+  events: <a href={base + '/docs/reference/types/#timeline-event'}>TimelineEvent</a>[];
+&#125;</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>id</code></td><td><code>string</code></td><td>Required</td><td>
+                Stable identity for this entry.
+              </td>
+            </tr>
+            <tr>
+              <td><code>title</code></td><td><code>string</code></td><td>Required</td><td>
+                Human-readable title.
+              </td>
+            </tr>
+            <tr>
+              <td><code>color</code></td><td><code>string</code></td><td>Required</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td><td><code>string</code></td><td>Optional</td><td>
+                Lucide icon key: graduation-cap, briefcase or bike; use the icon snippet for other
+                Lucide icons.
+              </td>
+            </tr>
+            <tr>
+              <td><code>events</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-event'}>TimelineEvent</a>[]
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'timeline-date',
+      title: 'TimelineDate',
+      headline: 'TimelineDate',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        Strict UTC calendar date: YYYY, YYYY-MM or YYYY-MM-DD, years 0001?9999. Missing parts mean
+        the start of that period; labels preserve input precision.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code>string</code></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>toString</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a string representation of a string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>charAt</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns the character at the specified index.
+              </td>
+            </tr>
+            <tr>
+              <td><code>charCodeAt</code></td><td><code>number</code></td><td>Required</td><td>
+                Returns the Unicode value of the character at the specified location.
+              </td>
+            </tr>
+            <tr>
+              <td><code>concat</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a string that contains the concatenation of two or more strings.
+              </td>
+            </tr>
+            <tr>
+              <td><code>indexOf</code></td><td><code>number</code></td><td>Required</td><td>
+                Returns the position of the first occurrence of a substring, or -1 if it is not
+                present.
+              </td>
+            </tr>
+            <tr>
+              <td><code>lastIndexOf</code></td><td><code>number</code></td><td>Required</td><td>
+                Returns the last occurrence of a substring in the string, or -1 if it is not
+                present.
+              </td>
+            </tr>
+            <tr>
+              <td><code>localeCompare</code></td><td><code>number</code></td><td>Required</td><td>
+                Determines whether two strings are equivalent in the current locale. Determines
+                whether two strings are equivalent in the current or specified locale.
+              </td>
+            </tr>
+            <tr>
+              <td><code>match</code></td><td><code>RegExpMatchArray | null</code></td><td>
+                Required
+              </td><td>
+                Matches a string with a regular expression, and returns an array containing the
+                results of that search. Matches a string or an object that supports being matched
+                against, and returns an array containing the results of that search, or null if no
+                matches are found.
+              </td>
+            </tr>
+            <tr>
+              <td><code>replace</code></td><td><code>string</code></td><td>Required</td><td>
+                Replaces text in a string, using a regular expression or search string. Passes a
+                string and &#123;@linkcode replaceValue&#125; to the `[Symbol.replace]` method on
+                &#123;@linkcode searchValue&#125;. This method is expected to implement its own
+                replacement algorithm. Replaces text in a string, using an object that supports
+                replacement within a string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>search</code></td><td><code>number</code></td><td>Required</td><td>
+                Finds the first substring match in a regular expression search.
+              </td>
+            </tr>
+            <tr>
+              <td><code>slice</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a section of a string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>split</code></td><td><code>string[]</code></td><td>Required</td><td>
+                Split a string into substrings using the specified separator and return them as an
+                array.
+              </td>
+            </tr>
+            <tr>
+              <td><code>substring</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns the substring at the specified location within a String object.
+              </td>
+            </tr>
+            <tr>
+              <td><code>toLowerCase</code></td><td><code>string</code></td><td>Required</td><td>
+                Converts all the alphabetic characters in a string to lowercase.
+              </td>
+            </tr>
+            <tr>
+              <td><code>toLocaleLowerCase</code></td><td><code>string</code></td><td>
+                Required
+              </td><td>
+                Converts all alphabetic characters to lowercase, taking into account the host
+                environment's current locale.
+              </td>
+            </tr>
+            <tr>
+              <td><code>toUpperCase</code></td><td><code>string</code></td><td>Required</td><td>
+                Converts all the alphabetic characters in a string to uppercase.
+              </td>
+            </tr>
+            <tr>
+              <td><code>toLocaleUpperCase</code></td><td><code>string</code></td><td>
+                Required
+              </td><td>
+                Returns a string where all alphabetic characters have been converted to uppercase,
+                taking into account the host environment's current locale.
+              </td>
+            </tr>
+            <tr>
+              <td><code>trim</code></td><td><code>string</code></td><td>Required</td><td>
+                Removes the leading and trailing white space and line terminator characters from a
+                string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>length</code></td><td><code>number</code></td><td>Required</td><td>
+                Returns the length of a String object.
+              </td>
+            </tr>
+            <tr>
+              <td><code>substr</code></td><td><code>string</code></td><td>Required</td><td>
+                Gets a substring beginning at the specified location and having the specified
+                length.
+              </td>
+            </tr>
+            <tr>
+              <td><code>valueOf</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns the primitive value of the specified object.
+              </td>
+            </tr>
+            <tr>
+              <td><code>codePointAt</code></td><td><code>number | undefined</code></td><td>
+                Required
+              </td><td>
+                Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code
+                point value of the UTF-16 encoded code point starting at the string element at
+                position pos in the String resulting from converting this object to a String. If
+                there is no element at that position, the result is undefined. If a valid UTF-16
+                surrogate pair does not begin at pos, the result is the code unit at pos.
+              </td>
+            </tr>
+            <tr>
+              <td><code>includes</code></td><td><code>boolean</code></td><td>Required</td><td>
+                Returns true if searchString appears as a substring of the result of converting this
+                object to a String, at one or more positions that are greater than or equal to
+                position; otherwise, returns false.
+              </td>
+            </tr>
+            <tr>
+              <td><code>endsWith</code></td><td><code>boolean</code></td><td>Required</td><td>
+                Returns true if the sequence of elements of searchString converted to a String is
+                the same as the corresponding elements of this object (converted to a String)
+                starting at endPosition – length(this). Otherwise returns false.
+              </td>
+            </tr>
+            <tr>
+              <td><code>normalize</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns the String value result of normalizing the string into the normalization
+                form named by form as specified in Unicode Standard Annex #15, Unicode Normalization
+                Forms.
+              </td>
+            </tr>
+            <tr>
+              <td><code>repeat</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a String value that is made from count copies appended together. If count is
+                0, the empty string is returned.
+              </td>
+            </tr>
+            <tr>
+              <td><code>startsWith</code></td><td><code>boolean</code></td><td>Required</td><td>
+                Returns true if the sequence of elements of searchString converted to a String is
+                the same as the corresponding elements of this object (converted to a String)
+                starting at position. Otherwise returns false.
+              </td>
+            </tr>
+            <tr>
+              <td><code>anchor</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns an `&lt;a&gt;` HTML anchor element and sets the name attribute to the text
+                value
+              </td>
+            </tr>
+            <tr>
+              <td><code>big</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;big&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>blink</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;blink&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>bold</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;b&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>fixed</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;tt&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>fontcolor</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;font&gt;` HTML element and sets the color attribute value
+              </td>
+            </tr>
+            <tr>
+              <td><code>fontsize</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;font&gt;` HTML element and sets the size attribute value
+              </td>
+            </tr>
+            <tr>
+              <td><code>italics</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns an `&lt;i&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>link</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns an `&lt;a&gt;` HTML element and sets the href attribute value
+              </td>
+            </tr>
+            <tr>
+              <td><code>small</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;small&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>strike</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;strike&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>sub</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;sub&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>sup</code></td><td><code>string</code></td><td>Required</td><td>
+                Returns a `&lt;sup&gt;` HTML element
+              </td>
+            </tr>
+            <tr>
+              <td><code>padStart</code></td><td><code>string</code></td><td>Required</td><td>
+                Pads the current string with a given string (possibly repeated) so that the
+                resulting string reaches a given length. The padding is applied from the start
+                (left) of the current string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>padEnd</code></td><td><code>string</code></td><td>Required</td><td>
+                Pads the current string with a given string (possibly repeated) so that the
+                resulting string reaches a given length. The padding is applied from the end (right)
+                of the current string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>trimEnd</code></td><td><code>string</code></td><td>Required</td><td>
+                Removes the trailing white space and line terminator characters from a string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>trimStart</code></td><td><code>string</code></td><td>Required</td><td>
+                Removes the leading white space and line terminator characters from a string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>trimLeft</code></td><td><code>string</code></td><td>Required</td><td>
+                Removes the leading white space and line terminator characters from a string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>trimRight</code></td><td><code>string</code></td><td>Required</td><td>
+                Removes the trailing white space and line terminator characters from a string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>matchAll</code></td><td>
+                <code>RegExpStringIterator&lt;RegExpExecArray&gt;</code>
+              </td><td>Required</td><td>
+                Matches a string with a regular expression, and returns an iterable of matches
+                containing the results of that search.
+              </td>
+            </tr>
+            <tr>
+              <td><code>replaceAll</code></td><td><code>string</code></td><td>Required</td><td>
+                Replace all instances of a substring in a string, using a regular expression or
+                search string.
+              </td>
+            </tr>
+            <tr>
+              <td><code>at</code></td><td><code>string | undefined</code></td><td>Required</td><td>
+                Returns a new String consisting of the single UTF-16 code unit located at the
+                specified index.
+              </td>
+            </tr>
+            <tr>
+              <td><code>__@iterator@35</code></td><td>
+                <code>StringIterator&lt;string&gt;</code>
+              </td><td>Required</td><td>Iterator</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'timeline-event',
+      title: 'TimelineEvent',
+      headline: 'TimelineEvent',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        A point with date or a period with start and optional end. Event IDs must be unique within
+        their category.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            ><a href={base + '/docs/reference/types/#timeline-point-event'}>TimelinePointEvent</a
+            > | <a href={base + '/docs/reference/types/#timeline-period-event'}
+              >TimelinePeriodEvent</a
+            ></code
+          ></pre>
+      </details>
+      <h3>Alternative 1</h3>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>type</code></td><td><code>'point'</code></td><td>Required</td><td>
+                Discriminator selecting this content variant.
+              </td>
+            </tr>
+            <tr>
+              <td><code>date</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>id</code></td><td><code>string</code></td><td>Required</td><td>
+                Stable identity for this entry.
+              </td>
+            </tr>
+            <tr>
+              <td><code>title</code></td><td><code>string</code></td><td>Required</td><td>
+                Human-readable title.
+              </td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td><td><code>string</code></td><td>Optional</td><td>
+                Optional Lucide key shown in the label; resolve additional keys with the eventIcon
+                snippet.
+              </td>
+            </tr>
+            <tr>
+              <td><code>description</code></td><td>
+                <code>
+                  string | <a href={base + '/docs/reference/types/#rich-text-content-data'}>
+                    RichTextContentData
+                  </a>
+                </code>
+              </td><td>Optional</td><td>Optional accompanying text.</td>
+            </tr>
+            <tr>
+              <td><code>image</code></td><td>
+                <code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code>
+              </td><td>Optional</td><td>Image content; follow ImageData for all fields.</td>
+            </tr>
+            <tr>
+              <td><code>tags</code></td><td><code>string[]</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>action</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Alternative 2</h3>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>type</code></td><td><code>'period'</code></td><td>Required</td><td>
+                Discriminator selecting this content variant.
+              </td>
+            </tr>
+            <tr>
+              <td><code>start</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>end</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>id</code></td><td><code>string</code></td><td>Required</td><td>
+                Stable identity for this entry.
+              </td>
+            </tr>
+            <tr>
+              <td><code>title</code></td><td><code>string</code></td><td>Required</td><td>
+                Human-readable title.
+              </td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td><td><code>string</code></td><td>Optional</td><td>
+                Optional Lucide key shown in the label; resolve additional keys with the eventIcon
+                snippet.
+              </td>
+            </tr>
+            <tr>
+              <td><code>description</code></td><td>
+                <code>
+                  string | <a href={base + '/docs/reference/types/#rich-text-content-data'}>
+                    RichTextContentData
+                  </a>
+                </code>
+              </td><td>Optional</td><td>Optional accompanying text.</td>
+            </tr>
+            <tr>
+              <td><code>image</code></td><td>
+                <code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code>
+              </td><td>Optional</td><td>Image content; follow ImageData for all fields.</td>
+            </tr>
+            <tr>
+              <td><code>tags</code></td><td><code>string[]</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>action</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'timeline-event-base',
+      title: 'TimelineEventBase',
+      headline: 'TimelineEventBase',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        Shared serializable event details. An optional Lucide icon appears in the label. Optional
+        image, rich description, tags and action appear only in the disclosure/popup.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            >interface <a href={base + '/docs/reference/types/#timeline-event-base'}
+              >TimelineEventBase</a
+            > &#123;
+  id: string;
+  title: string;
+  /** Optional Lucide key shown in the label; resolve additional keys with the eventIcon snippet. */
+  icon?: string;
+  description?: string | <a href={base + '/docs/reference/types/#rich-text-content-data'}
+              >RichTextContentData</a
+            >;
+  image?: <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>;
+  tags?: string[];
+  action?: <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>;
+&#125;</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>id</code></td><td><code>string</code></td><td>Required</td><td>
+                Stable identity for this entry.
+              </td>
+            </tr>
+            <tr>
+              <td><code>title</code></td><td><code>string</code></td><td>Required</td><td>
+                Human-readable title.
+              </td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td><td><code>string</code></td><td>Optional</td><td>
+                Optional Lucide key shown in the label; resolve additional keys with the eventIcon
+                snippet.
+              </td>
+            </tr>
+            <tr>
+              <td><code>description</code></td><td>
+                <code>
+                  string | <a href={base + '/docs/reference/types/#rich-text-content-data'}>
+                    RichTextContentData
+                  </a>
+                </code>
+              </td><td>Optional</td><td>Optional accompanying text.</td>
+            </tr>
+            <tr>
+              <td><code>image</code></td><td>
+                <code><a href={base + '/docs/reference/types/#image-data'}>ImageData</a></code>
+              </td><td>Optional</td><td>Image content; follow ImageData for all fields.</td>
+            </tr>
+            <tr>
+              <td><code>tags</code></td><td><code>string[]</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>action</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#content-action'}>ContentAction</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'timeline-period-event',
+      title: 'TimelinePeriodEvent',
+      headline: 'TimelinePeriodEvent',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        A start-inclusive, end-exclusive interval rendered as a rounded bar. Omit end to mark it as
+        ongoing.
+      </p>
+      <p>
+        Also includes the fields of <code>
+          <a href={base + '/docs/reference/types/#timeline-event-base'}>TimelineEventBase</a>
+        </code>. Follow these links for inherited fields.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            >interface <a href={base + '/docs/reference/types/#timeline-period-event'}
+              >TimelinePeriodEvent</a
+            > extends <a href={base + '/docs/reference/types/#timeline-event-base'}
+              >TimelineEventBase</a
+            > &#123; type: 'period'; start: <a href={base + '/docs/reference/types/#timeline-date'}
+              >TimelineDate</a
+            >; end?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a
+            > &#125;</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>type</code></td><td><code>'period'</code></td><td>Required</td><td>
+                Discriminator selecting this content variant.
+              </td>
+            </tr>
+            <tr>
+              <td><code>start</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>end</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'timeline-point-event',
+      title: 'TimelinePointEvent',
+      headline: 'TimelinePointEvent',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>A calendar milestone rendered as a circular marker.</p>
+      <p>
+        Also includes the fields of <code>
+          <a href={base + '/docs/reference/types/#timeline-event-base'}>TimelineEventBase</a>
+        </code>. Follow these links for inherited fields.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            >interface <a href={base + '/docs/reference/types/#timeline-point-event'}
+              >TimelinePointEvent</a
+            > extends <a href={base + '/docs/reference/types/#timeline-event-base'}
+              >TimelineEventBase</a
+            > &#123; type: 'point'; date: <a href={base + '/docs/reference/types/#timeline-date'}
+              >TimelineDate</a
+            > &#125;</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>type</code></td><td><code>'point'</code></td><td>Required</td><td>
+                Discriminator selecting this content variant.
+              </td>
+            </tr>
+            <tr>
+              <td><code>date</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'timeline-section-data',
+      title: 'TimelineSectionData',
+      headline: 'TimelineSectionData',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        Shared section metadata plus categories on one proportional date scale, ascending by default
+        or descending for newest-first timelines. Open-ended periods use end, referenceDate, or the
+        SSR render date reused during hydration.
+      </p>
+      <p>
+        Also includes the fields of <code>
+          <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
+        </code>. Follow these links for inherited fields.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            >interface <a href={base + '/docs/reference/types/#timeline-section-data'}
+              >TimelineSectionData</a
+            > extends <a href={base + '/docs/reference/types/#section-definition'}
+              >SectionDefinition</a
+            > &#123;
+  type: 'timeline';
+  categories: <a href={base + '/docs/reference/types/#timeline-category'}>TimelineCategory</a>[];
+  /** Date axis direction from top to bottom. Default ascending (oldest first). */
+  direction?: 'ascending' | 'descending';
+  start?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>;
+  end?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>;
+  /** End of ongoing events, unless end is supplied. Default: the SSR render's UTC date. */
+  referenceDate?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>;
+  /** Explicit locale keeps server and client date labels consistent. Default en-GB. */
+  locale?: string;
+  presentLabel?: string;
+  emptyLabel?: string;
+&#125;</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>type</code></td><td><code>'timeline'</code></td><td>Required</td><td>
+                Discriminator selecting this content variant.
+              </td>
+            </tr>
+            <tr>
+              <td><code>categories</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-category'}>TimelineCategory</a>[]
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>direction</code></td><td><code>'ascending' | 'descending'</code></td><td>
+                Optional
+              </td><td>
+                Date axis direction from top to bottom. Default ascending (oldest first).
+              </td>
+            </tr>
+            <tr>
+              <td><code>start</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>end</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>referenceDate</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>
+                </code>
+              </td><td>Optional</td><td>
+                End of ongoing events, unless end is supplied. Default: the SSR render's UTC date.
+              </td>
+            </tr>
+            <tr>
+              <td><code>locale</code></td><td><code>string</code></td><td>Optional</td><td>
+                Explicit locale keeps server and client date labels consistent. Default en-GB.
+              </td>
+            </tr>
+            <tr>
+              <td><code>presentLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>emptyLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
             </tr>
           </tbody>
         </table>

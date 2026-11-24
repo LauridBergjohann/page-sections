@@ -66,6 +66,16 @@ console.log(background.cssBackground);`
   >
     <div class="prose">
       <p>
+        Timeline data: <a href={base + '/docs/reference/types/#timeline-section-data'}>
+          TimelineSectionData
+        </a>, <a href={base + '/docs/reference/types/#timeline-category'}>TimelineCategory</a>,
+        <a href={base + '/docs/reference/types/#timeline-event'}>TimelineEvent</a>,
+        <a href={base + '/docs/reference/types/#timeline-event-base'}>TimelineEventBase</a>,
+        <a href={base + '/docs/reference/types/#timeline-point-event'}>TimelinePointEvent</a>,
+        <a href={base + '/docs/reference/types/#timeline-period-event'}>TimelinePeriodEvent</a>,
+        <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>.
+      </p>
+      <p>
         All runtime functions, constants, classes and types below are exported from <code>
           @page-sections/core
         </code>. The package has no runtime dependencies, DOM requirement or rendering
