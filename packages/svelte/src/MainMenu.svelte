@@ -114,6 +114,8 @@
 {/if}
 
 <style>
+  a { transition: background-color 300ms cubic-bezier(.2,.4,.3,1), color 300ms cubic-bezier(.2,.4,.3,1); }
+  @media (prefers-reduced-motion: reduce) { a { transition: none; } }
   ul {
     display: flex;
     justify-content: center;

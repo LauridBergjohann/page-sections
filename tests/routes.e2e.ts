@@ -180,6 +180,9 @@ for (const width of [320, 600, 840, 1200, 1599, 1600, 1809, 2300]) {
       await nav.locator('.settings > summary').focus(); await page.keyboard.press('Enter');
       await page.getByRole('button', { name: 'Dark', exact: true }).click();
       await expect(page.locator('[data-ps-theme]')).toHaveAttribute('data-ps-theme', 'dark');
+      await expect(nav.locator('.settings')).not.toHaveAttribute('open');
+      await expect(nav.locator('.settings > summary')).toBeFocused();
+      await nav.locator('.settings > summary').click();
       await expect(page.getByRole('link', { name: 'Documentation', exact: true })).toBeVisible();
       await page.keyboard.press('Escape');
       await expect(nav.locator('.settings > summary')).toBeFocused();

@@ -1,3 +1,4 @@
+export { default as Chip } from './Chip.svelte';
 // Atoms
 export { default as PrimaryButton } from './PrimaryButton.svelte';
 export { default as SecondaryButton } from './SecondaryButton.svelte';
@@ -5,6 +6,9 @@ export { default as IconButton } from './IconButton.svelte';
 export { default as Heading } from './Heading.svelte';
 export { default as Image } from './Image.svelte';
 export { default as InlineTextContent } from './InlineText.svelte';
+
+export { default as Tooltip } from './Tooltip.svelte';
+export { tooltip } from './tooltip.js';
 
 // Molecules
 export { default as ButtonGroup } from './ButtonGroup.svelte';
@@ -20,6 +24,7 @@ export { default as SidebarNavigation } from './SidebarNavigation.svelte';
 export { default as SectionNavigation } from './SectionNavigation.svelte';
 
 // Organisms
+export { default as TimelineSection } from './TimelineSection.svelte';
 export { default as Header } from './Header.svelte';
 export { default as Navigation } from './Header.svelte';
 export { default as Footer } from './Footer.svelte';

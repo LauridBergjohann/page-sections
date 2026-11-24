@@ -1,5 +1,33 @@
 # @page-sections/svelte
 
+## 0.8.0
+
+### Minor Changes
+
+- Add the reusable Chip atom with consistent selected/inactive geometry, leading and trailing icons, native button semantics and Timeline integration. Enlarge only card images on hover, filling the media area without cropping contain images and applying a stronger clipped cover zoom. Keep the card surface and text geometry stable while highlighting the border and shadow. Align timeline rails to category icons and dock chips flush with square upper corners.
+
+- Add a serializable TimelineSection model and SSR-first timeline organism with shared date scales, automatic overlap lanes, category filters, accessible native disclosures, optional images/actions, and responsive anchored detail popups. Extend Popup with opt-in side placement, viewport flipping and container-scroll dismissal.
+- Keep timelines in the natural page flow with uncapped height, width-aware label stacking and compact marker-only views. Use the shared Section background throughout, connect rails to transparent sticky category headers, and keep labeled restore controls in the header row, use Lucide icons without a new dependency, and add optional shared Popup close buttons with focus restoration.
+- Support ascending and descending timeline axes, decorative Lucide event icons, shared marker/label interaction states, and colored marker borders without white halos. Make document-scroll dismissal part of Popup, including fallback browsers, without moving focus or dismissing on internal scrolling.
+
+### Patch Changes
+
+- Align popup titles and close buttons in one shared header row. Remove the nested On this page popup and omit the close button and reserved space in the titleless hamburger menu.
+
+- Updated dependencies
+  - @page-sections/core@0.8.0
+
+## 0.7.0
+
+### Minor Changes
+
+- Add themed, keyboard-accessible Tooltip components and native tooltip actions. Introduce brief trigger-oriented popup transitions, a softly fading blur backdrop, immediate button and navigation hover feedback, subtle card elevation, ButtonGroup separators, and an independent footer border theme color. Respect reduced motion and close header settings after selecting a preference.
+
+### Patch Changes
+
+- Updated dependencies
+  - @page-sections/core@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes

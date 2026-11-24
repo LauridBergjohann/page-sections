@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { PrimaryButton, SecondaryButton, IconButton } from '@page-sections/svelte/atoms';
+  import { PrimaryButton, SecondaryButton, IconButton, Chip } from '@page-sections/svelte/atoms';
   import { Popup } from '@page-sections/svelte/molecules';
-  import { Header } from '@page-sections/svelte/organisms';
+  import { Header, TimelineSection } from '@page-sections/svelte/organisms';
   import { PageShell } from '@page-sections/svelte/layouts';
   import { ContentPage, HeadingSection, CardGridSection, CarouselSection, CodeSection, Sections, type InlineText } from '@page-sections/svelte';
   import { resolveCardLayout, type CardItem, type CardMediaAspect, type SurfaceTone } from '@page-sections/core';
@@ -17,6 +17,12 @@
   <CarouselSection section={{ id: 'browse', title: 'Browse', headline: 'Browse' }} list={cards} mediaAspect="4/3" mediaFit="cover" />
   <output aria-label="Catalog card height">{layout.height}</output>
   <CodeSection section={{ id: 'source', title: 'Source', code: 'const independent = true;', language: 'typescript', lineNumbers: true }} />
+  <TimelineSection section={{ id: 'history', title: 'History', headline: 'History', referenceDate: '2026', categories: [
+    { id: 'project', title: 'Project', color: '#168d91', events: [
+      { id: 'launch', title: 'Independent timeline', type: 'point', date: '2024-06', action: { label: 'Collection', href: '#collection' } },
+      { id: 'maintenance', title: 'Maintenance', type: 'period', start: '2024-06' }
+    ] }
+  ] }} />
   <Sections sections={[{ type: 'panel', id: 'contact', title: 'Contact', headline: 'Contact', blocks: [
     { type: 'address', name: 'Independent studio', lines: ['Example City'] },
     { type: 'paragraph', text: [{ type: 'link', text: 'Email', href: 'mailto:hello@example.com' }] }
@@ -25,5 +31,6 @@
 </ContentPage>
 
 <PageShell><Header>{#snippet brand()}Atomic consumer{/snippet}</Header>
-<PrimaryButton href="#collection">Primary</PrimaryButton><SecondaryButton>Secondary</SecondaryButton>
+<Chip label="Example filter" selected />
+  <PrimaryButton href="#collection">Primary</PrimaryButton><SecondaryButton>Secondary</SecondaryButton>
 <IconButton label="Settings">?</IconButton><Popup inline title="Shared popup">Popup content</Popup></PageShell>

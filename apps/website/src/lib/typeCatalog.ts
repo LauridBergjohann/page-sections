@@ -361,6 +361,54 @@ export const typeDocuments = [
     description: 'Fields and declaration of SurfaceTone.'
   },
   {
+    title: 'TimelineCategory',
+    href: '/docs/reference/types/#timeline-category',
+    group: 'Data types',
+    description:
+      'A named, colored time strand. IDs must be unique. Icon is a built-in Lucide key or an application key resolved to a Lucide component by the optional Svelte icon snippet.'
+  },
+  {
+    title: 'TimelineDate',
+    href: '/docs/reference/types/#timeline-date',
+    group: 'Data types',
+    description:
+      'Strict UTC calendar date: YYYY, YYYY-MM or YYYY-MM-DD, years 0001?9999. Missing parts mean the start of that period; labels preserve input precision.'
+  },
+  {
+    title: 'TimelineEvent',
+    href: '/docs/reference/types/#timeline-event',
+    group: 'Data types',
+    description:
+      'A point with date or a period with start and optional end. Event IDs must be unique within their category.'
+  },
+  {
+    title: 'TimelineEventBase',
+    href: '/docs/reference/types/#timeline-event-base',
+    group: 'Data types',
+    description:
+      'Shared serializable event details. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.'
+  },
+  {
+    title: 'TimelinePeriodEvent',
+    href: '/docs/reference/types/#timeline-period-event',
+    group: 'Data types',
+    description:
+      'A start-inclusive, end-exclusive interval rendered as a rounded bar. Omit end to mark it as ongoing.'
+  },
+  {
+    title: 'TimelinePointEvent',
+    href: '/docs/reference/types/#timeline-point-event',
+    group: 'Data types',
+    description: 'A calendar milestone rendered as a circular marker.'
+  },
+  {
+    title: 'TimelineSectionData',
+    href: '/docs/reference/types/#timeline-section-data',
+    group: 'Data types',
+    description:
+      'Shared section metadata plus categories on one proportional date scale, ascending by default or descending for newest-first timelines. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.'
+  },
+  {
     title: 'VideoData',
     href: '/docs/reference/types/#video-data',
     group: 'Data types',

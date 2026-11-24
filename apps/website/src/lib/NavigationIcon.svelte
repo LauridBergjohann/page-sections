@@ -20,6 +20,7 @@
   import Image from '@lucide/svelte/icons/image';
   import Panel from '@lucide/svelte/icons/panel-top';
   import Text from '@lucide/svelte/icons/text';
+  import Timeline from '@lucide/svelte/icons/git-branch';
   import Video from '@lucide/svelte/icons/video';
   let { name }: { name?: string } = $props();
   const icons = {
@@ -36,6 +37,7 @@
     panel: Panel,
     text: Text,
     video: Video,
+    timeline: Timeline,
     layers: Layers,
     panels: Panels,
     blocks: Blocks,

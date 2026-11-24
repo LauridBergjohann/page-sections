@@ -1,4 +1,5 @@
 ﻿<script lang="ts">
+  import { tooltip } from './tooltip.js';
   import type { Snippet } from 'svelte';
   import { safeHref, type ButtonGroupItem } from '@page-sections/core';
   import { selectionIndicator } from './selectionIndicator.js';
@@ -38,7 +39,7 @@
         href={safeHref(item.href)}
         aria-current={item.selected ? 'true' : undefined}
         aria-label={iconOnly && icon ? item.label : undefined}
-        title={iconOnly && icon ? item.label : undefined}
+        use:tooltip={iconOnly && icon ? item.label : undefined}
         class:icon-only={iconOnly && !!icon}
         data-first={index === 0 || undefined}
         data-last={index === items.length - 1 || undefined}
@@ -51,7 +52,7 @@
         disabled={item.disabled}
         aria-pressed={item.selected}
         aria-label={iconOnly && icon ? item.label : undefined}
-        title={iconOnly && icon ? item.label : undefined}
+        use:tooltip={iconOnly && icon ? item.label : undefined}
         class:icon-only={iconOnly && !!icon}
         data-first={index === 0 || undefined}
         data-last={index === items.length - 1 || undefined}
@@ -65,6 +66,7 @@
   .ps-button-group {
     display: flex;
     flex-wrap: wrap;
+    gap: 0;
     width: fit-content;
     max-width: 100%;
     outline: 1px solid var(--ps-border);
@@ -85,7 +87,15 @@
     background: transparent;
     cursor: pointer;
     text-decoration: none;
-    transition: color 180ms ease;
+    transition: color 300ms cubic-bezier(.2,.4,.3,1), background-color 300ms cubic-bezier(.2,.4,.3,1);
+    position: relative;
+  }
+  :is(a, button):not([data-first])::after {
+    content: ''; position: absolute; inset-inline-start: 0; inset-block: 0;
+    border-inline-start: 1px solid var(--ps-button-group-divider, var(--ps-border)); pointer-events: none;
+  }
+  @media (hover: hover) {
+    .ps-button-group > :is(a, button:not(:disabled)):hover { background: var(--ps-selection, var(--ps-section-muted)); }
   }
   [data-first] {
     border-start-start-radius: var(--ps-radius, 12px);

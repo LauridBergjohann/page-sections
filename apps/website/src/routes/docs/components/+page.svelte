@@ -43,6 +43,8 @@
         <li><a href={base + '/docs/components/buttons/'}>PrimaryButton</a></li>
         <li><a href={base + '/docs/components/buttons/'}>SecondaryButton</a></li>
         <li><a href={base + '/docs/components/buttons/'}>IconButton</a></li>
+        <li><a href={base + '/docs/components/tooltip/'}>Tooltip</a></li>
+        <li><a href={base + '/docs/components/chip/'}>Chip</a></li>
         <li><a href={base + '/docs/page-layout/headings-and-anchors/'}>Heading</a></li>
         <li><a href={base + '/docs/components/image/'}>Image</a></li>
         <li><a href={base + '/docs/reference/svelte-api/'}>InlineTextContent</a></li>

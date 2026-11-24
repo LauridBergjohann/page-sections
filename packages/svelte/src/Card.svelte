@@ -35,13 +35,15 @@
   data-ps-card-size={cardSize} data-tone={tone} data-shadow={shadow} data-media-fit={mediaFit} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
   <div class="surface ps-shadow-surface" bind:this={surfaceElement} data-ps-card-part="surface" aria-hidden="true">{@render surface?.(item)}</div>
   <div class="media-frame" class:no-media={!media && !item.image} data-ps-card-part="media-frame">
+    <div class="media-viewport">
     <div class="media" bind:this={mediaElement} data-ps-card-part="media">
       {#if media}{@render media(item)}{:else if item.image}<Image image={item.image} />{/if}
+    </div>
     </div>
   </div>
   <div class="text" bind:this={copy} data-ps-card-part="copy">
     {#if showEyebrowRow}<p class="eyebrow" data-ps-card-part="eyebrow" aria-hidden={hasEyebrow ? undefined : true}>{hasEyebrow ? item.eyebrow : ''}</p>{/if}
-    <svelte:element this={`h${level}`} bind:this={title} id={titleId} class="title" data-ps-card-part="title" title={item.title}>
+    <svelte:element this={`h${level}`} bind:this={title} id={titleId} class="title" data-ps-card-part="title">
       {#if href}<a class="primary-link" {href}><span class="title-label">{item.title}</span></a>{:else}<span class="title-label">{item.title}</span>{/if}
     </svelte:element>
     {#if item.description ?? item.subtitle}<p class="description">{item.description ?? item.subtitle}</p>{/if}
@@ -52,20 +54,25 @@
 </article>
 <style>
   .ps-card { position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr; width: 100%; min-width: 0; height: 100%; color: var(--ps-ink); border-radius: var(--ps-radius); }
-  .surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; background: var(--ps-section-standard); transition: box-shadow 150ms ease, border-color 150ms ease; }
+  .surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; background: var(--ps-section-standard); transition: box-shadow 280ms cubic-bezier(.2,.4,.3,1), border-color 280ms cubic-bezier(.2,.4,.3,1); }
   [data-tone='muted'] .surface { background: var(--ps-section-muted); }
   [data-shadow='true'] .surface { box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
   .ps-card:has(:focus-visible) > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
   .ps-card[data-shadow='true']:has(:focus-visible) > .surface { box-shadow: var(--ps-card-hover-shadow, var(--ps-default-card-hover-shadow)); }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .ps-card:has(a, button):hover .media { inset: 0; }
+    .ps-card[data-media-fit='cover']:has(a, button):hover .media { transform: scale(1.06); }
+  }
   @media (hover: hover) {
     .ps-card:hover > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
     .ps-card[data-shadow='true']:hover > .surface { box-shadow: var(--ps-card-hover-shadow, var(--ps-default-card-hover-shadow)); }
   }
-  @media (prefers-reduced-motion: reduce) { .surface { transition: none; } }
   .media, .text { min-width: 0; min-height: 0; }
-  .media-frame { position: relative; width: 100%; aspect-ratio: var(--ps-card-media-aspect); align-self: start; overflow: hidden; border-radius: var(--ps-radius) var(--ps-radius) 0 0; }
+  .media-frame { position: relative; width: 100%; aspect-ratio: var(--ps-card-media-aspect); align-self: start; border-radius: var(--ps-radius) var(--ps-radius) 0 0; }
+  .media-viewport { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
+  [data-media-fit='contain'] .media-viewport { overflow: visible; }
   .media-frame.no-media { display: none; }
-  .media { position: absolute; inset: min(var(--ps-card-media-inset), 33%); }
+  .media { position: absolute; inset: min(var(--ps-card-media-inset), 33%); transition: inset 280ms cubic-bezier(.2,.4,.3,1), transform 280ms cubic-bezier(.2,.4,.3,1); }
   [data-media-fit='cover'] .media { inset: 0; }
   .media :global(picture), .media :global(img) { width: 100%; height: 100%; object-fit: contain; border-radius: 0; }
   [data-media-fit='cover'] .media :global(img) { object-fit: cover; }
@@ -85,4 +92,5 @@
   .footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--ps-border); font-size: .875rem; }
   .text > :global(.ps-actions) { margin-top: auto; padding-top: 1rem; }
   .text :global(.ps-actions a), .footer :global(a), .custom-content :global(:is(a, button, input, select, textarea, summary, [tabindex])) { position: relative; z-index: 2; }
+  @media (prefers-reduced-motion: reduce) { .surface, .media { transition: none; } }
 </style>

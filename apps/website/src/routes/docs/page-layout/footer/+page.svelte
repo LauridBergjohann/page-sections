@@ -214,6 +214,10 @@
         </li>
         <li><code>footerInk</code> → <code>--ps-footer-ink</code> (default #fff).</li>
         <li>
+          <code>footerBorder</code> ? <code>--ps-footer-border</code> (independent outline color, blended
+          from footer ink and background by default).
+        </li>
+        <li>
           <code>footerRadius</code> → <code>--ps-footer-radius</code> (falls back to --ps-radius).
         </li>
         <li>

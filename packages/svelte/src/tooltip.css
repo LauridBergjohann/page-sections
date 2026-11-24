@@ -1,0 +1,13 @@
+.ps-tooltip {
+  position: fixed; inset: auto; z-index: 1000; margin: 0; box-sizing: border-box;
+  width: max-content; max-width: min(280px, calc(100vw - 16px));
+  padding: .5rem .75rem; border: 1px solid var(--ps-tooltip-border, color-mix(in srgb, var(--ps-section-standard, #fff) 24%, transparent));
+  border-radius: 8px; background: var(--ps-tooltip-background, var(--ps-ink, #172330));
+  color: var(--ps-tooltip-ink, var(--ps-section-standard, #fff));
+  box-shadow: 0 3px 12px rgb(0 0 0 / 18%); font: 500 .875rem/1.45 var(--ps-font-family, system-ui, sans-serif);
+  text-align: start; white-space: normal; overflow-wrap: anywhere;
+  animation: ps-tooltip-enter 100ms ease-out;
+}
+.ps-tooltip::backdrop { background: transparent; pointer-events: none; }
+@keyframes ps-tooltip-enter { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ps-tooltip { animation: none; } }

@@ -1,6 +1,44 @@
 import { expect, test, type Locator } from '@playwright/test';
 
 const route = '/docs/design-system/responsive-layout/';
+
+test('popup close controls dismiss website panels and preserve hover menus', async ({ page }) => {
+  for (const width of [390, 1250, 1700]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(route);
+    await expect(page.locator('.mobile-search')).toBeAttached();
+    const triggers = width < 1200 ? ['.settings > summary', '.ps-content-menu-slot .mobile > summary'] : width < 1600 ? ['.settings > summary', '.ps-content-menu-slot .mobile > summary'] : [];
+    for (const selector of triggers) {
+      const trigger = page.locator(selector);
+      await trigger.click();
+      const panel = page.locator('.ps-popup:popover-open');
+      await panel.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
+      const title = (await panel.locator('.ps-popup-title').boundingBox())!;
+      const close = (await panel.locator('.ps-popup-close').boundingBox())!;
+      expect(Math.abs(title.y + title.height / 2 - close.y - close.height / 2)).toBeLessThan(1);
+      await panel.locator('.ps-popup-close').click();
+      await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
+      await expect(trigger).toBeFocused();
+    }
+    if (width < 1200) {
+      await page.locator('.mobile-menu > summary').click();
+      await expect(page.locator('.mobile-panel:popover-open')).toBeVisible();
+      await expect(page.locator('.mobile-panel .ps-popup-close')).toHaveCount(0);
+      await expect(page.locator('.mobile-panel')).toHaveCSS('padding-top', '12px');
+      await page.keyboard.press('Escape');
+    }
+    const input = page.getByRole('combobox', { name: 'Search documentation' });
+    if (width < 1600) await page.getByRole('button', { name: 'Open search', exact: true }).click();
+    else await input.click();
+    await input.fill('theme');
+    await page.locator('.ps-popup:popover-open .ps-popup-close').click();
+    await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
+    if (width >= 1600) await expect(input).toBeFocused();
+  }
+  await page.locator('.desktop-menu a[aria-expanded]').first().hover();
+  await expect(page.locator('.ps-submenu:popover-open')).toBeVisible();
+  await expect(page.locator('.ps-submenu .ps-popup-close')).toHaveCount(0);
+});
 const blur = (page: import('@playwright/test').Page) =>
   page.locator('[data-ps-popup-backdrop]:popover-open');
 async function topmost(target: Locator) {
@@ -35,7 +73,7 @@ for (const width of [390, 1250, 1700])
         await expect(blur(page)).toHaveCSS('backdrop-filter', 'blur(3px)');
         await expect(trigger).not.toHaveCSS('color', initialColor);
         await topmost(trigger);
-        await expect(page.locator(`.${kind} > :popover-open`)).toBeVisible();
+        await expect(page.locator(`.${kind} > .ps-popup:popover-open`)).toBeVisible();
         if (dismissal === 'toggle') await trigger.click();
         else if (dismissal === 'escape') await page.keyboard.press('Escape');
         else await outside();
@@ -106,6 +144,9 @@ test('dark theme popup follows tab and accent colors', async ({ page }) => {
   await page.locator('.settings > summary').click();
   const dark = page.locator('.settings-panel').getByRole('button', { name: 'Dark', exact: true });
   await dark.click();
+  await expect(page.locator('.settings')).not.toHaveAttribute('open');
+  await expect(page.locator('.settings > summary')).toBeFocused();
+  await page.locator('.settings > summary').click();
   await expect(dark).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('Escape');
   const search = page.getByRole('button', { name: 'Open search', exact: true });
@@ -158,6 +199,7 @@ for (const width of [390, 1000, 1920]) {
     async function surface(selector: string, anchorBottom = headerBox.y + headerBox.height, gap = 0) {
       const popup = page.locator(selector + ':popover-open');
       await expect(popup).toBeVisible();
+      await popup.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
       const box = (await popup.boundingBox())!;
       expect(Math.abs(box.y - anchorBottom - gap)).toBeLessThan(1);
       expect(box.x).toBeGreaterThanOrEqual(12);
@@ -180,6 +222,7 @@ for (const width of [390, 1000, 1920]) {
     if (width < 1200) {
       await header.locator('.mobile-menu > summary').click();
       const popup = await surface('.mobile-panel');
+      await popup.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
       const box = (await popup.boundingBox())!;
       expect(box.x).toBe(headerBox.x + 12);
       expect(box.width).toBe(headerBox.width - 24);
@@ -236,7 +279,7 @@ test('atomic popup headings, compact alignment and standalone dismissal stay con
   });
   expect(centered).toBeLessThanOrEqual(1);
   await page.locator('.settings > summary').click();
-  const settingsTypography = await page.locator('.settings-panel > .ps-popup-title').evaluate(node => {
+  const settingsTypography = await page.locator('.settings-panel .ps-popup-title').evaluate(node => {
     const style = getComputedStyle(node); return [style.fontSize, style.fontWeight, style.lineHeight];
   });
   await page.keyboard.press('Escape');
@@ -254,6 +297,9 @@ test('atomic popup headings, compact alignment and standalone dismissal stay con
     await expect(blur(page)).toHaveCount(1);
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await page.locator('#example-settings').getByRole('button', { name: 'Dark', exact: true }).click();
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(trigger).toBeFocused();
+    await trigger.click();
     await expect(page.locator('#example-settings').getByRole('button', { name: 'Dark', exact: true })).toHaveAttribute('aria-pressed', 'true');
     if (dismissal === 'escape') { await page.keyboard.press('Escape'); await expect(trigger).toBeFocused(); }
     else if (dismissal === 'toggle') await trigger.click();

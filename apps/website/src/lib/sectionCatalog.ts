@@ -53,6 +53,12 @@ export const sectionCatalog = [
     title: 'Video',
     icon: 'video',
     description: 'Native video or YouTube, with optional accompanying content.'
+  },
+  {
+    slug: 'timeline',
+    title: 'Timeline',
+    icon: 'timeline',
+    description: 'Parallel journeys and milestones on a shared calendar.'
   }
 ].map((item) => ({
   ...item,
@@ -70,7 +76,7 @@ export const nextStepCards = [
   {
     id: 'add-sections',
     title: 'Add Sections',
-    description: 'Choose from nine composable section types.',
+    description: 'Choose from ten composable section types.',
     href: '/sections/'
   },
   {

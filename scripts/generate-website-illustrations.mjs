@@ -27,6 +27,7 @@ const frame = (content, outlined = false) =>
 const text = (x, y, value, size = 24, color = '#185b48') =>
   `<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" font-weight="700" fill="${color}">${value}</text>`;
 const scenes = {
+  timeline: { title: 'Parallel journeys on a shared calendar', art: "<g stroke=\"#bed8cc\" stroke-dasharray=\"3 5\"><path d=\"M70 130h660M70 210h660M70 290h660M70 370h660\"/></g><g stroke=\"#369c79\" stroke-width=\"3\"><path d=\"M160 80v350m230-350v350m230-350v350\"/></g><g fill=\"#8bcba3\"><rect x=\"148\" y=\"130\" width=\"24\" height=\"160\" rx=\"12\"/><rect x=\"378\" y=\"210\" width=\"24\" height=\"160\" rx=\"12\"/><rect x=\"608\" y=\"130\" width=\"24\" height=\"250\" rx=\"12\"/></g><g fill=\"#368c70\"><circle cx=\"160\" cy=\"370\" r=\"12\"/><rect x=\"410\" y=\"290\" width=\"24\" height=\"130\" rx=\"12\"/></g><g fill=\"#fff\" stroke=\"#c3d9ce\"><rect x=\"188\" y=\"150\" width=\"120\" height=\"44\" rx=\"8\"/><rect x=\"416\" y=\"220\" width=\"120\" height=\"44\" rx=\"8\"/><rect x=\"642\" y=\"150\" width=\"110\" height=\"44\" rx=\"8\"/></g>" },
   'feature-layout': {
     title: 'One responsive grid, from desktop to phone',
     art: rect(108, 115, 390, 245, '#e4eeea') + rect(124, 131, 358, 32, '#347e66') +
@@ -268,6 +269,12 @@ function recolor(art, [accent, secondary, tint, warm]) {
   return art.replace(/#[\da-f]{8}\b|#[\da-f]{6}\b/gi, color => colors[color.toLowerCase()] ?? color);
 }
 for (const [slug, { title, art }] of Object.entries(scenes)) {
+  if (['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video', 'timeline'].includes(slug)) {
+    // Center the original content without browser chrome, shadows or a backdrop.
+    const content = slug === 'timeline' ? art : '<g transform="translate(0 -12)">' + art + '</g>';
+    writeFileSync(new URL(slug + '.svg', output), '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500"><title>' + title + '</title>' + content + '</svg>\n');
+    continue;
+  }
   const palette = palettes[slug];
   const transparent = Boolean(palette) || ['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video'].includes(slug);
   const window = frame(`<g clip-path="url(#window)">${art}</g>`, transparent);

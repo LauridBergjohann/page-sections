@@ -45,7 +45,9 @@
       </p>
       <ol>
         <li>
-          <strong>Atoms:</strong> PrimaryButton, SecondaryButton, IconButton, Heading, Image and InlineTextContent.
+          <strong>Atoms:</strong> PrimaryButton, SecondaryButton, IconButton,
+          <a href={base + '/docs/components/chip/'}>Chip</a>, Tooltip, Heading, Image and
+          InlineTextContent.
         </li>
         <li>
           <strong>Molecules:</strong> ButtonGroup, Card, Popup, actions, text blocks and navigation lists.

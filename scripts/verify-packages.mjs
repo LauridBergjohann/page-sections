@@ -72,6 +72,7 @@ const html = readFileSync(join(consumer, 'dist/index.html'), 'utf8');
 for (const text of ['href="#browse"', 'data-ps-section="collection"', 'data-ps-section="browse"', 'aria-label="On this page"', 'Independent studio', 'mailto:hello@example.com', 'Readable copy']) assert(html.includes(text), `Consumer SSR missing ${text}`);
 assert(existsSync(join(consumer, 'node_modules/@page-sections/core/dist/index.js')));
 assert(html.includes('const independent = true;'), 'Consumer SSR missing code section');
+assert(html.includes('data-event="launch"') && html.includes('Independent timeline'), 'Consumer SSR missing timeline section');
 assert(!existsSync(join(consumer, 'node_modules/shiki')), 'Plain code must not require the optional highlighting engine');
 // Verify the same installed artifacts in a genuine SvelteKit production build as well.
 const kit = join(consumer, 'kit'); mkdirSync(join(kit, 'src/routes'), { recursive: true });

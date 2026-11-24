@@ -1,3 +1,4 @@
+import { timelineExampleFor } from './timelineExample.js';
 import { base } from '#lib/paths.js';
 import type { SectionData } from '@page-sections/core';
 import { sectionCards } from './sectionCatalog';
@@ -19,6 +20,13 @@ export function sectionExample(slug: string): SectionData {
     { label: 'Explore the details', href: base + `/sections/${slug}/`, variant: 'primary' as const }
   ];
   switch (slug) {
+    case 'timeline':
+      return {
+        ...timelineExampleFor(base, shared.id),
+        ...shared,
+        title: 'Timeline',
+        headline: undefined
+      };
     case 'card-grid':
       return {
         ...shared,
