@@ -29,6 +29,41 @@ test('tooltips preserve descriptions, support keyboard and hover, and clean up',
   await expect(tip).toHaveCount(0);
 });
 
+for (const native of [true, false]) test(`tooltips ignore queued viewport events but close on real movement, native popovers ${native}`, async ({ page }) => {
+  if (!native) await page.addInitScript(() => { Reflect.deleteProperty(HTMLElement.prototype, 'showPopover'); });
+  await page.setViewportSize({ width: 320, height: 180 });
+  await page.goto('/navigation-controls/');
+  await expect(page.getByRole('group', { name: 'Choose an option' })).toHaveAttribute('data-ps-selection-ready', '');
+  const trigger = page.getByRole('button', { name: 'Tooltip example', exact: true });
+  const tip = page.getByRole('tooltip');
+  // Focus scrolls the offscreen button into view before opening the tooltip;
+  // the resulting scroll notification is delivered after it has been positioned.
+  const focusedScroll = await trigger.evaluate(async node => {
+    window.scrollTo(0, 0);
+    node.focus();
+    await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    return scrollY;
+  });
+  expect(focusedScroll).toBeGreaterThan(0);
+  await expect(tip).toBeVisible();
+  if (!native) await expect(tip).not.toHaveAttribute('popover');
+  await page.evaluate(() => {
+    window.dispatchEvent(new Event('scroll'));
+    window.dispatchEvent(new Event('resize'));
+  });
+  await expect(tip).toBeVisible();
+  await expect(trigger).toHaveAttribute('aria-describedby', /existing-description ps-tooltip-/);
+  await page.setViewportSize({ width: 360, height: 200 });
+  await expect(tip).toHaveCount(0);
+  await trigger.blur();
+  await trigger.focus();
+  await expect(tip).toBeVisible();
+  await page.evaluate(() => scrollBy(0, 30));
+  await expect(tip).toHaveCount(0);
+  await expect(trigger).toHaveAttribute('aria-describedby', 'existing-description');
+  await expect(trigger).toBeFocused();
+});
+
 test('popup animation keeps placement, exits inertly and survives rapid reopening', async ({ page }) => {
   await page.goto('/navigation-controls/');
   await expect(page.getByRole('group', { name: 'Choose an option' })).toHaveAttribute('data-ps-selection-ready', '');

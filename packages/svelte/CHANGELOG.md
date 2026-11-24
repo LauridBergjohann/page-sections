@@ -12,6 +12,8 @@
 
 ### Patch Changes
 
+- Keep tooltips visible when queued scroll or resize notifications arrive after opening; dismiss only on actual viewport or anchor movement. Preserve focus-triggered tooltips after automatic scrolling.
+
 - Align popup titles and close buttons in one shared header row. Remove the nested On this page popup and omit the close button and reserved space in the titleless hamburger menu.
 
 - Updated dependencies
