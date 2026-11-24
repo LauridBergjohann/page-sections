@@ -31,7 +31,11 @@ test('popup close controls dismiss website panels and preserve hover menus', asy
     if (width < 1600) await page.getByRole('button', { name: 'Open search', exact: true }).click();
     else await input.click();
     await input.fill('theme');
-    await page.locator('.ps-popup:popover-open .ps-popup-close').click();
+    await expect(page.locator('.search-surface .ps-popup-close, .search-panel .ps-popup-close')).toHaveCount(0);
+    await expect(page.locator('.search-surface')).toHaveCSS('padding-top', '0px');
+    await expect(page.locator('.search-panel')).toHaveCSS('padding-top', '0px');
+    await input.press('Escape');
+    await expect(input).toHaveValue('theme');
     await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCount(0);
     if (width >= 1600) await expect(input).toBeFocused();
   }

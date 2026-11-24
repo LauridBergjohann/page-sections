@@ -38,10 +38,10 @@
         Popup is the molecule used by header navigation, Settings, search suggestions and On this
         page. It shares panel borders, background, radius, shadow and title typography. Set
         <code>closable</code> to add the shared Lucide close button. The website enables it for
-        floating panels except the titleless hamburger menu and hover-open main-menu submenus. Pass
-        the heading through <code>title</code> so it shares a vertically centered row with the close button.
-        Clicking outside, pressing Escape, scrolling the document or resizing closes a floating popup.
-        Escape and the close button return focus to its anchor.
+        floating panels except search, the titleless hamburger menu and hover-open main-menu
+        submenus. Pass the heading through <code>title</code> so it shares a vertically centered row with
+        the close button. Clicking outside, pressing Escape, scrolling the document or resizing closes
+        a floating popup. Escape and the close button return focus to its anchor.
       </p>
       <p>
         Document-scroll dismissal is owned by Popup itself, including standalone compositions and

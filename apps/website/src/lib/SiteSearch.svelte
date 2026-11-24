@@ -180,12 +180,11 @@
     </IconButton>
     <Popup
       class="search-surface"
-      closable
       inline={!compact}
       open={!compact || opened}
       anchor={trigger}
       onclose={() => dismiss()}
-      style={compact ? 'padding: 3rem 0 0' : 'padding: 0'}
+      style="padding: 0"
     >
       <div class="search-field" id="site-search-field">
         <Search size={18} aria-hidden="true" />
@@ -216,11 +215,10 @@
       {#if opened}
         <Popup
           class="search-panel"
-          closable
           inline={compact}
           onclose={() => dismiss()}
           anchor={input}
-          style={compact ? 'padding: 0' : 'padding: 3rem 0 0'}
+          style="padding: 0"
         >
           <p class="search-hint" role="status">
             {query.trim()
