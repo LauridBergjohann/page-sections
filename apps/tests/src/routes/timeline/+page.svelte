@@ -45,5 +45,7 @@
     ]}
     onselect={(item) => (axisPosition = item.id as typeof axisPosition)}
   />
-  <TimelineSection section={{ ...timelineExample, direction, axisPosition, categories }} />
+  <TimelineSection
+    section={{ ...timelineExample, stageWidth: 'full', direction, axisPosition, categories }}
+  />
 </ContentPage>

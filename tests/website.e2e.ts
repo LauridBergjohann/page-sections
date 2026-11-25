@@ -1051,7 +1051,7 @@ test('card hover shadows follow shared controls and their own override', async (
 });
 
 for (const [path, id, count] of [['/sections/timeline/', 'morgenhafen-timeline', 56], ['/sections/', 'timeline-example', 18]] as const) {
-  test(`Morgenhafen keeps its shared English fixture, wide stage and no-JS events on ${path}`, async ({ page, browser, baseURL }) => {
+  test(`Morgenhafen keeps its shared English fixture, contained stage and no-JS events on ${path}`, async ({ page, browser, baseURL }) => {
     await page.setViewportSize({ width: 3440, height: 1100 });
     await page.goto(path);
     const section = page.locator('#' + id), timeline = section.locator('.ps-timeline');
@@ -1060,7 +1060,8 @@ for (const [path, id, count] of [['/sections/timeline/', 'morgenhafen-timeline',
     await expect(timeline.locator('.legend button')).toHaveCount(4);
     await expect(timeline.getByRole('slider')).toBeVisible();
     await expect(timeline.getByRole('button', { name: 'Fit entire timeline', exact: true })).toHaveCount(0);
-    await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(3000);
+    await expect(timeline).toHaveAttribute('data-stage-width', 'contained');
+    await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeLessThan(1536);
     await timeline.scrollIntoViewIfNeeded();
     await expect(page.locator('.ps-left-sidebar')).toHaveCSS('visibility', 'visible');
     if (path === '/sections/timeline/') {
@@ -1086,12 +1087,21 @@ test('timeline width controls preserve overlay navigation and switch the right m
   await page.setViewportSize({ width: 3440, height: 1100 });
   await page.goto('/sections/timeline/');
   const timeline = page.locator('#morgenhafen-timeline .ps-timeline');
+  const section = page.locator('#morgenhafen-timeline');
   const right = page.locator('.ps-content-menu-slot .desktop');
+  await expect(timeline).toHaveAttribute('data-enhanced', 'true');
   // Isolate stage presence from the existing standalone rule for transparent/full backgrounds.
-  const opaque = () => page.locator('.ps-section[data-nested="false"]').evaluateAll(nodes => nodes.forEach(node => {
+  const opaque = () => page.locator('.ps-section[data-nested="false"]:not(#morgenhafen-timeline)').evaluateAll(nodes => nodes.forEach(node => {
     node.setAttribute('data-background-size', 'standard'); node.setAttribute('data-background-color', 'standard');
   }));
   await opaque();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'contained');
+  await expect(section).toHaveAttribute('data-background-size', 'standard');
+  await expect(right).toHaveCSS('border-left-width', '0px');
+  await page.getByRole('button', { name: 'Full page width', exact: true }).click();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'full');
+  await expect(section).toHaveAttribute('data-background-size', 'full');
+  await expect(section).toHaveAttribute('data-background-color', 'standard');
   await expect(right).toHaveCSS('border-left-width', '1px');
   await expect(right).toHaveCSS('border-top-left-radius', await right.evaluate(el => getComputedStyle(el).getPropertyValue('--ps-radius').trim()));
   await timeline.scrollIntoViewIfNeeded();
@@ -1105,11 +1115,13 @@ test('timeline width controls preserve overlay navigation and switch the right m
   await page.screenshot({ path: test.info().outputPath('timeline-visible-sidebars.png') });
   await page.getByRole('button', { name: 'Contained width', exact: true }).click();
   await expect(timeline).toHaveAttribute('data-stage-width', 'contained');
+  await expect(section).toHaveAttribute('data-background-size', 'standard');
   await opaque();
   await expect(right).toHaveCSS('border-left-width', '0px');
   await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeLessThan(1536);
   await page.getByRole('button', { name: 'Full page width', exact: true }).click();
   await expect(timeline).toHaveAttribute('data-stage-width', 'full');
+  await expect(section).toHaveAttribute('data-background-size', 'full');
   await expect(right).toHaveCSS('border-left-width', '1px');
   await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(3000);
   await expect(page.locator('#options')).toContainText('The shared data platform');

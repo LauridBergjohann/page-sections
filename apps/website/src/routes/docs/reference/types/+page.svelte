@@ -7825,9 +7825,10 @@
       <p>
         Shared section metadata plus categories on a horizontal proportional date scale with a
         shared priority-ordered track pool, zoom, filters and category-local clusters. Direction
-        defaults to ascending, axisPosition to bottom and stageWidth to full (recommended without
-        side navigation). Initial scale is clamped to the full-timeline fit minimum. Open-ended
-        periods use end, referenceDate, or the SSR render date reused during hydration.
+        defaults to ascending, axisPosition to bottom and stageWidth to contained. Full stage width
+        also sets background.size to full while preserving its color, and is recommended only
+        without side navigation. Initial scale is clamped to the full-timeline fit minimum.
+        Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.
       </p>
       <p>
         Also includes the fields of <code>
@@ -7848,7 +7849,7 @@
   direction?: 'ascending' | 'descending';
   /** Lane zero is nearest the axis. Default bottom. */
   axisPosition?: 'top' | 'bottom';
-  /** Full page stage or embedded content width. Default full; recommended only without side navigation, which overlays the stage. */
+  /** Embedded content width by default. Full also sets background.size to full, preserving its color; recommended only without side navigation, which overlays the stage. */
   stageWidth?: 'full' | 'contained';
   /** Initial CSS pixels per calendar day. Default 0.6; clamped to at least the scale that fits the full timeline. */
   initialScale?: number;
@@ -7903,8 +7904,9 @@
               <td><code>stageWidth</code></td><td><code>'full' | 'contained'</code></td><td>
                 Optional
               </td><td>
-                Full page stage or embedded content width. Default full; recommended only without
-                side navigation, which overlays the stage.
+                Embedded content width by default. Full also sets background.size to full,
+                preserving its color; recommended only without side navigation, which overlays the
+                stage.
               </td>
             </tr>
             <tr>

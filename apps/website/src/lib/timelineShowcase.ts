@@ -12,7 +12,7 @@ export const timelineShowcase: TimelineSectionData = {
   spacing: 'spacious',
   background: {
     color: 'standard',
-    size: 'full'
+    size: 'standard'
   },
   locale: 'en-GB',
   presentLabel: 'Present',

@@ -22,7 +22,7 @@
   let { data }: { data: PageData } = $props();
   let direction = $state<'ascending' | 'descending'>('descending');
   let axisPosition = $state<'top' | 'bottom'>('bottom');
-  let stageWidth = $state<'full' | 'contained'>('full');
+  let stageWidth = $state<'full' | 'contained'>('contained');
 </script>
 
 <ContentPage page={{ title: 'Timeline', pageTitle: 'Timeline · Page Sections' }} showContentMenu>
@@ -199,12 +199,14 @@
   >
     <div class="prose">
       <p>
-        <code>stageWidth</code> defaults to full: the timeline uses the page width with outer
-        spacing while its introduction stays within 1536px. Full width is recommended only for pages
-        without side navigation: sidebars always remain above the stage. A page containing any
+        <code>stageWidth</code> defaults to <code>contained</code>, keeping the timeline within the
+        content width. Choosing <code>full</code> uses the page width with outer spacing and
+        automatically sets <code>background.size</code> to <code>full</code>, preserving the
+        background color. Its introduction stays within 1536px. Full width is recommended only for
+        pages without side navigation: sidebars always remain above the stage. A page containing any
         full-width timeline uses a standalone right content menu instead of docking it. Use
-        contained for embedded layouts and pages with side navigation. Background and stage width
-        remain independent. The shared Section <code>stage</code> snippet renders outside its constrained
+        contained for embedded layouts and pages with side navigation; it respects the configured
+        background size. The shared Section <code>stage</code> snippet renders outside its constrained
         content wrapper. Only the timeline frame scrolls horizontally; text and icons keep their size
         on ultrawide displays.
       </p>

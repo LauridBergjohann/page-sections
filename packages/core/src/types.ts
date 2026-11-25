@@ -94,7 +94,7 @@ export interface TimelineSectionData extends SectionDefinition {
   direction?: 'ascending' | 'descending';
   /** Lane zero is nearest the axis. Default bottom. */
   axisPosition?: 'top' | 'bottom';
-  /** Full page stage or embedded content width. Default full; recommended only without side navigation, which overlays the stage. */
+  /** Embedded content width by default. Full also sets background.size to full, preserving its color; recommended only without side navigation, which overlays the stage. */
   stageWidth?: 'full' | 'contained';
   /** Initial CSS pixels per calendar day. Default 0.6; clamped to at least the scale that fits the full timeline. */
   initialScale?: number;

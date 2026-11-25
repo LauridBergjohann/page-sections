@@ -31,6 +31,7 @@
   $effect(() => { previous = layout.clusters; });
   const descending = $derived(section.direction === 'descending');
   const axisTop = $derived(section.axisPosition === 'top');
+  const stageWidth = $derived(section.stageWidth ?? 'contained');
   const range = $derived(`${formatTimelineDate(new Date(Math.max(domain.start, Math.min(domain.end, unprojectTime(scroll, domain, actualScale, descending)))).toISOString().slice(0, 10), section.locale)} – ${formatTimelineDate(new Date(Math.max(domain.start, Math.min(domain.end, unprojectTime(scroll + viewport, domain, actualScale, descending)))).toISOString().slice(0, 10), section.locale)}`);
   let activeKey = $state<string | null>(null);
   const active = $derived(layout.items.find(item => item.key === activeKey));
@@ -49,7 +50,7 @@
   let gestureUntil = 0;
   let zoomRevision = 0;
   $effect(() => {
-    const width = section.stageWidth ?? 'full';
+    const width = stageWidth;
     if (width !== lastStageWidth) { lastStageWidth = width; activeKey = null; selected = undefined; }
   });
   $effect(() => {
@@ -194,7 +195,7 @@
       </div>
 {/snippet}
 {#snippet timeline()}
-  <div id={uid} class="ps-timeline" data-stage-width={section.stageWidth ?? 'full'} data-enhanced={enhanced} data-reference-date={referenceDate} data-scale={actualScale} data-axis={axisTop ? 'top' : 'bottom'} data-fit={actualScale === minimumScale}>
+  <div id={uid} class="ps-timeline" data-stage-width={stageWidth} data-enhanced={enhanced} data-reference-date={referenceDate} data-scale={actualScale} data-axis={axisTop ? 'top' : 'bottom'} data-fit={actualScale === minimumScale}>
     {#if enhanced}
       {#if axisTop}{@render zoomControls()}{:else}{@render legend()}{/if}
       {#if !layout.items.length}<p class="empty" role="status">{section.emptyLabel ?? 'No events to display. Choose a category or a different date range.'}</p>{/if}
@@ -249,9 +250,9 @@
 {/snippet}
 
 <!-- Keep the registered Section alive when moving its timeline between slots. -->
-<Section section={section.stageWidth === 'contained' ? section : { ...section, layout: 'full' }}
-  children={section.stageWidth === 'contained' ? timeline : undefined}
-  stage={section.stageWidth === 'contained' ? undefined : timeline} />
+<Section section={stageWidth === 'full' ? { ...section, layout: 'full', background: { color: 'transparent', ...section.background, size: 'full' } } : section}
+  children={stageWidth === 'full' ? undefined : timeline}
+  stage={stageWidth === 'full' ? timeline : undefined} />
 
 <style>
   .ps-timeline { position: relative; min-width: 0; color: var(--ps-ink); font: var(--ps-grid-body-size)/1.5 var(--ps-font-family); }

@@ -207,10 +207,30 @@ describe('SSR, examples and shared-track invariants', () => {
     expect(body).toContain('aria-label="Tags"');
     expect(body).not.toContain('aria-pressed');
     expect(body).not.toContain('role="dialog"');
-    expect(body).toContain('ps-section-stage');
+    expect(body).toContain('data-stage-width="contained"');
+    expect(body).not.toContain('class="ps-section-stage ');
     const minimal = section([{ id: 'bare', type: 'point', date: '2022', title: 'Bare event' }]);
     const rendered = render(Sections, { props: { sections: [minimal] } }).body;
     expect(rendered).toContain('<summary'); expect(rendered).not.toContain('<picture');
+  });
+  it('defaults to contained and only a full stage overrides background size without mutating input', () => {
+    for (const background of [undefined, { color: 'muted' as const, size: 'standard' as const }, { color: 'standardToMuted' as const, size: 'full' as const }]) {
+      const data = section([], { background });
+      const before = JSON.stringify(data);
+      const implicit = render(TimelineSection, { props: { section: data } }).body;
+      const contained = render(TimelineSection, { props: { section: { ...data, stageWidth: 'contained' } } }).body;
+      for (const body of [implicit, contained]) {
+        expect(body).toContain('data-stage-width="contained"');
+        expect(body).toContain(`data-background-size="${background?.size ?? 'standard'}"`);
+        expect(body).not.toContain('class="ps-section-stage ');
+      }
+      const full = render(TimelineSection, { props: { section: { ...data, stageWidth: 'full' } } }).body;
+      expect(full).toContain('data-stage-width="full"');
+      expect(full).toContain('data-background-size="full"');
+      expect(full).toContain(`data-background-color="${background?.color ?? 'transparent'}"`);
+      expect(full).toContain('class="ps-section-stage ');
+      expect(JSON.stringify(data)).toBe(before);
+    }
   });
   it('derives both English examples and rewrites instance links and asset base paths without source mutation', () => {
     const before = JSON.stringify(timelineExample);
