@@ -7,8 +7,8 @@
   import SectionSurfaceGroup from './SectionSurfaceGroup.svelte';
   import { SURFACE_SCOPE } from './surfaceContext.js';
   import { SECTION_CONTEXT, defaultSectionContext, nextHeading, type ReadSectionContext } from './sectionContext.js';
-  type Props = Omit<HTMLAttributes<HTMLElement>, 'children' | 'id'> & { section: SectionDefinition; children?: Snippet; renderHeader?: boolean; inset?: boolean; onDiagnostic?: (diagnostic: SectionBackgroundDiagnostic) => void };
-  let { section, children, renderHeader = true, inset, onDiagnostic, class: className = '', ...rest }: Props = $props();
+  type Props = Omit<HTMLAttributes<HTMLElement>, 'children' | 'id'> & { section: SectionDefinition; children?: Snippet; stage?: Snippet; renderHeader?: boolean; inset?: boolean; onDiagnostic?: (diagnostic: SectionBackgroundDiagnostic) => void };
+  let { section, children, stage, renderHeader = true, inset, onDiagnostic, class: className = '', ...rest }: Props = $props();
   const readContext = getContext<ReadSectionContext | undefined>(SECTION_CONTEXT);
   const context = $derived(readContext?.() ?? defaultSectionContext);
   const heading = $derived(section.headingLevel ?? context.headingLevel);
@@ -25,6 +25,24 @@
   const surface = registerSurface();
   $effect(() => { registration?.update({ ...section, headingLevel: section.headline ? heading : undefined }); surface?.update(background); });
   onDestroy(() => { registration?.unregister(); surface?.unregister(); });
+  function expandStage(node: HTMLElement) {
+    const update = () => {
+      // A page can have asymmetric sidebars. Measure the owning section rather
+      // than assuming that its content column is centered in the viewport.
+      const left = node.parentElement!.getBoundingClientRect().left;
+      node.style.width = `${document.documentElement.clientWidth}px`;
+      node.style.marginLeft = `${-left}px`;
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(document.documentElement);
+    observer.observe(node.parentElement!);
+    const intersection = new IntersectionObserver(([entry]) => {
+      node.toggleAttribute('data-ps-stage-visible', entry.isIntersecting);
+    });
+    intersection.observe(node);
+    update();
+    return { destroy: () => { observer.disconnect(); intersection.disconnect(); } };
+  }
 </script>
 <section {...rest} id={section.id} class={['ps-section', className]} data-ps-section={section.id}
   data-ps-section-surface={surface?.id} data-ps-surface-owner={surfaceScope} data-background-color={background.color} data-background-size={background.size} data-layout={section.layout ?? 'inherit'}
@@ -43,8 +61,10 @@
     <SectionSurfaceGroup>{@render children()}</SectionSurfaceGroup>
   {/if}
   </div>
+  {#if stage}<div class="ps-section-stage" use:expandStage>{@render stage()}</div>{/if}
 </section>
 <style>
+  .ps-section-stage { position: relative; z-index: 3; padding: 0 var(--ps-grid-gap) calc(var(--ps-grid-gap) * var(--ps-spacing-factor, 1)); min-width: 0; box-sizing: border-box; }
   .ps-section { container: ps-content / inline-size; position: relative; isolation: isolate; width: min(var(--ps-section-width, 100%), 100%); margin-inline: auto; min-width: 0; box-sizing: border-box; color: var(--ps-ink); scroll-margin-top: var(--ps-scroll-offset, 1rem); }
   .ps-section-content { max-width: 1536px; margin-inline: auto; padding: calc(var(--ps-grid-gap) * var(--ps-spacing-factor, 1)) var(--ps-grid-gap); font: var(--ps-grid-body-size)/var(--ps-grid-body-line-height) var(--ps-font-family); }
   [data-inset='false'] > .ps-section-content { padding-inline: 0; }

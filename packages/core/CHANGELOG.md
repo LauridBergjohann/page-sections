@@ -1,5 +1,13 @@
 # @page-sections/core
 
+## 0.9.0
+
+### Minor Changes
+
+- Replace the vertical timeline with a proportional horizontal calendar, shared priority-ordered tracks, viewport-bound bar labels, anchored zoom, independent category filters and category-local clusters with accessible list/detail navigation. Add optional event labels, axis position, stage width, initial scale and configurable control labels while preserving date normalization, native no-JavaScript details and existing rich content.
+
+  This pre-1.0 minor release changes the timeline's visual layout and removes the former vertical rail, connector and sticky-header styling contract. Existing event data remains valid. Both packages move together to 0.9.0; consumers should review timeline styling and opt into contained stages where appropriate.
+
 ## 0.8.0
 
 ### Minor Changes

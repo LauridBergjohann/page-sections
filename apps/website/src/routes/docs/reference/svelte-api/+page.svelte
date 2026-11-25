@@ -60,7 +60,8 @@
             </tr>
             <tr>
               <td><code>TimelineSection</code></td><td>
-                Parallel date-based events; section and optional icon snippet.
+                Horizontal shared tracks, anchored zoom and cluster lists; section plus optional
+                icon and eventIcon snippets.
               </td><td><a href={base + '/sections/timeline/'}>Timeline</a></td>
             </tr>
             <tr>

@@ -67,6 +67,8 @@ export type TimelineDate = string;
 export interface TimelineEventBase {
   id: string;
   title: string;
+  /** Compact overview name. Empty labels fall back to title; details always show title. */
+  label?: string;
   /** Optional Lucide key shown in the label; resolve additional keys with the eventIcon snippet. */
   icon?: string;
   description?: string | RichTextContentData;
@@ -88,8 +90,22 @@ export interface TimelineCategory {
 export interface TimelineSectionData extends SectionDefinition {
   type: 'timeline';
   categories: TimelineCategory[];
-  /** Date axis direction from top to bottom. Default ascending (oldest first). */
+  /** Date axis direction from left to right. Default ascending (oldest first). */
   direction?: 'ascending' | 'descending';
+  /** Lane zero is nearest the axis. Default bottom. */
+  axisPosition?: 'top' | 'bottom';
+  /** Full page stage with a constrained heading, or embedded content width. Default full. */
+  stageWidth?: 'full' | 'contained';
+  /** Initial CSS pixels per calendar day. Default 0.6; user zoom is independent of viewport width. */
+  initialScale?: number;
+  /** Group nearby compact events within their category. Default true. */
+  clustering?: boolean;
+  zoomLabel?: string;
+  fitLabel?: string;
+  categoriesLabel?: string;
+  eventsLabel?: string;
+  backLabel?: string;
+  closeLabel?: string;
   start?: TimelineDate;
   end?: TimelineDate;
   /** End of ongoing events, unless end is supplied. Default: the SSR render's UTC date. */

@@ -134,6 +134,19 @@
                 Read the surface element for integration.
               </td>
             </tr>
+            <tr>
+              <td>modal</td><td>boolean, default false</td><td>
+                Expose dialog semantics, trap keyboard focus and prevent background pointer
+                interaction. The owner sets initial focus.
+              </td>
+            </tr>
+            <tr>
+              <td>onrequestclose</td><td>() =&gt; void</td><td>
+                Optional controlled dismissal. When supplied, the owner handles closing or returning
+                to a parent view, including focus restoration. Used by timeline cluster/detail
+                navigation.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

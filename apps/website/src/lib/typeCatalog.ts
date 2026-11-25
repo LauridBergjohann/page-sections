@@ -386,7 +386,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#timeline-event-base',
     group: 'Data types',
     description:
-      'Shared serializable event details. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.'
+      'Shared serializable event details. Optional label supplies a compact overview name; blank labels use title. Details retain the full title. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.'
   },
   {
     title: 'TimelinePeriodEvent',
@@ -406,7 +406,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#timeline-section-data',
     group: 'Data types',
     description:
-      'Shared section metadata plus categories on one proportional date scale, ascending by default or descending for newest-first timelines. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.'
+      'Shared section metadata plus categories on a horizontal proportional date scale with a shared priority-ordered track pool, zoom, filters and category-local clusters. Direction defaults to ascending, axisPosition to bottom and stageWidth to full. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.'
   },
   {
     title: 'VideoData',

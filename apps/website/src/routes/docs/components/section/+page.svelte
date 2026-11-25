@@ -79,6 +79,11 @@
   >
     <div class="prose">
       <dl>
+        <dt><code>stage</code></dt>
+        <dd>
+          Optional snippet outside the 1536px content wrapper. With layout full it supports a wide
+          timeline stage while the heading remains constrained. Background selection is independent.
+        </dd>
         <dt><code>children</code></dt>
         <dd>
           A Svelte snippet containing the content. A snippet is a reusable fragment of markup

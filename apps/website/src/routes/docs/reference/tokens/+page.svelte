@@ -44,8 +44,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
     <div class="prose">
       <p>
-        Timeline: <code>--ps-timeline-sticky-offset</code> reserves navigation height (default 0px). Category
-        headers stick below that offset; the timeline grows with the page without an internal scroll region.
+        Timeline uses the shared palette, spacing and typography tokens. Its horizontal frame
+        scrolls independently; zoom changes only the time scale.
       </p>
       <p>
         CSS variables customize presentation; <code>layoutTokens</code> supplies canonical numeric values

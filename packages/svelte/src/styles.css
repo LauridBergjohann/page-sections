@@ -47,6 +47,12 @@
 /* Bleed paints the viewport even when the page's content column is asymmetric. */
 .ps-page .ps-section[data-background-size='full'] > .ps-section-surface { left: -100vw; right: -100vw; width: auto; transform: none; }
 .ps-page .ps-section[data-layout='full'] { width: 100%; margin-inline: auto; }
+/* Wide stages occupy the sidebar area. Keep the grid stable, but let the stage
+   remain readable and clickable while it is in view. Header navigation remains available. */
+@media (min-width: 1600px) {
+  .ps-page:has(.ps-section-stage[data-ps-stage-visible]) .ps-left-sidebar,
+  .ps-page:has(.ps-section-stage[data-ps-stage-visible]) .ps-content-menu-slot .desktop { visibility: hidden; }
+}
 
 /* Keep the compact contents control reachable while a persistent header is visible. */
 @media (max-width: 1599.98px) {

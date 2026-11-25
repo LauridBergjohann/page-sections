@@ -31,7 +31,7 @@ Use atoms (PrimaryButton, SecondaryButton, IconButton, Chip, Tooltip, Heading, I
 
 See the [atomic design guide](https://page-sections.bergjohann.com/docs/design-system/atomic-design/) and [complete component catalog](https://page-sections.bergjohann.com/docs/components/) for live examples, data types and customization.
 
-TimelineSection renders parallel calendar categories with automatic overlap lanes, filters and anchored event details. Use the `timeline` discriminator in Sections, or pass `TimelineSectionData` directly. Set `referenceDate` for reproducible ongoing intervals. Native disclosures keep optional content available without JavaScript. See the [Timeline guide](https://page-sections.bergjohann.com/sections/timeline/).
+TimelineSection renders a proportional horizontal calendar with one shared, priority-ordered track pool, anchored zoom, category filters and compact clusters that open accessible event lists. Optional event `label` values shorten overview text while details retain the full title. `axisPosition` defaults to bottom; `stageWidth` defaults to full and can be contained for embedding. Use the `timeline` discriminator in Sections, or pass `TimelineSectionData` directly. Set `referenceDate` for reproducible ongoing intervals. Native disclosures keep optional content available without JavaScript. See the [Timeline guide](https://page-sections.bergjohann.com/sections/timeline/).
 
 ## License
 

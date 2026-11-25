@@ -1,0 +1,1534 @@
+{
+  "format": "timeline-layout-fixtures",
+  "formatVersion": 1,
+  "notASection": true,
+  "description": "Synthetic edge cases for the timeline rebuild. This is an independent test contract, not directly renderable TimelineSection JSON. All names and events are invented.",
+  "referenceDate": "2026-11-25",
+  "conventions": {
+    "laneZero": "Lane 0 is closest to the time axis; top/bottom does not change this meaning.",
+    "priorityOrder": [
+      "category priorityIndex ascending",
+      "actual event duration descending; point duration = 0",
+      "normalized start/date ascending",
+      "stable event identity (categoryId,eventId) in code-point order"
+    ],
+    "clusterPriority": "Use the category shared by all members. Duration priority is the longest actual member duration, not the time span covered by the group.",
+    "listChronology": "Use point.date or period.start. Descending means newest first; ascending means oldest first. Resolve ties by stable ID.",
+    "geometry": "CSS-pixel values and thresholds in individual cases are isolated test-adapter inputs, not a prescribed public API. Visible markers and required spacing count towards collisions.",
+    "datePrecision": "Preserve YYYY, YYYY-MM and YYYY-MM-DD separately; do not invent month or day values in labels.",
+    "scope": "Codex should translate these cases into the repository's existing test structure. The assertions are declarative and are not executed by this JSON file itself. All fixture content is English and uses en-GB date formatting; no language-switching adapter is required.",
+    "state": "Test hysteresis deterministically using both the same input and the same previous cluster state.",
+    "clustering": "Cluster within each category before assigning shared lanes. Do not force long bars into clusters. A global height target is soft.",
+    "eventIdentity": "Identity is the pair (categoryId,eventId). Event IDs only need to be unique within their category. A bare eventId in an assertion is shorthand only when it is unambiguous within that case.",
+    "dateIntervals": "Preserve the existing semantics: period.start is inclusive and period.end is exclusive. A point internally reserves one day for temporal collision checks; its actual duration and duration priority remain 0. Check visible glyphs and spacing separately.",
+    "ongoingEndPrecedence": "Resolve a missing period.end using the existing precedence: Section.end, otherwise referenceDate, otherwise a shared SSR/hydration date. A harness projection domain does not automatically become Section.end."
+  },
+  "fixtures": [
+    {
+      "id": "strict-priority-chain",
+      "purpose": "Strict overlap priority without category bands; three lanes despite only two concurrent events.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "clusteringEnabled": false,
+        "events": [
+          {
+            "id": "a",
+            "categoryId": "programme",
+            "type": "period",
+            "start": "2010-01-01",
+            "title": "a",
+            "end": "2015-01-01"
+          },
+          {
+            "id": "b",
+            "categoryId": "programme",
+            "type": "period",
+            "start": "2014-01-01",
+            "title": "b",
+            "end": "2018-01-01"
+          },
+          {
+            "id": "c",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2016-01-01",
+            "title": "c",
+            "end": "2017-01-01"
+          }
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "laneEquals",
+          "eventId": "a",
+          "lane": 0
+        },
+        {
+          "assert": "laneEquals",
+          "eventId": "b",
+          "lane": 1
+        },
+        {
+          "assert": "laneEquals",
+          "eventId": "c",
+          "lane": 2
+        },
+        {
+          "assert": "laneConstantOverWholeEvent",
+          "eventIds": [
+            "a",
+            "b",
+            "c"
+          ]
+        },
+        {
+          "assert": "maxTemporalConcurrencyEquals",
+          "value": 2
+        }
+      ],
+      "notes": [
+        "Lane 0 means the smallest distance from the axis, independently of axisPosition.",
+        "Within the same category, A is longer than B; B has category priority over C.",
+        "Choose collision spacing so that only the described temporal overlaps are relevant."
+      ]
+    },
+    {
+      "id": "reuse-lanes-across-categories",
+      "purpose": "Events in different categories may reuse both a free lane and the same category-local event ID.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "clusteringEnabled": false,
+        "events": [
+          {
+            "id": "shared-event",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2004-01-01",
+            "title": "earlier-project",
+            "end": "2006-01-01"
+          },
+          {
+            "id": "shared-event",
+            "categoryId": "programme",
+            "type": "period",
+            "start": "2012-01-01",
+            "title": "later-programme",
+            "end": "2014-01-01"
+          },
+          {
+            "id": "later-research",
+            "categoryId": "research",
+            "type": "point",
+            "date": "2018-06-12",
+            "title": "later-research"
+          }
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "sameLane",
+          "events": [
+            {
+              "categoryId": "projects",
+              "eventId": "shared-event"
+            },
+            {
+              "categoryId": "programme",
+              "eventId": "shared-event"
+            },
+            {
+              "categoryId": "research",
+              "eventId": "later-research"
+            }
+          ]
+        },
+        {
+          "assert": "laneEquals",
+          "categoryId": "projects",
+          "eventId": "shared-event",
+          "lane": 0
+        },
+        {
+          "assert": "sameEventIdInDifferentCategoriesRemainsDistinctAndIndividuallySelectable"
+        },
+        {
+          "assert": "noReservedCategoryBands"
+        }
+      ]
+    },
+    {
+      "id": "stable-complete-ties",
+      "purpose": "Identical category, duration and start dates require a stable tie-breaker.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "clusteringEnabled": false,
+        "events": [
+          {
+            "id": "tie-b",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2020-01-01",
+            "title": "tie-b",
+            "end": "2022-01-01"
+          },
+          {
+            "id": "tie-a",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2020-01-01",
+            "title": "tie-a",
+            "end": "2022-01-01"
+          },
+          {
+            "id": "tie-c",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2020-01-01",
+            "title": "tie-c",
+            "end": "2022-01-01"
+          }
+        ],
+        "inputPermutations": [
+          [
+            "tie-b",
+            "tie-a",
+            "tie-c"
+          ],
+          [
+            "tie-c",
+            "tie-b",
+            "tie-a"
+          ],
+          [
+            "tie-a",
+            "tie-c",
+            "tie-b"
+          ]
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "sameLaneAssignmentForEveryInputPermutation"
+        },
+        {
+          "assert": "strictlyIncreasingLane",
+          "eventIds": [
+            "tie-a",
+            "tie-b",
+            "tie-c"
+          ]
+        },
+        {
+          "assert": "preserveAssignmentDuringHorizontalPan"
+        }
+      ],
+      "notes": [
+        "The stable ID is the final deterministic sort key; title text and array position must not change the layout."
+      ]
+    },
+    {
+      "id": "rendered-glyph-collision",
+      "purpose": "Distinct timestamps can still collide because of marker width.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "clusteringEnabled": false,
+        "events": [
+          {
+            "id": "near-a",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-01",
+            "title": "near-a"
+          },
+          {
+            "id": "near-b",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-02",
+            "title": "near-b"
+          }
+        ],
+        "renderedGeometry": {
+          "unit": "css-px",
+          "markerDiameter": 32,
+          "minimumGap": 8,
+          "centres": {
+            "near-a": 100,
+            "near-b": 112
+          }
+        }
+      },
+      "expectedRelations": [
+        {
+          "assert": "normalizedTemporalIntervalsDoNotOverlap",
+          "eventIds": [
+            "near-a",
+            "near-b"
+          ]
+        },
+        {
+          "assert": "differentLanes",
+          "eventIds": [
+            "near-a",
+            "near-b"
+          ]
+        },
+        {
+          "assert": "markerCentreMatchesDateProjection",
+          "eventIds": [
+            "near-a",
+            "near-b"
+          ]
+        },
+        {
+          "assert": "noRenderedMarkerOverlapWithinLane"
+        },
+        {
+          "assert": "noFakeDurationCreatedForPoint"
+        }
+      ],
+      "notes": [
+        "Geometry values are test-adapter inputs, not claims about existing public props.",
+        "Display optional point labels in free space after placing the markers; labels must not displace their date markers."
+      ]
+    },
+    {
+      "id": "sticky-label-visible-intersection",
+      "purpose": "Icon and label remain inside the visible intersection of their own bar.",
+      "input": {
+        "renderedGeometry": {
+          "unit": "css-px",
+          "barStart": 80,
+          "barEnd": 520,
+          "viewportWidth": 220,
+          "innerPadding": 8,
+          "iconWidth": 16,
+          "iconTextGap": 6,
+          "untruncatedTextWidth": 180
+        },
+        "scrollOffsets": [
+          0,
+          100,
+          240,
+          470,
+          510,
+          540
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "labelAndIconBoundsInsideBarViewportIntersection"
+        },
+        {
+          "assert": "labelStartsAtVisibleLeftPlusPaddingWhenRoomExists"
+        },
+        {
+          "assert": "ellipsisOnlyWhenActualTextWidthExceedsVisibleTextWidth"
+        },
+        {
+          "assert": "hideTextBeforeLettingItOverflowBar"
+        },
+        {
+          "assert": "hideIconAndTextWhenVisibleFragmentCannotContainIcon"
+        },
+        {
+          "assert": "fullyOffscreenBarHasNoVisibleLabel"
+        },
+        {
+          "assert": "detailTriggerRemainsBoundToEvent"
+        }
+      ],
+      "notes": [
+        "The actual bar geometry remains unchanged.",
+        "An overflow:hidden parent must not make CSS sticky attach to the wrong ancestor; the implementation must satisfy the observable behaviour."
+      ]
+    },
+    {
+      "id": "direction-and-axis-independent",
+      "purpose": "Time direction and axis placement are independent.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "clusteringEnabled": false,
+        "events": [
+          {
+            "id": "high",
+            "categoryId": "programme",
+            "type": "period",
+            "start": "2020-01-01",
+            "title": "high",
+            "end": "2025-01-01"
+          },
+          {
+            "id": "low",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2021-01-01",
+            "title": "low",
+            "end": "2022-01-01"
+          },
+          {
+            "id": "point",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-15",
+            "title": "point"
+          }
+        ],
+        "combinations": [
+          {
+            "direction": "ascending",
+            "axisPosition": "top"
+          },
+          {
+            "direction": "ascending",
+            "axisPosition": "bottom"
+          },
+          {
+            "direction": "descending",
+            "axisPosition": "top"
+          },
+          {
+            "direction": "descending",
+            "axisPosition": "bottom"
+          }
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "descendingProjectionMirrorsAscendingProjectionInSameTimeDomain"
+        },
+        {
+          "assert": "everyPeriodWidthNonNegativeAndDerivedFromTime"
+        },
+        {
+          "assert": "eventHighCloserToAxis",
+          "higherId": "high",
+          "lowerId": "low"
+        },
+        {
+          "assert": "changingAxisPositionOnlyMirrorsLaneDistanceNotTimeDirection"
+        },
+        {
+          "assert": "textReadingDirectionUnchanged"
+        },
+        {
+          "assert": "legendOnOppositeVerticalSideOfAxis"
+        }
+      ],
+      "notes": [
+        "axisPosition is a semantic harness name here; Codex must align the final public name with the repository."
+      ]
+    },
+    {
+      "id": "zoom-preserves-time-anchor",
+      "purpose": "Zoom changes scale while preserving its time anchor.",
+      "input": {
+        "timeDomain": [
+          "2000-01-01",
+          "2030-01-01"
+        ],
+        "viewportWidthCssPx": 400,
+        "anchor": {
+          "date": "2013-08-20",
+          "viewportFraction": 0.5
+        },
+        "scaleSequencePxPerDay": [
+          0.1,
+          0.2,
+          0.4,
+          0.1
+        ],
+        "boundaryVariant": {
+          "anchorDate": "2000-01-02",
+          "viewportFraction": 0.5
+        }
+      },
+      "expectedRelations": [
+        {
+          "assert": "anchorDateStaysAtRequestedViewportFractionUnlessClamped"
+        },
+        {
+          "assert": "periodAndPointGeometryUseSameScale"
+        },
+        {
+          "assert": "scrollOffsetAlwaysWithinValidBounds"
+        },
+        {
+          "assert": "axisTicksAdaptWithoutOverlappingLabels"
+        },
+        {
+          "assert": "datePrecisionInContentUnaffectedByZoom"
+        }
+      ]
+    },
+    {
+      "id": "ultrawide-resize-preserves-scale",
+      "purpose": "Wider viewports reveal more time at unchanged user zoom.",
+      "input": {
+        "timeDomain": [
+          "2000-01-01",
+          "2030-01-01"
+        ],
+        "viewportWidthsCssPx": [
+          700,
+          1300,
+          2200
+        ],
+        "scalePxPerDay": 0.3,
+        "anchor": {
+          "date": "2017-07-01",
+          "viewportFraction": 0.5
+        },
+        "fitAllMode": false
+      },
+      "expectedRelations": [
+        {
+          "assert": "scaleRemainsConstantAcrossResize"
+        },
+        {
+          "assert": "visibleTimeSpanIncreasesWithViewportWidthUntilFullDomainVisible"
+        },
+        {
+          "assert": "anchorPreservedUnlessClamped"
+        },
+        {
+          "assert": "fontAndMarkerDimensionsDoNotScaleWithViewportWidth"
+        }
+      ],
+      "notes": [
+        "An explicitly enabled fit-all mode may behave differently; this case tests ordinary user zoom."
+      ]
+    },
+    {
+      "id": "identical-date-cluster-list",
+      "purpose": "Six identical dates remain individually accessible through a list.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "direction": "descending",
+        "events": [
+          {
+            "id": "same-alpha",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "alpha"
+          },
+          {
+            "id": "same-beta",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "beta"
+          },
+          {
+            "id": "same-gamma",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "gamma"
+          },
+          {
+            "id": "same-delta",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "delta"
+          },
+          {
+            "id": "same-epsilon",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "epsilon"
+          },
+          {
+            "id": "same-zeta",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "zeta"
+          }
+        ],
+        "clusteringEnabled": true,
+        "allSixEligibleAtCurrentScale": true
+      },
+      "expectedRelations": [
+        {
+          "assert": "oneClusterContainsExactly",
+          "eventIds": [
+            "same-alpha",
+            "same-beta",
+            "same-gamma",
+            "same-delta",
+            "same-epsilon",
+            "same-zeta"
+          ]
+        },
+        {
+          "assert": "clusterCountEqualsMemberCount",
+          "value": 6
+        },
+        {
+          "assert": "openedClusterShowsEachMemberExactlyOnce"
+        },
+        {
+          "assert": "clusterListContainsDateAndResolvedLabelForEveryMember"
+        },
+        {
+          "assert": "identicalDatesUseStableIdTieBreak"
+        },
+        {
+          "assert": "noNestedTimelineOrRecursiveClusterNeeded"
+        },
+        {
+          "assert": "globalZoomAndScrollPreservedOnOpenAndClose"
+        }
+      ],
+      "actions": [
+        {
+          "type": "openClusterContaining",
+          "eventId": "same-alpha"
+        },
+        {
+          "type": "selectMember",
+          "eventId": "same-delta"
+        },
+        {
+          "type": "closeEventDetails"
+        },
+        {
+          "type": "closeCluster"
+        }
+      ]
+    },
+    {
+      "id": "category-local-clustering-long-bars-retained",
+      "purpose": "Clusters remain category-local and long periods remain bars.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "events": [
+          {
+            "id": "long-range",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2016-01-01",
+            "title": "long-range",
+            "end": "2026-01-01"
+          },
+          {
+            "id": "p-a",
+            "categoryId": "projects",
+            "type": "point",
+            "date": "2024-06-01",
+            "title": "p-a"
+          },
+          {
+            "id": "p-b",
+            "categoryId": "projects",
+            "type": "point",
+            "date": "2024-06-02",
+            "title": "p-b"
+          },
+          {
+            "id": "p-c",
+            "categoryId": "projects",
+            "type": "point",
+            "date": "2024-06-03",
+            "title": "p-c"
+          },
+          {
+            "id": "q-a",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-01",
+            "title": "q-a"
+          },
+          {
+            "id": "q-b",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-02",
+            "title": "q-b"
+          }
+        ],
+        "renderedGeometry": {
+          "centres": {
+            "p-a": 100,
+            "p-b": 106,
+            "p-c": 112,
+            "q-a": 100,
+            "q-b": 108
+          },
+          "markerDiameter": 32
+        },
+        "eligibleForClustering": [
+          "p-a",
+          "p-b",
+          "p-c",
+          "q-a",
+          "q-b"
+        ],
+        "notEligibleForClustering": [
+          "long-range"
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "eachClusterContainsOnlyOneCategory"
+        },
+        {
+          "assert": "clusterExcluded",
+          "eventId": "long-range"
+        },
+        {
+          "assert": "longRangeRemainsTimeScaledBar",
+          "eventId": "long-range"
+        },
+        {
+          "assert": "everyEventRepresentedExactlyOnceAsItemOrClusterMember"
+        },
+        {
+          "assert": "clusterColourMatchesCategory"
+        },
+        {
+          "assert": "clusterPriorityDurationUsesLongestActualMemberDurationNotBoundingDateSpan"
+        }
+      ],
+      "notes": [
+        "The longest actual member duration is the recommended sorting rule for cluster markers; it is not a new data property.",
+        "A soft global height target must not force long periods or different categories into the same cluster."
+      ]
+    },
+    {
+      "id": "bounded-cluster-chain",
+      "purpose": "Chains of nearby markers must not merge into unbounded clusters.",
+      "input": {
+        "categoryId": "publications",
+        "events": [
+          {
+            "id": "chain-1",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-01",
+            "title": "chain-1"
+          },
+          {
+            "id": "chain-2",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-02",
+            "title": "chain-2"
+          },
+          {
+            "id": "chain-3",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-03",
+            "title": "chain-3"
+          },
+          {
+            "id": "chain-4",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-04",
+            "title": "chain-4"
+          },
+          {
+            "id": "chain-5",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-05",
+            "title": "chain-5"
+          }
+        ],
+        "renderedGeometry": {
+          "unit": "css-px",
+          "centres": {
+            "chain-1": 100,
+            "chain-2": 120,
+            "chain-3": 140,
+            "chain-4": 160,
+            "chain-5": 180
+          }
+        },
+        "harnessThresholds": {
+          "neighbourJoinDistancePx": 22,
+          "maximumMemberCentreSpanPx": 45,
+          "minimumClusterMemberCount": 2
+        }
+      },
+      "expectedRelations": [
+        {
+          "assert": "clusterMemberCentreSpanAtMost",
+          "valueCssPx": 45
+        },
+        {
+          "assert": "noClusterContainsAllFiveMembers"
+        },
+        {
+          "assert": "everyEventRepresentedExactlyOnceAsItemOrClusterMember"
+        },
+        {
+          "assert": "membershipDeterministicForSameInputAndPreviousClusterState"
+        }
+      ],
+      "notes": [
+        "These numbers calibrate an isolated algorithm test; they do not prescribe a public API or final design values."
+      ]
+    },
+    {
+      "id": "cluster-hysteresis",
+      "purpose": "Small zoom changes around a threshold do not flicker clusters.",
+      "input": {
+        "events": [
+          {
+            "id": "h-a",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-01",
+            "title": "h-a"
+          },
+          {
+            "id": "h-b",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-06-02",
+            "title": "h-b"
+          }
+        ],
+        "harnessThresholds": {
+          "mergeWhenDistanceAtMostPx": 32,
+          "splitWhenDistanceAtLeastPx": 38
+        },
+        "initiallyClustered": false,
+        "distanceSequenceCssPx": [
+          30,
+          33,
+          35,
+          38,
+          35,
+          32
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "clusteredStateSequenceEquals",
+          "values": [
+            true,
+            true,
+            true,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "assert": "panningAtConstantScaleDoesNotChangeMembership"
+        },
+        {
+          "assert": "eachEventAlwaysRepresentedExactlyOnce"
+        }
+      ],
+      "notes": [
+        "This case tests separate entry and exit thresholds; the production values may differ."
+      ]
+    },
+    {
+      "id": "filtering-preserves-view-and-focus",
+      "purpose": "Filters change visibility and layout without resetting the time view.",
+      "input": {
+        "categories": [
+          {
+            "id": "programme",
+            "priorityIndex": 0
+          },
+          {
+            "id": "projects",
+            "priorityIndex": 1
+          },
+          {
+            "id": "publications",
+            "priorityIndex": 2
+          },
+          {
+            "id": "research",
+            "priorityIndex": 3
+          }
+        ],
+        "events": [
+          {
+            "id": "visible-programme",
+            "categoryId": "programme",
+            "type": "period",
+            "start": "2020-01-01",
+            "title": "visible-programme",
+            "end": "2026-01-01"
+          },
+          {
+            "id": "filtered-a",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "filtered-a"
+          },
+          {
+            "id": "filtered-b",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "filtered-b"
+          }
+        ],
+        "selectedAnchorDate": "2024-10-17",
+        "scalePxPerDay": 0.4,
+        "initialVisibleCategories": [
+          "programme",
+          "publications"
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "filterPreservesZoomAndTimeAnchorUnlessDomainClampRequired"
+        },
+        {
+          "assert": "categoryColourRemainsBoundToId"
+        },
+        {
+          "assert": "removedClusterOrEventCannotLeaveOrphanDialogOrFocus"
+        },
+        {
+          "assert": "allCategoriesHiddenShowsEmptyStateAndRetainsFilterControls"
+        },
+        {
+          "assert": "restoringSameVisibleSetRestoresDeterministicMembershipAndLaneAssignment"
+        },
+        {
+          "assert": "categoryFiltersPreserveTimeDomainFromAllValidSourceData"
+        }
+      ],
+      "actions": [
+        {
+          "type": "openClusterContaining",
+          "eventId": "filtered-a"
+        },
+        {
+          "type": "externalVisibilityUpdate",
+          "visibleCategories": [
+            "programme"
+          ]
+        },
+        {
+          "type": "setVisibleCategories",
+          "visibleCategories": [
+            "publications"
+          ]
+        },
+        {
+          "type": "setVisibleCategories",
+          "visibleCategories": []
+        },
+        {
+          "type": "setVisibleCategories",
+          "visibleCategories": [
+            "programme",
+            "publications"
+          ]
+        }
+      ],
+      "notes": [
+        "An external prop update can occur while a modal window is open. If its trigger has been removed, move focus to an appropriate remaining filter or control button."
+      ]
+    },
+    {
+      "id": "fixed-reference-ongoing-and-future",
+      "purpose": "Ongoing periods share one reference date; planned dates remain future dates.",
+      "input": {
+        "referenceDate": "2026-11-25",
+        "serverClock": "2026-11-25T23:59:59Z",
+        "clientClock": "2026-11-26T00:00:02Z",
+        "events": [
+          {
+            "id": "ongoing",
+            "categoryId": "programme",
+            "type": "period",
+            "start": "2020-02-01",
+            "title": "ongoing"
+          },
+          {
+            "id": "future-point",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2027-04-08",
+            "title": "future-point"
+          },
+          {
+            "id": "future-period",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2027-02-01",
+            "title": "future-period",
+            "end": "2027-06-01"
+          }
+        ],
+        "layoutDomainOnly": [
+          "2010-01-01",
+          "2028-12-31"
+        ],
+        "sectionEndOmitted": true,
+        "ongoingEndPrecedenceVariants": [
+          {
+            "id": "section-end-wins",
+            "sectionEnd": "2026-12-31",
+            "referenceDate": "2026-11-25",
+            "sharedRenderDate": "2026-11-26",
+            "expectedEffectiveEnd": "2026-12-31"
+          },
+          {
+            "id": "reference-wins-without-section-end",
+            "referenceDate": "2026-11-25",
+            "sharedRenderDate": "2026-11-26",
+            "expectedEffectiveEnd": "2026-11-25"
+          },
+          {
+            "id": "shared-render-date-fallback",
+            "sharedRenderDate": "2026-11-25",
+            "expectedEffectiveEnd": "2026-11-25"
+          }
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "effectiveEndEquals",
+          "eventId": "ongoing",
+          "date": "2026-11-25"
+        },
+        {
+          "assert": "ongoingDurationFinite"
+        },
+        {
+          "assert": "serverAndClientNormalizeIdenticallyWithSameReferenceDate"
+        },
+        {
+          "assert": "futureExplicitDatesNotClampedToReferenceDate",
+          "eventIds": [
+            "future-point",
+            "future-period"
+          ]
+        },
+        {
+          "assert": "futureClosedPeriodNotLabelledOngoing",
+          "eventId": "future-period"
+        },
+        {
+          "assert": "allOngoingEndPrecedenceVariantsMatchExpectedEffectiveEnd"
+        }
+      ],
+      "notes": [
+        "When referenceDate is omitted in production, use one consistent shared current date per render/hydration cycle rather than independent Date.now() values throughout the layout.",
+        "layoutDomainOnly is only a projection input for the test adapter and must not implicitly be converted to the public Section.end field."
+      ]
+    },
+    {
+      "id": "date-precision-timezones",
+      "purpose": "Date precision and label fallback remain independent of layout and runtime timezone.",
+      "input": {
+        "events": [
+          {
+            "id": "year-only",
+            "categoryId": "research",
+            "type": "point",
+            "date": "2019",
+            "title": "A complete event title without an additional short label"
+          },
+          {
+            "id": "month-only",
+            "categoryId": "research",
+            "type": "point",
+            "date": "2024-03",
+            "title": "month-only",
+            "label": "Monthly report"
+          },
+          {
+            "id": "day-only",
+            "categoryId": "research",
+            "type": "point",
+            "date": "2024-03-31",
+            "title": "day-only"
+          },
+          {
+            "id": "dst-period",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2024-10-26",
+            "title": "dst-period",
+            "end": "2024-10-28"
+          },
+          {
+            "id": "early-century",
+            "categoryId": "research",
+            "type": "point",
+            "date": "0042-03-01",
+            "title": "Synthetic calendar case for a year below 100"
+          }
+        ],
+        "runtimeTimezones": [
+          "UTC",
+          "Europe/Berlin",
+          "America/Los_Angeles"
+        ],
+        "locale": "en-GB"
+      },
+      "expectedRelations": [
+        {
+          "assert": "dateOnlyProjectionIndependentOfRuntimeTimezone"
+        },
+        {
+          "assert": "yearOnlyLabelDoesNotInventMonthOrDay",
+          "eventId": "year-only"
+        },
+        {
+          "assert": "monthOnlyLabelDoesNotInventDay",
+          "eventId": "month-only"
+        },
+        {
+          "assert": "dayLabelRetainsCalendarDay",
+          "eventId": "day-only",
+          "date": "2024-03-31"
+        },
+        {
+          "assert": "periodCalendarEndpointsSurviveDstTransition",
+          "eventId": "dst-period"
+        },
+        {
+          "assert": "missingLabelFallsBackToTitle",
+          "eventId": "year-only"
+        },
+        {
+          "assert": "providedLabelUsedInOverviewAndList",
+          "eventId": "month-only"
+        },
+        {
+          "assert": "detailUsesFullTitle"
+        },
+        {
+          "assert": "calendarYearEquals",
+          "eventId": "early-century",
+          "value": 42
+        }
+      ],
+      "notes": [
+        "Document the internal precision projection and keep it compatible with the existing date-parsing convention; the display must not imply additional precision."
+      ]
+    },
+    {
+      "id": "invalid-dates-and-zero-duration",
+      "purpose": "Invalid dates must not create NaN geometry; a zero-duration period retains its type.",
+      "input": {
+        "events": [
+          {
+            "id": "invalid-leap",
+            "categoryId": "research",
+            "type": "point",
+            "date": "2025-02-29",
+            "title": "invalid-leap"
+          },
+          {
+            "id": "invalid-month",
+            "categoryId": "research",
+            "type": "point",
+            "date": "2024-13",
+            "title": "invalid-month"
+          },
+          {
+            "id": "invalid-text",
+            "categoryId": "research",
+            "type": "point",
+            "date": "yesterday",
+            "title": "invalid-text"
+          },
+          {
+            "id": "reversed-period",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2025-05-01",
+            "title": "reversed-period",
+            "end": "2025-04-01"
+          },
+          {
+            "id": "valid-leap",
+            "categoryId": "research",
+            "type": "point",
+            "date": "2024-02-29",
+            "title": "valid-leap"
+          },
+          {
+            "id": "zero-duration-period",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2024-06-05",
+            "title": "zero-duration-period",
+            "end": "2024-06-05"
+          },
+          {
+            "id": "invalid-null-end",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2024-01-01",
+            "title": "invalid-null-end",
+            "end": null
+          },
+          {
+            "id": "adjacent-first",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2024-07-01",
+            "end": "2024-08-01",
+            "title": "First adjacent period"
+          },
+          {
+            "id": "adjacent-second",
+            "categoryId": "projects",
+            "type": "period",
+            "start": "2024-08-01",
+            "end": "2024-09-01",
+            "title": "Second adjacent period"
+          }
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "diagnosticForInvalidEventIds",
+          "eventIds": [
+            "invalid-leap",
+            "invalid-month",
+            "invalid-text",
+            "reversed-period",
+            "invalid-null-end"
+          ]
+        },
+        {
+          "assert": "invalidEventsNotSilentlyRolledIntoDifferentCalendarDates"
+        },
+        {
+          "assert": "validEventsRemainRenderable",
+          "eventIds": [
+            "valid-leap",
+            "zero-duration-period"
+          ]
+        },
+        {
+          "assert": "zeroDurationPeriodUsesCompactRepresentationWithoutTypeMutation",
+          "eventId": "zero-duration-period"
+        },
+        {
+          "assert": "noNaNOrInfiniteLayoutValues"
+        },
+        {
+          "assert": "oneInvalidEventDoesNotCrashWholeSection"
+        },
+        {
+          "assert": "normalizedTemporalIntervalsDoNotOverlap",
+          "eventIds": [
+            "adjacent-first",
+            "adjacent-second"
+          ]
+        }
+      ],
+      "notes": [
+        "This input intentionally contains invalid values and belongs only in negative tests.",
+        "end:null does not represent an ongoing event; an ongoing event omits end.",
+        "Preserve the repository's explicit validation and error conventions, and align the expected diagnostic behaviour with them.",
+        "The adjacent periods do not overlap semantically because their ends are exclusive; actual glyph or spacing collisions may still require separate lanes at some scales."
+      ]
+    },
+    {
+      "id": "cluster-window-interaction",
+      "purpose": "The morphing rounded window remains usable on small screens and restores focus.",
+      "input": {
+        "events": [
+          {
+            "id": "row-a",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-15",
+            "title": "row-a"
+          },
+          {
+            "id": "row-b",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-16",
+            "title": "row-b"
+          },
+          {
+            "id": "row-c",
+            "categoryId": "publications",
+            "type": "point",
+            "date": "2024-10-17",
+            "title": "row-c"
+          }
+        ],
+        "direction": "descending",
+        "viewportCssPx": {
+          "width": 320,
+          "height": 568
+        },
+        "triggerNearViewportEdge": true,
+        "motionPreferences": [
+          "no-preference",
+          "reduce"
+        ],
+        "renderModes": [
+          "server-html-without-javascript",
+          "hydrated"
+        ]
+      },
+      "expectedRelations": [
+        {
+          "assert": "openedWindowBoundsInsideViewport"
+        },
+        {
+          "assert": "windowHasRoundedRectangleFormAndListContent"
+        },
+        {
+          "assert": "listOrderEquals",
+          "eventIds": [
+            "row-c",
+            "row-b",
+            "row-a"
+          ]
+        },
+        {
+          "assert": "everyRowHasAccessibleNameAndVisibleDateAndLabel"
+        },
+        {
+          "assert": "detailsCloseReturnsToSameClusterListAndRow"
+        },
+        {
+          "assert": "clusterCloseRestoresFocusToTriggerWhenPresent"
+        },
+        {
+          "assert": "escapeClosesTopmostInteractionLayer"
+        },
+        {
+          "assert": "modalBackgroundIsNotInteractableAndFocusRemainsInDialog",
+          "when": "hydrated-modal-open"
+        },
+        {
+          "assert": "reducedMotionPreservesEveryActionAndStateWithoutRequiredMorphAnimation"
+        },
+        {
+          "assert": "noTooltipRequiredToAccessFullEventDetails"
+        },
+        {
+          "assert": "eventDetailsRemainReachableInServerHtmlWithoutJavascript"
+        },
+        {
+          "assert": "oneActivePopupLayerAtATime"
+        },
+        {
+          "assert": "escapeFromEventDetailsReturnsToClusterListOnly"
+        },
+        {
+          "assert": "scrollingClusterListDoesNotDismissWindow"
+        }
+      ],
+      "actions": [
+        {
+          "type": "openCluster"
+        },
+        {
+          "type": "selectMember",
+          "eventId": "row-b"
+        },
+        {
+          "type": "closeEventDetails"
+        },
+        {
+          "type": "closeCluster"
+        }
+      ],
+      "notes": [
+        "Reuse the existing native details/summary fallbacks and shared popup system. Native no-JavaScript details do not need to be artificially marked as modal dialogs."
+      ]
+    },
+    {
+      "id": "responsive-stage-and-long-labels",
+      "purpose": "The stage uses wide windows while long text and narrow screens do not overflow the page.",
+      "input": {
+        "viewportWidthsCssPx": [
+          320,
+          768,
+          1536,
+          2560,
+          3440
+        ],
+        "stageWidthMode": "full",
+        "introMaxWidthCssPx": 1536,
+        "label": "Collaborative development of accessible workshop entry with multilingual guidance and resource-conscious operations planning",
+        "timeDomain": [
+          "2004-01-01",
+          "2026-12-31"
+        ],
+        "scalePxPerDay": 0.4
+      },
+      "expectedRelations": [
+        {
+          "assert": "introWidthAtMost",
+          "valueCssPx": 1536
+        },
+        {
+          "assert": "fullStageUsesAvailablePageWidthBeyond1536OnUltrawide"
+        },
+        {
+          "assert": "horizontalOverflowConfinedToTimelineFrame"
+        },
+        {
+          "assert": "noDocumentLevelHorizontalOverflow"
+        },
+        {
+          "assert": "legendControlsWrapWithoutCollision"
+        },
+        {
+          "assert": "barLabelEllipsisDoesNotStretchEventDuration"
+        },
+        {
+          "assert": "tooltipAvailableOnFocusWhenLabelTruncated"
+        },
+        {
+          "assert": "touchSelectionOpensDetailsWithoutHover"
+        },
+        {
+          "assert": "normalVerticalPageScrollingRemainsAvailable"
+        },
+        {
+          "assert": "timelineFrameScrollDoesNotLeaveOpenEventPopupAtStaleCoordinates"
+        }
+      ],
+      "notes": [
+        "stageWidthMode and introMaxWidthCssPx are semantic harness fields, not claims about existing props.",
+        "Do not derive fixed dimensions for a local dialog from these test values."
+      ]
+    }
+  ],
+  "locale": "en-GB"
+}

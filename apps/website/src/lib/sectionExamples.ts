@@ -22,7 +22,7 @@ export function sectionExample(slug: string): SectionData {
   switch (slug) {
     case 'timeline':
       return {
-        ...timelineExampleFor(base, shared.id),
+        ...timelineExampleFor(base, shared.id, true),
         ...shared,
         title: 'Timeline',
         headline: undefined

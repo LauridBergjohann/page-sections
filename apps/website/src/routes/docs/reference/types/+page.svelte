@@ -7487,6 +7487,11 @@
               </td>
             </tr>
             <tr>
+              <td><code>label</code></td><td><code>string</code></td><td>Optional</td><td>
+                Compact overview name. Empty labels fall back to title; details always show title.
+              </td>
+            </tr>
+            <tr>
               <td><code>icon</code></td><td><code>string</code></td><td>Optional</td><td>
                 Optional Lucide key shown in the label; resolve additional keys with the eventIcon
                 snippet.
@@ -7558,6 +7563,11 @@
               </td>
             </tr>
             <tr>
+              <td><code>label</code></td><td><code>string</code></td><td>Optional</td><td>
+                Compact overview name. Empty labels fall back to title; details always show title.
+              </td>
+            </tr>
+            <tr>
               <td><code>icon</code></td><td><code>string</code></td><td>Optional</td><td>
                 Optional Lucide key shown in the label; resolve additional keys with the eventIcon
                 snippet.
@@ -7605,8 +7615,10 @@
   >
     <div class="prose">
       <p>
-        Shared serializable event details. An optional Lucide icon appears in the label. Optional
-        image, rich description, tags and action appear only in the disclosure/popup.
+        Shared serializable event details. Optional label supplies a compact overview name; blank
+        labels use title. Details retain the full title. An optional Lucide icon appears in the
+        label. Optional image, rich description, tags and action appear only in the
+        disclosure/popup.
       </p>
       <details>
         <summary>Type declaration</summary>
@@ -7616,6 +7628,8 @@
             > &#123;
   id: string;
   title: string;
+  /** Compact overview name. Empty labels fall back to title; details always show title. */
+  label?: string;
   /** Optional Lucide key shown in the label; resolve additional keys with the eventIcon snippet. */
   icon?: string;
   description?: string | <a href={base + '/docs/reference/types/#rich-text-content-data'}
@@ -7641,6 +7655,11 @@
             <tr>
               <td><code>title</code></td><td><code>string</code></td><td>Required</td><td>
                 Human-readable title.
+              </td>
+            </tr>
+            <tr>
+              <td><code>label</code></td><td><code>string</code></td><td>Optional</td><td>
+                Compact overview name. Empty labels fall back to title; details always show title.
               </td>
             </tr>
             <tr>
@@ -7804,9 +7823,10 @@
   >
     <div class="prose">
       <p>
-        Shared section metadata plus categories on one proportional date scale, ascending by default
-        or descending for newest-first timelines. Open-ended periods use end, referenceDate, or the
-        SSR render date reused during hydration.
+        Shared section metadata plus categories on a horizontal proportional date scale with a
+        shared priority-ordered track pool, zoom, filters and category-local clusters. Direction
+        defaults to ascending, axisPosition to bottom and stageWidth to full. Open-ended periods use
+        end, referenceDate, or the SSR render date reused during hydration.
       </p>
       <p>
         Also includes the fields of <code>
@@ -7823,8 +7843,22 @@
             > &#123;
   type: 'timeline';
   categories: <a href={base + '/docs/reference/types/#timeline-category'}>TimelineCategory</a>[];
-  /** Date axis direction from top to bottom. Default ascending (oldest first). */
+  /** Date axis direction from left to right. Default ascending (oldest first). */
   direction?: 'ascending' | 'descending';
+  /** Lane zero is nearest the axis. Default bottom. */
+  axisPosition?: 'top' | 'bottom';
+  /** Full page stage with a constrained heading, or embedded content width. Default full. */
+  stageWidth?: 'full' | 'contained';
+  /** Initial CSS pixels per calendar day. Default 0.6; user zoom is independent of viewport width. */
+  initialScale?: number;
+  /** Group nearby compact events within their category. Default true. */
+  clustering?: boolean;
+  zoomLabel?: string;
+  fitLabel?: string;
+  categoriesLabel?: string;
+  eventsLabel?: string;
+  backLabel?: string;
+  closeLabel?: string;
   start?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>;
   end?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>;
   /** End of ongoing events, unless end is supplied. Default: the SSR render's UTC date. */
@@ -7858,7 +7892,60 @@
               <td><code>direction</code></td><td><code>'ascending' | 'descending'</code></td><td>
                 Optional
               </td><td>
-                Date axis direction from top to bottom. Default ascending (oldest first).
+                Date axis direction from left to right. Default ascending (oldest first).
+              </td>
+            </tr>
+            <tr>
+              <td><code>axisPosition</code></td><td><code>'top' | 'bottom'</code></td><td>
+                Optional
+              </td><td>Lane zero is nearest the axis. Default bottom.</td>
+            </tr>
+            <tr>
+              <td><code>stageWidth</code></td><td><code>'full' | 'contained'</code></td><td>
+                Optional
+              </td><td>
+                Full page stage with a constrained heading, or embedded content width. Default full.
+              </td>
+            </tr>
+            <tr>
+              <td><code>initialScale</code></td><td><code>number</code></td><td>Optional</td><td>
+                Initial CSS pixels per calendar day. Default 0.6; user zoom is independent of
+                viewport width.
+              </td>
+            </tr>
+            <tr>
+              <td><code>clustering</code></td><td><code>boolean</code></td><td>Optional</td><td>
+                Group nearby compact events within their category. Default true.
+              </td>
+            </tr>
+            <tr>
+              <td><code>zoomLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>fitLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>categoriesLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>eventsLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>backLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>closeLabel</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
               </td>
             </tr>
             <tr>

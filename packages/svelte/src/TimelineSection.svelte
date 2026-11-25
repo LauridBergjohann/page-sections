@@ -1,138 +1,236 @@
 <script lang="ts">
-  import { onMount, type Snippet } from 'svelte';
+  import { onMount, tick, untrack, type Snippet } from 'svelte';
   import type { TimelineCategory, TimelineEvent, TimelineSectionData } from '@page-sections/core';
   import Section from './Section.svelte';
   import TimelineEntry from './TimelineEntry.svelte';
+  import TimelineDetails from './TimelineDetails.svelte';
+  import Popup from './Popup.svelte';
   import LucideIcon from './LucideIcon.svelte';
   import Chip from './Chip.svelte';
-  import { layoutTimeline } from './timeline.js';
+  import { tooltip } from './tooltip.js';
+  import { layoutTimeline, normalizeTimeline, anchoredScroll, unprojectTime, viewportTime, chronological, eventLabel, eventDateLabel, formatTimelineDate, timelineIcon, DAY, EDGE, AXIS, type ClusterState, type PlacedItem, type NormalizedEvent } from './timeline.js';
   let { section, icon: categoryIcon, eventIcon }: { section: Omit<TimelineSectionData, 'type'>; icon?: Snippet<[TimelineCategory]>; eventIcon?: Snippet<[TimelineEvent]> } = $props();
   const uid = $props.id();
-  // Reuse the SSR date across hydration, including cached pages and midnight crossings.
+  // The serialized SSR day survives cached HTML and hydration across midnight.
   const referenceDate = typeof document !== 'undefined' ? document.getElementById(uid)?.dataset.referenceDate ?? new Date().toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
   let enhanced = $state(false);
   let hidden = $state<string[]>([]);
-  let active = $state<string | null>(null);
-  let labelHeights = $state<Record<string, number>>({});
-  let width = $state(0);
-  let textScale = $state(1);
-  const baseLayout = $derived(layoutTimeline(section, referenceDate));
-  const axisWidth = $derived(Math.max(3.25, Math.min(9, Math.max(0, ...baseLayout.ticks.map(tick => tick.label.length)) * .45 + .6)));
-  const widths = $derived.by(() => {
-    const count = baseLayout.categories.length;
-    const available = Math.max(0, width - axisWidth * 16 * textScale);
-    const hiddenCount = baseLayout.categories.filter(category => hidden.includes(category.id)).length;
-    const equal = available / Math.max(1, count);
-    // Reserve room for the restore label, while giving active categories the remaining space.
-    const compact = (title: string) => hiddenCount === count ? equal : Math.min(equal, (title.length * .6 + 4) * 16 * textScale);
-    const reserved = baseLayout.categories.reduce((sum, category) => sum + (hidden.includes(category.id) ? compact(category.title) : 0), 0);
-    const expanded = (available - reserved) / Math.max(1, count - hiddenCount);
-    return Object.fromEntries(baseLayout.categories.map(category => [category.id, hidden.includes(category.id) ? compact(category.title) : expanded]));
-  });
-  const layout = $derived(layoutTimeline(section, referenceDate, labelHeights, widths, textScale));
-  const visible = $derived(layout.categories.filter(category => !hidden.includes(category.id)));
-  const columns = $derived(`${axisWidth}rem ${layout.categories.map(category => `${category.width}px`).join(' ')}`);
-  const key = (category: string, event: string) => JSON.stringify([category, event]);
-  $effect(() => { void section.direction; active = null; });
+  let scale = $state(untrack(() => Number.isFinite(section.initialScale) && section.initialScale! > 0 ? section.initialScale! : .6));
+  let fit = $state(false);
+  let viewport = $state(0);
+  let scroll = $state(0);
+  let frame: HTMLDivElement | undefined = $state();
+  let zoomControl: HTMLInputElement | undefined = $state();
+  let previous: ClusterState = [];
+  const domain = $derived(normalizeTimeline(section, referenceDate));
+  const fitScale = $derived(Math.max(.00001, (viewport - EDGE * 2) / ((domain.end - domain.start) / DAY)));
+  const actualScale = $derived(fit ? fitScale : scale);
+  const minimumScale = $derived(Math.min(.02, fitScale));
+  const layout = $derived(layoutTimeline(section, referenceDate, actualScale, hidden, untrack(() => previous)));
+  $effect(() => { previous = layout.clusters; });
+  const descending = $derived(section.direction === 'descending');
+  const axisTop = $derived(section.axisPosition === 'top');
+  const range = $derived(`${formatTimelineDate(new Date(Math.max(domain.start, Math.min(domain.end, unprojectTime(scroll, domain, actualScale, descending)))).toISOString().slice(0, 10), section.locale)} – ${formatTimelineDate(new Date(Math.max(domain.start, Math.min(domain.end, unprojectTime(scroll + viewport, domain, actualScale, descending)))).toISOString().slice(0, 10), section.locale)}`);
+  let activeKey = $state<string | null>(null);
+  const active = $derived(layout.items.find(item => item.key === activeKey));
+  let selected = $state.raw<NormalizedEvent | undefined>();
+  let anchor = $state<HTMLElement>();
+  let anchorPoint = $state<{ x: number; y: number }>();
+  let popup: HTMLDivElement | undefined = $state();
+  let list: HTMLDivElement | undefined = $state();
+  let listScroll = 0;
+  let selectedKey: string | undefined;
+  let pointer: { x: number; y: number; scroll: number } | undefined;
+  let scrollFrame = 0;
+  let lastDirection: string | undefined;
   $effect(() => {
-    if (active && !visible.some(category => category.events.some(item => key(category.id, item.event.id) === active))) active = null;
+    if (activeKey && !active) { activeKey = null; selected = undefined; tick().then(() => zoomControl?.focus({ preventScroll: true })); }
+    else if (active && selected) {
+      const current = active.members.find(member => member.key === selected?.key);
+      if (current && current.event !== selected.event) selected = current;
+    }
   });
-  onMount(() => { enhanced = true; });
-  function measure(node: HTMLElement) {
-    const observer = new ResizeObserver(() => {
-      width = node.getBoundingClientRect().width;
-      textScale = parseFloat(getComputedStyle(document.documentElement).fontSize) / 16;
+  $effect(() => {
+    const nextDirection = section.direction ?? 'ascending';
+    if (frame && nextDirection !== lastDirection) {
+      lastDirection = nextDirection;
+      activeKey = null;
+      tick().then(() => { if (frame) { frame.scrollLeft = descending ? 0 : Math.max(0, layout.width - viewport); scroll = frame.scrollLeft; } });
+    }
+  });
+  onMount(() => { enhanced = true; return () => cancelAnimationFrame(scrollFrame); });
+  function observe(node: HTMLDivElement) {
+    const observer = new ResizeObserver(async () => {
+      const width = node.clientWidth;
+      if (width === viewport) return;
+      // Retain the pre-resize offset: the browser may already have clamped the DOM offset.
+      const time = viewport ? viewportTime(scroll, viewport, domain, actualScale, descending) : undefined;
+      viewport = width;
+      await tick();
+      node.scrollLeft = time === undefined ? descending ? 0 : layout.width - width : anchoredScroll(time, .5, width, domain, actualScale, descending);
+      scroll = node.scrollLeft;
     });
     observer.observe(node);
     return { destroy: () => observer.disconnect() };
   }
-  function dockHeader(node: HTMLElement) {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const edge = parseFloat(getComputedStyle(node).top) || 0;
-      node.toggleAttribute('data-docked', Math.abs(node.getBoundingClientRect().top - edge) < .5);
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    const observer = new ResizeObserver(schedule);
-    observer.observe(node);
-    document.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule, { passive: true });
-    schedule();
-    return { destroy() { observer.disconnect(); cancelAnimationFrame(frame); document.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); } };
+  function pan() {
+    if (!frame || frame.scrollLeft === scroll) return;
+    // Frame movement closes its dialog; an internal list scroll does not reach here.
+    activeKey = null; selected = undefined;
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; if (frame) scroll = frame.scrollLeft; });
   }
-  function toggle(id: string) {
+  async function zoom(value: number, fitAll = false) {
+    const time = viewportTime(frame?.scrollLeft ?? scroll, viewport, domain, actualScale, descending);
+    activeKey = null; selected = undefined;
+    fit = fitAll; scale = value;
+    await tick();
+    if (frame) { frame.scrollLeft = anchoredScroll(time, .5, viewport, domain, actualScale, descending); scroll = frame.scrollLeft; }
+  }
+  async function toggle(id: string) {
+    const position = frame?.scrollLeft ?? scroll;
+    activeKey = null; selected = undefined;
     hidden = hidden.includes(id) ? hidden.filter(value => value !== id) : [...hidden, id];
-    active = null;
+    await tick();
+    // Replacing the browser's scroll-anchor element during filtering must not
+    // choose a new time window. The source domain and scale remain unchanged.
+    if (frame) { frame.scrollLeft = position; scroll = frame.scrollLeft; }
   }
+  async function activate(event: MouseEvent, item: PlacedItem) {
+    if (event.detail && pointer && (Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y) > 8 || Math.abs((frame?.scrollLeft ?? scroll) - pointer.scroll) > 4)) return;
+    pointer = undefined;
+    if (frame) scroll = frame.scrollLeft;
+    anchor = event.currentTarget as HTMLElement;
+    anchorPoint = !item.cluster && event.detail ? { x: event.clientX, y: event.clientY } : undefined;
+    selected = item.cluster ? undefined : item.members[0];
+    selectedKey = undefined; listScroll = 0; activeKey = item.key;
+    await tick();
+    popup?.querySelector<HTMLElement>('button')?.focus({ preventScroll: true });
+  }
+  async function choose(member: NormalizedEvent) {
+    listScroll = list?.scrollTop ?? 0; selectedKey = member.key; selected = member;
+    await tick(); popup?.querySelector<HTMLElement>('.back')?.focus({ preventScroll: true });
+  }
+  async function back() {
+    selected = undefined;
+    await tick();
+    if (list) { list.scrollTop = listScroll; [...list.querySelectorAll<HTMLButtonElement>('button')].find(node => node.dataset.key === selectedKey)?.focus({ preventScroll: true }); }
+  }
+  async function close() {
+    if (active?.cluster && selected) { await back(); return; }
+    activeKey = null; selected = undefined;
+    await tick();
+    if (anchor?.isConnected) anchor.focus({ preventScroll: true }); else zoomControl?.focus({ preventScroll: true });
+  }
+  const groupRange = (item: PlacedItem) => `${formatTimelineDate(new Date(item.start).toISOString().slice(0, 10), section.locale)} – ${formatTimelineDate(new Date(item.end).toISOString().slice(0, 10), section.locale)}`;
 </script>
 
-<Section {section}>
-  <div id={uid} class="ps-timeline" use:measure data-enhanced={enhanced} data-reference-date={referenceDate} style:--timeline-columns={columns} style:--timeline-axis-width={`${axisWidth}rem`}>
+{#snippet legend()}
+  <div class="legend" role="group" aria-label={section.categoriesLabel ?? 'Categories'}>
+    {#each domain.categories as category (category.id)}
+      <Chip label={category.title} selected={!hidden.includes(category.id)} color={category.color} onclick={() => toggle(category.id)}>
+        {#snippet icon()}{#if categoryIcon}{@render categoryIcon(category)}{:else}<span class="swatch" style:background={category.color}></span>{/if}{/snippet}
+        {#snippet trailingIcon()}{#if !hidden.includes(category.id)}<LucideIcon name="check" size={16} />{:else}<LucideIcon name="plus" size={16} />{/if}{/snippet}
+      </Chip>
+    {/each}
+  </div>
+{/snippet}
+{#snippet timeline()}
+  <div id={uid} class="ps-timeline" data-enhanced={enhanced} data-reference-date={referenceDate} data-scale={actualScale} data-axis={axisTop ? 'top' : 'bottom'} data-fit={fit}>
     {#if enhanced}
-      <span class="axis-caption">Date</span>
-      <div class="timeline-header" use:dockHeader>
-        <div class="filters">
-          <span aria-hidden="true"></span>
-          {#each layout.categories as category (category.id)}
-            <div class="category-filter" class:compact={category.width < 160 * textScale} class:narrow={category.width < 64 * textScale}>
-              <Chip label={category.title} title={category.title} selected={!hidden.includes(category.id)} color={category.color} onclick={() => toggle(category.id)}>
-                {#snippet icon()}
-                  {#if hidden.includes(category.id)}<LucideIcon name="plus" />
-                  {:else if category.icon}{#if categoryIcon}{@render categoryIcon({ ...category, events: category.events.map(item => item.event) })}{:else}<LucideIcon name={category.icon} />{/if}{/if}
-                {/snippet}
-                {#snippet trailingIcon()}{#if !hidden.includes(category.id)}<LucideIcon name="check" size={16} />{/if}{/snippet}
-              </Chip>
-            </div>
+      <div class="zoom-controls">
+        <label for={`${uid}-zoom`}>{section.zoomLabel ?? 'Zoom'}</label>
+        <input bind:this={zoomControl} id={`${uid}-zoom`} type="range" min="0" max="100" step="0.1" value={100 * Math.log(actualScale / minimumScale) / Math.log(64 / minimumScale)} aria-valuetext={range} oninput={(event) => zoom(minimumScale * (64 / minimumScale) ** (+event.currentTarget.value / 100))} />
+        <button class="fit" type="button" aria-pressed={fit} onclick={() => zoom(scale, true)}>{section.fitLabel ?? 'Fit entire timeline'}</button>
+        <output for={`${uid}-zoom`}>{range}</output>
+      </div>
+      {#if !axisTop}{@render legend()}{/if}
+      {#if !layout.items.length}<p class="empty" role="status">{section.emptyLabel ?? 'No events to display. Choose a category or a different date range.'}</p>{/if}
+      <!-- Keyboard users can focus the native horizontal scroll region. -->
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+      <div class="timeline-frame" bind:this={frame} use:observe onscroll={pan} role="region" aria-label={section.title} tabindex="0"
+        onpointerdown={(event) => { pointer = { x: event.clientX, y: event.clientY, scroll: frame?.scrollLeft ?? 0 }; }}>
+        <div class="chart" style:width={`${layout.width}px`} style:height={`${layout.height}px`}>
+          <div class="axis" style:top={`${axisTop ? 0 : layout.height - AXIS}px`} aria-hidden="true">
+            {#each layout.ticks as tick}<span style:left={`${tick.x}px`}>{tick.label}</span>{/each}
+          </div>
+          {#each layout.ticks as tick}<div class="gridline" style:left={`${tick.x}px`} aria-hidden="true"></div>{/each}
+          {#each [...layout.items].sort((a, b) => a.x - b.x || a.lane - b.lane) as item (item.key)}
+            {#if item.cluster}
+              <button class="cluster" type="button" style:left={`${item.x}px`} style:top={`${item.top - 4}px`} style:--timeline-color={item.category.color} data-cluster={item.key} data-category={item.category.id} data-lane={item.lane}
+                aria-label={`${item.members.length} ${section.eventsLabel ?? 'events'} · ${item.category.title}, ${groupRange(item)}`} aria-haspopup="dialog" use:tooltip={`${item.members.length} ${section.eventsLabel ?? 'events'} · ${groupRange(item)}`} onclick={(e) => activate(e, item)}>{item.members.length}</button>
+            {:else}<TimelineEntry {item} {enhanced} {scroll} {viewport} {eventIcon} locale={section.locale} presentLabel={section.presentLabel} onactivate={activate} />{/if}
           {/each}
         </div>
       </div>
+      {#if axisTop}{@render legend()}{/if}
+    {:else}
+      {#each domain.categories as category (category.id)}
+        <div role="group" aria-label={category.title}><h3>{category.title}</h3>
+          {#each chronological(domain.events.filter(item => item.category.id === category.id), descending) as entry (entry.key)}
+            <TimelineEntry item={{ ...entry, members: [entry], x: 0, width: 0, top: 0, lane: 0, compact: false, cluster: false }} {enhanced} {eventIcon} locale={section.locale} presentLabel={section.presentLabel} onactivate={activate} />
+          {/each}
+        </div>
+      {/each}
+      {#if !domain.events.length}<p>{section.emptyLabel ?? 'No events to display. Choose a category or a different date range.'}</p>{/if}
     {/if}
-    {#if !visible.some(category => category.events.length)}<p class="empty" role="status">{section.emptyLabel ?? 'No events to display. Choose a category or a different date range.'}</p>{/if}
-    {#if enhanced || visible.some(category => category.events.length)}
-      <div class="chart" style:height={enhanced ? `${layout.contentHeight}px` : undefined}>
-        {#if enhanced}<div class="axis" aria-hidden="true">{#each layout.ticks as tick}<span style:top={`${tick.top + 16}px`}>{tick.label}</span>{/each}</div>{/if}
-        {#each layout.categories as category (category.id)}
-          {#if hidden.includes(category.id)}<div aria-hidden="true"></div>{:else}
-            <div class="category" style:--timeline-color={category.color} aria-label={category.title} role="group">
-              {#if !enhanced}<h3>{category.title}</h3>{/if}
-              {#if enhanced}
-                <div class="rail" style:left={`${category.railLeft}px`} style:height={`${layout.height + 32}px`} aria-hidden="true"></div>
-                {#each layout.ticks as tick}<span class="gridline" style:top={`${tick.top + 16}px`} aria-hidden="true"></span>{/each}
-              {/if}
-              {#each category.events as item (item.event.id)}
-                <TimelineEntry {...item} top={item.top + 16} labelTop={item.labelTop + 16} group={`${uid}-events`} {enhanced} {eventIcon}
-                  active={active === key(category.id, item.event.id)} locale={section.locale} presentLabel={section.presentLabel}
-                  onlabelsize={(height) => { const id = key(category.id, item.event.id); if (labelHeights[id] !== height) labelHeights = { ...labelHeights, [id]: height }; }}
-                  onactivate={() => { const id = key(category.id, item.event.id); active = active === id ? null : id; }}
-                  onclose={() => { if (active === key(category.id, item.event.id)) active = null; }} />
+    {#if enhanced && active}
+      <Popup title={selected?.event.title ?? `${active.members.length} ${section.eventsLabel ?? 'events'} · ${active.category.title}`} modal closable closeLabel={section.closeLabel ?? 'Close details'} {anchor} {anchorPoint} placement="side" onrequestclose={close} bind:element={popup} class="timeline-popup" data-ps-popup-morph={active.cluster ? '' : undefined} style={`--timeline-color: ${active.category.color}`}>
+        {#if selected}
+          {#if active.cluster}<button class="back" type="button" onclick={back}>{section.backLabel ?? 'Back to events'}</button>{/if}
+          <TimelineDetails event={selected.event} locale={section.locale} presentLabel={section.presentLabel} />
+        {/if}
+        {#if active.cluster}
+          <div hidden={!!selected}>
+            <p class="cluster-range">{groupRange(active)}</p>
+            <div class="cluster-list" bind:this={list}>
+              {#each chronological(active.members, descending) as member (member.key)}
+                <button type="button" class="cluster-row" data-key={member.key} onclick={() => choose(member)}>
+                  <span class="row-icon" aria-hidden="true">{#if eventIcon}{@render eventIcon(member.event)}{:else}<LucideIcon name={timelineIcon(member.event, member.category)} size={20} />{/if}</span>
+                  <span><strong>{eventLabel(member.event)}</strong><span class="row-date">{eventDateLabel(member.event, section.locale, section.presentLabel)}</span></span>
+                </button>
               {/each}
             </div>
-          {/if}
-        {/each}
-      </div>
+          </div>
+        {/if}
+      </Popup>
     {/if}
   </div>
-</Section>
+{/snippet}
+
+{#if section.stageWidth === 'contained'}
+  <Section {section}>{@render timeline()}</Section>
+{:else}
+  <Section section={{ ...section, layout: 'full' }}>{#snippet stage()}{@render timeline()}{/snippet}</Section>
+{/if}
 
 <style>
-  .ps-timeline { color: var(--ps-ink); container-type: inline-size; }
-  .ps-timeline[data-enhanced='true'] { position: relative; isolation: isolate; padding-top: .5rem; }
-  .timeline-header { position: sticky; top: var(--ps-timeline-sticky-offset, 0px); z-index: 5; padding-bottom: 1rem; pointer-events: none; }
-  .filters, [data-enhanced='true'] .chart { display: grid; grid-template-columns: var(--timeline-columns); min-width: 0; }
-  .timeline-header:global([data-docked]) :global(.ps-chip) { border-start-start-radius: 0; border-start-end-radius: 0; border-end-start-radius: 22px; border-end-end-radius: 22px; }
-  .category-filter { min-width: 0; margin-inline: 2px; pointer-events: auto; }
-  .category-filter :global(.ps-chip) { width: 100%; }
-  .category-filter :global(.ps-chip[aria-pressed='false'] .ps-chip-trailing-icon) { display: none; }
-  .compact :global(.ps-chip-trailing-icon) { display: none; }
-  .narrow :global(.ps-chip) { font-size: .75rem; padding-inline: 2px; }
-  .narrow :global(.ps-chip-icon) { display: none; }
-  .axis-caption { position: absolute; top: .5rem; left: 0; width: var(--timeline-axis-width); height: 44px; box-sizing: border-box; display: grid; align-items: center; padding-left: .5rem; font-size: .8rem; color: var(--ps-body); }
-  .chart { position: relative; }
-  .category { position: relative; min-width: 0; }
-  .axis { position: relative; z-index: 3; border-right: 1px solid var(--ps-border); }
-  .axis span { position: absolute; right: .65rem; transform: translateY(-50%); font-size: .8rem; color: var(--ps-body); white-space: nowrap; }
-  .rail { position: absolute; top: -16px; transform: translateX(-1px); border-left: 2px solid var(--timeline-color); }
-  .gridline { position: absolute; left: 0; right: 0; border-top: 1px dotted var(--ps-border); }
-  [data-enhanced='true'] .empty { position: absolute; top: 5rem; left: 0; right: 0; padding: 1rem; }
+  .ps-timeline { position: relative; min-width: 0; color: var(--ps-ink); font: var(--ps-grid-body-size)/1.5 var(--ps-font-family); }
+  .zoom-controls { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-block: .5rem 1rem; font-size: .8125rem; }
+  input { width: clamp(100px, 18vw, 240px); min-width: 0; accent-color: var(--ps-accent); }
+  output { color: var(--ps-body); margin-left: auto; }
+  .fit, .back { font: inherit; border: 1px solid var(--ps-border); border-radius: 999px; padding: .5rem .85rem; background: var(--ps-section-standard); color: var(--ps-ink); cursor: pointer; }
+  .fit[aria-pressed='true'] { border-color: var(--ps-accent); }
+  .legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; padding-block: .75rem; }
+  .legend :global(.ps-chip) { max-width: 100%; }
+  .swatch { width: 12px; height: 12px; border-radius: 50%; }
+  .timeline-frame { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; min-width: 0; scrollbar-width: thin; border: 1px solid var(--ps-border); border-radius: 12px; }
+  .chart { position: relative; min-width: 100%; isolation: isolate; }
+  .axis { position: absolute; left: 0; right: 0; height: 40px; border-top: 1px solid var(--ps-border); }
+  [data-axis='top'] .axis { border-top: 0; border-bottom: 1px solid var(--ps-border); }
+  .axis span { position: absolute; top: 8px; transform: translateX(-50%); white-space: nowrap; font-size: .75rem; color: var(--ps-body); }
+  .gridline { position: absolute; top: 0; bottom: 0; border-left: 1px dotted var(--ps-border); z-index: -1; }
+  .cluster { position: absolute; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--timeline-color) 70%, var(--ps-ink)); background: color-mix(in srgb, var(--timeline-color) 35%, var(--ps-section-standard)); color: var(--ps-ink); font: inherit; font-size: .875rem; font-weight: 650; cursor: pointer; }
+  .cluster::after { content: ''; position: absolute; inset: -2px; }
+  button:focus-visible, .timeline-frame:focus-visible { outline: 2px solid var(--ps-accent); outline-offset: 3px; }
+  .ps-timeline :global(.timeline-popup) { width: min(420px, calc(100vw - 24px)); border-radius: 18px; border-top: 3px solid var(--timeline-color); }
+  .cluster-range { color: var(--ps-body); margin: 0 0 .75rem; font-size: .8rem; }
+  .cluster-list { max-height: min(420px, calc(100dvh - 180px)); overflow-y: auto; overscroll-behavior: contain; }
+  .cluster-row { display: flex; align-items: flex-start; gap: .75rem; width: 100%; padding: .75rem .4rem; text-align: left; font: inherit; color: var(--ps-ink); background: transparent; border: 0; border-top: 1px solid var(--ps-border); cursor: pointer; }
+  .cluster-row:hover { background: color-mix(in srgb, var(--timeline-color) 12%, transparent); }
+  .cluster-row strong { display: block; font-weight: 600; overflow-wrap: anywhere; }
+  .row-icon { flex: none; margin-top: 3px; }
+  .row-date { display: block; font-size: .75rem; color: var(--ps-body); margin-top: .25rem; }
+  .back { margin-bottom: 1rem; }
+  .empty { padding: 1rem; }
+  @media (max-width: 500px) { output { width: 100%; margin-left: 0; } .legend { justify-content: flex-start; } }
 </style>

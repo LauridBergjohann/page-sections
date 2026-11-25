@@ -31,6 +31,17 @@ function createController(): Controller {
   };
   function animate(panel: HTMLElement, out = false) {
     animations.get(panel)?.cancel();
+    const trigger = triggerFor(panel)?.getBoundingClientRect();
+    if (panel.hasAttribute('data-ps-popup-morph') && trigger && !out) {
+      const rect = panel.getBoundingClientRect();
+      const animation = panel.animate([
+        { left: `${trigger.left}px`, top: `${trigger.top}px`, width: `${trigger.width}px`, height: `${trigger.height}px`, borderRadius: '50%', overflow: 'hidden' },
+        { left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px`, borderRadius: getComputedStyle(panel).borderRadius, overflow: 'hidden' }
+      ], { duration: enterDuration, easing });
+      for (const child of panel.children) child.animate([{ opacity: 0 }, { opacity: 0, offset: .55 }, { opacity: 1 }], { duration: enterDuration, easing });
+      animations.set(panel, animation);
+      return animation;
+    }
     const frames = [{ opacity: 0, scale: '.97' }, { opacity: 1, scale: '1' }];
     const animation = panel.animate(out ? frames.reverse() : frames, {
       duration: out ? exitDuration : enterDuration, easing, fill: 'both'
@@ -281,6 +292,8 @@ function createController(): Controller {
       const positioned = originals.get(panel)?.anchor;
       const current = trigger?.getBoundingClientRect();
       if (trigger && event.target.contains(trigger) && current && positioned && (current.x !== positioned.x || current.y !== positioned.y)) {
+        const dismiss = popupDismissals.get(panel);
+        if (dismiss) { dismiss(); continue; }
         const details = panel.parentElement;
         if (details instanceof HTMLDetailsElement) details.open = false;
       }

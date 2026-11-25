@@ -1049,3 +1049,29 @@ test('card hover shadows follow shared controls and their own override', async (
   await page.locator('.ps-shell').evaluate(el => (el as HTMLElement).style.setProperty('--ps-card-hover-shadow', 'none'));
   await expect(card.locator('.surface')).toHaveCSS('box-shadow', 'none');
 });
+
+for (const [path, id, count] of [['/sections/timeline/', 'morgenhafen-timeline', 56], ['/sections/', 'timeline-example', 18]] as const) {
+  test(`Morgenhafen keeps its shared English fixture, wide stage and no-JS events on ${path}`, async ({ page, browser, baseURL }) => {
+    await page.setViewportSize({ width: 3440, height: 1100 });
+    await page.goto(path);
+    const section = page.locator('#' + id), timeline = section.locator('.ps-timeline');
+    await expect(timeline).toHaveAttribute('data-enhanced', 'true');
+    await expect(section).toContainText('fictional');
+    await expect(timeline.locator('.legend button')).toHaveCount(4);
+    await expect(timeline.getByRole('button', { name: 'Fit entire timeline', exact: true })).toBeVisible();
+    await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(3000);
+    await timeline.scrollIntoViewIfNeeded();
+    await expect(page.locator('.ps-left-sidebar')).toHaveCSS('visibility', 'hidden');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(3440);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+    const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+    const native = await context.newPage();
+    await native.goto(path);
+    await expect(native.locator('#' + id + ' details[data-event]')).toHaveCount(count);
+    const platform = native.locator('#' + id + ' [data-event="mh-projects-data-platform"]');
+    await platform.locator('summary').click();
+    await expect(platform.getByRole('link', { name: 'Back to the timeline' })).toHaveAttribute('href', '#' + id);
+    await context.close();
+  });
+}

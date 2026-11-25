@@ -58,7 +58,8 @@ export const sectionCatalog = [
     slug: 'timeline',
     title: 'Timeline',
     icon: 'timeline',
-    description: 'Parallel journeys and milestones on a shared calendar.'
+    description:
+      'Explore shared tracks, milestones and clustered releases on a horizontal calendar.'
   }
 ].map((item) => ({
   ...item,
