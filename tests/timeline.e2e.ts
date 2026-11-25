@@ -47,8 +47,9 @@ test('cluster-window-interaction: list to detail to list preserves scroll, focus
   await row.scrollIntoViewIfNeeded();
   const afterClickPosition = await list.evaluate(el => el.scrollTop);
   await row.click();
-  await expect(dialog.getByRole('button', { name: 'Back to events' })).toBeFocused();
-  await page.keyboard.press('Escape');
+  await expect(dialog.getByRole('button', { name: 'Back to events' })).toHaveCount(0);
+  await expect(dialog.getByRole('button', { name: 'Close details' })).toBeFocused();
+  await cluster.click();
   await expect(dialog).toBeVisible();
   expect(await page.evaluate(() => (document.activeElement as HTMLElement)?.dataset.key)).toBe(key);
   expect(await list.evaluate(el => el.scrollTop)).toBe(afterClickPosition);
@@ -61,19 +62,22 @@ test('cluster-window-interaction: list to detail to list preserves scroll, focus
   expect(position).toBeGreaterThanOrEqual(0);
 });
 
-test('morph changes shape and position without scaling readable text; reduced motion skips it', async ({ page }) => {
+test('clusters use the standard popup transition and reduced motion skips it', async ({ page }) => {
   await page.addInitScript(() => {
     const original = Element.prototype.animate;
-    (window as any).__morphFrames = [];
+    (window as any).__popupFrames = [];
     Element.prototype.animate = function(frames, options) {
-      if (this.hasAttribute('data-ps-popup-morph')) (window as any).__morphFrames.push(...(frames as Keyframe[]));
+      if (this.classList.contains('timeline-popup')) (window as any).__popupFrames.push(...(frames as Keyframe[]));
       return original.call(this, frames, options);
     };
   });
   await ready(page);
   await openCluster(page);
-  const animations = await page.evaluate(() => (window as any).__morphFrames.map((f: Keyframe) => ({ width: f.width, radius: f.borderRadius })));
-  expect(animations.some(frame => frame.radius === '50%')).toBe(true);
+  const animations = await page.evaluate(() => (window as any).__popupFrames as Keyframe[]);
+  expect(animations.some(frame => frame.opacity === 0)).toBe(true);
+  expect(animations.some(frame => frame.width || frame.borderRadius)).toBe(false);
+  await expect(page.getByRole('dialog')).toHaveCSS('border-top-width', '1px');
+  await expect(page.getByRole('dialog').locator('.cluster-range')).toHaveCount(0);
   await page.keyboard.press('Escape');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openCluster(page);
@@ -131,7 +135,7 @@ test('zoom anchors the center, resize preserves scale and axis position only mir
   await expect(root).toHaveAttribute('data-axis', 'top');
   const axis = (await root.locator('.axis').boundingBox())!, legend = (await root.locator('.legend').boundingBox())!;
   expect(legend.y).toBeGreaterThan(axis.y);
-  await root.getByRole('button', { name: 'Fit entire timeline' }).click();
+  await root.getByRole('slider').fill('0');
   await expect(root).toHaveAttribute('data-fit', 'true');
   await expect.poll(() => frame.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
 });
@@ -274,4 +278,115 @@ test('a horizontal touch pan does not select its starting event', async ({ brows
   await expect.poll(() => frame.evaluate(el => el.scrollLeft)).toBeGreaterThan(before);
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await context.close();
+});
+
+test('fit is the slider minimum and overrides small initial scales across resizing', async ({ page }) => {
+  await page.setViewportSize({ width: 3440, height: 1100 });
+  await ready(page, '/timeline-fit/');
+  const root = timeline(page), frame = root.locator('.timeline-frame'), slider = root.getByRole('slider');
+  await expect(root).toHaveAttribute('data-fit', 'true');
+  await expect(slider).toHaveValue('0');
+  expect(await frame.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  const wide = Number(await root.getAttribute('data-scale'));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(async () => Number(await root.getAttribute('data-scale'))).toBeLessThan(wide);
+  await expect(root).toHaveAttribute('data-fit', 'true');
+  await slider.fill('30');
+  await expect(root).toHaveAttribute('data-fit', 'false');
+  await slider.fill('0');
+  expect(await frame.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await slider.focus(); await page.keyboard.press('ArrowLeft');
+  await expect(slider).toHaveValue('0');
+});
+
+test('zoom controls follow the axis while categories stay opposite', async ({ page }) => {
+  await ready(page);
+  const root = timeline(page);
+  for (const top of [false, true]) {
+    if (top) await page.getByRole('button', { name: 'Axis above', exact: true }).click();
+    const zoom = (await root.locator('.zoom-controls').boundingBox())!;
+    const legend = (await root.locator('.legend').boundingBox())!;
+    const frame = (await root.locator('.timeline-frame').boundingBox())!;
+    expect(top ? zoom.y < frame.y && legend.y > frame.y : legend.y < frame.y && zoom.y > frame.y).toBe(true);
+  }
+});
+
+test('standard detail popups allow mouse text selection and close on outside clicks', async ({ page }) => {
+  await ready(page);
+  const bar = timeline(page).locator('[data-event="mh-projects-data-platform"]');
+  await bar.focus(); await page.keyboard.press('Enter');
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.locator('img')).toBeVisible();
+  await expect(dialog.getByRole('link', { name: 'Back to the timeline' })).toBeVisible();
+  await expect(dialog).toHaveCSS('border-top-width', '1px');
+  await expect(dialog).not.toHaveAttribute('aria-modal', 'true');
+  const title = (await dialog.locator('.ps-popup-title').boundingBox())!;
+  await page.mouse.move(title.x + 2, title.y + 8);
+  await page.mouse.down();
+  await page.mouse.move(title.x + Math.min(170, title.width - 4), title.y + 8, { steps: 12 });
+  await page.mouse.up();
+  await expect.poll(() => page.evaluate(() => getSelection()?.toString().length ?? 0)).toBeGreaterThan(3);
+  await page.mouse.click(5, 5);
+  await expect(dialog).toHaveCount(0);
+  await openCluster(page);
+  await page.mouse.click(5, 5);
+  await expect(dialog).toHaveCount(0);
+});
+
+test('trackpad pinch zoom preserves its time anchor and respects both limits', async ({ page }) => {
+  await ready(page);
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  await frame.evaluate(el => el.scrollLeft = 900);
+  await frame.scrollIntoViewIfNeeded();
+  const rect = (await frame.boundingBox())!;
+  const fraction = .35;
+  const before = await frame.evaluate((el, f) => el.scrollLeft + el.clientWidth * f - 28, fraction);
+  const scale = Number(await root.getAttribute('data-scale'));
+  await page.mouse.move(rect.x + 1 + (rect.width - 2) * fraction, rect.y + 50);
+  await page.keyboard.down('Control'); await page.mouse.wheel(0, -50); await page.keyboard.up('Control');
+  await expect.poll(async () => Number(await root.getAttribute('data-scale'))).toBeGreaterThan(scale);
+  const after = Number(await root.getAttribute('data-scale'));
+  await expect.poll(() => frame.evaluate((el, f) => el.scrollLeft + el.clientWidth * f - 28, fraction)).toBeCloseTo(before / scale * after, 0);
+  for (const [delta, expected] of [[-5000, '64'], [5000, null]] as const) {
+    for (let i = 0; i < 3; i++) {
+      await page.keyboard.down('Control'); await page.mouse.wheel(0, delta); await page.keyboard.up('Control');
+      await page.waitForTimeout(40);
+    }
+    if (expected) await expect(root).toHaveAttribute('data-scale', expected);
+    else await expect(root).toHaveAttribute('data-fit', 'true');
+  }
+  expect(await page.evaluate(() => visualViewport?.scale)).toBe(1);
+});
+
+test('a real two-finger touchscreen pinch zooms the timeline without selecting or zooming the page', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const page = await context.newPage(); await ready(page);
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  await frame.scrollIntoViewIfNeeded();
+  const rect = (await frame.boundingBox())!, y = Math.max(40, Math.min(790, rect.y + 100));
+  const session = await context.newCDPSession(page);
+  const scale = Number(await root.getAttribute('data-scale'));
+  const points = (distance: number) => [{ x: 195 - distance / 2, y, id: 1 }, { x: 195 + distance / 2, y, id: 2 }];
+  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: points(80) });
+  for (const distance of [100, 130, 180, 240]) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: points(distance) });
+  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await expect.poll(async () => Number(await root.getAttribute('data-scale'))).toBeCloseTo(scale * 3, 4);
+  expect(await page.evaluate(() => visualViewport?.scale)).toBe(1);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await context.close();
+});
+
+test('the cluster marker remains clickable beside mobile list and detail popups', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await ready(page);
+  const cluster = await openCluster(page), dialog = page.getByRole('dialog');
+  await dialog.locator('.cluster-row').nth(2).click();
+  await expect(dialog.locator('.detail-date')).toBeVisible();
+  const marker = (await cluster.boundingBox())!, panel = (await dialog.boundingBox())!;
+  expect(panel.y + panel.height <= marker.y || panel.y >= marker.y + marker.height || panel.x + panel.width <= marker.x || panel.x >= marker.x + marker.width).toBe(true);
+  await cluster.click();
+  await expect(dialog.locator('.cluster-row').nth(2)).toBeFocused();
+  await page.screenshot({ path: test.info().outputPath('timeline-mobile-cluster.png') });
+  await cluster.click();
+  await expect(dialog).toHaveCount(0);
 });

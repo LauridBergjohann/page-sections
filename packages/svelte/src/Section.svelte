@@ -36,12 +36,8 @@
     const observer = new ResizeObserver(update);
     observer.observe(document.documentElement);
     observer.observe(node.parentElement!);
-    const intersection = new IntersectionObserver(([entry]) => {
-      node.toggleAttribute('data-ps-stage-visible', entry.isIntersecting);
-    });
-    intersection.observe(node);
     update();
-    return { destroy: () => { observer.disconnect(); intersection.disconnect(); } };
+    return { destroy: () => observer.disconnect() };
   }
 </script>
 <section {...rest} id={section.id} class={['ps-section', className]} data-ps-section={section.id}

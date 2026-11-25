@@ -31,17 +31,6 @@ function createController(): Controller {
   };
   function animate(panel: HTMLElement, out = false) {
     animations.get(panel)?.cancel();
-    const trigger = triggerFor(panel)?.getBoundingClientRect();
-    if (panel.hasAttribute('data-ps-popup-morph') && trigger && !out) {
-      const rect = panel.getBoundingClientRect();
-      const animation = panel.animate([
-        { left: `${trigger.left}px`, top: `${trigger.top}px`, width: `${trigger.width}px`, height: `${trigger.height}px`, borderRadius: '50%', overflow: 'hidden' },
-        { left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px`, borderRadius: getComputedStyle(panel).borderRadius, overflow: 'hidden' }
-      ], { duration: enterDuration, easing });
-      for (const child of panel.children) child.animate([{ opacity: 0 }, { opacity: 0, offset: .55 }, { opacity: 1 }], { duration: enterDuration, easing });
-      animations.set(panel, animation);
-      return animation;
-    }
     const frames = [{ opacity: 0, scale: '.97' }, { opacity: 1, scale: '1' }];
     const animation = panel.animate(out ? frames.reverse() : frames, {
       duration: out ? exitDuration : enterDuration, easing, fill: 'both'
@@ -204,6 +193,8 @@ function createController(): Controller {
         const mobileMenu = panel.classList.contains('mobile-panel') && headerRect;
         const width = Math.min(mobileMenu ? headerRect.width - 24 : rect.width, innerWidth - 24);
         let left = mobileMenu ? headerRect.left + 12 : rect.left;
+        let bottom: number | undefined;
+        let availableHeight: number | undefined;
         if (panel.dataset.psPopupPlacement === 'side') {
           const anchor = anchorRectFor(panel);
           if (anchor) {
@@ -211,6 +202,15 @@ function createController(): Controller {
             const leftSpace = anchor.left - 12;
             left = rightSpace >= width + 10 || rightSpace >= leftSpace ? anchor.right + 10 : anchor.left - width - 10;
             top = Math.max(12, Math.min(anchor.top, innerHeight - Math.min(rect.height, innerHeight - 24) - 12));
+            if (Math.max(rightSpace, leftSpace) < width + 10) {
+              // Keep the trigger usable on narrow screens, including when list
+              // content changes to a taller detail view in the same popup.
+              left = anchor.left + (anchor.width - width) / 2;
+              const above = Math.max(0, anchor.top - 22);
+              const below = Math.max(0, innerHeight - anchor.bottom - 22);
+              if (above > below) { bottom = innerHeight - anchor.top + 10; availableHeight = above; }
+              else { top = anchor.bottom + 10; availableHeight = below; }
+            }
           }
         }
         const anchorRect = triggerFor(panel)?.getBoundingClientRect();
@@ -223,7 +223,8 @@ function createController(): Controller {
           margin: '0',
           transform: 'none',
           left: Math.max(12, Math.min(left, innerWidth - width - 12)) + 'px',
-          top: top + 'px',
+          top: bottom === undefined ? top + 'px' : 'auto',
+          bottom: bottom === undefined ? 'auto' : bottom + 'px',
           width: width + 'px',
           padding,
           boxSizing: 'border-box',
@@ -235,7 +236,7 @@ function createController(): Controller {
             boxShadow: 'var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)))',
             background: 'var(--ps-section-standard)', color: 'var(--ps-ink)'
           }),
-          maxHeight: Math.max(0, innerHeight - top - 12) + 'px',
+          maxHeight: (availableHeight ?? Math.max(0, innerHeight - top - 12)) + 'px',
           overflowY: 'auto'
         });
       }

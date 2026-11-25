@@ -94,17 +94,15 @@ export interface TimelineSectionData extends SectionDefinition {
   direction?: 'ascending' | 'descending';
   /** Lane zero is nearest the axis. Default bottom. */
   axisPosition?: 'top' | 'bottom';
-  /** Full page stage with a constrained heading, or embedded content width. Default full. */
+  /** Full page stage or embedded content width. Default full; recommended only without side navigation, which overlays the stage. */
   stageWidth?: 'full' | 'contained';
-  /** Initial CSS pixels per calendar day. Default 0.6; user zoom is independent of viewport width. */
+  /** Initial CSS pixels per calendar day. Default 0.6; clamped to at least the scale that fits the full timeline. */
   initialScale?: number;
   /** Group nearby compact events within their category. Default true. */
   clustering?: boolean;
   zoomLabel?: string;
-  fitLabel?: string;
   categoriesLabel?: string;
   eventsLabel?: string;
-  backLabel?: string;
   closeLabel?: string;
   start?: TimelineDate;
   end?: TimelineDate;

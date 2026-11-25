@@ -2,7 +2,7 @@
   export const examples = [
     {
       language: 'svelte',
-      code: '<script lang="ts">\n  import { TimelineSection, type TimelineSectionData } from \'@page-sections/svelte\';\n  const section: TimelineSectionData = {\n  "type": "timeline",\n  "id": "morgenhafen-timeline",\n  "title": "Morgenhafen — an open urban lab",\n  "introduction": "Morgenhafen is an entirely fictional urban lab.",\n  "direction": "descending",\n  "axisPosition": "bottom",\n  "stageWidth": "full",\n  "locale": "en-GB",\n  "referenceDate": "2026-11-25",\n  "initialScale": 0.6,\n  "categories": [\n    {\n      "id": "programme",\n      "title": "Programme & operations",\n      "color": "#2F6EA6",\n      "events": [\n        {\n          "id": "mh-programme-open-access",\n          "type": "period",\n          "start": "2021-02",\n          "label": "Accessible workshops and digital services for a city everyone can take part in",\n          "title": "Accessible workshops, events and digital services: a shared programme for orientation, access and independent use",\n          "icon": "heart"\n        }\n      ]\n    },\n    {\n      "id": "publications",\n      "title": "Publications & exchange",\n      "color": "#AD7119",\n      "events": [\n        {\n          "id": "mh-publications-2024-station-handbook",\n          "type": "point",\n          "date": "2024-10-17",\n          "label": "Neighbourhood station handbook",\n          "title": "Understanding, building and maintaining neighbourhood stations together",\n          "icon": "book-open"\n        },\n        {\n          "id": "mh-publications-2024-rain-atlas",\n          "type": "point",\n          "date": "2024-10-17",\n          "label": "Rain in the neighbourhood",\n          "title": "Rain in the neighbourhood: maps, observations and traceable uncertainties",\n          "icon": "book-open"\n        }\n      ]\n    }\n  ]\n};\n<\/script>\n\n<TimelineSection {section} />'
+      code: '<script lang="ts">\n  import { TimelineSection, type TimelineSectionData } from \'@page-sections/svelte\';\n  const section: TimelineSectionData = {\n  "type": "timeline",\n  "id": "morgenhafen-timeline",\n  "title": "Morgenhafen — an open urban lab",\n  "introduction": "Morgenhafen is an entirely fictional urban lab.",\n  "direction": "descending",\n  "axisPosition": "bottom",\n  "stageWidth": "contained",\n  "locale": "en-GB",\n  "referenceDate": "2026-11-25",\n  "initialScale": 0.6,\n  "categories": [\n    {\n      "id": "projects",\n      "title": "Projects & prototypes",\n      "icon": "layers",\n      "color": "#16835D",\n      "events": [\n        {\n          "id": "mh-projects-data-platform",\n          "type": "period",\n          "start": "2024-05",\n          "label": "The shared data platform",\n          "title": "A shared data platform for maps, measurements and workshop documentation",\n          "description": {\n            "body": "The platform connects previously separate archives through **reusable interfaces**. Groups can add their data gradually and document it themselves.\\n\\nThe shared core includes:\\n\\n- Maps and measurements with traceable origins\\n- Workshop notes that state their date precision clearly\\n- Documented limitations and open questions\\n\\nEach group remains responsible for its own contributions."\n          },\n          "icon": "layers",\n          "image": {\n            "src": "/timeline-creative.svg",\n            "alt": "Schematic interface with an illustration, lines of text and two content cards",\n            "width": 640,\n            "height": 360,\n            "aspect": "16/9"\n          },\n          "tags": [\n            "Open data",\n            "Interfaces"\n          ],\n          "action": {\n            "label": "Back to the timeline",\n            "href": "#morgenhafen-timeline",\n            "variant": "secondary"\n          }\n        }\n      ]\n    }\n  ]\n};\n<\/script>\n\n<TimelineSection {section} />'
     }
   ];
 </script>
@@ -22,6 +22,7 @@
   let { data }: { data: PageData } = $props();
   let direction = $state<'ascending' | 'descending'>('descending');
   let axisPosition = $state<'top' | 'bottom'>('bottom');
+  let stageWidth = $state<'full' | 'contained'>('full');
 </script>
 
 <ContentPage page={{ title: 'Timeline', pageTitle: 'Timeline · Page Sections' }} showContentMenu>
@@ -51,9 +52,22 @@
         ]}
         onselect={(item) => (axisPosition = item.id as typeof axisPosition)}
       />
+      <ButtonGroup
+        label="Stage width"
+        items={[
+          { id: 'full', label: 'Full page width', selected: stageWidth === 'full' },
+          { id: 'contained', label: 'Contained width', selected: stageWidth === 'contained' }
+        ]}
+        onselect={(item) => (stageWidth = item.id as typeof stageWidth)}
+      />
     </div>
+    <p>
+      Open <strong>The shared data platform</strong> in Projects &amp; prototypes (from May 2024) to see
+      an image, rich text, tags and an action link. Move the zoom slider to its left edge to see every
+      year.
+    </p>
   </Section>
-  <TimelineSection section={{ ...timelineExampleFor(base), direction, axisPosition }} />
+  <TimelineSection section={{ ...timelineExampleFor(base), direction, axisPosition, stageWidth }} />
   <Section
     section={{
       id: 'usage',
@@ -139,8 +153,9 @@
       <p>
         <code>direction</code> defaults to ascending, with older dates on the left; descending puts
         newer dates on the left. <code>axisPosition</code> independently defaults to bottom. Track zero
-        is nearest either axis. The legend sits on the opposite side, wraps on narrow screens and independently
-        toggles categories. Colors remain tied to category IDs.
+        is nearest either axis. Zoom and the visible date range sit beside the axis. The legend sits on
+        the opposite side, wraps on narrow screens and independently toggles categories. Colors remain
+        tied to category IDs.
       </p>
       <p>
         Bars use true proportional start/end positions. Their icon and ellipsized label follow the
@@ -151,9 +166,11 @@
       </p>
       <p>
         <code>initialScale</code> defaults to 0.6 CSS pixels per day. The logarithmic zoom slider preserves
-        the visible time at the center; resizing reveals more time at the same scale. Fit entire timeline
-        explicitly adapts the scale to the frame. Ticks adapt to the scale. Native horizontal scrolling
-        and touch panning leave normal vertical page scrolling available.
+        the visible time at the center. Its left edge fits the entire timeline and is the minimum zoom,
+        overriding a smaller initialScale. Resizing preserves scale until the full timeline fits; at minimum
+        zoom it follows the frame width. Pinch on the timeline with a touchscreen or trackpad to zoom
+        around the gesture center, within the same limits. Ticks adapt to the scale. Native horizontal
+        scrolling and one-finger panning leave normal vertical page scrolling available.
       </p>
       <p>
         <code>clustering</code> defaults to true. Nearby points and genuinely short periods group within
@@ -163,12 +180,12 @@
         accessible in the list at every zoom.
       </p>
       <p>
-        A cluster circle morphs into a rounded list window. Rows follow start/date chronology,
-        newest first for descending, with stable identity ties. Selecting a row shows full details;
-        Back or Escape restores the same list, scroll position and row focus. A second Escape closes
-        the list and restores the trigger. The shared Popup provides one top layer and backdrop.
-        Frame scrolling closes its dialog; scrolling the list keeps it open. Removed triggers close
-        their dialog and focus a surviving control.
+        A cluster circle opens the standard Popup with an event list. Rows follow start/date
+        chronology, newest first for descending, with stable identity ties. Selecting a row shows
+        full details; clicking the same cluster circle again restores the list, scroll position and
+        row focus. Escape, the close button or an outside click closes the popup. The shared Popup
+        provides one top layer and backdrop. Frame scrolling closes its dialog; scrolling the list
+        keeps it open. Removed triggers close their dialog and focus a surviving control.
       </p>
     </div>
   </Section>
@@ -183,22 +200,25 @@
     <div class="prose">
       <p>
         <code>stageWidth</code> defaults to full: the timeline uses the page width with outer
-        spacing while its introduction stays within 1536px. Use contained for embedded layouts.
-        Background and stage width remain independent. The shared Section <code>stage</code> snippet renders
-        outside its constrained content wrapper. Only the timeline frame scrolls horizontally; text and
-        icons keep their size on ultrawide displays.
+        spacing while its introduction stays within 1536px. Full width is recommended only for pages
+        without side navigation: sidebars always remain above the stage. A page containing any
+        full-width timeline uses a standalone right content menu instead of docking it. Use
+        contained for embedded layouts and pages with side navigation. Background and stage width
+        remain independent. The shared Section <code>stage</code> snippet renders outside its constrained
+        content wrapper. Only the timeline frame scrolls horizontally; text and icons keep their size
+        on ultrawide displays.
       </p>
       <p>
         Without JavaScript every valid visible event remains a native details/summary disclosure.
         Hydration enables filters, zoom and clustering. Mouse, keyboard and touch open complete
-        details without depending on hover. The dialog keeps focus inside and restores it on return.
-        Reduced motion preserves all actions while omitting the morph. Theme tokens govern text,
-        borders and surfaces in light and dark mode.
+        details without depending on hover. Popup text is selectable. Closing restores focus to the
+        trigger. Reduced motion preserves all actions while omitting the standard popup transition.
+        Theme tokens govern text, borders and surfaces in light and dark mode.
       </p>
       <p>
-        English control defaults can be replaced through zoomLabel, fitLabel, categoriesLabel,
-        eventsLabel, backLabel and closeLabel. Existing presentLabel and emptyLabel remain
-        supported. No language runtime is required.
+        English control defaults can be replaced through zoomLabel, categoriesLabel, eventsLabel and
+        closeLabel. Existing presentLabel and emptyLabel remain supported. No language runtime is
+        required.
       </p>
     </div>
   </Section>

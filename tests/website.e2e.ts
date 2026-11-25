@@ -1058,10 +1058,16 @@ for (const [path, id, count] of [['/sections/timeline/', 'morgenhafen-timeline',
     await expect(timeline).toHaveAttribute('data-enhanced', 'true');
     await expect(section).toContainText('fictional');
     await expect(timeline.locator('.legend button')).toHaveCount(4);
-    await expect(timeline.getByRole('button', { name: 'Fit entire timeline', exact: true })).toBeVisible();
+    await expect(timeline.getByRole('slider')).toBeVisible();
+    await expect(timeline.getByRole('button', { name: 'Fit entire timeline', exact: true })).toHaveCount(0);
     await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(3000);
     await timeline.scrollIntoViewIfNeeded();
-    await expect(page.locator('.ps-left-sidebar')).toHaveCSS('visibility', 'hidden');
+    await expect(page.locator('.ps-left-sidebar')).toHaveCSS('visibility', 'visible');
+    if (path === '/sections/timeline/') {
+      const right = page.locator('.ps-content-menu-slot .desktop');
+      await expect(right).toHaveCSS('border-top-left-radius', await right.evaluate(el => getComputedStyle(el).getPropertyValue('--ps-radius').trim()));
+      await expect(right).toHaveCSS('border-left-width', '1px');
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(3440);
     await page.setViewportSize({ width: 390, height: 844 });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
@@ -1075,3 +1081,36 @@ for (const [path, id, count] of [['/sections/timeline/', 'morgenhafen-timeline',
     await context.close();
   });
 }
+
+test('timeline width controls preserve overlay navigation and switch the right menu between standalone and docked', async ({ page }) => {
+  await page.setViewportSize({ width: 3440, height: 1100 });
+  await page.goto('/sections/timeline/');
+  const timeline = page.locator('#morgenhafen-timeline .ps-timeline');
+  const right = page.locator('.ps-content-menu-slot .desktop');
+  // Isolate stage presence from the existing standalone rule for transparent/full backgrounds.
+  const opaque = () => page.locator('.ps-section[data-nested="false"]').evaluateAll(nodes => nodes.forEach(node => {
+    node.setAttribute('data-background-size', 'standard'); node.setAttribute('data-background-color', 'standard');
+  }));
+  await opaque();
+  await expect(right).toHaveCSS('border-left-width', '1px');
+  await expect(right).toHaveCSS('border-top-left-radius', await right.evaluate(el => getComputedStyle(el).getPropertyValue('--ps-radius').trim()));
+  await timeline.scrollIntoViewIfNeeded();
+  for (const sidebar of [page.locator('.ps-left-sidebar .sidebar-panel'), right]) {
+    await expect(sidebar).toBeVisible();
+    expect(await sidebar.evaluate(el => {
+      const rect = el.getBoundingClientRect();
+      return el.contains(document.elementFromPoint(rect.x + rect.width / 2, Math.max(15, rect.y) + 30));
+    })).toBe(true);
+  }
+  await page.screenshot({ path: test.info().outputPath('timeline-visible-sidebars.png') });
+  await page.getByRole('button', { name: 'Contained width', exact: true }).click();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'contained');
+  await opaque();
+  await expect(right).toHaveCSS('border-left-width', '0px');
+  await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeLessThan(1536);
+  await page.getByRole('button', { name: 'Full page width', exact: true }).click();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'full');
+  await expect(right).toHaveCSS('border-left-width', '1px');
+  await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(3000);
+  await expect(page.locator('#options')).toContainText('The shared data platform');
+});

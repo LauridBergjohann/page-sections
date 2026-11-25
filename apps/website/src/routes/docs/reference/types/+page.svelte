@@ -7825,8 +7825,9 @@
       <p>
         Shared section metadata plus categories on a horizontal proportional date scale with a
         shared priority-ordered track pool, zoom, filters and category-local clusters. Direction
-        defaults to ascending, axisPosition to bottom and stageWidth to full. Open-ended periods use
-        end, referenceDate, or the SSR render date reused during hydration.
+        defaults to ascending, axisPosition to bottom and stageWidth to full (recommended without
+        side navigation). Initial scale is clamped to the full-timeline fit minimum. Open-ended
+        periods use end, referenceDate, or the SSR render date reused during hydration.
       </p>
       <p>
         Also includes the fields of <code>
@@ -7847,17 +7848,15 @@
   direction?: 'ascending' | 'descending';
   /** Lane zero is nearest the axis. Default bottom. */
   axisPosition?: 'top' | 'bottom';
-  /** Full page stage with a constrained heading, or embedded content width. Default full. */
+  /** Full page stage or embedded content width. Default full; recommended only without side navigation, which overlays the stage. */
   stageWidth?: 'full' | 'contained';
-  /** Initial CSS pixels per calendar day. Default 0.6; user zoom is independent of viewport width. */
+  /** Initial CSS pixels per calendar day. Default 0.6; clamped to at least the scale that fits the full timeline. */
   initialScale?: number;
   /** Group nearby compact events within their category. Default true. */
   clustering?: boolean;
   zoomLabel?: string;
-  fitLabel?: string;
   categoriesLabel?: string;
   eventsLabel?: string;
-  backLabel?: string;
   closeLabel?: string;
   start?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>;
   end?: <a href={base + '/docs/reference/types/#timeline-date'}>TimelineDate</a>;
@@ -7904,13 +7903,14 @@
               <td><code>stageWidth</code></td><td><code>'full' | 'contained'</code></td><td>
                 Optional
               </td><td>
-                Full page stage with a constrained heading, or embedded content width. Default full.
+                Full page stage or embedded content width. Default full; recommended only without
+                side navigation, which overlays the stage.
               </td>
             </tr>
             <tr>
               <td><code>initialScale</code></td><td><code>number</code></td><td>Optional</td><td>
-                Initial CSS pixels per calendar day. Default 0.6; user zoom is independent of
-                viewport width.
+                Initial CSS pixels per calendar day. Default 0.6; clamped to at least the scale that
+                fits the full timeline.
               </td>
             </tr>
             <tr>
@@ -7924,22 +7924,12 @@
               </td>
             </tr>
             <tr>
-              <td><code>fitLabel</code></td><td><code>string</code></td><td>Optional</td><td>
-                See the declared value shape and the linked types.
-              </td>
-            </tr>
-            <tr>
               <td><code>categoriesLabel</code></td><td><code>string</code></td><td>Optional</td><td>
                 See the declared value shape and the linked types.
               </td>
             </tr>
             <tr>
               <td><code>eventsLabel</code></td><td><code>string</code></td><td>Optional</td><td>
-                See the declared value shape and the linked types.
-              </td>
-            </tr>
-            <tr>
-              <td><code>backLabel</code></td><td><code>string</code></td><td>Optional</td><td>
                 See the declared value shape and the linked types.
               </td>
             </tr>
