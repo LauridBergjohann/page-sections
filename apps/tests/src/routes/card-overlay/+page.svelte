@@ -24,6 +24,7 @@
       contentPlacement: 'overlay',
       textTone: 'light',
       mediaFit: 'contain',
+      mediaHoverZoom: false,
       mediaAspect: '1/1'
     }))
   );
@@ -36,6 +37,7 @@
     list={list.slice(0, 1)}
     contentPlacement="overlay"
     textTone="dark"
+    mediaHoverZoom={false}
     mediaAspect="4/3"
   >
     {#snippet card(item, options)}<Card {item} {...options} />{/snippet}

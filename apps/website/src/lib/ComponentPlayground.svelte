@@ -21,6 +21,7 @@
   let description = $state(true);
   let cardSize = $state<CardSize>('m');
   let tone = $state<SurfaceTone>('muted');
+  let mediaHoverZoom = $state(true);
   let contentPlacement = $state<CardContentPlacement>('below');
   let textTone = $state<CardTextTone>('light');
   let mediaAspect = $state<CardMediaAspect>('3/2');
@@ -52,7 +53,7 @@
   });
   const source = $derived(
     kind === 'card'
-      ? `<script>\n  import { Card } from '@page-sections/svelte';\n  const item = ${JSON.stringify(item, null, 2)};\n<\/script>\n\n<Card {item} shadow={${shadow}} cardSize="${cardSize}" tone="${tone}" mediaAspect="${mediaAspect}" mediaFit="${fit}" contentPlacement="${contentPlacement}" textTone="${textTone}" />`
+      ? `<script>\n  import { Card } from '@page-sections/svelte';\n  const item = ${JSON.stringify(item, null, 2)};\n<\/script>\n\n<Card {item} shadow={${shadow}} cardSize="${cardSize}" tone="${tone}" mediaAspect="${mediaAspect}" mediaFit="${fit}" mediaHoverZoom={${mediaHoverZoom}} contentPlacement="${contentPlacement}" textTone="${textTone}" />`
       : `<script lang="ts">\n  import { Image, PageShell, type ImageData } from '@page-sections/svelte';\n  const image: ImageData = ${JSON.stringify(image, null, 2)};\n<\/script>\n\n<PageShell mode="${mode}">\n  <Image {image} />\n</PageShell>`
   );
   function reset() {
@@ -63,6 +64,7 @@
     tone = 'muted';
     mediaAspect = '3/2';
     contentPlacement = 'below';
+    mediaHoverZoom = true;
     textTone = 'light';
     fit = 'contain';
     aspect = '16/9';
@@ -88,6 +90,9 @@
       Tone<select bind:value={tone} disabled={!ready}>
         <option>standard</option><option>muted</option>
       </select>
+    </label>
+    <label class="toggle">
+      <input type="checkbox" bind:checked={mediaHoverZoom} disabled={!ready} /> Image zoom on hover
     </label>
     <label>
       Content placement<select bind:value={contentPlacement} disabled={!ready}>
@@ -145,6 +150,7 @@
         {tone}
         {mediaAspect}
         mediaFit={fit}
+        {mediaHoverZoom}
         {contentPlacement}
         {textTone}
       />{:else}<Image {image} />{/if}

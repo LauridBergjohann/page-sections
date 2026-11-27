@@ -68,16 +68,18 @@ export const sectionCatalog = [
     description:
       'Explore shared tracks, milestones and clustered releases on a horizontal calendar.'
   }
-].map((item) => ({
-  ...item,
-  id: item.slug,
-  href: `/sections/${item.slug}/`,
-  image: {
-    src: base + `/illustrations/${item.slug}.svg`,
-    alt: `${item.title} section layout`,
-    ...illustrationSizes[item.slug]
-  }
-}));
+]
+  .sort((a, b) => a.title.localeCompare(b.title, 'en'))
+  .map((item) => ({
+    ...item,
+    id: item.slug,
+    href: `/sections/${item.slug}/`,
+    image: {
+      src: base + `/illustrations/${item.slug}.svg`,
+      alt: `${item.title} section layout`,
+      ...illustrationSizes[item.slug]
+    }
+  }));
 export const sectionCards = sectionCatalog.map((item) => ({ ...item, href: base + item.href }));
 export const nextStepCards = [
   {

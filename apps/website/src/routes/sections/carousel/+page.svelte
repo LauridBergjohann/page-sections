@@ -70,14 +70,16 @@
         to place text at the bottom of the image. Overlay always uses cover, and
         <code>mediaAspect</code>
         fixes the entire card ratio. <code>textTone="light"</code> (default) uses pure white text
-        over a dark gradient; <code>textTone="dark"</code> uses dark text over a light gradient. These
-        local colors stay independent of the page theme and do not recolor the image.
+        over a subtle dark gradient limited to the copy area; <code>textTone="dark"</code> uses dark text
+        over a light gradient. These local colors stay independent of the page theme and do not recolor
+        the image.
       </p>
       <p>
         Use short titles and teasers for overlay cards. Longer copy, custom content and actions
         remain reachable in a keyboard-focusable scrolling text area without enlarging the card.
-        Text remains selectable, the image and title share the main link, and actions remain
-        independent. Missing images retain the same fixed card shape and gradient.
+        Text remains selectable, the image, gradient padding, title and description share the main
+        link, and actions remain independent. Missing images retain the same fixed card shape and
+        gradient.
       </p>
       <p>
         A native horizontal collection using the same card sizes as CardGridSection. It is
@@ -107,9 +109,9 @@
         Required section:
         <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a> and list: T[].
         Optional cardSize (m), cardShadow (false), mediaAspect (3/2; also 4/3 or 1/1), mediaFit (contain),
-        contentPlacement (below), textTone (light; overlay only), textAlign (start), controls (true),
-        previousLabel (Previous cards), nextLabel (Next cards), media(item), itemContent(item), oncardready(parts),
-        initialItemKey and onselectionchange(key).
+        mediaHoverZoom (true), contentPlacement (below), textTone (light; overlay only), textAlign (start),
+        controls (true), previousLabel (Previous cards), nextLabel (Next cards), media(item), itemContent(item),
+        oncardready(parts), initialItemKey and onselectionchange(key).
       </p>
       <p>
         <code>initialItemKey</code> is applied once after mount, matching itemKey ?? id.

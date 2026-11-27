@@ -6,18 +6,18 @@
   import Card from './Card.svelte';
   import ContentGrid from './ContentGrid.svelte';
   import ContentBlock from './ContentBlock.svelte';
-  let { section, list, cardSize = 'm', cardShadow = false, cardTone = 'standard', mediaAspect = '3/2', mediaFit = 'contain', contentPlacement = 'below', textTone = 'light', itemSpan, textAlign = 'start', itemContent, media, surface, card, oncardready }: {
+  let { section, list, cardSize = 'm', cardShadow = false, cardTone = 'standard', mediaAspect = '3/2', mediaFit = 'contain', mediaHoverZoom = true, contentPlacement = 'below', textTone = 'light', itemSpan, textAlign = 'start', itemContent, media, surface, card, oncardready }: {
     section: SectionDefinition; list: T[]; cardSize?: CardSize; cardShadow?: boolean; cardTone?: SurfaceTone; itemSpan?: ContentSpan; textAlign?: 'start' | 'center';
-    mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; contentPlacement?: CardContentPlacement; textTone?: CardTextTone;
+    mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; mediaHoverZoom?: boolean; contentPlacement?: CardContentPlacement; textTone?: CardTextTone;
     itemContent?: Snippet<[T]>; media?: Snippet<[T]>; surface?: Snippet<[T]>;
-    card?: Snippet<[T, { cardSize: CardSize; shadow: boolean; tone: SurfaceTone; textAlign: 'start' | 'center'; mediaAspect: CardMediaAspect; mediaFit: CardMediaFit; contentPlacement: CardContentPlacement; textTone: CardTextTone; reserveEyebrow: boolean }]>;
+    card?: Snippet<[T, { cardSize: CardSize; shadow: boolean; tone: SurfaceTone; textAlign: 'start' | 'center'; mediaAspect: CardMediaAspect; mediaFit: CardMediaFit; mediaHoverZoom: boolean; contentPlacement: CardContentPlacement; textTone: CardTextTone; reserveEyebrow: boolean }]>;
     oncardready?: (parts: CardElements<T>) => void | (() => void);
   } = $props();
   const reserveEyebrow = $derived(cardSize !== 's' && list.some(item => Boolean(item.eyebrow?.trim())));
 </script>
 {#snippet entry(item: T)}
-  {#if card}{@render card(item, { cardSize, shadow: cardShadow, tone: cardTone, textAlign, mediaAspect, mediaFit: contentPlacement === 'overlay' ? 'cover' : mediaFit, contentPlacement, textTone, reserveEyebrow })}
-  {:else}<Card {item} {cardSize} shadow={cardShadow} tone={cardTone} {mediaAspect} {mediaFit} {contentPlacement} {textTone} {reserveEyebrow} {textAlign} {media} {surface} children={itemContent} onready={oncardready} />{/if}
+  {#if card}{@render card(item, { cardSize, shadow: cardShadow, tone: cardTone, textAlign, mediaAspect, mediaFit: contentPlacement === 'overlay' ? 'cover' : mediaFit, mediaHoverZoom, contentPlacement, textTone, reserveEyebrow })}
+  {:else}<Card {item} {cardSize} shadow={cardShadow} tone={cardTone} {mediaAspect} {mediaFit} {mediaHoverZoom} {contentPlacement} {textTone} {reserveEyebrow} {textAlign} {media} {surface} children={itemContent} onready={oncardready} />{/if}
 {/snippet}
 <Section {section} inset>
   <ContentGrid class="ps-card-grid">

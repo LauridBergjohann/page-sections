@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Add optional mediaHoverZoom to card-grid and carousel data, defaulting to true in the components.
+
 - Add FeatureSection with centered incomplete rows, shared S/M/L card spans, decorative icons, standard/muted/primary circle colors and native whole-feature links. Support serializable feature data and custom icon snippets.
 
 - Add below/overlay card content placement with fixed media aspect, theme-independent light/dark copy gradients, accessible overflow and collection support. Use three-column medium cards on the twelve-column L grid in both grids and carousels; other card spans stay unchanged.

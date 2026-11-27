@@ -7,9 +7,9 @@
   import Image from './Image.svelte';
   import InlineText from './InlineText.svelte';
   import Actions from './Actions.svelte';
-  let { item, cardSize = 'm', tone = 'standard', shadow = false, mediaAspect = '3/2', mediaFit = 'contain', contentPlacement = 'below', textTone = 'light', reserveEyebrow, textAlign = 'start', headingLevel, children, media, surface, onready, class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
+  let { item, cardSize = 'm', tone = 'standard', shadow = false, mediaAspect = '3/2', mediaFit = 'contain', mediaHoverZoom = true, contentPlacement = 'below', textTone = 'light', reserveEyebrow, textAlign = 'start', headingLevel, children, media, surface, onready, class: className = '', ...rest }: Omit<HTMLAttributes<HTMLElement>, 'children'> & {
     item: T; cardSize?: CardSize; tone?: SurfaceTone; shadow?: boolean; textAlign?: 'start' | 'center'; headingLevel?: HeadingLevel;
-    mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; contentPlacement?: CardContentPlacement; textTone?: CardTextTone; reserveEyebrow?: boolean;
+    mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; mediaHoverZoom?: boolean; contentPlacement?: CardContentPlacement; textTone?: CardTextTone; reserveEyebrow?: boolean;
     children?: Snippet<[T]>; media?: Snippet<[T]>; surface?: Snippet<[T]>; onready?: (parts: CardElements<T>) => void | (() => void);
   } = $props();
   const readContext = getContext<ReadSectionContext | undefined>(SECTION_CONTEXT);
@@ -32,7 +32,7 @@
   });
 </script>
 <article {...rest} bind:this={root} aria-labelledby={titleId} class={['ps-card', className]} data-card-id={item.itemKey ?? item.id}
-  data-ps-card-size={cardSize} data-tone={tone} data-shadow={shadow} data-media-fit={contentPlacement === 'overlay' ? 'cover' : mediaFit} data-content-placement={contentPlacement} data-text-tone={textTone} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
+  data-ps-card-size={cardSize} data-tone={tone} data-shadow={shadow} data-media-fit={contentPlacement === 'overlay' ? 'cover' : mediaFit} data-media-hover-zoom={mediaHoverZoom} data-content-placement={contentPlacement} data-text-tone={textTone} style:text-align={textAlign} style:--ps-card-media-aspect={mediaAspect}>
   <div class="surface ps-shadow-surface" bind:this={surfaceElement} data-ps-card-part="surface" aria-hidden="true">{@render surface?.(item)}</div>
   <div class="media-frame" class:no-media={!media && !item.image} data-ps-card-part="media-frame">
     <div class="media-viewport">
@@ -44,11 +44,16 @@
   {#if contentPlacement === 'overlay' && href}<a class="media-link" {href} tabindex="-1" aria-hidden="true"></a>{/if}
   <!-- svelte-ignore a11y_no_noninteractive_tabindex (Fixed-height overlay copy must remain keyboard-scrollable without JavaScript.) -->
   <div class="text" bind:this={copy} data-ps-card-part="copy" tabindex={contentPlacement === 'overlay' ? 0 : undefined} role={contentPlacement === 'overlay' ? 'region' : undefined} aria-labelledby={contentPlacement === 'overlay' ? titleId : undefined}>
-    {#if showEyebrowRow}<p class="eyebrow" data-ps-card-part="eyebrow" aria-hidden={hasEyebrow ? undefined : true}>{hasEyebrow ? item.eyebrow : ''}</p>{/if}
-    <svelte:element this={`h${level}`} bind:this={title} id={titleId} class="title" data-ps-card-part="title">
-      {#if href}<a class="primary-link" {href}><span class="title-label">{item.title}</span></a>{:else}<span class="title-label">{item.title}</span>{/if}
-    </svelte:element>
-    {#if item.description ?? item.subtitle}<p class="description">{item.description ?? item.subtitle}</p>{/if}
+    {#snippet mainCopy()}
+      {#if showEyebrowRow}<p class="eyebrow" data-ps-card-part="eyebrow" aria-hidden={hasEyebrow ? undefined : true}>{hasEyebrow ? item.eyebrow : ''}</p>{/if}
+      <svelte:element this={`h${level}`} bind:this={title} id={titleId} class="title" data-ps-card-part="title">
+        {#if href && contentPlacement !== 'overlay'}<a class="primary-link" {href}><span class="title-label">{item.title}</span></a>{:else}<span class="title-label">{item.title}</span>{/if}
+      </svelte:element>
+      {#if item.description ?? item.subtitle}<p class="description">{item.description ?? item.subtitle}</p>{/if}
+    {/snippet}
+    {#if contentPlacement === 'overlay' && href}
+      <a class="copy-link" {href} aria-labelledby={titleId}>{@render mainCopy()}</a>
+    {:else}{@render mainCopy()}{/if}
     <div class="custom-content">{@render children?.(item)}</div>
     {#if item.footer}<p class="footer"><InlineText text={item.footer} /></p>{/if}
     <Actions actions={item.actions} />
@@ -65,8 +70,8 @@
   .ps-card:has(:focus-visible)::after { border-color: var(--ps-accent); }
   .ps-card[data-shadow='true']:has(:focus-visible) > .surface { box-shadow: var(--ps-card-hover-shadow, var(--ps-default-card-hover-shadow)); }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .ps-card:has(a, button):hover .media { inset: 0; }
-    .ps-card[data-media-fit='cover']:has(a, button):hover .media { transform: scale(1.06); }
+    .ps-card[data-media-hover-zoom='true']:has(a, button):hover .media { inset: 0; }
+    .ps-card[data-media-hover-zoom='true'][data-media-fit='cover']:has(a, button):hover .media { transform: scale(1.06); }
   }
   @media (hover: hover) {
     .ps-card:hover > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
@@ -96,14 +101,18 @@
   .description { margin-top: .5em; font-size: min(var(--ps-card-title-size), var(--ps-grid-body-size)); line-height: 1.5; overflow-wrap: anywhere; }
   .footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--ps-border); font-size: .875rem; }
   .text > :global(.ps-actions) { margin-top: auto; padding-top: 1rem; }
-  .text :global(.ps-actions a), .footer :global(a), .custom-content :global(:is(a, button, input, select, textarea, summary, [tabindex])) { position: relative; z-index: 2; }
+  .text :global(.ps-actions a), .footer :global(a), .custom-content :global(:is(a, button, input, select, textarea, summary, [tabindex])) { position: relative; z-index: 2; pointer-events: auto; }
   /* Overlay height follows the media ratio. Long copy stays reachable by scrolling. */
   [data-content-placement='overlay'] { grid-template-rows: minmax(0, 1fr); aspect-ratio: var(--ps-card-media-aspect); height: auto; --ps-card-overlay-ink: #fff; --ps-card-overlay-rgb: 0, 0, 0; }
   [data-content-placement='overlay'][data-text-tone='dark'] { --ps-card-overlay-ink: #111; --ps-card-overlay-rgb: 255, 255, 255; }
   [data-content-placement='overlay'] .media-frame { grid-area: 1 / 1; height: 100%; border-radius: inherit; }
   .media-link { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
-  [data-content-placement='overlay'] .text { box-sizing: border-box; grid-area: 1 / 1; align-self: end; position: relative; z-index: 2; max-height: 100%; overflow: auto; overscroll-behavior: contain; border-radius: inherit; padding-top: 36px; color: var(--ps-card-overlay-ink); background: linear-gradient(to bottom, rgba(var(--ps-card-overlay-rgb), 0), rgba(var(--ps-card-overlay-rgb), .85) 24px, rgba(var(--ps-card-overlay-rgb), .94)); }
-  [data-content-placement='overlay'] .text > * { flex-shrink: 0; }
+  [data-content-placement='overlay'] .text { box-sizing: border-box; grid-area: 1 / 1; align-self: end; position: relative; z-index: 2; max-height: 100%; overflow: auto; overscroll-behavior: contain; border-radius: inherit; padding-top: 24px; color: var(--ps-card-overlay-ink); background: linear-gradient(to top, rgba(var(--ps-card-overlay-rgb), .6), rgba(var(--ps-card-overlay-rgb), 0)); }
+  /* Let gradient padding reach the native image link; copy and actions remain selectable. */
+  [data-content-placement='overlay'] .text:has(> .copy-link) { pointer-events: none; }
+  [data-content-placement='overlay'] .text > * { pointer-events: auto; flex-shrink: 0; }
+  .copy-link, .copy-link:hover { display: block; color: inherit; text-decoration: none; }
+  .copy-link:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
   [data-content-placement='overlay'] :is(.title, .eyebrow, .description, .footer) { color: inherit; }
   [data-content-placement='overlay'] .title { height: auto; }
   [data-content-placement='overlay'] .title-label { display: block; overflow: visible; }

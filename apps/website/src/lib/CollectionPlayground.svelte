@@ -17,6 +17,7 @@
   let cardTone = $state<SurfaceTone>('muted');
   let cardShadow = $state(false);
   let descriptions = $state(true);
+  let mediaHoverZoom = $state(true);
   let contentPlacement = $state<CardContentPlacement>('below');
   let textTone = $state<CardTextTone>('light');
   let mediaAspect = $state<CardMediaAspect>('3/2');
@@ -69,6 +70,7 @@
     cardShadow,
     mediaAspect,
     mediaFit,
+    mediaHoverZoom,
     contentPlacement,
     textTone,
     textAlign
@@ -90,6 +92,7 @@
     descriptions = true;
     mediaAspect = '3/2';
     contentPlacement = 'below';
+    mediaHoverZoom = true;
     textTone = 'light';
     mediaFit = 'contain';
     textAlign = 'start';
@@ -115,6 +118,9 @@
     </label>
     <label class="toggle">
       <input type="checkbox" bind:checked={descriptions} disabled={!ready} /> Show descriptions
+    </label>
+    <label class="toggle">
+      <input type="checkbox" bind:checked={mediaHoverZoom} disabled={!ready} /> Image zoom on hover
     </label>
     <label>
       Content placement<select bind:value={contentPlacement} disabled={!ready}>

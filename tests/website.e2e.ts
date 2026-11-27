@@ -349,6 +349,7 @@ test('desktop page links reveal only the second level and retain native navigati
   const docs = menu.getByRole('link', { name: 'Sections', exact: true });
   await docs.hover();
   await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(11);
+  await expect(menu.locator('.ps-submenu:visible > ul > li > a')).toHaveText(sectionTitles);
   await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(11);
   await expect(menu.locator('.ps-submenu .ps-submenu')).toHaveCount(0);
   await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toBeVisible();
@@ -540,7 +541,7 @@ test('global search supports shortcuts, keyboard navigation and empty results', 
 test('home explains the library and getting started stays focused', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#what-is-page-sections')).toContainText('Svelte and HTML');
-  await expect(page.locator('#features .ps-card')).toHaveCount(6);
+  await expect(page.locator('#features .ps-feature')).toHaveCount(6);
   await page.goto('/getting-started/');
   await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
   await expect(page.locator('#install')).toContainText('npm install @page-sections/svelte');
@@ -573,19 +574,22 @@ test('home uses themed hero artwork, illustrated next steps and local technology
   const textBox = (await story.locator('.prose').boundingBox())!;
   expect(textBox.x + textBox.width).toBeLessThanOrEqual(imageBox.x);
   await expect(page.locator('#features-title')).toHaveText('Features');
-  await expect(page.locator('#features .ps-card img')).toHaveCount(6);
+  await expect(page.locator('#features .ps-feature svg')).toHaveCount(6);
   await expect(page.locator('#explore .title a')).toHaveText([
     'Install it or try it in the playground', 'Explore available sections', 'Make it yours — create a custom theme'
   ]);
   expect(await page.locator('#explore .title a').evaluateAll(links => links.map(link => new URL(link.href).pathname)))
     .toEqual(['/getting-started/', '/sections/', '/docs/foundations/themes/']);
-  const technologies = page.locator('#built-with .ps-card');
+  const technologies = page.locator('#built-with .ps-feature');
   await expect(technologies).toHaveCount(8);
+  await expect(page.locator('#built-with-title')).toHaveText('Techstack');
+  await expect(page.locator('#features .ps-feature').first()).toHaveAttribute('data-feature-size', 'm');
+  await expect(technologies.first()).toHaveAttribute('data-feature-size', 's');
+  await expect(technologies.locator('.description')).toHaveText(['Composable page layouts', 'Packages and releases', 'Source and collaboration', 'Hosting and deployments', 'Reactive components', 'Design and development', 'Code editing', 'AI-assisted development']);
   await expect(technologies.locator('.title')).toHaveText([
-    'Made with Page Sections', 'Available on NPM', 'Source available on GitHub', 'Hosted on Vercel',
-    'Made for Svelte', 'Developed by Laurid Bergjohann', 'Created in VS Code', 'Supported by Codex'
+    'Page Sections', 'npm', 'GitHub', 'Vercel', 'Svelte', 'Laurid Bergjohann', 'VS Code', 'Codex'
   ]);
-  expect(await technologies.evaluateAll(cards => cards.map(card => card.querySelector('.primary-link')?.getAttribute('href')))).toEqual([
+  expect(await technologies.evaluateAll(cards => cards.map(card => card.getAttribute('href')))).toEqual([
     'https://page-sections.bergjohann.com/', 'https://www.npmjs.com/package/@page-sections/svelte',
     'https://github.com/LauridBergjohann/page-sections', 'https://vercel.com/', 'https://svelte.dev/',
     'https://bergjohann.com/', 'https://code.visualstudio.com/', 'https://chatgpt.com/codex'
@@ -598,7 +602,7 @@ test('home uses themed hero artwork, illustrated next steps and local technology
   await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
   await expect.poll(() => hero.evaluate(img => img.currentSrc)).toContain('/hero-dark.webp');
   for (const id of ['github', 'vercel', 'codex']) {
-    const icon = page.locator(`#built-with [data-card-id="${id}"] img`);
+    const icon = page.locator(`#built-with [data-feature-id="${id}"] img`);
     await icon.scrollIntoViewIfNeeded();
     await expect.poll(() => icon.evaluate(img => img.currentSrc)).toContain(`/technology/${id}-dark.svg`);
     await expect.poll(() => icon.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
@@ -703,8 +707,8 @@ test('minimal demo renders a complete page without documentation infrastructure'
   await context.close();
 });
 
-const sectionSlugs = ['features', 'card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video', 'timeline'];
-const sectionTitles = ['Features', 'CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Video', 'Timeline'];
+const sectionSlugs = ['card-grid', 'carousel', 'code', 'features', 'headings', 'hero', 'image', 'panel', 'rich-text', 'timeline', 'video'];
+const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Features', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Timeline', 'Video'];
 
 test('documentation teaches concepts in order and chapter landing pages explain their scope', async ({ page }) => {
   await page.goto('/docs/');

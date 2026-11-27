@@ -14,6 +14,7 @@ for (const [width, spans, columns, gap] of [[390, [2, 2, 4], 4, 12], [720, [2, 2
         expect(box.width).toBeCloseTo(expected, 1);
         expect(box.height).toBeCloseTo(box.width, 1);
         await expect(card).toHaveAttribute('data-media-fit', 'cover');
+        await expect(card).toHaveAttribute('data-media-hover-zoom', 'false');
         await expect(card.locator('img')).toHaveCSS('object-fit', 'cover');
         const media = (await card.locator('.media-frame').boundingBox())!;
         expect(media.height).toBeCloseTo(box.height, 1);
@@ -38,6 +39,7 @@ test('overlay colors, independent links and long copy work across themes', async
     await expect(page.locator('#custom .title')).toHaveCSS('color', 'rgb(17, 17, 17)');
   }
   const custom = (await page.locator('#custom .ps-card').boundingBox())!;
+  await expect(page.locator('#custom .ps-card')).toHaveAttribute('data-media-hover-zoom', 'false');
   expect(custom.width / custom.height).toBeCloseTo(4 / 3, 2);
   const long = page.locator('#long .ps-card');
   expect((await long.boundingBox())!.height).toBeCloseTo(160, 1);
@@ -62,9 +64,19 @@ test('overlay dimensions and keyboard scrolling need no JavaScript', async ({ br
   const box = (await card.boundingBox())!;
   expect(box.width).toBeCloseTo(330, 1);
   expect(box.height).toBeCloseTo(box.width, 1);
+  // Both the text and the transparent gradient padding follow native links without hydration.
+  await card.locator('.description').click();
+  await expect(page).toHaveURL(/#destination$/);
+  await page.goto('/card-overlay/');
+  await card.scrollIntoViewIfNeeded();
+  const text = (await card.locator('.text').boundingBox())!;
+  await page.mouse.click(text.x + 4, text.y + 4);
+  await expect(page).toHaveURL(/#destination$/);
   const copy = page.locator('#long .text');
   await copy.focus();
   await page.keyboard.press('End');
   await expect.poll(() => copy.evaluate(el => el.scrollTop)).toBeGreaterThan(100);
+  await page.locator('#long').getByRole('link', { name: 'Independent action' }).click();
+  await expect(page).toHaveURL(/#action$/);
   await context.close();
 });

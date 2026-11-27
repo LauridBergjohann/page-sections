@@ -1,5 +1,23 @@
 import { expect, test } from '@playwright/test';
 
+test('image hover zoom can be disabled and enabled for contain and cover', async ({ page }) => {
+  await page.goto('/chip-card/');
+  await page.getByRole('checkbox', { name: 'Image zoom on hover' }).uncheck();
+  for (const fit of ['contain', 'cover']) {
+    const card = page.locator(`.ps-card[data-media-fit="${fit}"]`);
+    await page.mouse.move(0, 0);
+    const before = await card.locator('.media').boundingBox();
+    await card.hover();
+    await expect(card.locator('.media')).toHaveCSS('transform', 'none');
+    await expect(card.locator('.media')).toHaveCSS('top', fit === 'contain' ? '12px' : '0px');
+    expect(await card.locator('.media').boundingBox()).toEqual(before);
+  }
+  await page.getByRole('checkbox', { name: 'Image zoom on hover' }).check();
+  const card = page.locator('.ps-card[data-media-fit="cover"]');
+  await card.hover();
+  await expect(card.locator('.media')).toHaveCSS('transform', 'matrix(1.06, 0, 0, 1.06, 0, 0)');
+});
+
 test('chip retains padded icon/label geometry and native keyboard selection', async ({ page }) => {
   await page.goto('/chip-card/');
   const chip = page.getByRole('button', { name: 'Work', exact: true });

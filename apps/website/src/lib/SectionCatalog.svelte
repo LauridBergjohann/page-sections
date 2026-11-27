@@ -19,4 +19,5 @@
   cardTone="standard"
   cardShadow={true}
   mediaFit="contain"
+  mediaHoverZoom={false}
 />

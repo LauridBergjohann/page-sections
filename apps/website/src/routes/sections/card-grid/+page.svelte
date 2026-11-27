@@ -75,14 +75,16 @@
         to place text at the bottom of the image. Overlay always uses cover, and
         <code>mediaAspect</code>
         fixes the entire card ratio. <code>textTone="light"</code> (default) uses pure white text
-        over a dark gradient; <code>textTone="dark"</code> uses dark text over a light gradient. These
-        local colors stay independent of the page theme and do not recolor the image.
+        over a subtle dark gradient limited to the copy area; <code>textTone="dark"</code> uses dark text
+        over a light gradient. These local colors stay independent of the page theme and do not recolor
+        the image.
       </p>
       <p>
         Use short titles and teasers for overlay cards. Longer copy, custom content and actions
         remain reachable in a keyboard-focusable scrolling text area without enlarging the card.
-        Text remains selectable, the image and title share the main link, and actions remain
-        independent. Missing images retain the same fixed card shape and gradient.
+        Text remains selectable, the image, gradient padding, title and description share the main
+        link, and actions remain independent. Missing images retain the same fixed card shape and
+        gradient.
       </p>
       <p>
         Cards share one layout in the container-based ContentGrid. Supply a description when an item
@@ -168,6 +170,10 @@
               <td>contain</td>
             </tr>
             <tr>
+              <td><code>mediaHoverZoom</code></td><td>boolean</td><td>
+                true; false disables image enlargement on hover
+              </td>
+            </tr><tr>
               <td><code>contentPlacement</code></td><td>
                 <a href={base + '/docs/reference/types/#card-content-placement'}>
                   CardContentPlacement
@@ -219,7 +225,7 @@
                   <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>;
                   mediaFit:
                   <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a>;
-                  reserveEyebrow: boolean &#125;]&gt;
+                  mediaHoverZoom: boolean; reserveEyebrow: boolean &#125;]&gt;
                 </code>
               </td>
               <td>Optional complete card replacement</td>

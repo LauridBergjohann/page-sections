@@ -80,14 +80,16 @@
         to place text at the bottom of the image. Overlay always uses cover, and
         <code>mediaAspect</code>
         fixes the entire card ratio. <code>textTone="light"</code> (default) uses pure white text
-        over a dark gradient; <code>textTone="dark"</code> uses dark text over a light gradient. These
-        local colors stay independent of the page theme and do not recolor the image.
+        over a subtle dark gradient limited to the copy area; <code>textTone="dark"</code> uses dark text
+        over a light gradient. These local colors stay independent of the page theme and do not recolor
+        the image.
       </p>
       <p>
         Use short titles and teasers for overlay cards. Longer copy, custom content and actions
         remain reachable in a keyboard-focusable scrolling text area without enlarging the card.
-        Text remains selectable, the image and title share the main link, and actions remain
-        independent. Missing images retain the same fixed card shape and gradient.
+        Text remains selectable, the image, gradient padding, title and description share the main
+        link, and actions remain independent. Missing images retain the same fixed card shape and
+        gradient.
       </p>
       <p>
         These low-level building blocks are useful when composing a custom section. Card supplies
@@ -100,7 +102,9 @@
         card. With <code>mediaFit="contain"</code>, the image expands through its reserved padding
         to the edges of the media area, preserving its proportions and the complete image. With
         <code>mediaFit="cover"</code>, a stronger zoom stays clipped to the media frame and cannot
-        cover the text. Reduced motion disables image enlargement.
+        cover the text. Set <code>mediaHoverZoom=&#123;false&#125;</code> to disable image enlargement
+        while retaining border and shadow feedback. This option also works on CardGridSection and CarouselSection.
+        Reduced motion disables image enlargement.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
@@ -125,11 +129,11 @@
         Generic <code>
           T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>
         </code>; required item. Optional cardSize (m), shadow (false), mediaAspect (3/2; also 4/3 or
-        1/1), mediaFit (contain), contentPlacement (below), textTone (light; overlay only),
-        reserveEyebrow (otherwise follows the item), textAlign (start/center), headingLevel
-        (inherited, standalone h2), media(item), surface(item), children(item) and onready(parts).
-        Card forwards HTMLElement attributes, including class and event callbacks; card
-        identity/accessibility attributes remain component-owned.
+        1/1), mediaFit (contain), mediaHoverZoom (true), contentPlacement (below), textTone (light;
+        overlay only), reserveEyebrow (otherwise follows the item), textAlign (start/center),
+        headingLevel (inherited, standalone h2), media(item), surface(item), children(item) and
+        onready(parts). Card forwards HTMLElement attributes, including class and event callbacks;
+        card identity/accessibility attributes remain component-owned.
       </p>
       <h3 id="complete-carditem-model">
         Complete <a href={base + '/docs/reference/types/#card-item'}>CardItem</a> model

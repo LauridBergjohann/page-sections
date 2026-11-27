@@ -440,8 +440,8 @@
             >; mediaAspect?: <a href={base + '/docs/reference/types/#card-media-aspect'}
               >CardMediaAspect</a
             >; mediaFit?: <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a
-            >; contentPlacement?: <a href={base + '/docs/reference/types/#card-content-placement'}
-              >CardContentPlacement</a
+            >; mediaHoverZoom?: boolean; contentPlacement?: <a
+              href={base + '/docs/reference/types/#card-content-placement'}>CardContentPlacement</a
             >; textTone?: <a href={base + '/docs/reference/types/#card-text-tone'}>CardTextTone</a
             >; itemSpan?: <a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a
             >; textAlign?: 'start' | 'center' &#125;</code
@@ -500,6 +500,11 @@
                   <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a>
                 </code>
               </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>mediaHoverZoom</code></td><td><code>boolean</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
             </tr>
             <tr>
               <td><code>contentPlacement</code></td><td>
@@ -827,8 +832,8 @@
             >; mediaAspect?: <a href={base + '/docs/reference/types/#card-media-aspect'}
               >CardMediaAspect</a
             >; mediaFit?: <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a
-            >; contentPlacement?: <a href={base + '/docs/reference/types/#card-content-placement'}
-              >CardContentPlacement</a
+            >; mediaHoverZoom?: boolean; contentPlacement?: <a
+              href={base + '/docs/reference/types/#card-content-placement'}>CardContentPlacement</a
             >; textTone?: <a href={base + '/docs/reference/types/#card-text-tone'}>CardTextTone</a
             >; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string &#125;</code
           ></pre>
@@ -877,6 +882,11 @@
                   <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a>
                 </code>
               </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>mediaHoverZoom</code></td><td><code>boolean</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
             </tr>
             <tr>
               <td><code>contentPlacement</code></td><td>

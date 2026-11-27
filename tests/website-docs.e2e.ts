@@ -139,7 +139,7 @@ test('section and homepage illustrations use tightly cropped art without applica
   const sources = await page.locator('#section-catalog img').evaluateAll(images => images.map(image => image.getAttribute('src')!));
   await page.goto('/');
   sources.push(...await page.locator('#features img, #explore img').evaluateAll(images => images.map(image => image.getAttribute('src')!)));
-  expect(sources.length).toBe(20);
+  expect(sources.length).toBe(14);
   for (const src of sources) {
     const response=await request.get(src);
     const svg=await response.text();
@@ -166,6 +166,12 @@ test('section and homepage illustrations use tightly cropped art without applica
     for (const margin of margins) expect(Math.abs(margin), src).toBeLessThanOrEqual(1);
   }
   await page.goto('/sections/');
+  const staticCard = page.locator('#section-catalog .ps-card').first();
+  const mediaBefore = await staticCard.locator('.media').boundingBox();
+  await staticCard.hover();
+  await expect(staticCard).toHaveAttribute('data-media-hover-zoom', 'false');
+  await expect(staticCard.locator('.media')).toHaveCSS('top', '12px');
+  expect(await staticCard.locator('.media').boundingBox()).toEqual(mediaBefore);
   for (const width of [390,1440]) {
     await page.setViewportSize({width,height:1000});
     await page.locator('#section-catalog').screenshot({path:`.artifacts/cards-transparent-${width}.png`});
@@ -301,6 +307,13 @@ for (const route of ['/docs/components/card/', '/sections/card-grid/', '/section
   test('card overlay playground updates preview and source on ' + route, async ({ page }) => {
     await page.goto(route);
     await page.getByRole('combobox', { name: 'Content placement', exact: true }).selectOption('overlay');
+    await page.getByRole('checkbox', { name: 'Image zoom on hover', exact: true }).uncheck();
+    const preview = page.locator('#playground .ps-card').first();
+    await expect(preview).toHaveAttribute('data-media-hover-zoom', 'false');
+    await expect(page.locator('#playground pre')).toContainText('mediaHoverZoom={false}');
+    await preview.hover();
+    await expect(preview.locator('.media')).toHaveCSS('transform', 'none');
+    await page.locator('#playground').screenshot({ path: test.info().outputPath('overlay-gradient.png') });
     await page.getByRole('combobox', { name: 'Media aspect', exact: true }).selectOption('1/1');
     await page.getByRole('combobox', { name: 'Overlay text tone', exact: true }).selectOption('dark');
     const card = page.locator('#playground .ps-card').first();
