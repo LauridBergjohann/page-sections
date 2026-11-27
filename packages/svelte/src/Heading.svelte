@@ -27,6 +27,7 @@
 <style>
   .headline {
     margin: 0;
+    color: var(--ps-ink);
     font-weight: 650;
     line-height: 1.25;
     overflow-wrap: anywhere;

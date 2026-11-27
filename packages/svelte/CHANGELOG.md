@@ -16,6 +16,8 @@
 
 ### Patch Changes
 
+- Use the shared body token consistently for section copy, rich text and panels. Keep headings and navigation on ink, including Markdown and custom section headings, in both color modes.
+
 - Clip both card media modes to their rounded frame during hover and keep the card border visible above images. Align contained media with the 12px text inset.
 
 - Updated dependencies

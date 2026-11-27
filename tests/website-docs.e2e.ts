@@ -1,5 +1,41 @@
 import { expect, test } from '@playwright/test';
 
+test('section copy shares body colors while headings and navigation retain ink', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  const expectToken = async (selector: string, token: string) => {
+    const elements = page.locator(selector);
+    expect(await elements.count(), selector).toBeGreaterThan(0);
+    for (const element of await elements.all()) {
+      await expect.poll(() => element.evaluate((el, name) => {
+        const probe = document.createElement('span');
+        probe.style.color = `var(${name})`;
+        el.append(probe);
+        const expected = getComputedStyle(probe).color;
+        probe.remove();
+        return getComputedStyle(el).color === expected;
+      }, token), { message: selector }).toBe(true);
+    }
+  };
+  for (const mode of ['Light', 'Dark']) {
+    await page.goto('/');
+    await page.locator('.satellite.right').getByRole('button', { name: mode, exact: true }).click();
+    await expect(page.locator('.ps-shell')).toHaveAttribute('data-ps-theme', mode.toLowerCase());
+    await expectToken('#welcome .introduction, #what-is-page-sections .prose p, #features .description, #explore .description, #built-with .description', '--ps-body');
+    await expectToken('#welcome h1, #what-is-page-sections h2, #features .title, .desktop-menu .ps-main-menu > li > a', '--ps-ink');
+    await page.locator('#what-is-page-sections').screenshot({ path: test.info().outputPath(`copy-${mode}.png`) });
+    await page.goto('/sections/');
+    await expect(page.locator('.ps-shell')).toHaveAttribute('data-ps-theme', mode.toLowerCase());
+    const copy = '#headings-example .introduction, #hero-example .introduction, #image-example .ps-media-pair p, #video-example .ps-media-pair p, #panel-example .ps-prose p, #rich-text-example .ps-prose p, #rich-text-example .ps-prose li, #features-example .description, #card-grid-example .description, #carousel-example .description';
+    await expectToken(copy, '--ps-body');
+    await expectToken('#rich-text-example h3, #page-heading h1, #hero-example h3, #features-example .title, #card-grid-example .title', '--ps-ink');
+    await expectToken('#hero-example .ps-button[data-variant="primary"]', '--ps-on-accent');
+    await expectToken('#rich-text-example .ps-prose a', '--ps-accent');
+    await page.locator('.ps-shell').evaluate(el => (el as HTMLElement).style.setProperty('--ps-body', '#8b2456'));
+    await expectToken(copy, '--ps-body');
+    await expectToken('#rich-text-example h3, #page-heading h1', '--ps-ink');
+  }
+});
+
 test('top-level icons precede labels at every layout size and open parents stay highlighted', async ({page}) => {
   await page.goto('/');
   for (const width of [390, 700, 1000, 1280, 1700, 1920, 2560]) {

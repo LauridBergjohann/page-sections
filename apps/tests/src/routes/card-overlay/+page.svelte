@@ -4,6 +4,7 @@
     Sections,
     Card,
     CardGridSection,
+    RichTextContent,
     Section,
     type SectionData
   } from '@page-sections/svelte';
@@ -40,7 +41,11 @@
     mediaHoverZoom={false}
     mediaAspect="4/3"
   >
-    {#snippet card(item, options)}<Card {item} {...options} />{/snippet}
+    {#snippet card(item, options)}
+      <Card {item} {...options}>
+        <RichTextContent content={{ body: '### Custom heading\n\nCustom overlay copy.' }} />
+      </Card>
+    {/snippet}
   </CardGridSection>
   <Section section={{ id: 'long', title: 'Long copy' }}>
     <div style="width: 240px">

@@ -90,12 +90,12 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             <tr>
               <td><code>--ps-ink</code></td>
               <td>#172330</td>
-              <td>Main text</td>
+              <td>Headings, navigation and controls</td>
             </tr>
             <tr>
               <td><code>--ps-body</code></td>
               <td>#465564</td>
-              <td>Supporting text</td>
+              <td>Section body copy, introductions and descriptions</td>
             </tr>
             <tr>
               <td><code>--ps-accent</code></td>

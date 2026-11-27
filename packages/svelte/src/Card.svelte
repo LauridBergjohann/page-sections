@@ -114,6 +114,7 @@
   .copy-link, .copy-link:hover { display: block; color: inherit; text-decoration: none; }
   .copy-link:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
   [data-content-placement='overlay'] :is(.title, .eyebrow, .description, .footer) { color: inherit; }
+  [data-content-placement='overlay'] .custom-content :global(:is(.ps-prose, h1, h2, h3, h4, h5, h6)) { color: inherit; }
   [data-content-placement='overlay'] .title { height: auto; }
   [data-content-placement='overlay'] .title-label { display: block; overflow: visible; }
   [data-content-placement='overlay'] .primary-link::after { display: none; }

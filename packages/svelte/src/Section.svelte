@@ -61,7 +61,7 @@
 </section>
 <style>
   .ps-section-stage { position: relative; z-index: 3; padding: 0 var(--ps-grid-gap) calc(var(--ps-grid-gap) * var(--ps-spacing-factor, 1)); min-width: 0; box-sizing: border-box; }
-  .ps-section { container: ps-content / inline-size; position: relative; isolation: isolate; width: min(var(--ps-section-width, 100%), 100%); margin-inline: auto; min-width: 0; box-sizing: border-box; color: var(--ps-ink); scroll-margin-top: var(--ps-scroll-offset, 1rem); }
+  .ps-section { container: ps-content / inline-size; position: relative; isolation: isolate; width: min(var(--ps-section-width, 100%), 100%); margin-inline: auto; min-width: 0; box-sizing: border-box; color: var(--ps-body); scroll-margin-top: var(--ps-scroll-offset, 1rem); }
   .ps-section-content { max-width: 1536px; margin-inline: auto; padding: calc(var(--ps-grid-gap) * var(--ps-spacing-factor, 1)) var(--ps-grid-gap); font: var(--ps-grid-body-size)/var(--ps-grid-body-line-height) var(--ps-font-family); }
   [data-inset='false'] > .ps-section-content { padding-inline: 0; }
   .ps-section-surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; }

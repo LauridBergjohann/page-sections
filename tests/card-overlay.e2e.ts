@@ -37,6 +37,8 @@ test('overlay colors, independent links and long copy work across themes', async
     await page.keyboard.press('Escape');
     await expect(card.locator('.title')).toHaveCSS('color', 'rgb(255, 255, 255)');
     await expect(page.locator('#custom .title')).toHaveCSS('color', 'rgb(17, 17, 17)');
+    await expect(page.locator('#custom .ps-prose p')).toHaveCSS('color', 'rgb(17, 17, 17)');
+    await expect(page.locator('#custom .ps-prose h3')).toHaveCSS('color', 'rgb(17, 17, 17)');
   }
   const custom = (await page.locator('#custom .ps-card').boundingBox())!;
   await expect(page.locator('#custom .ps-card')).toHaveAttribute('data-media-hover-zoom', 'false');

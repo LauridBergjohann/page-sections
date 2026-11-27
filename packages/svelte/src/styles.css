@@ -34,7 +34,9 @@
 .ps-media-pair { display: grid; gap: var(--ps-grid-gap, 16px); align-items: center; }
 .ps-media-pair > * { min-width: 0; }
 @container ps-content (min-width: 600px) { .ps-media-pair { grid-template-columns: 1.7fr 1fr; } .ps-media-pair[data-side='right'] { grid-template-columns: 1fr 1.7fr; } .ps-media-pair[data-side='right'] > :first-child { order: 2; } }
-.ps-prose { overflow-wrap: anywhere; line-height: 1.7; }
+/* Shared copy roles also cover Markdown and application-authored section headings. */
+:where(.ps-section, .ps-prose, .ps-panel) :where(h1, h2, h3, h4, h5, h6) { color: var(--ps-ink); }
+.ps-prose { color: var(--ps-body); overflow-wrap: anywhere; line-height: 1.7; }
 .ps-prose > :first-child { margin-top: 0; } .ps-prose > :last-child { margin-bottom: 0; }
 .ps-prose pre { overflow: auto; padding: 1rem; background: var(--ps-section-muted); }
 .ps-prose img, .ps-prose video { max-width: 100%; }
