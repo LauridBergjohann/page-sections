@@ -198,8 +198,8 @@ test('headings, compact code tools and nested routes use the website design syst
   await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto('/docs/foundations/installation/');
   const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
-  await expect(breadcrumb.getByRole('link').nth(0)).toHaveAttribute('href', '/docs/');
-  await expect(breadcrumb.getByRole('link').nth(1)).toHaveAttribute('href', '/docs/foundations/');
+  await expect(breadcrumb.getByRole('link').nth(1)).toHaveAttribute('href', '/docs/');
+  await expect(breadcrumb.getByRole('link').nth(2)).toHaveAttribute('href', '/docs/foundations/');
   await expect(breadcrumb.locator('[aria-current="page"]')).toHaveText('Installation');
   await expect(page.locator('main h1')).toHaveCSS('font-size', '32px');
   await expect(page.locator('.ps-left-sidebar summary svg').first()).toHaveClass(/lucide/);
@@ -314,7 +314,7 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await docs.click();
   await expect(page).toHaveURL(/\/docs\/$/);
   await expect(docs).toHaveCSS('font-weight', '650');
-  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toBeVisible();
   expect((await sidebar.boundingBox())!.y).toBe(initialTop);
 });
 
@@ -375,11 +375,11 @@ test('desktop page links reveal only the second level and retain native navigati
   await newTab.close();
   await docs.click();
   await expect(page).toHaveURL(/\/sections\/$/);
-  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toBeVisible();
   await page.locator('#section-catalog').getByRole('link', { name: 'Hero', exact: true }).click();
   await expect(page).toHaveURL(/\/sections\/hero\/$/);
   const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
-  await expect(breadcrumb.locator('li')).toHaveCount(2);
+  await expect(breadcrumb.locator('li')).toHaveCount(3);
   await expect(breadcrumb).not.toContainText('Home');
   await expect(page.locator('.ps-left-sidebar [aria-current="page"]')).toHaveText('Hero');
   await expect(page.locator('.reading-path [rel="next"]')).toContainText('Image');
@@ -1130,3 +1130,43 @@ test('timeline width controls preserve overlay navigation and switch the right m
   await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(3000);
   await expect(page.locator('#options')).toContainText('The shared data platform');
 });
+
+for (const javaScriptEnabled of [false, true]) {
+  test('Home breadcrumbs work on every page with JavaScript ' + javaScriptEnabled, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, javaScriptEnabled });
+    const page = await context.newPage();
+    for (const width of [320, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      for (const [path, current, count] of [
+        ['/sections/', 'Sections', 2], ['/docs/', 'Documentation', 2],
+        ['/about/', 'About', 2], ['/docs/foundations/installation/', 'Installation', 4]
+      ] as const) {
+        await page.goto(path);
+        const trail = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
+        await expect(trail.locator('li')).toHaveCount(count);
+        await expect(trail.locator('[aria-current="page"]')).toHaveText(current);
+        const home = trail.getByRole('link', { name: 'Home', exact: true });
+        await expect(home).toHaveAttribute('href', '/');
+        await expect(home.locator('svg')).toBeVisible();
+        await expect(home).toHaveText('');
+        const tops = await trail.locator('li').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+        expect(new Set(tops).size).toBe(1);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+        if (width === 1920) {
+          const firstSurface = page.locator('.ps-section[data-nested="false"][data-background-color="standard"] > .ps-section-surface').first();
+          await expect(firstSurface).toHaveCSS('border-top-left-radius', '12px');
+        }
+        if (javaScriptEnabled && current === 'Installation') {
+          await page.screenshot({ path: test.info().outputPath(`breadcrumb-${width}.png`) });
+        }
+        if (width === 320) {
+          await home.focus();
+          await page.keyboard.press('Enter');
+        } else await home.click();
+        await expect(page).toHaveURL(baseURL + '/');
+        await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+      }
+    }
+    await context.close();
+  });
+}

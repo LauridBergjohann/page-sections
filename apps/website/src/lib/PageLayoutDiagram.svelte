@@ -1,4 +1,5 @@
 <script lang="ts">
+  import House from '@lucide/svelte/icons/house';
   let {
     kind
   }: { kind: 'header' | 'breadcrumbs' | 'content-page' | 'headings-and-anchors' | 'footer' } =
@@ -23,6 +24,9 @@
       <span>Brand</span><strong>Header · main navigation</strong><span>Tools</span>
     </div>
     <div class:highlight={kind === 'breadcrumbs'} class="crumbs">
+      <span aria-label="Home"><House size={14} aria-hidden="true" /></span><span aria-hidden="true">
+        ›
+      </span>
       Guides <span aria-hidden="true">›</span> Garden <span aria-hidden="true">›</span> Planting
     </div>
     <div class:highlight={kind === 'content-page'} class="main">

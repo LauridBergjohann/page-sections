@@ -40,6 +40,7 @@
 {/snippet}
 
 <ContentPage
+  breadcrumbHomeHref={base + '/'}
   {...rest}
   page={{
     ...page,

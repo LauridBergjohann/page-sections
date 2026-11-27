@@ -15,8 +15,6 @@
       { label: 'Planting', href: '/guides/garden/planting/' },
     ],
   }}
-  showContentMenu
-  contentMenuLabel="In this guide"
 >
   <Section
     section={{ id: 'soil', title: 'Prepare the soil', headline: 'Prepare the soil' }}
@@ -107,53 +105,51 @@
   >
     <div class="prose">
       <p>
-        Use the same navigation tree for the menu, sidebar and breadcrumbs. The first breadcrumb is
-        the main-menu entry; Home is reachable through the logo. Breadcrumbs accepts items and an
-        optional label. It renders nothing with fewer than two items and marks the final entry with
-        aria-current="page". The trail stays on one line. Labels that do not fit are shortened with
-        an ellipsis; their full text remains available to assistive technology.
+        Use the same navigation tree for the menu, sidebar and breadcrumbs. Supply the path from the
+        main-menu entry through the current page. Breadcrumbs automatically adds an icon-only Home
+        link at the beginning. An existing first entry pointing to Home is reused, so it is never
+        shown twice. An empty path or a path containing only Home renders no breadcrumb. Every other
+        path is visible, including a single page such as Documentation or About.
       </p>
     </div>
   </Section>
   <Section
     section={{
-      id: 'automatic-navigation',
-      title: 'Automatic content menu',
-      headline: 'Automatic content menu',
+      id: 'home-link',
+      title: 'Home and base paths',
+      headline: 'Home and base paths',
       background: { color: 'standard', size: 'standard' }
     }}
   >
     <div class="prose">
       <p>
-        <code>showContentMenu</code> registers section IDs and titles automatically. It displays a sticky
-        right sidebar in wide windows or a sticky button with a popup in smaller windows. The active bullet
-        follows the reading position. Short last sections are selected at the end of the document. Reordered,
-        added or removed sections update the list. The compact button sits 12 pixels from both the right
-        edge and the beginning of the page's first section. It scrolls up with the content, then docks
-        12 pixels below the viewport edge. A permanently fixed header reserves its own height above the
-        button. While the popup is open, the button uses the accent color and selection background, matching
-        ButtonGroup; closing it restores its normal appearance.
+        The Home icon links to <code>/</code> by default. If your application lives under a base
+        path, set <code>breadcrumbHomeHref="/my-app/"</code> on ContentPage. Set
+        <code>breadcrumbHomeLabel="Startseite"</code> to translate its accessible name and tooltip.
+        When using Breadcrumbs directly, the equivalent props are <code>homeHref</code> and
+        <code>homeLabel</code>. The navigation landmark's label can be set with <code>label</code>.
       </p>
       <p>
-        Native anchor links work without JavaScript. The enhanced menu adds active-state tracking
-        and Escape dismissal. No entries means no menu or reserved rail.
+        ContentPage keeps the breadcrumb row reserved even on the homepage, so content and sidebars
+        retain their vertical position when moving between pages.
       </p>
     </div>
   </Section>
   <Section
     section={{
-      id: 'sectionnavigation',
-      title: 'SectionNavigation',
-      headline: 'SectionNavigation',
+      id: 'accessibility',
+      title: 'Accessibility and small screens',
+      headline: 'Accessibility and small screens',
       background: { color: 'standard', size: 'standard' }
     }}
   >
     <div class="prose">
       <p>
-        For a manually supplied list, SectionNavigation remains a small stateless building block. It
-        accepts items (id and title), label (default “On this page”) and variant (horizontal or
-        sidebar). It does not observe scrolling. ContentPage owns the complete automatic
-        content-menu behavior.
+        Home and ancestor pages use native links that work with the keyboard and without JavaScript.
+        The Home icon has the accessible name “Home”. The final entry is plain text marked with
+        <code>aria-current="page"</code>. Breadcrumbs stay on one line; long labels are shortened
+        with an ellipsis while their full text remains available to assistive technology. The Home
+        icon keeps its width even on narrow screens.
       </p>
     </div>
   </Section>

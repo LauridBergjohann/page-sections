@@ -43,9 +43,29 @@ it('keeps page metadata separate from visible content', () => {
   expect(body).toContain('aria-label="Page heading"');
   expect(head).toContain('<title>Browser title</title>');
 });
-it('omits empty content menus and single-entry breadcrumbs on the server', () => {
+it('omits empty content menus and Home-only breadcrumbs on the server', () => {
   expect(render(ContentPage, { props: { page: { title: 'Empty' }, showContentMenu: true } }).body).not.toContain('class="ps-content-menu-slot');
-  expect(render(Breadcrumbs, { props: { items: [{ label: 'Docs', href: '/docs/' }] } }).body).not.toContain('<nav');
+  for (const items of [[], [{ label: 'Home', href: '/' }]]) {
+    expect(render(Breadcrumbs, { props: { items } }).body).not.toContain('<nav');
+  }
+});
+it('adds an icon-only Home link to even a single-page breadcrumb', () => {
+  const { body } = render(Breadcrumbs, { props: { items: [{ label: 'Docs', href: '/docs/' }] } });
+  expect(body).toContain('href="/" aria-label="Home"');
+  expect(body).toContain('<svg');
+  expect(body).not.toContain('>Home<');
+  expect(body).toMatch(/aria-current="page"[^>]*>Docs<\/span>/);
+  expect(body).not.toContain('href="/docs/"');
+});
+it('reuses an existing Home entry and supports a localized site root through ContentPage', () => {
+  const { body } = render(ContentPage, { props: {
+    page: { title: 'Docs', breadcrumbs: [{ label: 'Start', href: '/app' }, { label: 'Docs' }] },
+    breadcrumbHomeHref: '/app/', breadcrumbHomeLabel: 'Startseite'
+  } });
+  expect(body.match(/<li\b/g)).toHaveLength(2);
+  expect(body).toContain('href="/app/" aria-label="Startseite"');
+  expect(body).not.toContain('>Start<');
+  expect(render(Breadcrumbs, { props: { items: [{ label: 'Docs' }], homeHref: 'javascript:alert(1)' } }).body).not.toContain('javascript:');
 });
 it('decouples heading size from semantics and renders heading sections from JSON', () => {
   for (const level of [1, 2, 3] as const) for (const size of ['m', 'l', 'xl'] as const) {

@@ -55,8 +55,9 @@
   <ContentPage
     page={{
       title: 'Planting',
-      breadcrumbs: kind === 'breadcrumbs' && !enabled ? [fullPath[2]] : fullPath
+      breadcrumbs: kind === 'breadcrumbs' && !enabled ? [] : fullPath
     }}
+    breadcrumbHomeHref={base + '/'}
     showContentMenu={showSidebars}
     leftSidebar={showSidebars ? sidebar : undefined}
   >

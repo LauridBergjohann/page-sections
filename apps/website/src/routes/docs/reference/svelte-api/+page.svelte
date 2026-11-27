@@ -88,7 +88,7 @@
             </tr>
             <tr>
               <td><code>ContentPage</code></td>
-              <td>Main content; page</td>
+              <td>Main content; page, breadcrumbHomeHref, breadcrumbHomeLabel</td>
               <td><a href={base + '/docs/page-layout/content-page/'}>Pages</a></td>
             </tr>
             <tr>
@@ -225,13 +225,15 @@
             </tr>
             <tr>
               <td><code>Breadcrumbs</code></td>
-              <td>Site ancestry; items</td>
-              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs and index</a></td>
+              <td>Site ancestry with automatic Home icon; items, label, homeHref, homeLabel</td>
+              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs</a></td>
             </tr>
             <tr>
               <td><code>SectionNavigation</code></td>
               <td>Explicit anchor list; items</td>
-              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs and index</a></td>
+              <td>
+                <a href={base + '/docs/page-layout/headings-and-anchors/'}>Headings and anchors</a>
+              </td>
             </tr>
             <tr>
               <td><code>Sections</code></td>

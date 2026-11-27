@@ -228,9 +228,10 @@
         Place a HeadingSection or HeroSection with headingLevel: 1 directly in the page content. It
         controls its own background, position and typography, like every other section. Breadcrumbs
         remain separate. Supply the path from the first main-menu entry through the current page;
-        exclude Home. A one-entry breadcrumb is hidden. Its row remains reserved, including on pages
-        without breadcrumbs, so the content and sidebars keep their vertical position. The logo
-        links to Home.
+        the component adds an icon-only Home link automatically. Only a trail containing Home alone
+        is hidden. Set breadcrumbHomeHref for an application base path and breadcrumbHomeLabel to
+        translate the icon's accessible label. The row remains reserved, including on the homepage,
+        so the content and sidebars keep their vertical position.
       </p>
       <p>
         Supply exactly one h1. The main landmark uses page.title as its accessible label, unless

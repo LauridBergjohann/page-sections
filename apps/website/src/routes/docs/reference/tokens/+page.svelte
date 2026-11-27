@@ -508,8 +508,9 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         </table>
       </div>
       <p>
-        Breadcrumbs consumes these generated viewport sizes and minimum heights, allowing wrapping
-        to grow beyond the minimum. Header consumes the generated menu and satellite geometry.
+        Breadcrumbs uses these generated viewport sizes and minimum heights. Its trail stays on one
+        line, with ellipses for long labels and a fixed-width Home icon. Header consumes the
+        generated menu and satellite geometry.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>

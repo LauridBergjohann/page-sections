@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Prepend an accessible icon-only Home link in Breadcrumbs, including single-page trails. Hide Home-only trails, reuse an existing Home entry, and expose site-root and label overrides through Breadcrumbs and ContentPage.
+
 - Add mediaHoverZoom (default true) to cards, grids and carousels. Refine overlay gradients to a translucent fade within the copy area and make descriptions and gradient padding follow the native card link while actions keep their own destinations.
 
 - Add FeatureSection with centered incomplete rows, shared S/M/L card spans, decorative icons, standard/muted/primary circle colors and native whole-feature links. Support serializable feature data and custom icon snippets.
