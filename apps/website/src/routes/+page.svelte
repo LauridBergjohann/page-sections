@@ -58,6 +58,7 @@
   <ImageSection
     section={{
       id: 'what-is-page-sections',
+      headingAlign: 'center',
       title: 'What is Page Sections?',
       headline: 'From content to a complete page.',
       image: {
@@ -89,6 +90,7 @@
   <FeatureSection
     section={{
       id: 'features',
+      headingAlign: 'center',
       title: 'Why Page Sections?',
       headline: 'Features',
       introduction: 'A consistent foundation with room for your own design.',
@@ -151,6 +153,7 @@
   <CardGridSection
     section={{
       id: 'explore',
+      headingAlign: 'center',
       title: 'Explore',
       headline: 'See it. Try it. Build it.',
       spacing: 'loose',
@@ -159,6 +162,7 @@
     cardSize="l"
     cardTone="standard"
     mediaFit="contain"
+    mediaHoverZoom={false}
     list={[
       {
         id: 'start',
@@ -186,9 +190,15 @@
     ]}
   />
   <FeatureSection
-    section={{ id: 'built-with', title: 'Techstack', headline: 'Techstack', spacing: 'loose' }}
+    section={{
+      id: 'built-with',
+      title: 'Techstack',
+      headline: 'Techstack',
+      headingAlign: 'center',
+      spacing: 'loose'
+    }}
     list={technologies}
-    featureSize="s"
+    featureSize="m"
     iconTone="muted"
   >
     {#snippet icon(item)}

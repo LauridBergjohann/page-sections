@@ -68,7 +68,7 @@
   {@render children()}
 {:else}
   <PageShell {mode}>
-    <Header class="website-header" {items} closeKey={page.url.pathname} scrollBehavior="delayed">
+    <Header class="website-header" {items} closeKey={page.url.pathname} scrollBehavior="fixed">
       {#snippet itemIcon(item)}<NavigationIcon name={item.icon} />{/snippet}
       {#snippet brand()}
         <a class="skip-link" href="#main-content">Skip to content</a>

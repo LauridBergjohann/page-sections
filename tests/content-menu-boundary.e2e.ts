@@ -26,7 +26,7 @@ for (const width of [390, 1920, 2456])
         );
         const initialBody = (await body.boundingBox())!;
         const initialMenu = (await menu.boundingBox())!;
-        const inset = width < 1600 ? 12 : 16;
+        const inset = width < 1600 ? 78 : 80;
         const gap = width < 1600 || detached ? 0 : 16;
         if (width >= 1600)
           await expect(page.locator('.ps-content-menu-slot')).toHaveCSS(

@@ -111,6 +111,7 @@
           <li><a href={base + '/docs/reference/types/#footer-menu-group'}>FooterMenuGroup</a></li>
           <li><a href={base + '/docs/reference/types/#footer-social-link'}>FooterSocialLink</a></li>
           <li><a href={base + '/docs/reference/types/#grid-section-data'}>GridSectionData</a></li>
+          <li><a href={base + '/docs/reference/types/#heading-align'}>HeadingAlign</a></li>
           <li><a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a></li>
           <li>
             <a href={base + '/docs/reference/types/#heading-section-data'}>HeadingSectionData</a>
@@ -1694,6 +1695,31 @@
   </Section>
   <Section
     section={{
+      id: 'heading-align',
+      title: 'HeadingAlign',
+      headline: 'HeadingAlign',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>HeadingAlign is a public type. Follow linked field types to inspect nested values.</p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code>'left' | 'center' | 'right'</code></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody> </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
       id: 'heading-level',
       title: 'HeadingLevel',
       headline: 'HeadingLevel',
@@ -3154,6 +3180,16 @@
               </td><td>Optional</td><td>Visual heading size, independent of the HTML level.</td>
             </tr>
             <tr>
+              <td><code>headingAlign</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#heading-align'}>HeadingAlign</a>
+                </code>
+              </td><td>Optional</td><td>
+                Left (default), center or right alignment for the headline, eyebrow and
+                introduction. Does not change body content; ignored by HeroSection.
+              </td>
+            </tr>
+            <tr>
               <td><code>background</code></td><td>
                 <code>
                   <a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a>
@@ -3473,6 +3509,8 @@
   introduction?: string;
   headingLevel?: <a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a>;
   headingSize?: <a href={base + '/docs/reference/types/#heading-size'}>HeadingSize</a>;
+  /** Align the headline, eyebrow and introduction. Default left; HeroSection ignores this option. */
+  headingAlign?: <a href={base + '/docs/reference/types/#heading-align'}>HeadingAlign</a>;
   background?: <a href={base + '/docs/reference/types/#section-background'}>SectionBackground</a>;
   layout?: 'full' | 'wide' | 'narrow' | 'inherit';
   spacing?: 'none' | 'tight' | 'normal' | 'loose' | 'spacious';
@@ -3527,6 +3565,16 @@
               <td><code>headingSize</code></td><td>
                 <code><a href={base + '/docs/reference/types/#heading-size'}>HeadingSize</a></code>
               </td><td>Optional</td><td>Visual heading size, independent of the HTML level.</td>
+            </tr>
+            <tr>
+              <td><code>headingAlign</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#heading-align'}>HeadingAlign</a>
+                </code>
+              </td><td>Optional</td><td>
+                Left (default), center or right alignment for the headline, eyebrow and
+                introduction. Does not change body content; ignored by HeroSection.
+              </td>
             </tr>
             <tr>
               <td><code>background</code></td><td>

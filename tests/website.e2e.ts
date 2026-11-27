@@ -49,10 +49,10 @@ for (const width of [390, 1599]) {
       for (const y of [16, 32, 64, 200, 600, 0]) {
         await page.evaluate(y => window.scrollTo(0, y), y);
         await expect.poll(() => page.evaluate(() => scrollY)).toBe(y);
-        await expect.poll(async () => (await button.boundingBox())!.y).toBe(Math.max(12, initial.y - y));
+        await expect.poll(async () => (await button.boundingBox())!.y).toBe(Math.max(78, initial.y - y));
         if (width === 390 && javaScriptEnabled && y === 200) await page.screenshot({ path: test.info().outputPath('content-menu-docked.png') });
       }
-      // A genuinely fixed header still needs room above the docked control.
+      // The website defaults to fixed; page overrides must restore the smaller inset.
       const header = page.locator('.website-header');
       await header.evaluate(node => node.setAttribute('data-scroll', 'fixed'));
       await page.evaluate(() => window.scrollTo(0, 200));
@@ -95,7 +95,8 @@ for (const width of [390, 1920]) {
       const page = await context.newPage();
       await page.goto('/docs/design-system/responsive-layout/');
       const header = page.locator('.website-header');
-      await expect(header).toHaveAttribute('data-scroll', 'delayed');
+      await expect(header).toHaveAttribute('data-scroll', 'fixed');
+      await header.evaluate(node => node.setAttribute('data-scroll', 'delayed'));
       const surfaces = width >= 1600 ? header.locator('.header, .satellite') : header.locator('.header');
       const initialTops = await surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
       const content = page.locator('main').first();
@@ -584,15 +585,15 @@ test('home uses themed hero artwork, illustrated next steps and local technology
   await expect(technologies).toHaveCount(8);
   await expect(page.locator('#built-with-title')).toHaveText('Techstack');
   await expect(page.locator('#features .ps-feature').first()).toHaveAttribute('data-feature-size', 'm');
-  await expect(technologies.first()).toHaveAttribute('data-feature-size', 's');
-  await expect(technologies.locator('.description')).toHaveText(['Composable page layouts', 'Packages and releases', 'Source and collaboration', 'Hosting and deployments', 'Reactive components', 'Design and development', 'Code editing', 'AI-assisted development']);
+  await expect(technologies.first()).toHaveAttribute('data-feature-size', 'm');
+  await expect(technologies.locator('.description')).toHaveText(['install the Packages', 'check out the source', 'is used to host these pages', "without Svelte we wouldn't be here", 'used for Code editing', 'used for AI-assisted development', 'check out my other projects', 'these pages are created with Page Sections']);
   await expect(technologies.locator('.title')).toHaveText([
-    'Page Sections', 'npm', 'GitHub', 'Vercel', 'Svelte', 'Laurid Bergjohann', 'VS Code', 'Codex'
+    'npm', 'GitHub', 'Vercel', 'Svelte', 'VS Code', 'Codex', 'Laurid Bergjohann', 'Page Sections'
   ]);
   expect(await technologies.evaluateAll(cards => cards.map(card => card.getAttribute('href')))).toEqual([
-    'https://page-sections.bergjohann.com/', 'https://www.npmjs.com/package/@page-sections/svelte',
+    'https://www.npmjs.com/package/@page-sections/svelte',
     'https://github.com/LauridBergjohann/page-sections', 'https://vercel.com/', 'https://svelte.dev/',
-    'https://bergjohann.com/', 'https://code.visualstudio.com/', 'https://chatgpt.com/codex'
+    'https://code.visualstudio.com/', 'https://chatgpt.com/codex', 'https://bergjohann.com/', 'https://page-sections.bergjohann.com/'
   ]);
   for (const image of await page.locator('main img').all()) {
     await image.scrollIntoViewIfNeeded();

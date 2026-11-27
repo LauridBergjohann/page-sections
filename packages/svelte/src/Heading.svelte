@@ -1,10 +1,11 @@
 <script lang="ts">
-  import type { HeadingLevel, HeadingSize } from '@page-sections/core';
+  import type { HeadingLevel, HeadingSize, HeadingAlign } from '@page-sections/core';
   import './styles.css';
   let {
     text,
     level = 2,
     size = 'm',
+    align = 'left',
     id,
     eyebrow,
     introduction
@@ -12,19 +13,25 @@
     text?: string;
     level?: HeadingLevel;
     size?: HeadingSize;
+    align?: HeadingAlign;
     id?: string;
     eyebrow?: string;
     introduction?: string;
   } = $props();
 </script>
 
-<div class="ps-heading" data-size={size}>
+<div class="ps-heading" data-size={size} data-align={align}>
   {#if eyebrow}<p class="eyebrow">{eyebrow}</p>{/if}
   {#if text}<svelte:element this={`h${level}`} {id} class="headline">{text}</svelte:element>{/if}
   {#if introduction}<p class="introduction">{introduction}</p>{/if}
 </div>
 
 <style>
+  .ps-heading { text-align: left; }
+  [data-align='center'] { text-align: center; }
+  [data-align='right'] { text-align: right; }
+  [data-align='center'] .introduction { margin-left: auto; margin-right: auto; }
+  [data-align='right'] .introduction { margin-left: auto; }
   .headline {
     margin: 0;
     color: var(--ps-ink);

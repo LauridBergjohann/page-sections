@@ -179,6 +179,12 @@ export const typeDocuments = [
     description: 'Fields and declaration of GridSectionData.'
   },
   {
+    title: 'HeadingAlign',
+    href: '/docs/reference/types/#heading-align',
+    group: 'Data types',
+    description: 'Fields and declaration of HeadingAlign.'
+  },
+  {
     title: 'HeadingLevel',
     href: '/docs/reference/types/#heading-level',
     group: 'Data types',

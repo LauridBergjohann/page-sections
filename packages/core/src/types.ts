@@ -2,6 +2,7 @@ import type { ContentSpan } from './responsiveLayout.js';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type HeadingSize = 'm' | 'l' | 'xl';
+export type HeadingAlign = 'left' | 'center' | 'right';
 export type PageKind = 'content' | 'detail';
 export type SurfaceTone = 'standard' | 'muted';
 export type CardMediaAspect = '3/2' | '4/3' | '1/1';
@@ -35,6 +36,8 @@ export interface SectionDefinition {
   introduction?: string;
   headingLevel?: HeadingLevel;
   headingSize?: HeadingSize;
+  /** Align the headline, eyebrow and introduction. Default left; HeroSection ignores this option. */
+  headingAlign?: HeadingAlign;
   background?: SectionBackground;
   layout?: 'full' | 'wide' | 'narrow' | 'inherit';
   spacing?: 'none' | 'tight' | 'normal' | 'loose' | 'spacious';

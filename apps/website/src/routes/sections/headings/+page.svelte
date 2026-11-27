@@ -10,7 +10,7 @@
   <HeadingSection section={{ id: 'page-heading', title: 'Field notes', headingLevel: 1,
     headingSize: 'l', background: { color: 'standard', size: 'standard' } }} />
   <HeadingSection section={{ id: 'chapter', title: 'A new chapter',
-    headingLevel: 2, headingSize: 'xl', background: { color: 'muted' } }} />
+    headingLevel: 2, headingSize: 'xl', headingAlign: 'center', background: { color: 'muted' } }} />
   <CarouselSection section={{ id: 'projects', title: 'Projects',
     headline: 'Selected projects', headingLevel: 2, headingSize: 'm' }} list={[]} />
 </ContentPage>`
@@ -25,10 +25,16 @@
   import LiveCode from '#lib/LiveCode.svelte';
   import { onMount } from 'svelte';
   import { Section, HeadingSection, CodeBlock } from '@page-sections/svelte';
-  import type { HeadingLevel, HeadingSize, SectionBackground } from '@page-sections/core';
+  import type {
+    HeadingAlign,
+    HeadingLevel,
+    HeadingSize,
+    SectionBackground
+  } from '@page-sections/core';
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
   let size = $state<HeadingSize>('l');
+  let align = $state<HeadingAlign>('left');
   let level = $state<HeadingLevel>(2);
   let color = $state<SectionBackground['color']>('muted');
   let ready = $state(false);
@@ -44,6 +50,7 @@
     eyebrow,
     introduction,
     headingSize: size,
+    headingAlign: align,
     headingLevel: level,
     background: { color, size: 'standard' as const }
   });
@@ -79,6 +86,15 @@
       <label>Eyebrow<input bind:value={eyebrow} /></label>
       <label>Introduction<input bind:value={introduction} /></label>
       <label>
+        Heading alignment<select bind:value={align}>
+          <option value="left">Left</option><option value="center">Center</option><option
+            value="right"
+          >
+            Right
+          </option>
+        </select>
+      </label>
+      <label>
         Heading size <select bind:value={size}>
           <option>m</option><option>l</option><option>xl</option>
         </select>
@@ -104,6 +120,7 @@
           eyebrow = 'HeadingSection';
           introduction = 'Choose the visual size independently of the document hierarchy.';
           size = 'l';
+          align = 'left';
           level = 2;
           color = 'muted';
         }}
@@ -141,6 +158,14 @@
         <code>title</code>. Use
         <code>headingSize</code>
         and <code>headingLevel</code> independently.
+      </p>
+      <p>
+        Set <code>headingAlign</code> to <code>left</code> (default), <code>center</code> or
+        <code>right</code> on any section to align its headline, eyebrow and introduction together.
+        The introduction keeps its readable width and moves to the same side or center. Body copy,
+        cards and nested sections keep their own alignment. HeroSection ignores this setting to
+        preserve its composition. Standalone <code>Heading</code> exposes the same values as
+        <code>align</code>.
       </p>
       <p>
         Optional <code>headline</code> fields remain on all sections, including CarouselSection. Section

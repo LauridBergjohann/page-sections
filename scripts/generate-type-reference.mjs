@@ -77,6 +77,7 @@ const notes = {
   'SectionDefinition.headline': 'Visible heading. Omit it for a region without a displayed heading.',
   'SectionDefinition.headingLevel': 'HTML heading level; inherits the surrounding context when omitted.',
   'SectionDefinition.headingSize': 'Visual heading size, independent of the HTML level.',
+  'SectionDefinition.headingAlign': 'Left (default), center or right alignment for the headline, eyebrow and introduction. Does not change body content; ignored by HeroSection.',
   'SectionDefinition.background': 'Surface color and width; follow the linked type for its fields.',
   'SectionDefinition.style': 'Optional width and text color as CSS strings. Other layout settings have dedicated fields.',
   'SectionDefinition.spacing': 'Vertical spacing: normal for top-level sections and none for nested sections by default.',

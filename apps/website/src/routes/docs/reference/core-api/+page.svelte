@@ -882,6 +882,9 @@ console.log(background.cssBackground);`
     <p>
       <code><a href={base + '/docs/reference/types/#heading-size'}>HeadingSize</a></code> is m | l |
       xl, independent of <a href={base + '/docs/reference/types/#heading-level'}>HeadingLevel</a>.
+      <code><a href={base + '/docs/reference/types/#heading-align'}>HeadingAlign</a></code> is left
+      | center | right, default left. SectionDefinition.headingAlign aligns the headline, eyebrow
+      and introduction; HeroSection ignores it. Standalone Heading uses the align prop.
       <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>.headingSize
       selects the visual size.
       <code>

@@ -14,7 +14,7 @@
   const layout = resolveCardLayout(320, 'm', { mediaAspect, contentPlacement, reserveEyebrow: true });
 </script>
 <ContentPage page={{ title: 'Plain Svelte consumer' }} showContentMenu>
-  <HeadingSection section={{ id: 'page-title', title: 'Plain Svelte consumer', headingLevel: 1 }} />
+  <HeadingSection section={{ id: 'page-title', title: 'Plain Svelte consumer', headingLevel: 1, headingAlign: 'center' }} />
   <CardGridSection section={{ id: 'collection', title: 'Collection' }} list={cards} {mediaAspect} {cardTone} {contentPlacement} {textTone} mediaFit="contain" />
   <CarouselSection section={{ id: 'browse', title: 'Browse', headline: 'Browse' }} list={cards} mediaAspect="4/3" mediaFit="cover" {contentPlacement} textTone="dark" />
   <FeatureSection section={{ id: 'features', title: 'Features' }} featureSize="l" iconTone="primary" list={[{ id: 'independent-feature', icon: 'layers', title: 'Independent feature', description: 'Centered without browser scripts.', href: '#collection' }]} />

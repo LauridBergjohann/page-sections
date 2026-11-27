@@ -379,7 +379,9 @@
         HeadingLevel
       </a>, default 2), size (<a href={base + '/docs/reference/types/#heading-size'}>
         HeadingSize
-      </a>, default m), id, eyebrow and introduction. It renders typography only.
+      </a>, default m), align (left, center or right; default left), id, eyebrow and introduction.
+      It renders typography only. Sections pass their shared headingAlign setting to Heading;
+      HeroSection keeps its own composition.
       <code>HeadingSection</code>
       accepts section: Omit&lt;<a href={base + '/docs/reference/types/#heading-section-data'}>
         HeadingSectionData

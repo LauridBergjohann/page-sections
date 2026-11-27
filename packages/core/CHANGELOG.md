@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Add shared headingAlign (left, center or right; default left) to SectionDefinition for section headlines, eyebrows and introductions. HeroSection retains its own composition.
+
 - Add optional mediaHoverZoom to card-grid and carousel data, defaulting to true in the components.
 
 - Add FeatureSection with centered incomplete rows, shared S/M/L card spans, decorative icons, standard/muted/primary circle colors and native whole-feature links. Support serializable feature data and custom icon snippets.

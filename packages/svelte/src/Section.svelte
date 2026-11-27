@@ -49,7 +49,7 @@
   <div class="ps-section-content ps-grid-scope">
   {#if renderHeader && (section.headline || section.eyebrow || section.introduction)}
     <div class="section-heading" class:with-content={!!children}>
-      <Heading text={section.headline} level={heading} size={section.headingSize ?? (section.variant === 'content' ? 'm' : 'l')} id={`${section.id}-title`} eyebrow={section.eyebrow} introduction={section.introduction} />
+      <Heading text={section.headline} level={heading} size={section.headingSize ?? (section.variant === 'content' ? 'm' : 'l')} align={section.headingAlign} id={`${section.id}-title`} eyebrow={section.eyebrow} introduction={section.introduction} />
     </div>
   {/if}
   {#if children}

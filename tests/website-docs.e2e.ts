@@ -1,5 +1,17 @@
 import { expect, test } from '@playwright/test';
 
+test('homepage section headings are centered while the hero retains its composition', async ({ page }) => {
+  await page.goto('/');
+  for (const width of [390, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const id of ['what-is-page-sections', 'features', 'explore', 'built-with']) {
+      await expect(page.locator(`#${id} .section-heading .ps-heading`)).toHaveCSS('text-align', 'center');
+    }
+    await expect(page.locator('#welcome .ps-heading')).toHaveCSS('text-align', 'left');
+    await expect(page.locator('#features .introduction')).toHaveCSS('text-align', 'center');
+  }
+});
+
 test('section copy shares body colors while headings and navigation retain ink', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1000 });
   const expectToken = async (selector: string, token: string) => {
@@ -373,6 +385,11 @@ for (const route of ['/docs/components/card/', '/sections/card-grid/', '/section
 test('feature playground updates size, colors, centered counts and optional links', async ({ page }) => {
   await page.goto('/sections/features/');
   const preview = page.locator('[data-feature-preview]');
+  for (const align of ['center', 'right', 'left']) {
+    await page.getByRole('combobox', { name: 'Heading alignment', exact: true }).selectOption(align);
+    await expect(preview.locator('.ps-heading')).toHaveCSS('text-align', align);
+    await expect(page.locator('#playground pre')).toContainText(`"headingAlign": "${align}"`);
+  }
   await expect(preview.locator('.ps-feature')).toHaveCount(6);
   await expect(preview.locator('a.ps-feature')).toHaveCount(0);
   await page.getByRole('combobox', { name: 'Feature count', exact: true }).selectOption('5');

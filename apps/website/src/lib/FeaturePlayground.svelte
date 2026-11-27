@@ -3,6 +3,7 @@
   import {
     Sections,
     type CardSize,
+    type HeadingAlign,
     type FeatureIconTone,
     type FeatureSectionData,
     type SectionBackgroundColor
@@ -11,6 +12,7 @@
   import LiveCode from './LiveCode.svelte';
   let ready = $state(false);
   let featureSize = $state<CardSize>('l');
+  let headingAlign = $state<HeadingAlign>('left');
   let iconTone = $state<FeatureIconTone>('muted');
   let background = $state<SectionBackgroundColor>('standard');
   let count = $state(6);
@@ -22,6 +24,9 @@
     type: 'features',
     id: 'feature-preview',
     title: 'Feature preview',
+    headline: 'A consistent foundation',
+    introduction: 'Reusable sections, shared layouts and room for your own ideas.',
+    headingAlign,
     featureSize,
     iconTone,
     background: { color: background },
@@ -36,6 +41,7 @@
   );
   function reset() {
     featureSize = 'l';
+    headingAlign = 'left';
     iconTone = 'muted';
     background = 'standard';
     count = 6;
@@ -44,6 +50,13 @@
 </script>
 
 <div class="playground-controls">
+  <label>
+    Heading alignment<select bind:value={headingAlign} disabled={!ready}>
+      <option value="left">Left</option><option value="center">Center</option><option value="right">
+        Right
+      </option>
+    </select>
+  </label>
   <label>
     Feature size<select bind:value={featureSize} disabled={!ready}>
       <option value="s">Small</option><option value="m">Medium</option><option value="l">

@@ -2,56 +2,56 @@ import { base } from '#lib/paths.js';
 
 export const technologies = [
   {
-    id: 'page-sections',
-    title: 'Page Sections',
-    description: 'Composable page layouts',
-    href: 'https://page-sections.bergjohann.com/',
-    icon: '/page-sections-logo.svg'
-  },
-  {
     id: 'npm',
     title: 'npm',
-    description: 'Packages and releases',
+    description: 'install the Packages',
     href: 'https://www.npmjs.com/package/@page-sections/svelte'
   },
   {
     id: 'github',
     title: 'GitHub',
-    description: 'Source and collaboration',
+    description: 'check out the source',
     href: 'https://github.com/LauridBergjohann/page-sections',
     monochrome: true
   },
   {
     id: 'vercel',
     title: 'Vercel',
-    description: 'Hosting and deployments',
+    description: 'is used to host these pages',
     href: 'https://vercel.com/',
     monochrome: true
   },
   {
     id: 'svelte',
     title: 'Svelte',
-    description: 'Reactive components',
+    description: "without Svelte we wouldn't be here",
     href: 'https://svelte.dev/'
-  },
-  {
-    id: 'bergjohann',
-    title: 'Laurid Bergjohann',
-    description: 'Design and development',
-    href: 'https://bergjohann.com/'
   },
   {
     id: 'vscode',
     title: 'VS Code',
-    description: 'Code editing',
+    description: 'used for Code editing',
     href: 'https://code.visualstudio.com/'
   },
   {
     id: 'codex',
     title: 'Codex',
-    description: 'AI-assisted development',
+    description: 'used for AI-assisted development',
     href: 'https://chatgpt.com/codex',
     monochrome: true
+  },
+  {
+    id: 'bergjohann',
+    title: 'Laurid Bergjohann',
+    description: 'check out my other projects',
+    href: 'https://bergjohann.com/'
+  },
+  {
+    id: 'page-sections',
+    title: 'Page Sections',
+    description: 'these pages are created with Page Sections',
+    href: 'https://page-sections.bergjohann.com/',
+    icon: '/page-sections-logo.svg'
   }
 ].map(({ icon, monochrome, ...item }) => ({
   ...item,

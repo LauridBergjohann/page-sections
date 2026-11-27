@@ -8,6 +8,25 @@ import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
 import ImplicitNestedSurfaces from './ImplicitNestedSurfaces.svelte';
 import StructuredPage from './StructuredPage.svelte';
+it('preserves heading alignment through every serialized section renderer except Hero', () => {
+  const shared = { id: 'aligned', title: 'Section', headline: 'Aligned heading', introduction: 'Introduction', headingAlign: 'right' as const };
+  const sections: SectionData[] = [
+    { ...shared, type: 'heading' }, { ...shared, type: 'richText', body: 'Body' },
+    { ...shared, type: 'panel', blocks: [] }, { ...shared, type: 'code', code: 'const x = 1;' },
+    { ...shared, type: 'image', image: { src: '/image.svg', alt: 'Image' } },
+    { ...shared, type: 'video', video: { provider: 'html5', src: '/video.webm' } },
+    { ...shared, type: 'features', list: [] }, { ...shared, type: 'cardGrid', list: [] },
+    { ...shared, type: 'carousel', list: [] }, { ...shared, type: 'grid', blocks: [] },
+    { ...shared, type: 'timeline', categories: [], referenceDate: '2026-01-01' },
+    { ...shared, type: 'hero' }
+  ];
+  for (const section of sections) {
+    const { body } = render(Sections, { props: { sections: JSON.parse(JSON.stringify([section])) } });
+    expect(body).toContain(`data-align="${section.type === 'hero' ? 'left' : 'right'}"`);
+    expect(body).toContain('Aligned heading');
+    expect(body).toContain('Introduction');
+  }
+});
 it.each(['cardGrid', 'carousel'] as const)('forwards optional shadows and descriptions through %s data', (type) => {
   for (const cardShadow of [undefined, false, true]) {
     const sections: SectionData[] = [{ type, id: 'cards', title: 'Cards', cardShadow, list: [{ id: 'one', title: 'One', description: 'Optional copy' }] }];
