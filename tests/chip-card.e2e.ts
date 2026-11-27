@@ -28,6 +28,11 @@ test('card hover expands only images, keeping surface and text geometry stable',
     const frame = await card.locator('.media-frame').boundingBox();
     const surface = await card.locator('.surface').boundingBox();
     const image = await card.locator('img').boundingBox();
+    if (fit === 'contain') {
+      const media = (await card.locator('.media').boundingBox())!;
+      const padding = await card.locator('.text').evaluate(el => parseFloat(getComputedStyle(el).paddingLeft));
+      expect(media.x - frame!.x).toBeCloseTo(padding, 1);
+    }
     await card.hover();
     await expect(card.locator('.surface')).toHaveCSS('top', '0px');
     await expect(card.locator('.media-viewport')).toHaveCSS('top', '0px');
@@ -39,7 +44,11 @@ test('card hover expands only images, keeping surface and text geometry stable',
     expect(await card.locator('.media-frame').boundingBox()).toEqual(frame);
     expect(await card.locator('.surface').boundingBox()).toEqual(surface);
     expect((await card.locator('img').boundingBox())!.width).toBeGreaterThan(image!.width);
-    await expect(card.locator('.media-viewport')).toHaveCSS('overflow', fit === 'cover' ? 'hidden' : 'visible');
+    await expect(card.locator('.media-viewport')).toHaveCSS('overflow', 'hidden');
+    expect(await card.evaluate(el => {
+      const outline = getComputedStyle(el, '::after');
+      return { border: outline.borderTopColor, width: outline.borderTopWidth, layer: outline.zIndex, pointerEvents: outline.pointerEvents };
+    })).toEqual({ border: await card.locator('.surface').evaluate(el => getComputedStyle(el).borderTopColor), width: '1px', layer: '3', pointerEvents: 'none' });
     await expect(card.locator('img')).toHaveCSS('object-fit', fit);
     expect(frame!.y + frame!.height).toBeLessThanOrEqual(copy!.y);
     if (fit === 'contain') expect((await card.locator('.media').boundingBox())!.width).toBeCloseTo(frame!.width, 1);
@@ -56,5 +65,25 @@ test('reduced motion keeps image and surface sizes unchanged', async ({ page }) 
     expect(await card.locator('.media').boundingBox()).toEqual(media);
     expect(await card.locator('.surface').boundingBox()).toEqual(surface);
     await expect(card.locator('.media')).toHaveCSS('transition-duration', '0s');
+  }
+});
+
+test('oversized custom media is clipped before and during hover without hiding the card outline', async ({ page }) => {
+  await page.goto('/chip-card/');
+  const card = page.locator('.ps-card[data-media-fit="contain"]');
+  await card.locator('.media').evaluate(el => {
+    const probe = document.createElement('div');
+    probe.id = 'oversized-media';
+    probe.style.cssText = 'position:absolute;inset:-80px;background:red;pointer-events:auto;z-index:10';
+    el.replaceChildren(probe);
+  });
+  for (const hover of [false, true]) {
+    if (hover) await card.hover();
+    const frame = (await card.locator('.media-frame').boundingBox())!;
+    for (const [x, y] of [[frame.x - 4, frame.y + frame.height / 2], [frame.x + frame.width + 4, frame.y + frame.height / 2], [frame.x + frame.width / 2, frame.y - 4], [frame.x + frame.width / 2, frame.y + frame.height + 4]]) {
+      expect(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.id, { x, y })).not.toBe('oversized-media');
+    }
+    await expect(card.locator('.media-viewport')).toHaveCSS('overflow', 'hidden');
+    await expect(card.locator('.media-viewport')).toHaveCSS('isolation', 'isolate');
   }
 });

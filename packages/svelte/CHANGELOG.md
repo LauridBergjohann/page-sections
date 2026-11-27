@@ -10,6 +10,8 @@
 
 ### Patch Changes
 
+- Clip both card media modes to their rounded frame during hover and keep the card border visible above images. Align contained media with the 12px text inset.
+
 - Updated dependencies
   - @page-sections/core@0.9.0
 

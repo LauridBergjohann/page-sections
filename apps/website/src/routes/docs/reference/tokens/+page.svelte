@@ -372,7 +372,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td><code>cardMediaInset</code></td>
-              <td>8; contained-media inset; cover uses zero</td>
+              <td>12; contained-media inset matching the text; cover uses zero</td>
             </tr>
             <tr>
               <td><code>menu</code></td>
@@ -580,7 +580,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td>--ps-card-media-inset</td>
-              <td>8px contained-media inset; cover uses zero</td>
+              <td>12px contained-media inset matching the text; cover uses zero</td>
             </tr>
             <tr>
               <td>--ps-card-text-inset-inline, --ps-card-text-inset-block</td>

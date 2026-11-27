@@ -55,9 +55,12 @@
 <style>
   .ps-card { position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr; width: 100%; min-width: 0; height: 100%; color: var(--ps-ink); border-radius: var(--ps-radius); }
   .surface { position: absolute; inset: 0; z-index: -1; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; background: var(--ps-section-standard); transition: box-shadow 280ms cubic-bezier(.2,.4,.3,1), border-color 280ms cubic-bezier(.2,.4,.3,1); }
+  /* Keep the outline above clipped media without clipping link focus rings or card shadows. */
+  .ps-card::after { content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none; border: 1px solid var(--ps-border); border-radius: inherit; transition: border-color 280ms cubic-bezier(.2,.4,.3,1); }
   [data-tone='muted'] .surface { background: var(--ps-section-muted); }
   [data-shadow='true'] .surface { box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
   .ps-card:has(:focus-visible) > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
+  .ps-card:has(:focus-visible)::after { border-color: var(--ps-accent); }
   .ps-card[data-shadow='true']:has(:focus-visible) > .surface { box-shadow: var(--ps-card-hover-shadow, var(--ps-default-card-hover-shadow)); }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .ps-card:has(a, button):hover .media { inset: 0; }
@@ -65,12 +68,12 @@
   }
   @media (hover: hover) {
     .ps-card:hover > .surface { border-color: var(--ps-accent); box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow)); }
+    .ps-card:hover::after { border-color: var(--ps-accent); }
     .ps-card[data-shadow='true']:hover > .surface { box-shadow: var(--ps-card-hover-shadow, var(--ps-default-card-hover-shadow)); }
   }
   .media, .text { min-width: 0; min-height: 0; }
   .media-frame { position: relative; width: 100%; aspect-ratio: var(--ps-card-media-aspect); align-self: start; border-radius: var(--ps-radius) var(--ps-radius) 0 0; }
-  .media-viewport { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
-  [data-media-fit='contain'] .media-viewport { overflow: visible; }
+  .media-viewport { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; isolation: isolate; }
   .media-frame.no-media { display: none; }
   .media { position: absolute; inset: min(var(--ps-card-media-inset), 33%); transition: inset 280ms cubic-bezier(.2,.4,.3,1), transform 280ms cubic-bezier(.2,.4,.3,1); }
   [data-media-fit='cover'] .media { inset: 0; }
@@ -92,5 +95,5 @@
   .footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--ps-border); font-size: .875rem; }
   .text > :global(.ps-actions) { margin-top: auto; padding-top: 1rem; }
   .text :global(.ps-actions a), .footer :global(a), .custom-content :global(:is(a, button, input, select, textarea, summary, [tabindex])) { position: relative; z-index: 2; }
-  @media (prefers-reduced-motion: reduce) { .surface, .media { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .surface, .media, .ps-card::after { transition: none; } }
 </style>

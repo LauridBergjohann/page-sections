@@ -1,4 +1,5 @@
 import { base } from '#lib/paths.js';
+import { illustrationSizes } from './illustrationSizes.js';
 export const sectionCatalog = [
   {
     slug: 'card-grid',
@@ -68,8 +69,7 @@ export const sectionCatalog = [
   image: {
     src: base + `/illustrations/${item.slug}.svg`,
     alt: `${item.title} section layout`,
-    width: 800,
-    height: 500
+    ...illustrationSizes[item.slug]
   }
 }));
 export const sectionCards = sectionCatalog.map((item) => ({ ...item, href: base + item.href }));
@@ -101,5 +101,9 @@ export const nextStepCards = [
 ].map((item) => ({
   ...item,
   href: item.href.startsWith('/') ? base + item.href : item.href,
-  image: { src: base + `/illustrations/${item.id}.svg`, alt: item.title, width: 800, height: 500 }
+  image: {
+    src: base + `/illustrations/${item.id}.svg`,
+    alt: item.title,
+    ...illustrationSizes[item.id]
+  }
 }));

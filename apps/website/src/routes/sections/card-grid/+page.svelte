@@ -251,12 +251,14 @@
         alignment.
       </p>
       <p>
-        Use mediaFit=&quot;contain&quot; for complete objects with an 8px media inset, or
-        mediaFit=&quot;cover&quot; for edge-to-edge cropped photos. Both use the same selected
-        mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>
+        Use mediaFit=&quot;contain&quot; for complete objects with a 12px media inset matching the
+        text, or mediaFit=&quot;cover&quot; for edge-to-edge cropped photos. Both use the same
+        selected mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>
           ImageData
         </a>.aspect/objectFit do not override this collection-level contract. Compare 3:2 and 1:1 in
-        the interactive example above.
+        the interactive example above. On hover, contained media expands into its inset and covered
+        photos zoom within the frame. Both are clipped at the rounded card edges; the card outline
+        stays visible above the image.
       </p>
       <p>
         Enable <code>cardShadow</code> for a subtle resting shadow. Hover quickly animates the border

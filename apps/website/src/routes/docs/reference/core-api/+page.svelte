@@ -298,9 +298,10 @@ console.log(background.cssBackground);`
         collection, as the Svelte collections do. Width comes from contentSpanWidth;
         mediaFrame.height is width divided by the selected ratio. Text height is
         <code>(rows + eyebrowRows) * lineHeight + 2 * cardTextInset.block</code>; total height is
-        mediaFrame.height + textHeight. The media rectangle is inset by 8px for contain (clamped to
-        available space), or fills mediaFrame for cover. These are default base card measurements,
-        not measurements of arbitrary CSS overrides or additional card content. Observe the actual
+        mediaFrame.height + textHeight. The media rectangle is inset by 12px for contain (matching
+        the text, clamped to available space), or fills mediaFrame for cover. These are default base
+        card measurements, not measurements of arbitrary CSS overrides or additional card content.
+        Observe the actual
         <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a>.media rectangle
         when attaching a renderer.
       </p>

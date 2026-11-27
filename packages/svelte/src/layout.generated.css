@@ -102,7 +102,7 @@
 
 [data-ps-card-size='l'] { --ps-card-span: var(--ps-card-large-span); --ps-card-title-size: 18px; --ps-card-title-weight: 500; --ps-card-eyebrow-size: 14px; --ps-card-eyebrow-weight: 400; --ps-card-line-height: 24px; --ps-card-text-rows: 3; }
 
-:root { --ps-card-text-inset-inline: 12px; --ps-card-text-inset-block: 12px; --ps-card-media-inset: 8px; }
+:root { --ps-card-text-inset-inline: 12px; --ps-card-text-inset-block: 12px; --ps-card-media-inset: 12px; }
 
 [data-spacing='none'] { --ps-spacing-factor: 0; }
 

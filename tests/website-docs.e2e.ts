@@ -134,14 +134,38 @@ test('all card sizes keep descriptions close, scale their text and fill each gri
   expect(sizes.m).toBeLessThan(sizes.l);
 });
 
-test('section illustrations share frameless art and transparent surroundings', async ({page,request}) => {
+test('section and homepage illustrations use tightly cropped art without application windows', async ({page,request}) => {
   await page.goto('/sections/');
-  for (const img of await page.locator('#section-catalog img').all()) {
-    const response=await request.get((await img.getAttribute('src'))!);
+  const sources = await page.locator('#section-catalog img').evaluateAll(images => images.map(image => image.getAttribute('src')!));
+  await page.goto('/');
+  sources.push(...await page.locator('#features img, #explore img').evaluateAll(images => images.map(image => image.getAttribute('src')!)));
+  expect(sources.length).toBe(19);
+  for (const src of sources) {
+    const response=await request.get(src);
     const svg=await response.text();
     expect(svg).not.toContain('id="window-shadow"');
+    expect(svg).not.toContain('id="window"');
     expect(svg).not.toMatch(/<rect[^>]*(?:width="800"|height="500")/);
+    const margins = await page.evaluate(source => {
+      const host = document.createElement('div');
+      host.style.cssText = 'position:fixed;left:-10000px;top:0';
+      host.innerHTML = source;
+      document.body.append(host);
+      const root = host.querySelector('svg')!;
+      // Nested photo viewports clip their own art before it reaches the illustration.
+      for (const nested of root.querySelectorAll('svg')) {
+        const rectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        for (const attribute of ['x', 'y', 'width', 'height']) rectangle.setAttribute(attribute, nested.getAttribute(attribute)!);
+        nested.replaceWith(rectangle);
+      }
+      const bounds = root.getBBox(), view = root.viewBox.baseVal;
+      const result = [bounds.x - view.x, bounds.y - view.y, view.x + view.width - bounds.x - bounds.width, view.y + view.height - bounds.y - bounds.height];
+      host.remove();
+      return result;
+    }, svg);
+    for (const margin of margins) expect(Math.abs(margin), src).toBeLessThanOrEqual(1);
   }
+  await page.goto('/sections/');
   for (const width of [390,1440]) {
     await page.setViewportSize({width,height:1000});
     await page.locator('#section-catalog').screenshot({path:`.artifacts/cards-transparent-${width}.png`});

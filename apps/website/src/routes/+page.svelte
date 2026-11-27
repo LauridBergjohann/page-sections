@@ -4,11 +4,11 @@
   import { base } from '#lib/paths.js';
   import ContentPage from '#lib/WebsitePage.svelte';
   import { technologies } from '#lib/technologies.js';
+  import { illustrationSizes } from '#lib/illustrationSizes.js';
   const illustration = (name: string, alt: string) => ({
     src: base + `/illustrations/${name}.svg`,
     alt,
-    width: 800,
-    height: 500
+    ...illustrationSizes[name]
   });
 </script>
 
@@ -91,7 +91,7 @@
     }}
     cardSize="l"
     cardTone="standard"
-    mediaFit="cover"
+    mediaFit="contain"
     list={[
       {
         id: 'layout',
@@ -156,7 +156,7 @@
     }}
     cardSize="l"
     cardTone="standard"
-    mediaFit="cover"
+    mediaFit="contain"
     list={[
       {
         id: 'start',

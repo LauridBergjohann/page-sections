@@ -8,6 +8,10 @@
 
   This pre-1.0 minor release changes the timeline's visual layout and removes the former vertical rail, connector and sticky-header styling contract. Existing event data remains valid. Both packages move together to 0.9.0; consumers should review timeline styling. Stage width defaults to contained; opting into full also sets background.size to full while preserving its color.
 
+### Patch Changes
+
+- Match contained card media to the 12px text inset in the shared layout calculations and generated CSS.
+
 ## 0.8.0
 
 ### Minor Changes

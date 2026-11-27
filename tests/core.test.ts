@@ -37,7 +37,7 @@ describe('shared navigation and catalog geometry', () => {
     const square = resolveCardLayout(320, 'm', { reserveEyebrow: true, mediaAspect: '1/1' });
     expect(compact.textHeight).toBe(64); // Two 20px title lines plus 24px padding.
     expect(labeled.textHeight).toBe(84); // The label never consumes a title line.
-    expect(square).toMatchObject({ width: 142, height: 226, textHeight: 84, media: { x: 8, y: 8, width: 126, height: 126 } });
+    expect(square).toMatchObject({ width: 142, height: 226, textHeight: 84, media: { x: 12, y: 12, width: 118, height: 118 } });
     expect(resolveCardLayout(320, 's', { reserveEyebrow: true }).eyebrowRows).toBe(0);
     const cropped = resolveCardLayout(320, 'm', { mediaAspect: '4/3', mediaFit: 'cover' });
     expect(cropped.media).toEqual(cropped.mediaFrame);
