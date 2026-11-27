@@ -149,7 +149,12 @@
         The Home icon has the accessible name “Home”. The final entry is plain text marked with
         <code>aria-current="page"</code>. Breadcrumbs stay on one line; long labels are shortened
         with an ellipsis while their full text remains available to assistive technology. The Home
-        icon keeps its width even on narrow screens.
+        icon scales with the breadcrumb font size while retaining a 24-pixel click target.
+      </p>
+      <p>
+        Links use the normal body text color without underlines. Hovering or focusing a link with
+        the keyboard changes its text or icon to the accent color. Separators and entries without
+        links are partially transparent, keeping the trail visually secondary to the page content.
       </p>
     </div>
   </Section>
