@@ -139,7 +139,7 @@ test('section and homepage illustrations use tightly cropped art without applica
   const sources = await page.locator('#section-catalog img').evaluateAll(images => images.map(image => image.getAttribute('src')!));
   await page.goto('/');
   sources.push(...await page.locator('#features img, #explore img').evaluateAll(images => images.map(image => image.getAttribute('src')!)));
-  expect(sources.length).toBe(19);
+  expect(sources.length).toBe(20);
   for (const src of sources) {
     const response=await request.get(src);
     const svg=await response.text();
@@ -289,7 +289,7 @@ test('visual guides and ready-made catalog remain useful without JavaScript', as
   await expect(page.getByRole('figure',{name:'Seven viewport sizes from phone to wide desktop'})).toContainText('Wide desktop');
   await expect(page.locator('#every-screen svg')).toHaveCount(7);
   await page.goto('/docs/building-blocks/section/');
-  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(10);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(11);
   await page.goto('/docs/page-layout/header/');
   await expect(page.getByRole('figure',{name:'Page anatomy'})).toBeVisible();
   await expect(page.getByLabel('Preview viewport')).toBeDisabled();
@@ -316,3 +316,24 @@ for (const route of ['/docs/components/card/', '/sections/card-grid/', '/section
     await expect(page.getByRole('combobox', { name: 'Overlay text tone', exact: true })).toBeDisabled();
   });
 }
+
+test('feature playground updates size, colors, centered counts and optional links', async ({ page }) => {
+  await page.goto('/sections/features/');
+  const preview = page.locator('[data-feature-preview]');
+  await expect(preview.locator('.ps-feature')).toHaveCount(6);
+  await expect(preview.locator('a.ps-feature')).toHaveCount(0);
+  await page.getByRole('combobox', { name: 'Feature count', exact: true }).selectOption('5');
+  await page.getByRole('combobox', { name: 'Feature size', exact: true }).selectOption('m');
+  await page.getByRole('combobox', { name: 'Icon tone', exact: true }).selectOption('primary');
+  await page.getByRole('checkbox', { name: 'Link features', exact: true }).check();
+  await expect(preview.locator('a.ps-feature')).toHaveCount(5);
+  await expect(preview.locator('.ps-features')).toHaveAttribute('data-ps-card-size', 'm');
+  await expect(preview.locator('.ps-feature').first()).toHaveAttribute('data-icon-tone', 'primary');
+  await expect(page.locator('#playground pre')).toContainText('"featureSize": "m"');
+  await expect(page.locator('#playground pre')).toContainText('"iconTone": "primary"');
+  await page.getByRole('button', { name: 'Reset example', exact: true }).click();
+  await expect(preview.locator('.ps-feature')).toHaveCount(6);
+  await expect(preview.locator('a.ps-feature')).toHaveCount(0);
+  await page.getByRole('combobox', { name: 'Feature count', exact: true }).selectOption('5');
+  await preview.screenshot({ path: '.artifacts/features-playground.png' });
+});

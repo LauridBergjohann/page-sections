@@ -348,8 +348,8 @@ test('desktop page links reveal only the second level and retain native navigati
   const menu = page.locator('.website-header .desktop-menu');
   const docs = menu.getByRole('link', { name: 'Sections', exact: true });
   await docs.hover();
-  await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(10);
-  await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(10);
+  await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(11);
+  await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(11);
   await expect(menu.locator('.ps-submenu .ps-submenu')).toHaveCount(0);
   await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toBeVisible();
   await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('backdrop-filter', 'blur(3px)');
@@ -534,7 +534,7 @@ test('global search supports shortcuts, keyboard navigation and empty results', 
   await page.getByRole('listbox', { name: 'Search results' }).getByRole('option').click();
   await expect(page).toHaveURL(/\/showcase\/portfolio\/$/);
   await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Sections', exact: true }).click();
-  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(10);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(11);
 });
 
 test('home explains the library and getting started stays focused', async ({ page }) => {
@@ -703,8 +703,8 @@ test('minimal demo renders a complete page without documentation infrastructure'
   await context.close();
 });
 
-const sectionSlugs = ['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video', 'timeline'];
-const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Video', 'Timeline'];
+const sectionSlugs = ['features', 'card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video', 'timeline'];
+const sectionTitles = ['Features', 'CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Video', 'Timeline'];
 
 test('documentation teaches concepts in order and chapter landing pages explain their scope', async ({ page }) => {
   await page.goto('/docs/');
@@ -797,8 +797,8 @@ test('sections have a complete illustrated catalog, examples and a dedicated sid
   await expect(page.locator('.desktop-menu .ps-main-menu > li > a')).toHaveText(['Getting Started', 'Sections', 'Documentation', 'About']);
   const sidebar = page.getByRole('navigation', { name: 'Sections', exact: true });
   await expect(sidebar.getByRole('link')).toHaveText(sectionTitles);
-  await expect(sidebar.locator('a svg')).toHaveCount(10);
-  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(10);
+  await expect(sidebar.locator('a svg')).toHaveCount(11);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(11);
   for (const [index, slug] of sectionSlugs.entries()) {
     const card = page.locator('#section-catalog .ps-card').nth(index);
     await expect(card.locator('.primary-link')).toHaveAttribute('href', `/sections/${slug}/`);

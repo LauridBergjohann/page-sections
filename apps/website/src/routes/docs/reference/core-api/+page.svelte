@@ -307,6 +307,14 @@ console.log(background.cssBackground);`
         <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a>.media rectangle
         when attaching a renderer.
       </p>
+      <p>
+        <a href={base + '/docs/reference/types/#feature-section-data'}>FeatureSectionData</a> adds
+        the features section discriminator. Its list contains
+        <a href={base + '/docs/reference/types/#feature-item'}>FeatureItem</a>
+        records; <a href={base + '/docs/reference/types/#feature-icon-tone'}>FeatureIconTone</a> chooses
+        standard, muted or primary circle colors. Feature sizes reuse CardSize and the generated card
+        spans.
+      </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
     </div>
   </Section>

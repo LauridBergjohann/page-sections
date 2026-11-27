@@ -1,4 +1,5 @@
 import { timelineExampleFor } from './timelineExample.js';
+import { featureExample } from './featureExample.js';
 import { base } from '#lib/paths.js';
 import type { SectionData } from '@page-sections/core';
 import { sectionCards } from './sectionCatalog';
@@ -20,6 +21,14 @@ export function sectionExample(slug: string): SectionData {
     { label: 'Explore the details', href: base + `/sections/${slug}/`, variant: 'primary' as const }
   ];
   switch (slug) {
+    case 'features':
+      return {
+        ...shared,
+        type: 'features',
+        list: featureExample.slice(0, 5),
+        featureSize: 'm',
+        iconTone: 'standard'
+      };
     case 'timeline':
       return {
         ...timelineExampleFor(base, shared.id, true),

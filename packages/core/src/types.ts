@@ -121,11 +121,15 @@ export type RichTextSectionData = SectionDefinition & RichTextContentData & { ty
 export interface PanelSectionData extends SectionDefinition { type: 'panel'; blocks: RichTextBlock[]; tone?: SurfaceTone; actions?: ContentAction[] }
 export interface ImageSectionData extends SectionDefinition { type: 'image'; image: ImageData; description?: string; imageSide?: 'left' | 'right' }
 export interface VideoSectionData extends SectionDefinition { type: 'video'; video: VideoData; description?: string; videoSide?: 'left' | 'right' }
+/** Circle colors reuse section surfaces or the primary-button foreground/background. */
+export type FeatureIconTone = SurfaceTone | 'primary';
+export interface FeatureItem { id: string; itemKey?: string; icon: string; title: string; description: string; href?: string }
+export interface FeatureSectionData extends SectionDefinition { type: 'features'; list: FeatureItem[]; featureSize?: CardSize; iconTone?: FeatureIconTone }
 export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid'; list: CardItem[]; cardSize?: CardSize; variant?: SectionDefinition['variant']; cardShadow?: boolean; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; contentPlacement?: CardContentPlacement; textTone?: CardTextTone; itemSpan?: ContentSpan; textAlign?: 'start' | 'center' }
 export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; cardShadow?: boolean; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; contentPlacement?: CardContentPlacement; textTone?: CardTextTone; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string }
 export interface GridSectionData extends SectionDefinition { type: 'grid'; blocks: { id: string; span?: ContentSpan; sections: SectionData[] }[] }
 /** Extend this map by module augmentation. Models remain JSON data; renderers are separate. */
-export interface SectionTypeMap { heading: HeadingSectionData; hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData; code: CodeSectionData; timeline: TimelineSectionData }
+export interface SectionTypeMap { heading: HeadingSectionData; hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; features: FeatureSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData; code: CodeSectionData; timeline: TimelineSectionData }
 export type SectionData = SectionTypeMap[keyof SectionTypeMap];
 export interface PageData extends ContentPageData { sections: SectionData[] }
 export interface MenuItem { id: string; label: string; href: string; current?: boolean; active?: boolean; icon?: string; children?: MenuItem[] }

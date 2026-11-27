@@ -393,6 +393,12 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         <code>--ps-card-overlay-rgb</code> hold the local foreground and gradient channels. Choose textTone
         instead of overriding them.
       </p>
+      <p>
+        FeatureSection reuses the card column spans and typography. Its private <code>
+          --ps-feature-icon-size
+        </code> sets 72/104/144px circles for S/M/L; choose featureSize rather than overriding it. Circle
+        colors reuse section-standard, section-muted, accent and on-accent.
+      </p>
       <p><code>cards</code> contains:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">

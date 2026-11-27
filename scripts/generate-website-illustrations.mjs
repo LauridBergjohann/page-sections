@@ -18,6 +18,7 @@ const card = (x, y, w = 170, h = 125) =>
 const text = (x, y, value, size = 24, color = '#185b48') =>
   `<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" font-weight="700" fill="${color}">${value}</text>`;
 const scenes = {
+  features: { title: 'Centered feature icons with titles and descriptions', art: [0,1,2,3,4,5].map(i => { const x = 200 + i % 3 * 200, y = 170 + Math.floor(i / 3) * 170; return '<circle cx="'+x+'" cy="'+y+'" r="54" fill="#e4eeea"/><path d="M'+(x-26)+' '+y+'l26-20 26 20-26 20z" fill="none" stroke="#347e66" stroke-width="4"/>' + line(x-70,y+74,140,'#185b48') + line(x-60,y+96,120); }).join('') },
   timeline: {"title":"Horizontal projects and clustered releases on shared tracks","art":"<rect x=\"42\" y=\"58\" width=\"716\" height=\"384\" rx=\"22\" fill=\"#f2f8f5\" stroke=\"#bfd9ce\"/><g stroke=\"#bdd5cb\" stroke-dasharray=\"3 5\"><path d=\"M110 120v270m145-270v270m145-270v270m145-270v270m145-270v270\"/></g><path d=\"M72 390h656\" stroke=\"#588775\" stroke-width=\"2\"/><g fill=\"#89b5ce\" stroke=\"#2f6ea6\"><rect x=\"100\" y=\"326\" width=\"525\" height=\"32\" rx=\"16\"/><rect x=\"225\" y=\"274\" width=\"360\" height=\"32\" rx=\"16\"/></g><g fill=\"#a4c8b1\" stroke=\"#438468\"><rect x=\"150\" y=\"222\" width=\"265\" height=\"32\" rx=\"16\"/><rect x=\"458\" y=\"222\" width=\"240\" height=\"32\" rx=\"16\"/></g><g fill=\"#e6bd89\" stroke=\"#ad651e\"><circle cx=\"545\" cy=\"170\" r=\"22\"/><circle cx=\"320\" cy=\"170\" r=\"16\"/></g><g fill=\"#224d40\" font-family=\"sans-serif\" font-size=\"15\"><text x=\"128\" y=\"347\">Open access</text><text x=\"252\" y=\"295\">Shared stations</text><text x=\"174\" y=\"244\">Field research</text><text x=\"540\" y=\"176\" font-weight=\"bold\">7</text><text x=\"92\" y=\"418\">2026</text><text x=\"382\" y=\"418\">2022</text><text x=\"672\" y=\"418\">2018</text></g><g fill=\"#2f6ea6\"><circle cx=\"468\" cy=\"88\" r=\"6\"/></g><circle cx=\"575\" cy=\"88\" r=\"6\" fill=\"#438468\"/><circle cx=\"680\" cy=\"88\" r=\"6\" fill=\"#ad651e\"/>"},
   'feature-layout': {
     title: 'One responsive grid, from desktop to phone',
@@ -261,6 +262,7 @@ function recolor(art, [accent, secondary, tint, warm]) {
 // Tight visible-art bounds, including text and the timeline outline. Nested landscape
 // viewports are already clipped; their offscreen geometry is not part of these bounds.
 const artBounds = {
+  features: [130, 116, 540, 328],
   'timeline': [41.5, 57.5, 717, 385],
   'feature-layout': [108, 105, 574, 294],
   'feature-sections': [118, 109, 560, 304],

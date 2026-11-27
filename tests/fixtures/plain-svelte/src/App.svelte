@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PrimaryButton, SecondaryButton, IconButton, Chip } from '@page-sections/svelte/atoms';
   import { Popup } from '@page-sections/svelte/molecules';
-  import { Header, TimelineSection } from '@page-sections/svelte/organisms';
+  import { Header, FeatureSection, TimelineSection } from '@page-sections/svelte/organisms';
   import { PageShell } from '@page-sections/svelte/layouts';
   import { ContentPage, HeadingSection, CardGridSection, CarouselSection, CodeSection, Sections, type InlineText } from '@page-sections/svelte';
   import { resolveCardLayout, type CardItem, type CardMediaAspect, type CardContentPlacement, type CardTextTone, type SurfaceTone } from '@page-sections/core';
@@ -17,6 +17,7 @@
   <HeadingSection section={{ id: 'page-title', title: 'Plain Svelte consumer', headingLevel: 1 }} />
   <CardGridSection section={{ id: 'collection', title: 'Collection' }} list={cards} {mediaAspect} {cardTone} {contentPlacement} {textTone} mediaFit="contain" />
   <CarouselSection section={{ id: 'browse', title: 'Browse', headline: 'Browse' }} list={cards} mediaAspect="4/3" mediaFit="cover" {contentPlacement} textTone="dark" />
+  <FeatureSection section={{ id: 'features', title: 'Features' }} featureSize="l" iconTone="primary" list={[{ id: 'independent-feature', icon: 'layers', title: 'Independent feature', description: 'Centered without browser scripts.', href: '#collection' }]} />
   <output aria-label="Catalog card height">{layout.height}</output>
   <CodeSection section={{ id: 'source', title: 'Source', code: 'const independent = true;', language: 'typescript', lineNumbers: true }} />
   <TimelineSection section={{ id: 'history', title: 'History', headline: 'History', referenceDate: '2026', categories: [

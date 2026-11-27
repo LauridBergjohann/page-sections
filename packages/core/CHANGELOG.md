@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Add FeatureSection with centered incomplete rows, shared S/M/L card spans, decorative icons, standard/muted/primary circle colors and native whole-feature links. Support serializable feature data and custom icon snippets.
+
 - Add below/overlay card content placement with fixed media aspect, theme-independent light/dark copy gradients, accessible overflow and collection support. Use three-column medium cards on the twelve-column L grid in both grids and carousels; other card spans stay unchanged.
 
 - Replace the vertical timeline with a proportional horizontal calendar, shared priority-ordered tracks, viewport-bound bar labels, fit-limited slider and pinch zoom, independent category filters and category-local clusters with standard popup list/detail navigation with outside-click dismissal. Keep sidebars visible above full stages, use standalone content menus on pages with full timelines, and place zoom controls beside the chosen axis. Add optional event labels, axis position, stage width, initial scale and configurable control labels while preserving date normalization, native no-JavaScript details and existing rich content.

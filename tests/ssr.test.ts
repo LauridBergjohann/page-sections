@@ -200,3 +200,17 @@ it('escapes structured inline content and rejects unsafe action and inline links
   expect(body).not.toContain('href="javascript:');
   expect(body).toContain('&lt;script');
 });
+
+it('renders feature data with native links and inherited headings before hydration', () => {
+  const sections: SectionData[] = [{ type: 'features', id: 'benefits', title: 'Benefits', headline: 'Benefits', featureSize: 'l', iconTone: 'primary', list: [
+    { id: 'linked', icon: 'laptop', title: 'Linked feature', description: 'Selectable copy', href: '/guide/' },
+    { id: 'unsafe', icon: 'unknown', title: 'Plain feature', description: 'Still readable', href: 'javascript:alert(1)' }
+  ] }];
+  const { body } = render(Sections, { props: { sections } });
+  expect(body).toContain('href="/guide/"');
+  expect(body).not.toContain('javascript:');
+  expect(body).toContain('data-icon-tone="primary"');
+  expect(body).toContain('data-ps-card-size="l"');
+  expect(body).toMatch(/<h3[^>]*>Linked feature/);
+  expect(body.match(/<svg /g)).toHaveLength(2);
+});

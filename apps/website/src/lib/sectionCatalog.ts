@@ -2,6 +2,12 @@ import { base } from '#lib/paths.js';
 import { illustrationSizes } from './illustrationSizes.js';
 export const sectionCatalog = [
   {
+    slug: 'features',
+    title: 'Features',
+    icon: 'layers',
+    description: 'Centered icons, titles and benefits with optional links and shared grid sizes.'
+  },
+  {
     slug: 'card-grid',
     title: 'CardGrid',
     icon: 'grid',
@@ -77,7 +83,7 @@ export const nextStepCards = [
   {
     id: 'add-sections',
     title: 'Add Sections',
-    description: 'Choose from ten composable section types.',
+    description: 'Choose from eleven composable section types.',
     href: '/sections/'
   },
   {

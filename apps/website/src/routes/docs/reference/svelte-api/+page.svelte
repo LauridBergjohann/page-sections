@@ -173,6 +173,11 @@
               <td><a href={base + '/sections/video/'}>VideoSection</a></td>
             </tr>
             <tr>
+              <td><code>FeatureSection</code></td><td>
+                Centered icon features; section, list, featureSize, iconTone and optional icon
+                snippet
+              </td><td><a href={base + '/sections/features/'}>FeatureSection</a></td>
+            </tr><tr>
               <td><code>CardGridSection</code></td>
               <td>Responsive card collection; section, list</td>
               <td><a href={base + '/sections/card-grid/'}>CardGridSection</a></td>

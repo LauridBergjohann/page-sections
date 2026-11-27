@@ -131,6 +131,27 @@ export const typeDocuments = [
       'A column count, or an object assigning counts to container sizes xs, s, m and l. For example, { xs: 4, s: 3 } spans four columns in the smallest grid and three from s onward.'
   },
   {
+    title: 'FeatureIconTone',
+    href: '/docs/reference/types/#feature-icon-tone',
+    group: 'Data types',
+    description:
+      'Icon-circle palette: standard and muted reuse section surfaces with accent icons; primary uses primary-button accent and on-accent colors. Muted is the default.'
+  },
+  {
+    title: 'FeatureItem',
+    href: '/docs/reference/types/#feature-item',
+    group: 'Data types',
+    description:
+      'A centered benefit with a required icon key, title and description. Optional href makes the whole feature a native link. itemKey distinguishes repeated occurrences. Unknown built-in icon keys fall back to layers; a custom icon snippet can render application keys.'
+  },
+  {
+    title: 'FeatureSectionData',
+    href: '/docs/reference/types/#feature-section-data',
+    group: 'Data types',
+    description:
+      'A centered feature collection. featureSize defaults to m and follows the CardGrid spans; every incomplete row is centered. iconTone defaults to muted and is independent of the section background.'
+  },
+  {
     title: 'FooterLink',
     href: '/docs/reference/types/#footer-link',
     group: 'Data types',

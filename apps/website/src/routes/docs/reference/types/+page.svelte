@@ -102,6 +102,11 @@
             </a>
           </li>
           <li><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></li>
+          <li><a href={base + '/docs/reference/types/#feature-icon-tone'}>FeatureIconTone</a></li>
+          <li><a href={base + '/docs/reference/types/#feature-item'}>FeatureItem</a></li>
+          <li>
+            <a href={base + '/docs/reference/types/#feature-section-data'}>FeatureSectionData</a>
+          </li>
           <li><a href={base + '/docs/reference/types/#footer-link'}>FooterLink</a></li>
           <li><a href={base + '/docs/reference/types/#footer-menu-group'}>FooterMenuGroup</a></li>
           <li><a href={base + '/docs/reference/types/#footer-social-link'}>FooterSocialLink</a></li>
@@ -1316,6 +1321,170 @@
           <thead>
             <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
           </thead><tbody> </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'feature-icon-tone',
+      title: 'FeatureIconTone',
+      headline: 'FeatureIconTone',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        Icon-circle palette: standard and muted reuse section surfaces with accent icons; primary
+        uses primary-button accent and on-accent colors. Muted is the default.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            ><a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a
+            > | 'primary'</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody> </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'feature-item',
+      title: 'FeatureItem',
+      headline: 'FeatureItem',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        A centered benefit with a required icon key, title and description. Optional href makes the
+        whole feature a native link. itemKey distinguishes repeated occurrences. Unknown built-in
+        icon keys fall back to layers; a custom icon snippet can render application keys.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            >interface <a href={base + '/docs/reference/types/#feature-item'}>FeatureItem</a
+            > &#123; id: string; itemKey?: string; icon: string; title: string; description: string; href?: string &#125;</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>id</code></td><td><code>string</code></td><td>Required</td><td>
+                Stable identity for this entry.
+              </td>
+            </tr>
+            <tr>
+              <td><code>itemKey</code></td><td><code>string</code></td><td>Optional</td><td>
+                See the declared value shape and the linked types.
+              </td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td><td><code>string</code></td><td>Required</td><td>
+                Caller-supplied icon or icon identifier, as shown by the type.
+              </td>
+            </tr>
+            <tr>
+              <td><code>title</code></td><td><code>string</code></td><td>Required</td><td>
+                Human-readable title.
+              </td>
+            </tr>
+            <tr>
+              <td><code>description</code></td><td><code>string</code></td><td>Required</td><td>
+                Optional accompanying text.
+              </td>
+            </tr>
+            <tr>
+              <td><code>href</code></td><td><code>string</code></td><td>Optional</td><td>
+                Link destination.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'feature-section-data',
+      title: 'FeatureSectionData',
+      headline: 'FeatureSectionData',
+      headingSize: 'm',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        A centered feature collection. featureSize defaults to m and follows the CardGrid spans;
+        every incomplete row is centered. iconTone defaults to muted and is independent of the
+        section background.
+      </p>
+      <p>
+        Also includes the fields of <code>
+          <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a>
+        </code>. Follow these links for inherited fields.
+      </p>
+      <details>
+        <summary>Type declaration</summary>
+        <pre><code
+            >interface <a href={base + '/docs/reference/types/#feature-section-data'}
+              >FeatureSectionData</a
+            > extends <a href={base + '/docs/reference/types/#section-definition'}
+              >SectionDefinition</a
+            > &#123; type: 'features'; list: <a href={base + '/docs/reference/types/#feature-item'}
+              >FeatureItem</a
+            >[]; featureSize?: <a href={base + '/docs/reference/types/#card-size'}>CardSize</a
+            >; iconTone?: <a href={base + '/docs/reference/types/#feature-icon-tone'}
+              >FeatureIconTone</a
+            > &#125;</code
+          ></pre>
+      </details>
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex (Reference tables need keyboard scrolling.) -->
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Type fields">
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Presence</th><th>Meaning</th></tr>
+          </thead><tbody>
+            <tr>
+              <td><code>type</code></td><td><code>'features'</code></td><td>Required</td><td>
+                Discriminator selecting this content variant.
+              </td>
+            </tr>
+            <tr>
+              <td><code>list</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#feature-item'}>FeatureItem</a>[]
+                </code>
+              </td><td>Required</td><td>Card items in display order.</td>
+            </tr>
+            <tr>
+              <td><code>featureSize</code></td><td>
+                <code><a href={base + '/docs/reference/types/#card-size'}>CardSize</a></code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>iconTone</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#feature-icon-tone'}>FeatureIconTone</a>
+                </code>
+              </td><td>Optional</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -3476,6 +3645,8 @@
               >ImageSectionData</a
             >; video: <a href={base + '/docs/reference/types/#video-section-data'}
               >VideoSectionData</a
+            >; features: <a href={base + '/docs/reference/types/#feature-section-data'}
+              >FeatureSectionData</a
             >; cardGrid: <a href={base + '/docs/reference/types/#card-grid-section-data'}
               >CardGridSectionData</a
             >; carousel: <a href={base + '/docs/reference/types/#carousel-section-data'}
@@ -3536,6 +3707,15 @@
               <td><code>video</code></td><td>
                 <code>
                   <a href={base + '/docs/reference/types/#video-section-data'}>VideoSectionData</a>
+                </code>
+              </td><td>Required</td><td>See the declared value shape and the linked types.</td>
+            </tr>
+            <tr>
+              <td><code>features</code></td><td>
+                <code>
+                  <a href={base + '/docs/reference/types/#feature-section-data'}>
+                    FeatureSectionData
+                  </a>
                 </code>
               </td><td>Required</td><td>See the declared value shape and the linked types.</td>
             </tr>
