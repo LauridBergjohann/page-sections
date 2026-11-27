@@ -35,6 +35,8 @@ const descriptions = {
   ContentPageData: 'Metadata for ContentPage, the main content container. A browser document title is distinct from the visible h1, which you supply as content.',
   PageData: 'A data-driven page: ContentPageData plus an array of section models. Pass sections to the plural Sections component explicitly; ContentPage does not render this array itself.',
   ImageData: 'One image and its optional variants. Supply your own assets; the library does not resize images or generate srcset files.',
+  CardContentPlacement: 'below (default) adds copy under the media. overlay places copy over a gradient, forces cover and uses mediaAspect for the entire fixed card shape. Long copy scrolls within the card.',
+  CardTextTone: 'Overlay copy colors, independent of the page theme: light (default) is white on a dark gradient; dark is dark text on a light gradient. Ignored in below mode.',
   CardItem: 'The content of a single card. A supplied description appears below its title. The main link covers the card; additional actions and footer links remain independent.',
   VideoData: 'A native HTML video source or a YouTube source. Captions are an array of objects: src is the track URL, language is its language code, and label is its visible name.',
   MenuItem: 'One site-navigation entry. Children use the same shape recursively. IDs must be unique in the tree. resolveNavigation derives current and active states from the current location.',
@@ -112,7 +114,7 @@ const sourceText = node => node.getText(node.getSourceFile());
 function rows(type, owner) {
   return checker.getPropertiesOfType(type).map(symbol => {
     const node = symbol.valueDeclaration ?? symbol.declarations?.[0];
-    if (!node || (!ts.isPropertySignature(node) && !ts.isMethodSignature(node))) return '';
+    if (!node || program.isSourceFileDefaultLibrary(node.getSourceFile()) || (!ts.isPropertySignature(node) && !ts.isMethodSignature(node))) return '';
     const parent = node.parent.name?.getText() ?? '';
     if (owner && parent && parent !== owner) return '';
     const typeText = node.type ? sourceText(node.type) : checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, node));

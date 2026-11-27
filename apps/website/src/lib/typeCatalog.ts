@@ -14,6 +14,13 @@ export const typeDocuments = [
     description: 'Fields and declaration of ButtonGroupItem.'
   },
   {
+    title: 'CardContentPlacement',
+    href: '/docs/reference/types/#card-content-placement',
+    group: 'Data types',
+    description:
+      'below (default) adds copy under the media. overlay places copy over a gradient, forces cover and uses mediaAspect for the entire fixed card shape. Long copy scrolls within the card.'
+  },
+  {
     title: 'CardElements',
     href: '/docs/reference/types/#card-elements',
     group: 'Data types',
@@ -56,6 +63,13 @@ export const typeDocuments = [
     href: '/docs/reference/types/#card-size',
     group: 'Data types',
     description: 'Fields and declaration of CardSize.'
+  },
+  {
+    title: 'CardTextTone',
+    href: '/docs/reference/types/#card-text-tone',
+    group: 'Data types',
+    description:
+      'Overlay copy colors, independent of the page theme: light (default) is white on a dark gradient; dark is dark text on a light gradient. Ignored in below mode.'
   },
   {
     title: 'CarouselSectionData',

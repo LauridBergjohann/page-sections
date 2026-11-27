@@ -291,17 +291,19 @@ console.log(background.cssBackground);`
         </table>
       </div>
       <p>
-        For resolveCardLayout, s/m/l request 2/2/4 columns, except l uses 3 on the s grid.
+        For resolveCardLayout, s/m/l request 2/2/4 columns on xs and m, 2/2/3 on s, and 2/3/4 on l.
         <a href={base + '/docs/reference/types/#card-layout-options'}>CardLayoutOptions</a> accepts
-        mediaAspect (3/2 default; also 4/3 or 1/1), mediaFit (contain default or cover), and
-        reserveEyebrow (false default, ignored for S). Derive reserveEyebrow from the entire
-        collection, as the Svelte collections do. Width comes from contentSpanWidth;
-        mediaFrame.height is width divided by the selected ratio. Text height is
+        mediaAspect (3/2 default; also 4/3 or 1/1), mediaFit (contain default or cover),
+        contentPlacement (below default or overlay), and reserveEyebrow (false default, ignored for
+        S). Derive reserveEyebrow from the entire collection, as the Svelte collections do. Width
+        comes from contentSpanWidth; mediaFrame.height is width divided by the selected ratio. Text
+        height is
         <code>(rows + eyebrowRows) * lineHeight + 2 * cardTextInset.block</code>; total height is
-        mediaFrame.height + textHeight. The media rectangle is inset by 12px for contain (matching
-        the text, clamped to available space), or fills mediaFrame for cover. These are default base
-        card measurements, not measurements of arbitrary CSS overrides or additional card content.
-        Observe the actual
+        mediaFrame.height + textHeight in below mode. Overlay height equals mediaFrame.height and
+        always uses the full media rectangle; textHeight remains the intrinsic base copy estimate.
+        The media rectangle is inset by 12px for contain (matching the text, clamped to available
+        space), or fills mediaFrame for cover. These are default base card measurements, not
+        measurements of arbitrary CSS overrides or additional card content. Observe the actual
         <a href={base + '/docs/reference/types/#card-elements'}>CardElements</a>.media rectangle
         when attaching a renderer.
       </p>
@@ -727,16 +729,26 @@ console.log(background.cssBackground);`
         <li>
           <code>
             <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>
-          </code>: 3/2, 4/3 or 1/1; applies to the media frame only.
+          </code>: 3/2, 4/3 or 1/1; the media frame ratio, or the entire card ratio in overlay mode.
         </li>
         <li>
           <code><a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a></code>:
           contain or cover; independent from the frame ratio.
         </li>
         <li>
+          <a href={base + '/docs/reference/types/#card-content-placement'}>CardContentPlacement</a>:
+          below (default) or overlay; overlay forces cover.
+        </li>
+        <li>
+          <a href={base + '/docs/reference/types/#card-text-tone'}>CardTextTone</a>: light (default)
+          or dark; local overlay copy colors independent of the page theme.
+        </li>
+        <li>
           <code>
             <a href={base + '/docs/reference/types/#card-layout-options'}>CardLayoutOptions</a>
-          </code>: mediaAspect, mediaFit and reserveEyebrow for base card measurements.
+          </code>: mediaAspect, mediaFit, contentPlacement and reserveEyebrow for base card
+          measurements. Overlay height equals mediaFrame height and media fills the frame;
+          textHeight remains the intrinsic base copy estimate, not added height.
         </li>
         <li>
           <code><a href={base + '/docs/reference/types/#inline-text'}>InlineText</a></code>: string

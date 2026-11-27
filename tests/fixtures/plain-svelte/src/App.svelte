@@ -4,17 +4,19 @@
   import { Header, TimelineSection } from '@page-sections/svelte/organisms';
   import { PageShell } from '@page-sections/svelte/layouts';
   import { ContentPage, HeadingSection, CardGridSection, CarouselSection, CodeSection, Sections, type InlineText } from '@page-sections/svelte';
-  import { resolveCardLayout, type CardItem, type CardMediaAspect, type SurfaceTone } from '@page-sections/core';
+  import { resolveCardLayout, type CardItem, type CardMediaAspect, type CardContentPlacement, type CardTextTone, type SurfaceTone } from '@page-sections/core';
   const cards: CardItem[] = [{ id: 'one', title: 'Independent consumer', href: '#collection' }];
   const footer: InlineText = 'Footer';
   const mediaAspect: CardMediaAspect = '1/1';
+  const contentPlacement: CardContentPlacement = 'overlay';
+  const textTone: CardTextTone = 'light';
   const cardTone: SurfaceTone = 'muted';
-  const layout = resolveCardLayout(320, 'm', { mediaAspect, reserveEyebrow: true });
+  const layout = resolveCardLayout(320, 'm', { mediaAspect, contentPlacement, reserveEyebrow: true });
 </script>
 <ContentPage page={{ title: 'Plain Svelte consumer' }} showContentMenu>
   <HeadingSection section={{ id: 'page-title', title: 'Plain Svelte consumer', headingLevel: 1 }} />
-  <CardGridSection section={{ id: 'collection', title: 'Collection' }} list={cards} {mediaAspect} {cardTone} mediaFit="contain" />
-  <CarouselSection section={{ id: 'browse', title: 'Browse', headline: 'Browse' }} list={cards} mediaAspect="4/3" mediaFit="cover" />
+  <CardGridSection section={{ id: 'collection', title: 'Collection' }} list={cards} {mediaAspect} {cardTone} {contentPlacement} {textTone} mediaFit="contain" />
+  <CarouselSection section={{ id: 'browse', title: 'Browse', headline: 'Browse' }} list={cards} mediaAspect="4/3" mediaFit="cover" {contentPlacement} textTone="dark" />
   <output aria-label="Catalog card height">{layout.height}</output>
   <CodeSection section={{ id: 'source', title: 'Source', code: 'const independent = true;', language: 'typescript', lineNumbers: true }} />
   <TimelineSection section={{ id: 'history', title: 'History', headline: 'History', referenceDate: '2026', categories: [

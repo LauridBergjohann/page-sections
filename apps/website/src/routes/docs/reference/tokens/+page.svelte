@@ -388,6 +388,11 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
           </tbody>
         </table>
       </div>
+      <p>
+        Overlay implementation variables <code>--ps-card-overlay-ink</code> and
+        <code>--ps-card-overlay-rgb</code> hold the local foreground and gradient channels. Choose textTone
+        instead of overriding them.
+      </p>
       <p><code>cards</code> contains:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -402,7 +407,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <th>eyebrowWeight</th>
               <th>lineHeight</th>
               <th>rows</th>
-              <th>gridSSpan</th>
+              <th>gridSSpan</th><th>gridLSpan</th>
             </tr>
           </thead>
           <tbody>
@@ -415,7 +420,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>400</td>
               <td>18</td>
               <td>2</td>
-              <td>Absent</td>
+              <td>Absent</td><td>Absent</td>
             </tr>
             <tr>
               <td>m</td>
@@ -426,7 +431,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>400</td>
               <td>20</td>
               <td>2</td>
-              <td>Absent</td>
+              <td>Absent</td><td>3</td>
             </tr>
             <tr>
               <td>l</td>
@@ -437,16 +442,15 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>400</td>
               <td>24</td>
               <td>3</td>
-              <td>3</td>
+              <td>3</td><td>Absent</td>
             </tr>
           </tbody>
         </table>
       </div>
       <p>
         These feed resolveCardLayout and Svelte cards. Descriptions use natural title height;
-        descriptions and additional content make the final height content-dependent. <code>
-          breadcrumb
-        </code> contains:
+        descriptions and additional content make the final height content-dependent in below mode.
+        Overlay uses a fixed media aspect and scrollable copy. <code> breadcrumb </code> contains:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -554,7 +558,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>--ps-breadcrumb-font-size, --ps-breadcrumb-height</td>
               <td>Viewport values in the table above</td>
             </tr>
-            <tr>
+            <tr> <td>--ps-card-medium-span</td><td>2 columns; 3 on the L grid</td></tr><tr>
               <td>--ps-card-large-span</td>
               <td>3 in the S grid, otherwise 4</td>
             </tr>

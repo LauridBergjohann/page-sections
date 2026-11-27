@@ -7,6 +7,8 @@
     type CardSize,
     type SurfaceTone,
     type CardMediaAspect,
+    type CardContentPlacement,
+    type CardTextTone,
     type CardMediaFit
   } from '@page-sections/svelte';
   import LiveCode from './LiveCode.svelte';
@@ -15,6 +17,8 @@
   let cardTone = $state<SurfaceTone>('muted');
   let cardShadow = $state(false);
   let descriptions = $state(true);
+  let contentPlacement = $state<CardContentPlacement>('below');
+  let textTone = $state<CardTextTone>('light');
   let mediaAspect = $state<CardMediaAspect>('3/2');
   let mediaFit = $state<CardMediaFit>('contain');
   let textAlign = $state<'start' | 'center'>('start');
@@ -59,7 +63,16 @@
   const list = $derived(
     cards.map((item) => ({ ...item, description: descriptions ? item.description : undefined }))
   );
-  const options = $derived({ cardSize, cardTone, cardShadow, mediaAspect, mediaFit, textAlign });
+  const options = $derived({
+    cardSize,
+    cardTone,
+    cardShadow,
+    mediaAspect,
+    mediaFit,
+    contentPlacement,
+    textTone,
+    textAlign
+  });
   const name = $derived(kind === 'grid' ? 'CardGridSection' : 'CarouselSection');
   const source = $derived(
     `<script lang="ts">\n  import { ${name} } from '@page-sections/svelte';\n  const list = ${JSON.stringify(list, null, 2).replaceAll('\n', '\n  ')};\n<\/script>\n\n<${name}\n  section={{ id: 'collection', title: 'Collection' }}\n  {list}\n${Object.entries(
@@ -76,6 +89,8 @@
     cardShadow = false;
     descriptions = true;
     mediaAspect = '3/2';
+    contentPlacement = 'below';
+    textTone = 'light';
     mediaFit = 'contain';
     textAlign = 'start';
   }
@@ -102,12 +117,25 @@
       <input type="checkbox" bind:checked={descriptions} disabled={!ready} /> Show descriptions
     </label>
     <label>
+      Content placement<select bind:value={contentPlacement} disabled={!ready}>
+        <option value="below">Below image</option><option value="overlay">On image</option>
+      </select>
+    </label>
+    <label>
+      Overlay text tone<select
+        bind:value={textTone}
+        disabled={!ready || contentPlacement !== 'overlay'}
+      >
+        <option>light</option><option>dark</option>
+      </select>
+    </label>
+    <label>
       Media aspect<select bind:value={mediaAspect} disabled={!ready}>
         <option>3/2</option><option>4/3</option><option>1/1</option>
       </select>
     </label>
     <label>
-      Media fit<select bind:value={mediaFit} disabled={!ready}>
+      Media fit<select bind:value={mediaFit} disabled={!ready || contentPlacement === 'overlay'}>
         <option>cover</option><option>contain</option>
       </select>
     </label>
@@ -133,7 +161,9 @@
 </div>
 <p class="example-note">
   Card sizes control media and title geometry. Descriptions appear whenever supplied. Hover a card
-  to compare its shadow and accent border. The code below follows your selections.
+  to compare its shadow and accent border. Overlay uses cover automatically; media aspect sets the
+  whole card shape. Use short teasers; longer copy scrolls inside the card. The code below follows
+  your selections.
 </p>
 <LiveCode code={source} />
 

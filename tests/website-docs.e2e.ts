@@ -296,3 +296,23 @@ test('visual guides and ready-made catalog remain useful without JavaScript', as
   await expect(page.frameLocator('iframe').getByRole('heading',{name:'Planting',exact:true})).toBeVisible();
   await context.close();
 });
+
+for (const route of ['/docs/components/card/', '/sections/card-grid/', '/sections/carousel/']) {
+  test('card overlay playground updates preview and source on ' + route, async ({ page }) => {
+    await page.goto(route);
+    await page.getByRole('combobox', { name: 'Content placement', exact: true }).selectOption('overlay');
+    await page.getByRole('combobox', { name: 'Media aspect', exact: true }).selectOption('1/1');
+    await page.getByRole('combobox', { name: 'Overlay text tone', exact: true }).selectOption('dark');
+    const card = page.locator('#playground .ps-card').first();
+    await expect(card).toHaveAttribute('data-content-placement', 'overlay');
+    await expect(card).toHaveAttribute('data-media-fit', 'cover');
+    await expect(card.locator('.title')).toHaveCSS('color', 'rgb(17, 17, 17)');
+    const box = (await card.boundingBox())!;
+    expect(box.height).toBeCloseTo(box.width, 1);
+    await expect(page.locator('#playground pre')).toContainText('contentPlacement="overlay"');
+    await expect(page.locator('#playground pre')).toContainText('textTone="dark"');
+    await page.getByRole('combobox', { name: 'Content placement', exact: true }).selectOption('below');
+    await expect(card).toHaveAttribute('data-media-fit', 'contain');
+    await expect(page.getByRole('combobox', { name: 'Overlay text tone', exact: true })).toBeDisabled();
+  });
+}

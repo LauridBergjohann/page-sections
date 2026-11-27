@@ -67,7 +67,7 @@ for (const [name, grid] of Object.entries(tokens.grid)) {
 }
 for (const [name, card] of Object.entries(tokens.cards)) {
   const fields = ['span', 'titleSize', 'titleWeight', 'eyebrowSize', 'eyebrowWeight', 'lineHeight', 'rows'];
-  if (!rows.includes([name, ...fields.map(field => card[field]), card.gridSSpan ?? 'Absent'].join('|'))) throw new Error(`Stale card tokens: ${name}`);
+  if (!rows.includes([name, ...fields.map(field => card[field]), card.gridSSpan ?? 'Absent', card.gridLSpan ?? 'Absent'].join('|'))) throw new Error(`Stale card tokens: ${name}`);
 }
 for (const [name, value] of Object.entries(tokens.breadcrumb)) if (!rows.includes(`${name}|${value.fontSize}|${value.height}`)) throw new Error(`Stale breadcrumb tokens: ${name}`);
 for (const [name, value] of Object.entries(tokens.layoutMinWidths)) if (!tokenReference.includes(`${name}=${value}`)) throw new Error(`Stale viewport tokens: ${name}`);

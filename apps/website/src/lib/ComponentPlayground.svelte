@@ -8,6 +8,8 @@
     type CardSize,
     type SurfaceTone,
     type CardMediaAspect,
+    type CardContentPlacement,
+    type CardTextTone,
     type CardMediaFit,
     type ImageData
   } from '@page-sections/svelte';
@@ -19,6 +21,8 @@
   let description = $state(true);
   let cardSize = $state<CardSize>('m');
   let tone = $state<SurfaceTone>('muted');
+  let contentPlacement = $state<CardContentPlacement>('below');
+  let textTone = $state<CardTextTone>('light');
   let mediaAspect = $state<CardMediaAspect>('3/2');
   let fit = $state<CardMediaFit>('contain');
   let aspect = $state<ImageData['aspect']>('16/9');
@@ -48,7 +52,7 @@
   });
   const source = $derived(
     kind === 'card'
-      ? `<script>\n  import { Card } from '@page-sections/svelte';\n  const item = ${JSON.stringify(item, null, 2)};\n<\/script>\n\n<Card {item} shadow={${shadow}} cardSize="${cardSize}" tone="${tone}" mediaAspect="${mediaAspect}" mediaFit="${fit}" />`
+      ? `<script>\n  import { Card } from '@page-sections/svelte';\n  const item = ${JSON.stringify(item, null, 2)};\n<\/script>\n\n<Card {item} shadow={${shadow}} cardSize="${cardSize}" tone="${tone}" mediaAspect="${mediaAspect}" mediaFit="${fit}" contentPlacement="${contentPlacement}" textTone="${textTone}" />`
       : `<script lang="ts">\n  import { Image, PageShell, type ImageData } from '@page-sections/svelte';\n  const image: ImageData = ${JSON.stringify(image, null, 2)};\n<\/script>\n\n<PageShell mode="${mode}">\n  <Image {image} />\n</PageShell>`
   );
   function reset() {
@@ -58,6 +62,8 @@
     cardSize = 'm';
     tone = 'muted';
     mediaAspect = '3/2';
+    contentPlacement = 'below';
+    textTone = 'light';
     fit = 'contain';
     aspect = '16/9';
     mode = 'light';
@@ -84,6 +90,19 @@
       </select>
     </label>
     <label>
+      Content placement<select bind:value={contentPlacement} disabled={!ready}>
+        <option value="below">Below image</option><option value="overlay">On image</option>
+      </select>
+    </label>
+    <label>
+      Overlay text tone<select
+        bind:value={textTone}
+        disabled={!ready || contentPlacement !== 'overlay'}
+      >
+        <option>light</option><option>dark</option>
+      </select>
+    </label>
+    <label>
       Media aspect<select bind:value={mediaAspect} disabled={!ready}>
         <option>3/2</option><option>4/3</option><option>1/1</option>
       </select>
@@ -103,7 +122,10 @@
     </label>
   {/if}
   <label>
-    Image fit<select bind:value={fit} disabled={!ready}>
+    Image fit<select
+      bind:value={fit}
+      disabled={!ready || (kind === 'card' && contentPlacement === 'overlay')}
+    >
       <option>contain</option><option>cover</option>
     </select>
   </label>
@@ -123,6 +145,8 @@
         {tone}
         {mediaAspect}
         mediaFit={fit}
+        {contentPlacement}
+        {textTone}
       />{:else}<Image {image} />{/if}
   </PageShell>
 </div>

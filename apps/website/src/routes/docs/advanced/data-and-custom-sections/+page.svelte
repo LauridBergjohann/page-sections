@@ -278,7 +278,8 @@ declare module '@page-sections/core' {
               </td>
               <td>
                 Required list: <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>[];
-                optional cardSize, cardShadow, mediaAspect, mediaFit, itemSpan, textAlign
+                optional cardSize, cardShadow, mediaAspect, mediaFit, contentPlacement, textTone,
+                itemSpan, textAlign
               </td>
             </tr>
             <tr>
@@ -292,8 +293,8 @@ declare module '@page-sections/core' {
               </td>
               <td>
                 Required list: <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>[];
-                optional cardSize, cardShadow, mediaAspect, mediaFit, textAlign, controls,
-                initialItemKey
+                optional cardSize, cardShadow, mediaAspect, mediaFit, contentPlacement, textTone,
+                textAlign, controls, initialItemKey
               </td>
             </tr>
             <tr>
