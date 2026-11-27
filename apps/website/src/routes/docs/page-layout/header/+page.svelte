@@ -43,6 +43,19 @@
   >
 </ContentPage>
 `
+    },
+    {
+      language: 'svelte',
+      code: `<script lang="ts">
+  import { Header } from '@page-sections/svelte';
+  // The host layout supplies this value from its current route or page data.
+  let { isDetailPage = false }: { isDetailPage?: boolean } = $props();
+<\/script>
+
+<Header scrollBehavior={isDetailPage ? 'delayed' : 'fixed'}>
+  {#snippet brand()}<a href="/">My website</a>{/snippet}
+</Header>
+`
     }
   ];
 </script>
@@ -182,6 +195,46 @@
         screen size. Supply an icon key on each item and render it through this snippet. The website uses
         Lucide; the library has no icon dependency.
       </p>
+    </div>
+  </Section>
+  <Section
+    section={{
+      id: 'fixed-header',
+      title: 'Fixed headers and page overrides',
+      headline: 'Fixed headers and page overrides',
+      background: { color: 'standard' }
+    }}
+  >
+    <div class="prose">
+      <p>
+        With <code>scrollBehavior="fixed"</code>, XL–3XL layouts first scroll through the header's
+        16px top gap. The header then docks at the viewport edge. Satellites dock independently
+        after their 28px top gap. Scrolling back to the top restores both original positions.
+        Smaller layouts have no top gap or satellites, so their header is fixed from the start.
+        Positioning uses CSS and works without JavaScript.
+      </p>
+      <p>
+        Once a surface reaches the top, its upper corner radius decreases by one pixel per pixel
+        scrolled. With a 12px radius, the header becomes square at scroll position 28px and
+        satellites at 40px. Lower corners stay rounded. The effect follows scrolling in both
+        directions, with no timed transition. It uses <a
+          href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation-timeline/scroll"
+        >
+          CSS scroll timelines
+        </a>; older browsers without support, and reduced-motion preferences, retain static corners.
+      </p>
+      <p>
+        Inside PageShell, both desktop sidebars automatically reserve the docked header height plus
+        their usual 16px gap: 80px with the standard 64px desktop header. Their bottom gap stays
+        16px. Selecting static or delayed immediately restores the usual sidebar position.
+      </p>
+      <p>
+        The prop stays reactive. Derive it from the active route or page data in your host layout:
+        use fixed for ordinary pages and delayed on a detail page with its own product or CTA
+        header. No global settings or remount are needed. If an enclosing navigation shell already
+        owns scrolling, choose static instead.
+      </p>
+      <CodeBlock {...examples[1]} highlighted={data.highlights[1]} />
     </div>
   </Section>
   <Section

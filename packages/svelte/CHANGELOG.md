@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Make fixed headers dock independently from their satellites on XL–3XL layouts using native CSS sticky positioning. Flatten upper corners with scroll progress, reserve the docked header above both sidebars, and update sidebar space when the reactive scrollBehavior prop changes. Compact fixed headers and delayed/static modes retain their behavior.
+
 - Prepend an accessible icon-only Home link in Breadcrumbs, including single-page trails. Hide Home-only trails, reuse an existing Home entry, and expose site-root and label overrides through Breadcrumbs and ContentPage. Scale the icon with the text; use body-colored links without underlines, accent on hover/keyboard focus, and translucent separators and unlinked entries.
 
 - Add mediaHoverZoom (default true) to cards, grids and carousels. Refine overlay gradients to a translucent fade within the copy area and make descriptions and gradient padding follow the native card link while actions keep their own destinations.

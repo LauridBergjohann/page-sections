@@ -292,6 +292,13 @@
         independently, while the main content stays readable.
       </p>
       <p>
+        When PageShell contains a Header with <code>scrollBehavior="fixed"</code>, both desktop
+        sidebars dock 80px from the viewport top: the 64px header plus the usual 16px gap. Smaller
+        layouts reserve the compact header height above the contents button. Changing the Header
+        prop to static or delayed restores the normal offsets automatically, including during
+        client-side navigation.
+      </p>
+      <p>
         The <a href={base + '/docs/design-system/responsive-layout/'}>responsive design system</a> explains
         the layout sizes, breakpoints and sidebar widths. Topic links also work without JavaScript; JavaScript
         adds active-topic tracking and keyboard focus restoration.

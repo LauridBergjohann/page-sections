@@ -320,6 +320,14 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         default to 0px. Image uses private <code>--image-ratio</code> and <code>--image-fit</code>
         variables; configure <a href={base + '/docs/reference/types/#image-data'}>ImageData</a> instead.
       </p>
+      <p>
+        Fixed Header uses <code>--ps-header-dock-extra</code> for the gap between the header and
+        satellite docking positions. Internal <code>--ps-header-dock-start</code> and
+        <code>--ps-header-dock-radius</code> define each surface's corner animation range.
+        <code>--ps-sidebar-header-offset</code> adds the docked menu height to desktop sidebar
+        offsets inside PageShell; it is zero without a fixed header. Configure Header's
+        <code>scrollBehavior</code> prop instead of setting these derived values.
+      </p>
     </div>
   </Section>
   <Section

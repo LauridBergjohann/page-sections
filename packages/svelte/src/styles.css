@@ -51,6 +51,10 @@
 .ps-page .ps-section[data-layout='full'] { width: 100%; margin-inline: auto; }
 
 /* Keep the compact contents control reachable while a persistent header is visible. */
+.ps-shell { --ps-sidebar-header-offset: 0px; }
+@media (min-width: 1600px) {
+  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) { --ps-sidebar-header-offset: var(--ps-menu-height); }
+}
 @media (max-width: 1599.98px) {
   .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .mobile { top: calc(var(--ps-nav-height) + 12px); }
   .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }

@@ -246,6 +246,10 @@ test('page layout examples use independent viewports and real component controls
     await expect(preview.getByRole('main')).toHaveCount(1);
     const toggle = page.locator('#live-example input[type="checkbox"]');
     if (kind === 'header') {
+      for (const mode of ['fixed', 'delayed', 'static', 'fixed']) {
+        await page.getByLabel('Header scroll behavior').selectOption(mode);
+        await expect(preview.locator('.ps-header')).toHaveAttribute('data-scroll', mode);
+      }
       await expect(preview.locator('.satellite.left')).toBeVisible();
       await toggle.uncheck();
       await expect(preview.locator('.satellite.left')).toHaveCount(0);
