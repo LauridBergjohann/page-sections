@@ -14,6 +14,13 @@ export const typeDocuments = [
     description: 'Fields and declaration of ButtonGroupItem.'
   },
   {
+    title: 'CardContentPlacement',
+    href: '/docs/reference/types/#card-content-placement',
+    group: 'Data types',
+    description:
+      'below (default) adds copy under the media. overlay places copy over a gradient, forces cover and uses mediaAspect for the entire fixed card shape. Long copy scrolls within the card.'
+  },
+  {
     title: 'CardElements',
     href: '/docs/reference/types/#card-elements',
     group: 'Data types',
@@ -56,6 +63,13 @@ export const typeDocuments = [
     href: '/docs/reference/types/#card-size',
     group: 'Data types',
     description: 'Fields and declaration of CardSize.'
+  },
+  {
+    title: 'CardTextTone',
+    href: '/docs/reference/types/#card-text-tone',
+    group: 'Data types',
+    description:
+      'Overlay copy colors, independent of the page theme: light (default) is white on a dark gradient; dark is dark text on a light gradient. Ignored in below mode.'
   },
   {
     title: 'CarouselSectionData',
@@ -117,6 +131,27 @@ export const typeDocuments = [
       'A column count, or an object assigning counts to container sizes xs, s, m and l. For example, { xs: 4, s: 3 } spans four columns in the smallest grid and three from s onward.'
   },
   {
+    title: 'FeatureIconTone',
+    href: '/docs/reference/types/#feature-icon-tone',
+    group: 'Data types',
+    description:
+      'Icon-circle palette: standard and muted reuse section surfaces with accent icons; primary uses primary-button accent and on-accent colors. Muted is the default.'
+  },
+  {
+    title: 'FeatureItem',
+    href: '/docs/reference/types/#feature-item',
+    group: 'Data types',
+    description:
+      'A centered benefit with a required icon key, title and description. Optional href makes the whole feature a native link. itemKey distinguishes repeated occurrences. Unknown built-in icon keys fall back to layers; a custom icon snippet can render application keys.'
+  },
+  {
+    title: 'FeatureSectionData',
+    href: '/docs/reference/types/#feature-section-data',
+    group: 'Data types',
+    description:
+      'A centered feature collection. featureSize defaults to m and follows the CardGrid spans; every incomplete row is centered. iconTone defaults to muted and is independent of the section background.'
+  },
+  {
     title: 'FooterLink',
     href: '/docs/reference/types/#footer-link',
     group: 'Data types',
@@ -142,6 +177,12 @@ export const typeDocuments = [
     href: '/docs/reference/types/#grid-section-data',
     group: 'Data types',
     description: 'Fields and declaration of GridSectionData.'
+  },
+  {
+    title: 'HeadingAlign',
+    href: '/docs/reference/types/#heading-align',
+    group: 'Data types',
+    description: 'Fields and declaration of HeadingAlign.'
   },
   {
     title: 'HeadingLevel',
@@ -386,7 +427,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#timeline-event-base',
     group: 'Data types',
     description:
-      'Shared serializable event details. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.'
+      'Shared serializable event details. Optional label supplies a compact overview name; blank labels use title. Details retain the full title. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.'
   },
   {
     title: 'TimelinePeriodEvent',
@@ -406,7 +447,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#timeline-section-data',
     group: 'Data types',
     description:
-      'Shared section metadata plus categories on one proportional date scale, ascending by default or descending for newest-first timelines. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.'
+      'Shared section metadata plus categories on a horizontal proportional date scale with a shared priority-ordered track pool, zoom, filters and category-local clusters. Direction defaults to ascending, axisPosition to bottom and stageWidth to contained. Full stage width also sets background.size to full while preserving its color, and is recommended only without side navigation. Initial scale is clamped to the full-timeline fit minimum. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.'
   },
   {
     title: 'VideoData',

@@ -13,10 +13,13 @@
   import NavigationIcon from '#lib/NavigationIcon.svelte';
   let kind = $state('content-page');
   let enabled = $state(true);
+  let scrollBehavior = $state<'fixed' | 'delayed' | 'static'>('delayed');
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
     kind = params.get('kind') ?? 'content-page';
     enabled = params.get('enabled') !== 'false';
+    const scroll = params.get('scroll');
+    if (scroll === 'fixed' || scroll === 'delayed' || scroll === 'static') scrollBehavior = scroll;
   });
   const items = [
     {
@@ -45,6 +48,7 @@
 {#snippet sidebar()}<SidebarNavigation {items} />{/snippet}
 <PageShell mode="light">
   <Header
+    {scrollBehavior}
     {items}
     left={kind === 'header' && enabled ? left : undefined}
     right={kind === 'header' && enabled ? right : undefined}
@@ -55,8 +59,9 @@
   <ContentPage
     page={{
       title: 'Planting',
-      breadcrumbs: kind === 'breadcrumbs' && !enabled ? [fullPath[2]] : fullPath
+      breadcrumbs: kind === 'breadcrumbs' && !enabled ? [] : fullPath
     }}
+    breadcrumbHomeHref={base + '/'}
     showContentMenu={showSidebars}
     leftSidebar={showSidebars ? sidebar : undefined}
   >

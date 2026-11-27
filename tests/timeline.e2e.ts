@@ -1,312 +1,392 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('/timeline/');
-  await expect(page.locator('.ps-timeline')).toHaveAttribute('data-enhanced', 'true');
+const timeline = (page: Page) => page.locator('.ps-timeline').first();
+const publicationCluster = (page: Page) => timeline(page).locator('.cluster[data-category="publications"]').filter({ hasText: '7' }).first();
+async function ready(page: Page, path = '/timeline/') {
+  await page.goto(path);
+  await expect(timeline(page)).toHaveAttribute('data-enhanced', 'true');
+  await expect.poll(() => timeline(page).locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(100);
+}
+async function openCluster(page: Page) {
+  const cluster = publicationCluster(page);
+  await cluster.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog')).toBeVisible();
+  return cluster;
+}
+
+test('filters retain domain, scale and viewpoint, and recover from all off', async ({ page }) => {
+  await ready(page);
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  await frame.evaluate(el => el.scrollLeft = 200);
+  await expect.poll(() => frame.evaluate(el => el.scrollLeft)).toBe(200);
+  const before = await frame.evaluate(el => ({ width: el.scrollWidth, scroll: el.scrollLeft }));
+  const scale = await root.getAttribute('data-scale');
+  for (const button of await root.locator('.legend button').all()) await button.click();
+  await expect(root.locator('.empty')).toContainText('Select at least one category');
+  expect(await frame.evaluate(el => ({ width: el.scrollWidth, scroll: el.scrollLeft }))).toEqual(before);
+  expect(await root.getAttribute('data-scale')).toBe(scale);
+  await root.getByRole('button', { name: 'Programme & operations', exact: true }).click();
+  await expect(root.locator('[data-event="mh-programme-open-access"]')).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath('timeline-filter.png') });
 });
 
-test('filters release columns, close active details and recover from all off', async ({ page }) => {
-  const timeline = page.locator('.ps-timeline');
-  const chartTop = await timeline.locator('.chart').evaluate(el => el.getBoundingClientRect().top + scrollY);
-  const headerHeight = await timeline.locator('.timeline-header').evaluate(el => el.getBoundingClientRect().height);
-  await timeline.locator('[data-event="bachelor"] .label').click();
-  await expect(timeline.locator('details[open]')).toHaveCount(1);
-  await timeline.getByRole('button', { name: 'Education' }).click();
-  await expect(timeline.locator('details[open]')).toHaveCount(0);
-  await expect(timeline.getByRole('group', { name: 'Education', exact: true })).toHaveCount(0);
-  await expect(timeline.getByRole('button', { name: 'Education' })).toHaveAttribute('aria-pressed', 'false');
-  expect(await timeline.locator('.chart').evaluate(el => el.getBoundingClientRect().top + scrollY)).toBeCloseTo(chartTop, 0);
-  expect(await timeline.locator('.timeline-header').evaluate(el => el.getBoundingClientRect().height)).toBe(headerHeight);
-  await timeline.getByRole('button', { name: 'Work', exact: true }).click();
-  await timeline.getByRole('button', { name: 'Hobby', exact: true }).click();
-  await expect(timeline.getByRole('status')).toContainText('No events');
-  await timeline.getByRole('button', { name: 'Education' }).click();
-  await expect(timeline.locator('[data-event="bachelor"]')).toBeVisible();
-});
-
-test('locally anchors one popup, switches, toggles, and restores keyboard focus', async ({ page }) => {
-  const timeline = page.locator('.ps-timeline');
-  const bachelor = timeline.locator('[data-event="bachelor"]');
-  await bachelor.locator('.label').click();
-  await expect(bachelor.locator('.ps-popup')).toHaveAttribute('popover', 'manual');
-  await expect(bachelor.locator('img')).toBeVisible();
-  const label = await bachelor.locator('.label').boundingBox();
-  const popup = await bachelor.locator('.ps-popup').boundingBox();
-  expect(popup!.x).toBeGreaterThanOrEqual(label!.x + label!.width);
-  await bachelor.locator('summary').focus();
+test('cluster-window-interaction: list to detail to list preserves scroll, focus and one active layer', async ({ page }) => {
+  await ready(page);
+  const cluster = await openCluster(page);
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.locator('.cluster-row')).toHaveCount(7);
+  await expect(dialog.locator('.cluster-row .row-date').first()).toContainText('17 Oct 2024');
+  await expect(page.locator('[data-ps-popup-backdrop]')).toHaveCount(1);
+  const list = dialog.locator('.cluster-list');
+  await list.evaluate(el => el.scrollTop = 100);
+  const position = await list.evaluate(el => el.scrollTop);
+  await expect(dialog).toBeVisible();
+  const row = dialog.locator('.cluster-row').nth(4);
+  const key = await row.getAttribute('data-key');
+  await row.scrollIntoViewIfNeeded();
+  const afterClickPosition = await list.evaluate(el => el.scrollTop);
+  await row.click();
+  await expect(dialog.getByRole('button', { name: 'Back to events' })).toHaveCount(0);
+  await expect(dialog.getByRole('button', { name: 'Close details' })).toBeFocused();
+  await cluster.click();
+  await expect(dialog).toBeVisible();
+  expect(await page.evaluate(() => (document.activeElement as HTMLElement)?.dataset.key)).toBe(key);
+  expect(await list.evaluate(el => el.scrollTop)).toBe(afterClickPosition);
+  await page.keyboard.press('Tab');
+  expect(await dialog.evaluate(el => el.contains(document.activeElement))).toBe(true);
+  await page.screenshot({ path: test.info().outputPath('timeline-cluster-list.png') });
   await page.keyboard.press('Escape');
-  await expect(bachelor).not.toHaveAttribute('open', '');
-  await expect(bachelor.locator('summary')).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(bachelor).toHaveAttribute('open', '');
-  await bachelor.locator('.label').click();
-  await expect(bachelor).not.toHaveAttribute('open', '');
-  await bachelor.locator('.label').click();
-  const student = timeline.locator('[data-event="student"]');
-  await student.locator('.label').click();
-  await expect(timeline.locator('details[open]')).toHaveCount(1);
-  await expect(student).toHaveAttribute('open', '');
-  await page.getByRole('heading', { name: 'My Journey', exact: true }).click();
-  await expect(timeline.locator('details[open]')).toHaveCount(0);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(cluster).toBeFocused();
+  expect(position).toBeGreaterThanOrEqual(0);
 });
 
-test('natural page flow, sticky headers, scroll dismissal, optional links and dark media', async ({ page }) => {
-  const timeline = page.locator('.ps-timeline');
-  const header = timeline.locator('.timeline-header');
-  await page.evaluate(() => window.scrollBy(0, 350));
-  await expect.poll(async () => (await header.boundingBox())!.y).toBeCloseTo(0, 0);
-  expect(await timeline.evaluate(el => getComputedStyle(el).overflowY)).toBe('visible');
-  expect(await timeline.evaluate(el => el.scrollHeight - el.clientHeight)).toBeLessThanOrEqual(1);
-  const cloud = timeline.locator('[data-event="cloud"]');
-  await cloud.locator('.label').click();
-  await expect(cloud.getByRole('link', { name: 'View certificate' })).toHaveAttribute('href', 'https://example.com/certificate');
-  await expect(cloud.getByRole('list', { name: 'Tags' })).toBeVisible();
-  await page.evaluate(() => window.scrollBy(0, -60));
-  await expect(timeline.locator('details[open]')).toHaveCount(0);
-  await page.setViewportSize({ width: 1920, height: 1100 });
-  await page.getByRole('button', { name: 'Dark', exact: true }).first().click();
-  const bachelor = timeline.locator('[data-event="bachelor"]');
-  await bachelor.locator('.label').click();
-  await expect(bachelor.locator('source')).toHaveAttribute('media', 'all');
-});
-
-test('mobile keeps shared scale and confines popups; no hydration errors', async ({ page }) => {
-  const errors: string[] = [];
-  page.on('pageerror', error => errors.push(error.message));
-  page.on('console', message => { if (/hydration/i.test(message.text())) errors.push(message.text()); });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.reload();
-  const timeline = page.locator('.ps-timeline');
-  await expect(timeline).toHaveAttribute('data-enhanced', 'true');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
-  expect(await timeline.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
-  await expect(timeline.locator('.label:visible')).toHaveCount(0);
-  const student = timeline.locator('[data-event="student"]');
-  await student.locator('summary').focus();
-  await page.keyboard.press('Enter');
-  await expect(student).toHaveAttribute('open', '');
-  const rect = await student.locator('.ps-popup').boundingBox();
-  expect(rect!.x).toBeGreaterThanOrEqual(11);
-  expect(rect!.x + rect!.width).toBeLessThanOrEqual(379);
-  expect(rect!.y).toBeGreaterThanOrEqual(11);
-  expect(rect!.y + rect!.height).toBeLessThanOrEqual(833);
-  expect(errors).toEqual([]);
-  await student.getByRole('button', { name: 'Close details' }).click();
-  await expect(student.locator('summary')).toBeFocused();
-  await page.screenshot({ path: test.info().outputPath('timeline-mobile.png') });
-});
-
-test('reuses the server date even when the browser clock differs and respects reduced motion', async ({ page }) => {
-  const warnings: string[] = [];
-  page.on('console', message => { if (/hydration/i.test(message.text())) warnings.push(message.text()); });
-  await page.clock.setFixedTime(new Date('2040-06-01T12:00:00Z'));
+test('clusters use the standard popup transition and reduced motion skips it', async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = Element.prototype.animate;
+    (window as any).__popupFrames = [];
+    Element.prototype.animate = function(frames, options) {
+      if (this.classList.contains('timeline-popup')) (window as any).__popupFrames.push(...(frames as Keyframe[]));
+      return original.call(this, frames, options);
+    };
+  });
+  await ready(page);
+  await openCluster(page);
+  const animations = await page.evaluate(() => (window as any).__popupFrames as Keyframe[]);
+  expect(animations.some(frame => frame.opacity === 0)).toBe(true);
+  expect(animations.some(frame => frame.width || frame.borderRadius)).toBe(false);
+  await expect(page.getByRole('dialog')).toHaveCSS('border-top-width', '1px');
+  await expect(page.getByRole('dialog').locator('.cluster-range')).toHaveCount(0);
+  await page.keyboard.press('Escape');
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/timeline-clock/');
-  const timeline = page.locator('.ps-timeline');
-  await expect(timeline).toHaveAttribute('data-enhanced', 'true');
-  expect(await timeline.getAttribute('data-reference-date')).not.toBe('2040-06-01');
-  const bachelor = timeline.locator('[data-event="bachelor"]');
-  await bachelor.locator('.label').click();
-  await expect(bachelor.locator('.ps-popup')).toHaveAttribute('popover', 'manual');
-  expect(await bachelor.locator('.ps-popup').evaluate(el => el.getAnimations().length)).toBe(0);
-  expect(warnings).toEqual([]);
+  await openCluster(page);
+  expect(await page.getByRole('dialog').evaluate(el => el.getAnimations().length)).toBe(0);
 });
 
-test('a long bar opens beside the clicked point, and labels never overlap', async ({ page }) => {
-  await page.setViewportSize({ width: 1600, height: 1100 });
-  const timeline = page.locator('.ps-timeline');
-  const labels = await timeline.locator('.label').evaluateAll(elements => elements.map(el => {
-    const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
-  }));
-  for (let i = 0; i < labels.length; i++) for (let j = i + 1; j < labels.length; j++) {
-    const a = labels[i], b = labels[j];
-    expect(a.right <= b.left || b.right <= a.left || a.bottom <= b.top || b.bottom <= a.top).toBe(true);
-  }
-  const bachelor = timeline.locator('[data-event="bachelor"]');
-  await bachelor.locator('.marker').click({ position: { x: 10, y: 160 } });
-  await expect(bachelor.locator('.ps-popup')).toHaveAttribute('popover', 'manual');
-  const marker = await bachelor.locator('.marker').boundingBox();
-  const popup = await bachelor.locator('.ps-popup').boundingBox();
-  expect(Math.abs(popup!.y - (marker!.y + 160))).toBeLessThan(2);
+test('a removed cluster closes its dialog and focuses a surviving control', async ({ page }) => {
+  await ready(page); await openCluster(page);
+  await page.evaluate(() => window.dispatchEvent(new Event('remove-publications')));
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(timeline(page).getByRole('slider')).toBeFocused();
+});
+
+test('long bar labels stay inside the visible segment, pan keeps tracks stable and closes details', async ({ page }) => {
+  await ready(page);
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  const bar = root.locator('[data-event="mh-programme-open-access"]');
+  const snapshot = () => root.locator('[data-lane]').evaluateAll(nodes => nodes.map(el => [el.getAttribute('data-event') ?? el.getAttribute('data-cluster'), el.getAttribute('data-lane')]));
+  const before = await snapshot();
+  const height = await root.locator('.chart').evaluate(el => el.clientHeight);
+  await frame.evaluate(el => el.scrollLeft = 500);
+  await expect.poll(() => bar.locator('.bar-label').evaluate(el => parseFloat((el as HTMLElement).style.left))).toBeGreaterThan(100);
+  const b = (await bar.boundingBox())!, f = (await frame.boundingBox())!, label = (await bar.locator('.bar-label').boundingBox())!;
+  expect(label.x).toBeGreaterThanOrEqual(Math.max(b.x, f.x));
+  expect(label.x + label.width).toBeLessThanOrEqual(Math.min(b.x + b.width, f.x + f.width));
+  expect(await snapshot()).toEqual(before);
+  expect(await root.locator('.chart').evaluate(el => el.clientHeight)).toBe(height);
+  await page.screenshot({ path: test.info().outputPath('timeline-scrolled-bar.png') });
+  await bar.click({ position: { x: 520, y: 16 } });
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await frame.evaluate(el => el.scrollLeft += 50);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  const x = await bar.evaluate(el => parseFloat((el as HTMLElement).style.left) + parseFloat((el as HTMLElement).style.width) - 10);
+  await frame.evaluate((el, x) => el.scrollLeft = x, x);
+  await expect.poll(() => bar.locator('.event-icon').count()).toBe(0);
+});
+
+test('zoom anchors the center, resize preserves scale and axis position only mirrors tracks', async ({ page }) => {
+  await ready(page);
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  await frame.evaluate(el => el.scrollLeft = 1800);
+  const before = await frame.evaluate(el => ({ center: el.scrollLeft + el.clientWidth / 2 - 28, width: el.clientWidth }));
+  const scale = Number(await root.getAttribute('data-scale'));
+  await root.getByRole('slider').fill('50');
+  const afterScale = Number(await root.getAttribute('data-scale'));
+  await expect.poll(() => frame.evaluate(el => el.scrollLeft + el.clientWidth / 2 - 28)).toBeCloseTo(before.center / scale * afterScale, 0);
+  await page.setViewportSize({ width: 2560, height: 1100 });
+  await expect(root).toHaveAttribute('data-scale', String(afterScale));
+  await expect.poll(() => frame.evaluate(el => el.clientWidth)).toBeGreaterThan(1536);
+  const entries = () => root.locator('[data-lane]').evaluateAll(nodes => nodes.map(el => [el.getAttribute('data-event') ?? el.getAttribute('data-cluster'), (el as HTMLElement).style.left, el.getAttribute('data-lane')]));
+  const old = await entries();
+  await page.getByRole('button', { name: 'Axis above', exact: true }).click();
+  expect(await entries()).toEqual(old);
+  await expect(root).toHaveAttribute('data-axis', 'top');
+  const axis = (await root.locator('.axis').boundingBox())!, legend = (await root.locator('.legend').boundingBox())!;
+  expect(legend.y).toBeGreaterThan(axis.y);
+  await root.getByRole('slider').fill('0');
+  await expect(root).toHaveAttribute('data-fit', 'true');
+  await expect.poll(() => frame.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+});
+
+for (const width of [320, 390, 768, 1440, 1536, 2560, 3440]) for (const colorScheme of ['light', 'dark'] as const) {
+  test(`responsive-stage-and-long-labels: ${width}px ${colorScheme}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' });
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('console', message => { if (/hydration/i.test(message.text())) errors.push(message.text()); });
+    await ready(page);
+    await page.locator('.ps-shell').evaluate((node, theme) => node.setAttribute('data-ps-theme', theme), colorScheme);
+    const root = timeline(page);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+    expect(await root.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+    const heading = page.locator('#morgenhafen-timeline > .ps-section-content');
+    expect((await heading.boundingBox())!.width).toBeLessThanOrEqual(1600);
+    if (width > 2000) expect((await root.boundingBox())!.width).toBeGreaterThan(1536);
+    await openCluster(page);
+    const rect = (await page.getByRole('dialog').boundingBox())!;
+    expect(rect.x).toBeGreaterThanOrEqual(11);
+    expect(rect.x + rect.width).toBeLessThanOrEqual(width - 11);
+    expect(rect.y).toBeGreaterThanOrEqual(11);
+    expect(rect.y + rect.height).toBeLessThanOrEqual(989);
+    await page.keyboard.press('Escape');
+    expect(errors).toEqual([]);
+    await page.screenshot({ path: test.info().outputPath(`timeline-${width}-${colorScheme}.png`) });
+  });
+}
+
+test('truncated labels expose focus tooltips and retain full detail titles', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await ready(page);
+  const bar = timeline(page).locator('[data-event="mh-programme-open-access"]');
+  await bar.focus();
+  await expect(page.getByRole('tooltip')).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByRole('tooltip')).toHaveCount(0);
   await page.keyboard.press('Escape');
-  await page.screenshot({ path: test.info().outputPath('timeline-desktop.png') });
+  await expect(bar).toBeFocused();
 });
 
-test('without JavaScript native disclosures expose image, description and actions', async ({ browser, baseURL }) => {
+test('no JavaScript retains all events, rich details, media and internal actions', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
-  const page = await context.newPage();
-  await page.goto('/timeline/');
-  const timeline = page.locator('.ps-timeline');
-  await expect(timeline.getByRole('button')).toHaveCount(0);
-  const bachelor = timeline.locator('[data-event="bachelor"]');
-  await bachelor.locator('summary').click();
-  await expect(bachelor.locator('img')).toBeVisible();
-  await expect(bachelor).toContainText('Northbridge Institute');
-  const cloud = timeline.locator('[data-event="cloud"]');
-  await cloud.locator('summary').click();
-  await expect(cloud.getByRole('link', { name: 'View certificate' })).toBeVisible();
+  const page = await context.newPage(); await page.goto('/timeline/');
+  const root = timeline(page);
+  await expect(root.locator('details')).toHaveCount(56);
+  await expect(root.getByRole('button')).toHaveCount(0);
+  const hall = root.locator('[data-event="mh-programme-hall-opening"]');
+  await hall.locator('summary').click(); await expect(hall.locator('img')).toBeVisible();
+  const platform = root.locator('[data-event="mh-projects-data-platform"]');
+  await platform.locator('summary').click();
+  await expect(platform.getByRole('link', { name: 'Back to the timeline' })).toHaveAttribute('href', '#morgenhafen-timeline');
+  await expect(platform.locator('.tags')).toBeVisible();
   await context.close();
 });
 
-test('touch controls and enlarged text remain usable', async ({ browser, baseURL }) => {
+test('touch opens details without hover and shared SSR clock survives a different browser day', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
-  await page.goto('/timeline/');
-  const timeline = page.locator('.ps-timeline');
-  await expect(timeline).toHaveAttribute('data-enhanced', 'true');
-  const bachelor = timeline.locator('[data-event="bachelor"]');
-  await bachelor.locator('.marker').tap({ position: { x: 8, y: 30 } });
-  await expect(bachelor.getByRole('button', { name: 'Close details' })).toBeVisible();
-  await bachelor.getByRole('button', { name: 'Close details' }).tap();
-  await expect(bachelor).not.toHaveAttribute('open', '');
-  await page.addStyleTag({ content: 'html { font-size: 24px !important; }' });
-  await expect.poll(() => timeline.locator('.label').evaluateAll(elements => {
-    const rects = elements.map(el => el.getBoundingClientRect());
-    return rects.every((a, i) => rects.slice(i + 1).every(b => a.right <= b.left || b.right <= a.left || a.bottom <= b.top || b.bottom <= a.top));
-  })).toBe(true);
+  await page.clock.setFixedTime(new Date('2040-06-01T12:00:00Z'));
+  await ready(page, '/timeline-clock/');
+  expect(await timeline(page).getAttribute('data-reference-date')).not.toBe('2040-06-01');
+  const bar = timeline(page).locator('[data-event="mh-programme-open-access"]');
+  await bar.tap({ position: { x: 100, y: 16 } });
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.getByRole('button', { name: 'Close details', exact: true }).tap();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await context.close();
 });
 
-test('many categories fit the page and a long timeline extends the document', async ({ page }) => {
-  await page.goto('/timeline-dense/');
-  const timeline = page.locator('.ps-timeline');
-  await expect(timeline).toHaveAttribute('data-enhanced', 'true');
-  for (const width of [1440, 390, 320]) {
-    await page.setViewportSize({ width, height: 900 });
-    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-    await expect(timeline.locator('.label:visible')).toHaveCount(0);
-    expect(await timeline.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
-    expect((await timeline.boundingBox())!.height).toBeGreaterThan(6000);
-    await expect(timeline.locator('summary')).toHaveCount(48);
-  }
-  const last = timeline.getByRole('group', { name: 'Category 12', exact: true }).locator('summary').last();
-  await last.focus();
-  await page.keyboard.press('Enter');
-  await expect(timeline.locator('details[open] .ps-popup-title')).toHaveText('Event 12.4');
+test('long parallel bars stay individual and the page scrolls vertically', async ({ page }) => {
+  await ready(page, '/timeline-dense/');
+  await expect(timeline(page).locator('[data-event]')).toHaveCount(48);
+  await expect(timeline(page).locator('.cluster')).toHaveCount(0);
+  const height = await timeline(page).locator('.chart').evaluate(el => el.clientHeight);
+  expect(height).toBeGreaterThan(2000);
+  await page.mouse.wheel(0, 500);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
 });
 
-test('reverses the date axis, keeps icons and lays out newest-first labels without collisions', async ({ page }) => {
-  const timeline = page.locator('.ps-timeline');
-  await page.getByRole('button', { name: 'Newest first', exact: true }).click();
-  await expect(timeline.locator('.axis span').first()).toHaveText('2026');
-  await expect(timeline.locator('.axis span').last()).toHaveText('2014');
-  await expect(timeline.getByRole('group', { name: 'Education', exact: true }).locator('details').first()).toHaveAttribute('data-event', 'systems');
-  await expect(timeline.locator('[data-event="systems"] .event-icon svg')).toBeVisible();
-  await expect.poll(() => timeline.locator('.label:visible').evaluateAll(elements => {
-    const rects = elements.map(el => el.getBoundingClientRect());
-    return rects.every((a, i) => rects.slice(i + 1).every(b => a.right <= b.left || b.right <= a.left || a.bottom <= b.top || b.bottom <= a.top));
-  })).toBe(true);
-  await timeline.locator('[data-event="systems"] summary').focus();
-  await page.keyboard.press('Enter');
-  await expect(timeline.locator('[data-event="systems"] .ps-popup-title')).toHaveText('Systems Certification');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('[data-ps-popup-backdrop]')).toHaveCount(0);
-  await page.screenshot({ path: test.info().outputPath('timeline-descending.png'), fullPage: true });
-});
-
-test('marker and label share hover, keyboard and open states without overlapping halos', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  const timeline = page.locator('.ps-timeline');
-  for (const id of ['student', 'cloud']) {
-    const event = timeline.locator('[data-event="' + id + '"]');
-    const marker = event.locator('.marker'), label = event.locator('.label');
-    await page.mouse.move(0, 0);
-    const original = await marker.evaluate(el => getComputedStyle(el).backgroundColor);
-    await marker.hover({ position: { x: 10, y: 5 } });
-    await expect(marker).not.toHaveCSS('background-color', original);
-    const highlighted = await marker.evaluate(el => getComputedStyle(el).backgroundColor);
-    await label.hover();
-    await expect(marker).toHaveCSS('background-color', highlighted);
-    await label.click();
-    await page.mouse.move(0, 0);
-    await expect(marker).toHaveCSS('background-color', highlighted);
+test('custom icons and multiple instances retain independent state, IDs and action links', async ({ page }) => {
+  await page.goto('/timeline-instances/');
+  const first = page.locator('#first-timeline'), second = page.locator('#second-timeline');
+  await expect(first.locator('.ps-timeline')).toHaveAttribute('data-enhanced', 'true');
+  await expect(second.locator('.ps-timeline')).toHaveAttribute('data-enhanced', 'true');
+  expect(await first.locator('.ps-timeline').getAttribute('id')).not.toBe(await second.locator('.ps-timeline').getAttribute('id'));
+  await expect(first.locator('[data-custom-icon]').first()).toBeVisible();
+  for (const instance of [first, second]) {
+    const bar = instance.locator('[data-event="mh-projects-data-platform"]');
+    await bar.focus(); await page.keyboard.press('Enter');
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.locator('img')).toBeVisible();
+    await expect(dialog.getByRole('link', { name: 'Back to the timeline' })).toHaveAttribute('href', '#' + await instance.getAttribute('id'));
+    await expect(dialog.locator('.tags')).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect(event.locator('summary')).toBeFocused();
-    await expect(marker).toHaveCSS('background-color', highlighted);
-    await event.locator('summary').blur();
-    await expect(marker).toHaveCSS('background-color', original);
   }
-  const markers = timeline.getByRole('group', { name: 'Work', exact: true }).locator('.marker');
-  const student = timeline.locator('[data-event="student"] .marker');
-  const engineer = timeline.locator('[data-event="engineer"] .marker');
-  const first = await student.boundingBox(), second = await engineer.boundingBox();
-  expect(first!.y + first!.height).toBeCloseTo(second!.y, 1);
-  await expect(markers.first()).toHaveCSS('box-shadow', 'none');
-  await expect(timeline.locator('.marker-halo')).toHaveCount(0);
+  await first.getByRole('button', { name: 'Programme & operations', exact: true }).click();
+  await expect(second.getByRole('button', { name: 'Programme & operations', exact: true })).toHaveAttribute('aria-pressed', 'true');
 });
 
+test('dark detail media uses its alternate image', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1100 });
+  await ready(page);
+  await page.getByRole('button', { name: 'Dark', exact: true }).first().click();
+  const hall = timeline(page).locator('[data-event="mh-programme-hall-opening"]');
+  await hall.focus(); await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog').locator('source')).toHaveAttribute('media', 'all');
+  await expect(page.getByRole('dialog').locator('img')).toHaveAttribute('alt', /.+/);
+  await page.keyboard.press('Escape');
+});
 
-test('uses the section surface, connects rails to buttons and retains restore labels', async ({ page }) => {
-  const timeline = page.locator('.ps-timeline');
-  await expect(page.locator('#journey')).toHaveAttribute('data-background-color', 'standard');
-  for (const selector of ['.timeline-header', '.axis', '.chart']) {
-    await expect(timeline.locator(selector)).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-  }
-  const button = timeline.getByRole('button', { name: 'Education', exact: true });
-  const rail = timeline.getByRole('group', { name: 'Education', exact: true }).locator('.rail');
-  const buttonRect = await button.boundingBox(), railRect = await rail.boundingBox();
-  expect(railRect!.y).toBeCloseTo(buttonRect!.y + buttonRect!.height, 0);
-  for (const name of ['Education', 'Work']) {
-    const toggle = timeline.getByRole('button', { name, exact: true });
-    await toggle.click();
-    await expect(toggle.locator('.ps-chip-label')).toBeVisible();
-    expect(await toggle.locator('.ps-chip-label').evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
-    await expect(toggle).toHaveCSS('font-weight', '400');
-    const icon = await toggle.locator('.ps-chip-icon').boundingBox();
-    const label = await toggle.locator('.ps-chip-label').boundingBox();
-    const bounds = await toggle.boundingBox();
-    expect(icon!.x - bounds!.x).toBeGreaterThanOrEqual(12);
-    expect(label!.x - (icon!.x + icon!.width)).toBeCloseTo(8, 0);
-    expect(bounds!.height).toBe(44);
-  }
-  await page.evaluate(() => window.scrollBy(0, 500));
-  await expect.poll(async () => (await timeline.locator('.timeline-header').boundingBox())!.y).toBeCloseTo(0, 0);
-  expect((await timeline.locator('.axis-caption').boundingBox())!.y).toBeLessThan(0);
-  await page.screenshot({ path: test.info().outputPath('timeline-transparent-sticky.png') });
+test('an open detail updates when its source event changes without changing identity', async ({ page }) => {
+  await ready(page);
+  const bar = timeline(page).locator('[data-event="mh-projects-data-platform"]');
+  await bar.focus(); await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.evaluate(() => window.dispatchEvent(new Event('rename-platform')));
+  await expect(page.getByRole('dialog').locator('.ps-popup-title')).toHaveText('Updated platform details');
+  await page.keyboard.press('Escape'); await expect(bar).toBeFocused();
+});
+
+test('a horizontal touch pan does not select its starting event', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const page = await context.newPage(); await ready(page);
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  await frame.scrollIntoViewIfNeeded();
+  const bar = root.locator('[data-event="mh-programme-open-access"]');
+  await bar.scrollIntoViewIfNeeded();
+  const rect = (await bar.boundingBox())!;
+  const before = await frame.evaluate(el => el.scrollLeft);
+  const session = await context.newCDPSession(page);
+  const y = Math.min(800, Math.max(20, rect.y + 16));
+  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 230, y }] });
+  await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 180, y }] });
+  await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 100, y }] });
+  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await expect.poll(() => frame.evaluate(el => el.scrollLeft)).toBeGreaterThan(before);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await context.close();
+});
+
+test('fit is the slider minimum and overrides small initial scales across resizing', async ({ page }) => {
+  await page.setViewportSize({ width: 3440, height: 1100 });
+  await ready(page, '/timeline-fit/');
+  const root = timeline(page), frame = root.locator('.timeline-frame'), slider = root.getByRole('slider');
+  await expect(root).toHaveAttribute('data-fit', 'true');
+  await expect(slider).toHaveValue('0');
+  expect(await frame.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  const wide = Number(await root.getAttribute('data-scale'));
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const name of ['Education', 'Work']) {
-    await expect(timeline.getByRole('button', { name, exact: true }).locator('.ps-chip-label')).toBeVisible();
-  }
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+  await expect.poll(async () => Number(await root.getAttribute('data-scale'))).toBeLessThan(wide);
+  await expect(root).toHaveAttribute('data-fit', 'true');
+  await slider.fill('30');
+  await expect(root).toHaveAttribute('data-fit', 'false');
+  await slider.fill('0');
+  expect(await frame.evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await slider.focus(); await page.keyboard.press('ArrowLeft');
+  await expect(slider).toHaveValue('0');
 });
 
+test('zoom controls follow the axis while categories stay opposite', async ({ page }) => {
+  await ready(page);
+  const root = timeline(page);
+  for (const top of [false, true]) {
+    if (top) await page.getByRole('button', { name: 'Axis above', exact: true }).click();
+    const zoom = (await root.locator('.zoom-controls').boundingBox())!;
+    const legend = (await root.locator('.legend').boundingBox())!;
+    const frame = (await root.locator('.timeline-frame').boundingBox())!;
+    expect(top ? zoom.y < frame.y && legend.y > frame.y : legend.y < frame.y && zoom.y > frame.y).toBe(true);
+  }
+});
 
-test('rails align with category icons and chips dock flush with square upper corners', async ({ page }) => {
-  const timeline = page.locator('.ps-timeline');
-  const header = timeline.locator('.timeline-header');
-  const work = timeline.getByRole('button', { name: 'Work', exact: true });
-  await expect(header).not.toHaveAttribute('data-docked');
-  await expect(work).toHaveCSS('border-top-left-radius', '999px');
-  for (const width of [1440, 390]) {
-    await page.setViewportSize({ width, height: 1000 });
-    for (const name of ['Education', 'Work', 'Hobby']) {
-      const category = timeline.getByRole('group', { name, exact: true });
-      const icon = timeline.getByRole('button', { name, exact: true }).locator('.ps-chip-icon');
-      await expect(icon).toBeVisible();
-      await expect.poll(async () => {
-        const a = (await icon.boundingBox())!, b = (await category.locator('.rail').boundingBox())!;
-        return Math.abs(a.x + a.width / 2 - b.x - b.width / 2);
-      }).toBeLessThan(.6);
-      const rail = (await category.locator('.rail').boundingBox())!;
-      const marker = (await category.locator('details').filter({ has: page.locator('.marker') }).first().locator('.marker').boundingBox())!;
-      // The first chronological event starts in the first interval lane.
-      expect(marker.x + marker.width / 2).toBeCloseTo(rail.x + rail.width / 2, 0);
+test('standard detail popups allow mouse text selection and close on outside clicks', async ({ page }) => {
+  await ready(page);
+  const bar = timeline(page).locator('[data-event="mh-projects-data-platform"]');
+  await bar.focus(); await page.keyboard.press('Enter');
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.locator('img')).toBeVisible();
+  await expect(dialog.getByRole('link', { name: 'Back to the timeline' })).toBeVisible();
+  await expect(dialog).toHaveCSS('border-top-width', '1px');
+  await expect(dialog).not.toHaveAttribute('aria-modal', 'true');
+  const title = (await dialog.locator('.ps-popup-title').boundingBox())!;
+  await page.mouse.move(title.x + 2, title.y + 8);
+  await page.mouse.down();
+  await page.mouse.move(title.x + Math.min(170, title.width - 4), title.y + 8, { steps: 12 });
+  await page.mouse.up();
+  await expect.poll(() => page.evaluate(() => getSelection()?.toString().length ?? 0)).toBeGreaterThan(3);
+  await page.mouse.click(5, 5);
+  await expect(dialog).toHaveCount(0);
+  await openCluster(page);
+  await page.mouse.click(5, 5);
+  await expect(dialog).toHaveCount(0);
+});
+
+test('trackpad pinch zoom preserves its time anchor and respects both limits', async ({ page }) => {
+  await ready(page);
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  await frame.evaluate(el => el.scrollLeft = 900);
+  await frame.scrollIntoViewIfNeeded();
+  const rect = (await frame.boundingBox())!;
+  const fraction = .35;
+  const before = await frame.evaluate((el, f) => el.scrollLeft + el.clientWidth * f - 28, fraction);
+  const scale = Number(await root.getAttribute('data-scale'));
+  await page.mouse.move(rect.x + 1 + (rect.width - 2) * fraction, rect.y + 50);
+  await page.keyboard.down('Control'); await page.mouse.wheel(0, -50); await page.keyboard.up('Control');
+  await expect.poll(async () => Number(await root.getAttribute('data-scale'))).toBeGreaterThan(scale);
+  const after = Number(await root.getAttribute('data-scale'));
+  await expect.poll(() => frame.evaluate((el, f) => el.scrollLeft + el.clientWidth * f - 28, fraction)).toBeCloseTo(before / scale * after, 0);
+  for (const [delta, expected] of [[-5000, '64'], [5000, null]] as const) {
+    for (let i = 0; i < 3; i++) {
+      await page.keyboard.down('Control'); await page.mouse.wheel(0, delta); await page.keyboard.up('Control');
+      await page.waitForTimeout(40);
     }
+    if (expected) await expect(root).toHaveAttribute('data-scale', expected);
+    else await expect(root).toHaveAttribute('data-fit', 'true');
   }
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await work.click();
-  await page.evaluate(() => scrollTo(0, 500));
-  await expect(header).toHaveAttribute('data-docked', '');
-  for (const chip of await header.locator('.ps-chip').all()) {
-    expect((await chip.boundingBox())!.y).toBeCloseTo(0, 1);
-    await expect(chip).toHaveCSS('border-top-left-radius', '0px');
-    await expect(chip).toHaveCSS('border-top-right-radius', '0px');
-    await expect(chip).toHaveCSS('border-bottom-left-radius', '22px');
-  }
-  await timeline.evaluate(el => (el as HTMLElement).style.setProperty('--ps-timeline-sticky-offset', '32px'));
-  await page.evaluate(() => scrollBy(0, 10));
-  await expect.poll(async () => (await work.boundingBox())!.y).toBeCloseTo(32, 1);
-  await page.evaluate(() => scrollTo(0, 0));
-  await expect(header).not.toHaveAttribute('data-docked');
-  await expect(work).toHaveCSS('border-top-left-radius', '999px');
+  expect(await page.evaluate(() => visualViewport?.scale)).toBe(1);
+});
+
+test('a real two-finger touchscreen pinch zooms the timeline without selecting or zooming the page', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const page = await context.newPage(); await ready(page);
+  const root = timeline(page), frame = root.locator('.timeline-frame');
+  await frame.scrollIntoViewIfNeeded();
+  const rect = (await frame.boundingBox())!, y = Math.max(40, Math.min(790, rect.y + 100));
+  const session = await context.newCDPSession(page);
+  const scale = Number(await root.getAttribute('data-scale'));
+  const points = (distance: number) => [{ x: 195 - distance / 2, y, id: 1 }, { x: 195 + distance / 2, y, id: 2 }];
+  await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: points(80) });
+  for (const distance of [100, 130, 180, 240]) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: points(distance) });
+  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await expect.poll(async () => Number(await root.getAttribute('data-scale'))).toBeCloseTo(scale * 3, 4);
+  expect(await page.evaluate(() => visualViewport?.scale)).toBe(1);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await context.close();
+});
+
+test('the cluster marker remains clickable beside mobile list and detail popups', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await ready(page);
+  const cluster = await openCluster(page), dialog = page.getByRole('dialog');
+  await dialog.locator('.cluster-row').nth(2).click();
+  await expect(dialog.locator('.detail-date')).toBeVisible();
+  const marker = (await cluster.boundingBox())!, panel = (await dialog.boundingBox())!;
+  expect(panel.y + panel.height <= marker.y || panel.y >= marker.y + marker.height || panel.x + panel.width <= marker.x || panel.x >= marker.x + marker.width).toBe(true);
+  await cluster.click();
+  await expect(dialog.locator('.cluster-row').nth(2)).toBeFocused();
+  await page.screenshot({ path: test.info().outputPath('timeline-mobile-cluster.png') });
+  await cluster.click();
+  await expect(dialog).toHaveCount(0);
 });

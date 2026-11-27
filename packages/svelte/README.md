@@ -5,7 +5,7 @@
 Composable Svelte 5 components for content-driven websites, from portfolios and product pages to documentation. Works with plain Svelte and SvelteKit.
 
 - **Consistent layouts:** pages, sections, grids and cards share responsive sizing and spacing.
-- **Reusable sections:** compose heroes, text, panels, media, card grids, carousels, timelines and code examples.
+- **Reusable sections:** compose heroes, text, panels, media, card grids, feature lists, carousels, timelines and code examples.
 - **Flexible content:** use Svelte snippets and HTML, or render serializable content from JSON or a CMS.
 - **Connected navigation:** menus, sidebars, breadcrumbs and automatic page contents work together.
 - **Adaptable styling:** light and dark themes, surface options and CSS variables support your visual identity.
@@ -31,8 +31,10 @@ Use atoms (PrimaryButton, SecondaryButton, IconButton, Chip, Tooltip, Heading, I
 
 See the [atomic design guide](https://page-sections.bergjohann.com/docs/design-system/atomic-design/) and [complete component catalog](https://page-sections.bergjohann.com/docs/components/) for live examples, data types and customization.
 
-TimelineSection renders parallel calendar categories with automatic overlap lanes, filters and anchored event details. Use the `timeline` discriminator in Sections, or pass `TimelineSectionData` directly. Set `referenceDate` for reproducible ongoing intervals. Native disclosures keep optional content available without JavaScript. See the [Timeline guide](https://page-sections.bergjohann.com/sections/timeline/).
+TimelineSection renders a proportional horizontal calendar with one shared, priority-ordered track pool, anchored zoom, category filters and compact clusters that open accessible event lists. Optional event `label` values shorten overview text while details retain the full title. `axisPosition` defaults to bottom; `stageWidth` defaults to contained. Choosing full also sets `background.size` to full while preserving its color; full width is recommended only without side navigation. Use the `timeline` discriminator in Sections, or pass `TimelineSectionData` directly. Set `referenceDate` for reproducible ongoing intervals. Native disclosures keep optional content available without JavaScript. See the [Timeline guide](https://page-sections.bergjohann.com/sections/timeline/).
 
 ## License
 
 [Mozilla Public License 2.0](LICENSE). Attribution is retained in [NOTICE](NOTICE).
+
+FeatureSection presents centered icons, titles and descriptions using the CardGrid S/M/L spans. Every incomplete row is centered. Set iconTone to standard, muted (default) or primary using existing theme colors; optional href links the entire feature. Use type: features for JSON-driven Sections. See the [Features guide](https://page-sections.bergjohann.com/sections/features/).

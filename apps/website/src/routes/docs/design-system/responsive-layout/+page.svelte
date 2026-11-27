@@ -269,12 +269,12 @@
   >
     <div class="prose">
       <p>
-        Cards use the same media-plus-text layout in CardGridSection and CarouselSection: S/M span 2
-        columns, L spans 4 (3 on the S grid). Media ratios are 3/2 (default), 4/3 or 1/1; titles
-        have two lines in S/M and three in L, with an additional collection-wide eyebrow line for
-        M/L when used. Text has 12px padding; contained media has an 8px inset. S titles are 12px.
-        The complete card is not constrained to a square. Geometry follows layoutTokens.cards and
-        resolveCardLayout.
+        Cards share the same layout options in CardGridSection and CarouselSection: S spans 2
+        columns at every grid size; M spans 3 on L and otherwise 2 columns, L spans 4 (3 on the S
+        grid). Media ratios are 3/2 (default), 4/3 or 1/1; titles have two lines in S/M and three in
+        L, with an additional collection-wide eyebrow line for M/L when used. Text and contained
+        media share a 12px inset. S titles are 12px. The complete card is not constrained to a
+        square. Geometry follows layoutTokens.cards and resolveCardLayout.
       </p>
       <p>
         Descriptions appear close below the actual title when provided, without unused title lines.

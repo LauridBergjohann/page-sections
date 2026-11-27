@@ -65,6 +65,23 @@
   >
     <div class="prose">
       <p>
+        <code>contentPlacement="below"</code> is the default. Choose
+        <code>contentPlacement="overlay"</code>
+        to place text at the bottom of the image. Overlay always uses cover, and
+        <code>mediaAspect</code>
+        fixes the entire card ratio. <code>textTone="light"</code> (default) uses pure white text
+        over a subtle dark gradient limited to the copy area; <code>textTone="dark"</code> uses dark text
+        over a light gradient. These local colors stay independent of the page theme and do not recolor
+        the image.
+      </p>
+      <p>
+        Use short titles and teasers for overlay cards. Longer copy, custom content and actions
+        remain reachable in a keyboard-focusable scrolling text area without enlarging the card.
+        Text remains selectable, the image, gradient padding, title and description share the main
+        link, and actions remain independent. Missing images retain the same fixed card shape and
+        gradient.
+      </p>
+      <p>
         A native horizontal collection using the same card sizes as CardGridSection. It is
         progressively enhanced with previous/next buttons and selection callbacks; it does not
         implement Spatial Elements' virtual scrolling, camera or 3D selection mechanics.
@@ -92,8 +109,9 @@
         Required section:
         <a href={base + '/docs/reference/types/#section-definition'}>SectionDefinition</a> and list: T[].
         Optional cardSize (m), cardShadow (false), mediaAspect (3/2; also 4/3 or 1/1), mediaFit (contain),
-        textAlign (start), controls (true), previousLabel (Previous cards), nextLabel (Next cards), media(item),
-        itemContent(item), oncardready(parts), initialItemKey and onselectionchange(key).
+        mediaHoverZoom (true), contentPlacement (below), textTone (light; overlay only), textAlign (start),
+        controls (true), previousLabel (Previous cards), nextLabel (Next cards), media(item), itemContent(item),
+        oncardready(parts), initialItemKey and onselectionchange(key).
       </p>
       <p>
         <code>initialItemKey</code> is applied once after mount, matching itemKey ?? id.
@@ -115,10 +133,11 @@
   >
     <div class="prose">
       <p>
-        Each slide takes the canonical S/M/L column span, with the same container width, outer
-        gutters and gap as CardGridSection. Slides share equal heights. Cards use the selected media
-        ratio plus independent title space and a collection-wide eyebrow row. S/M titles have up to
-        two lines, L three; S hides eyebrows. Contained media has an 8px inset; cover fills the
+        Card sizes S/M/L use 2/2/4 columns on XS and M, 2/2/3 on S, and 2/3/4 on L. Each slide takes
+        that canonical span, with the same container width, outer gutters and gap as
+        CardGridSection. Slides share equal heights. Cards use the selected media ratio plus
+        independent title space in below mode and a collection-wide eyebrow row. S/M titles have up
+        to two lines, L three; S hides eyebrows. Contained media has an 8px inset; cover fills the
         frame. Descriptions follow the actual title with a compact gap and text no larger than the
         title. Cards grow to fit their content. Optional
         <code>cardShadow</code> adds a resting shadow; hover strengthens the shadow and highlights the

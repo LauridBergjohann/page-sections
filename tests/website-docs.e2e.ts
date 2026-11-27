@@ -1,5 +1,53 @@
 import { expect, test } from '@playwright/test';
 
+test('homepage section headings are centered while the hero retains its composition', async ({ page }) => {
+  await page.goto('/');
+  for (const width of [390, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const id of ['what-is-page-sections', 'features', 'explore', 'built-with']) {
+      await expect(page.locator(`#${id} .section-heading .ps-heading`)).toHaveCSS('text-align', 'center');
+    }
+    await expect(page.locator('#welcome .ps-heading')).toHaveCSS('text-align', 'left');
+    await expect(page.locator('#features .introduction')).toHaveCSS('text-align', 'center');
+  }
+});
+
+test('section copy shares body colors while headings and navigation retain ink', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  const expectToken = async (selector: string, token: string) => {
+    const elements = page.locator(selector);
+    expect(await elements.count(), selector).toBeGreaterThan(0);
+    for (const element of await elements.all()) {
+      await expect.poll(() => element.evaluate((el, name) => {
+        const probe = document.createElement('span');
+        probe.style.color = `var(${name})`;
+        el.append(probe);
+        const expected = getComputedStyle(probe).color;
+        probe.remove();
+        return getComputedStyle(el).color === expected;
+      }, token), { message: selector }).toBe(true);
+    }
+  };
+  for (const mode of ['Light', 'Dark']) {
+    await page.goto('/');
+    await page.locator('.satellite.right').getByRole('button', { name: mode, exact: true }).click();
+    await expect(page.locator('.ps-shell')).toHaveAttribute('data-ps-theme', mode.toLowerCase());
+    await expectToken('#welcome .introduction, #what-is-page-sections .prose p, #features .description, #explore .description, #built-with .description', '--ps-body');
+    await expectToken('#welcome h1, #what-is-page-sections h2, #features .title, .desktop-menu .ps-main-menu > li > a', '--ps-ink');
+    await page.locator('#what-is-page-sections').screenshot({ path: test.info().outputPath(`copy-${mode}.png`) });
+    await page.goto('/sections/');
+    await expect(page.locator('.ps-shell')).toHaveAttribute('data-ps-theme', mode.toLowerCase());
+    const copy = '#headings-example .introduction, #hero-example .introduction, #image-example .ps-media-pair p, #video-example .ps-media-pair p, #panel-example .ps-prose p, #rich-text-example .ps-prose p, #rich-text-example .ps-prose li, #features-example .description, #card-grid-example .description, #carousel-example .description';
+    await expectToken(copy, '--ps-body');
+    await expectToken('#rich-text-example h3, #page-heading h1, #hero-example h3, #features-example .title, #card-grid-example .title', '--ps-ink');
+    await expectToken('#hero-example .ps-button[data-variant="primary"]', '--ps-on-accent');
+    await expectToken('#rich-text-example .ps-prose a', '--ps-accent');
+    await page.locator('.ps-shell').evaluate(el => (el as HTMLElement).style.setProperty('--ps-body', '#8b2456'));
+    await expectToken(copy, '--ps-body');
+    await expectToken('#rich-text-example h3, #page-heading h1', '--ps-ink');
+  }
+});
+
 test('top-level icons precede labels at every layout size and open parents stay highlighted', async ({page}) => {
   await page.goto('/');
   for (const width of [390, 700, 1000, 1280, 1700, 1920, 2560]) {
@@ -134,14 +182,44 @@ test('all card sizes keep descriptions close, scale their text and fill each gri
   expect(sizes.m).toBeLessThan(sizes.l);
 });
 
-test('section illustrations share frameless art and transparent surroundings', async ({page,request}) => {
+test('section and homepage illustrations use tightly cropped art without application windows', async ({page,request}) => {
   await page.goto('/sections/');
-  for (const img of await page.locator('#section-catalog img').all()) {
-    const response=await request.get((await img.getAttribute('src'))!);
+  const sources = await page.locator('#section-catalog img').evaluateAll(images => images.map(image => image.getAttribute('src')!));
+  await page.goto('/');
+  sources.push(...await page.locator('#features img, #explore img').evaluateAll(images => images.map(image => image.getAttribute('src')!)));
+  expect(sources.length).toBe(14);
+  for (const src of sources) {
+    const response=await request.get(src);
     const svg=await response.text();
     expect(svg).not.toContain('id="window-shadow"');
+    expect(svg).not.toContain('id="window"');
     expect(svg).not.toMatch(/<rect[^>]*(?:width="800"|height="500")/);
+    const margins = await page.evaluate(source => {
+      const host = document.createElement('div');
+      host.style.cssText = 'position:fixed;left:-10000px;top:0';
+      host.innerHTML = source;
+      document.body.append(host);
+      const root = host.querySelector('svg')!;
+      // Nested photo viewports clip their own art before it reaches the illustration.
+      for (const nested of root.querySelectorAll('svg')) {
+        const rectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        for (const attribute of ['x', 'y', 'width', 'height']) rectangle.setAttribute(attribute, nested.getAttribute(attribute)!);
+        nested.replaceWith(rectangle);
+      }
+      const bounds = root.getBBox(), view = root.viewBox.baseVal;
+      const result = [bounds.x - view.x, bounds.y - view.y, view.x + view.width - bounds.x - bounds.width, view.y + view.height - bounds.y - bounds.height];
+      host.remove();
+      return result;
+    }, svg);
+    for (const margin of margins) expect(Math.abs(margin), src).toBeLessThanOrEqual(1);
   }
+  await page.goto('/sections/');
+  const staticCard = page.locator('#section-catalog .ps-card').first();
+  const mediaBefore = await staticCard.locator('.media').boundingBox();
+  await staticCard.hover();
+  await expect(staticCard).toHaveAttribute('data-media-hover-zoom', 'false');
+  await expect(staticCard.locator('.media')).toHaveCSS('top', '12px');
+  expect(await staticCard.locator('.media').boundingBox()).toEqual(mediaBefore);
   for (const width of [390,1440]) {
     await page.setViewportSize({width,height:1000});
     await page.locator('#section-catalog').screenshot({path:`.artifacts/cards-transparent-${width}.png`});
@@ -180,6 +258,10 @@ test('page layout examples use independent viewports and real component controls
     await expect(preview.getByRole('main')).toHaveCount(1);
     const toggle = page.locator('#live-example input[type="checkbox"]');
     if (kind === 'header') {
+      for (const mode of ['fixed', 'delayed', 'static', 'fixed']) {
+        await page.getByLabel('Header scroll behavior').selectOption(mode);
+        await expect(preview.locator('.ps-header')).toHaveAttribute('data-scroll', mode);
+      }
       await expect(preview.locator('.satellite.left')).toBeVisible();
       await toggle.uncheck();
       await expect(preview.locator('.satellite.left')).toHaveCount(0);
@@ -265,10 +347,63 @@ test('visual guides and ready-made catalog remain useful without JavaScript', as
   await expect(page.getByRole('figure',{name:'Seven viewport sizes from phone to wide desktop'})).toContainText('Wide desktop');
   await expect(page.locator('#every-screen svg')).toHaveCount(7);
   await page.goto('/docs/building-blocks/section/');
-  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(10);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(11);
   await page.goto('/docs/page-layout/header/');
   await expect(page.getByRole('figure',{name:'Page anatomy'})).toBeVisible();
   await expect(page.getByLabel('Preview viewport')).toBeDisabled();
   await expect(page.frameLocator('iframe').getByRole('heading',{name:'Planting',exact:true})).toBeVisible();
   await context.close();
+});
+
+for (const route of ['/docs/components/card/', '/sections/card-grid/', '/sections/carousel/']) {
+  test('card overlay playground updates preview and source on ' + route, async ({ page }) => {
+    await page.goto(route);
+    await page.getByRole('combobox', { name: 'Content placement', exact: true }).selectOption('overlay');
+    await page.getByRole('checkbox', { name: 'Image zoom on hover', exact: true }).uncheck();
+    const preview = page.locator('#playground .ps-card').first();
+    await expect(preview).toHaveAttribute('data-media-hover-zoom', 'false');
+    await expect(page.locator('#playground pre')).toContainText('mediaHoverZoom={false}');
+    await preview.hover();
+    await expect(preview.locator('.media')).toHaveCSS('transform', 'none');
+    await page.locator('#playground').screenshot({ path: test.info().outputPath('overlay-gradient.png') });
+    await page.getByRole('combobox', { name: 'Media aspect', exact: true }).selectOption('1/1');
+    await page.getByRole('combobox', { name: 'Overlay text tone', exact: true }).selectOption('dark');
+    const card = page.locator('#playground .ps-card').first();
+    await expect(card).toHaveAttribute('data-content-placement', 'overlay');
+    await expect(card).toHaveAttribute('data-media-fit', 'cover');
+    await expect(card.locator('.title')).toHaveCSS('color', 'rgb(17, 17, 17)');
+    const box = (await card.boundingBox())!;
+    expect(box.height).toBeCloseTo(box.width, 1);
+    await expect(page.locator('#playground pre')).toContainText('contentPlacement="overlay"');
+    await expect(page.locator('#playground pre')).toContainText('textTone="dark"');
+    await page.getByRole('combobox', { name: 'Content placement', exact: true }).selectOption('below');
+    await expect(card).toHaveAttribute('data-media-fit', 'contain');
+    await expect(page.getByRole('combobox', { name: 'Overlay text tone', exact: true })).toBeDisabled();
+  });
+}
+
+test('feature playground updates size, colors, centered counts and optional links', async ({ page }) => {
+  await page.goto('/sections/features/');
+  const preview = page.locator('[data-feature-preview]');
+  for (const align of ['center', 'right', 'left']) {
+    await page.getByRole('combobox', { name: 'Heading alignment', exact: true }).selectOption(align);
+    await expect(preview.locator('.ps-heading')).toHaveCSS('text-align', align);
+    await expect(page.locator('#playground pre')).toContainText(`"headingAlign": "${align}"`);
+  }
+  await expect(preview.locator('.ps-feature')).toHaveCount(6);
+  await expect(preview.locator('a.ps-feature')).toHaveCount(0);
+  await page.getByRole('combobox', { name: 'Feature count', exact: true }).selectOption('5');
+  await page.getByRole('combobox', { name: 'Feature size', exact: true }).selectOption('m');
+  await page.getByRole('combobox', { name: 'Icon tone', exact: true }).selectOption('primary');
+  await page.getByRole('checkbox', { name: 'Link features', exact: true }).check();
+  await expect(preview.locator('a.ps-feature')).toHaveCount(5);
+  await expect(preview.locator('.ps-features')).toHaveAttribute('data-ps-card-size', 'm');
+  await expect(preview.locator('.ps-feature').first()).toHaveAttribute('data-icon-tone', 'primary');
+  await expect(page.locator('#playground pre')).toContainText('"featureSize": "m"');
+  await expect(page.locator('#playground pre')).toContainText('"iconTone": "primary"');
+  await page.getByRole('button', { name: 'Reset example', exact: true }).click();
+  await expect(preview.locator('.ps-feature')).toHaveCount(6);
+  await expect(preview.locator('a.ps-feature')).toHaveCount(0);
+  await page.getByRole('combobox', { name: 'Feature count', exact: true }).selectOption('5');
+  await preview.screenshot({ path: '.artifacts/features-playground.png' });
 });

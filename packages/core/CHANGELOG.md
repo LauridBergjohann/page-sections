@@ -1,5 +1,25 @@
 # @page-sections/core
 
+## 0.9.0
+
+### Minor Changes
+
+- Add shared headingAlign (left, center or right; default left) to SectionDefinition for section headlines, eyebrows and introductions. HeroSection retains its own composition.
+
+- Add optional mediaHoverZoom to card-grid and carousel data, defaulting to true in the components.
+
+- Add FeatureSection with centered incomplete rows, shared S/M/L card spans, decorative icons, standard/muted/primary circle colors and native whole-feature links. Support serializable feature data and custom icon snippets.
+
+- Add below/overlay card content placement with fixed media aspect, theme-independent light/dark copy gradients, accessible overflow and collection support. Use three-column medium cards on the twelve-column L grid in both grids and carousels; other card spans stay unchanged.
+
+- Replace the vertical timeline with a proportional horizontal calendar, shared priority-ordered tracks, viewport-bound bar labels, fit-limited slider and pinch zoom, independent category filters and category-local clusters with standard popup list/detail navigation with outside-click dismissal. Keep sidebars visible above full stages, use standalone content menus on pages with full timelines, and place zoom controls beside the chosen axis. Add optional event labels, axis position, stage width, initial scale and configurable control labels while preserving date normalization, native no-JavaScript details and existing rich content.
+
+  This pre-1.0 minor release changes the timeline's visual layout and removes the former vertical rail, connector and sticky-header styling contract. Existing event data remains valid. Both packages move together to 0.9.0; consumers should review timeline styling. Stage width defaults to contained; opting into full also sets background.size to full while preserving its color.
+
+### Patch Changes
+
+- Match contained card media to the 12px text inset in the shared layout calculations and generated CSS.
+
 ## 0.8.0
 
 ### Minor Changes

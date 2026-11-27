@@ -25,11 +25,20 @@ describe('shared navigation and catalog geometry', () => {
     expect([0, 31, 32, 33, 200].map(value => resolveMenuOffset(value))).toEqual([0, 0, 0, -1, -168]);
     expect(resolveMenuOffset(200, true)).toBe(0);
   });
-  it.each([[320, 's', 142, 2], [320, 'm', 142, 2], [320, 'l', 296, 4], [720, 'l', 336, 3], [840, 'm', 190, 2], [1536, 'm', 228, 2], [1536, 'l', 480, 4]] as const)('fits %s/%s cards into canonical spans', (width, cardSize, expected, span) => {
+  it.each([[320, 's', 142, 2], [320, 'm', 142, 2], [320, 'l', 296, 4], [720, 'l', 336, 3], [840, 'm', 190, 2], [1536, 'm', 354, 3], [1536, 'l', 480, 4]] as const)('fits %s/%s cards into canonical spans', (width, cardSize, expected, span) => {
     const card = resolveCardLayout(width, cardSize);
     expect(card).toMatchObject({ width: expected, span });
     expect(card.mediaFrame.width / card.mediaFrame.height).toBeCloseTo(3 / 2);
     expect(card.media.y * 2 + card.media.height + card.textHeight).toBeCloseTo(card.height);
+  });
+  it.each([[320, [2, 2, 4]], [600, [2, 2, 3]], [840, [2, 2, 4]], [1200, [2, 3, 4]]] as const)('uses the requested card spans at %s', (width, spans) => {
+    expect((['s', 'm', 'l'] as const).map(size => resolveCardLayout(width, size).span)).toEqual(spans);
+  });
+  it('keeps overlay geometry fixed and forces full media even when contain is requested', () => {
+    const card = resolveCardLayout(1536, 'm', { contentPlacement: 'overlay', mediaAspect: '4/3', mediaFit: 'contain', reserveEyebrow: true });
+    expect(card.height).toBe(265.5);
+    expect(card.media).toEqual(card.mediaFrame);
+    expect(card.textHeight).toBe(84);
   });
   it('allocates independent media, title and optional eyebrow space', () => {
     const compact = resolveCardLayout(320, 'm');
@@ -37,7 +46,7 @@ describe('shared navigation and catalog geometry', () => {
     const square = resolveCardLayout(320, 'm', { reserveEyebrow: true, mediaAspect: '1/1' });
     expect(compact.textHeight).toBe(64); // Two 20px title lines plus 24px padding.
     expect(labeled.textHeight).toBe(84); // The label never consumes a title line.
-    expect(square).toMatchObject({ width: 142, height: 226, textHeight: 84, media: { x: 8, y: 8, width: 126, height: 126 } });
+    expect(square).toMatchObject({ width: 142, height: 226, textHeight: 84, media: { x: 12, y: 12, width: 118, height: 118 } });
     expect(resolveCardLayout(320, 's', { reserveEyebrow: true }).eyebrowRows).toBe(0);
     const cropped = resolveCardLayout(320, 'm', { mediaAspect: '4/3', mediaFit: 'cover' });
     expect(cropped.media).toEqual(cropped.mediaFrame);

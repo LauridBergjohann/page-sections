@@ -13,3 +13,5 @@ export { default as CardGridSection } from '../CardGridSection.svelte';
 export { default as CarouselSection } from '../CarouselSection.svelte';
 export { default as CodeSection } from '../CodeSection.svelte';
 export { default as Sections } from '../Sections.svelte';
+
+export { default as FeatureSection } from '../FeatureSection.svelte';

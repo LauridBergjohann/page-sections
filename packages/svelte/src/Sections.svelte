@@ -9,6 +9,7 @@
   import PanelSection from './PanelSection.svelte';
   import ImageSection from './ImageSection.svelte';
   import VideoSection from './VideoSection.svelte';
+  import FeatureSection from './FeatureSection.svelte';
   import CardGridSection from './CardGridSection.svelte';
   import CarouselSection from './CarouselSection.svelte';
   import Section from './Section.svelte';
@@ -30,8 +31,9 @@
   {:else if section.type === 'code'}<CodeSection {section} highlighted={codeHighlights[section.id]} />
   {:else if section.type === 'image'}<ImageSection {section} />
   {:else if section.type === 'video'}<VideoSection {section} />
-  {:else if section.type === 'cardGrid'}<CardGridSection {section} list={section.list} cardSize={section.cardSize} cardShadow={section.cardShadow} cardTone={section.cardTone} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} itemSpan={section.itemSpan} textAlign={section.textAlign} />
-  {:else if section.type === 'carousel'}<CarouselSection {section} list={section.list} cardSize={section.cardSize} cardShadow={section.cardShadow} cardTone={section.cardTone} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} textAlign={section.textAlign} controls={section.controls} initialItemKey={section.initialItemKey} />
+  {:else if section.type === 'features'}<FeatureSection {section} list={section.list} featureSize={section.featureSize} iconTone={section.iconTone} />
+  {:else if section.type === 'cardGrid'}<CardGridSection {section} list={section.list} cardSize={section.cardSize} cardShadow={section.cardShadow} cardTone={section.cardTone} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} mediaHoverZoom={section.mediaHoverZoom} contentPlacement={section.contentPlacement} textTone={section.textTone} itemSpan={section.itemSpan} textAlign={section.textAlign} />
+  {:else if section.type === 'carousel'}<CarouselSection {section} list={section.list} cardSize={section.cardSize} cardShadow={section.cardShadow} cardTone={section.cardTone} mediaAspect={section.mediaAspect} mediaFit={section.mediaFit} mediaHoverZoom={section.mediaHoverZoom} contentPlacement={section.contentPlacement} textTone={section.textTone} textAlign={section.textAlign} controls={section.controls} initialItemKey={section.initialItemKey} />
   {:else if section.type === 'grid'}<Section {section} inset><ContentGrid>{#each section.blocks as block (block.id)}<ContentBlock span={block.span}><Sections sections={block.sections} {renderers} {codeHighlights} /></ContentBlock>{/each}</ContentGrid></Section>
   {:else}{missing(section)}{/if}
 {/each}

@@ -1,6 +1,13 @@
 // Shared chapter metadata for navigation, search and reading order.
 export const documents = [
   {
+    title: 'Features',
+    href: '/sections/features/',
+    description: 'Centered icon features with shared grid sizes, theme colors and optional links.',
+    group: 'Sections',
+    category: 'Collections'
+  },
+  {
     title: 'Chip',
     href: '/docs/components/chip/',
     description: 'Reusable labeled selection chips with optional Lucide icons.',

@@ -44,8 +44,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
   >
     <div class="prose">
       <p>
-        Timeline: <code>--ps-timeline-sticky-offset</code> reserves navigation height (default 0px). Category
-        headers stick below that offset; the timeline grows with the page without an internal scroll region.
+        Timeline uses the shared palette, spacing and typography tokens. Its horizontal frame
+        scrolls independently; zoom changes only the time scale.
       </p>
       <p>
         CSS variables customize presentation; <code>layoutTokens</code> supplies canonical numeric values
@@ -90,12 +90,12 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             <tr>
               <td><code>--ps-ink</code></td>
               <td>#172330</td>
-              <td>Main text</td>
+              <td>Headings, navigation and controls</td>
             </tr>
             <tr>
               <td><code>--ps-body</code></td>
               <td>#465564</td>
-              <td>Supporting text</td>
+              <td>Section body copy, introductions and descriptions</td>
             </tr>
             <tr>
               <td><code>--ps-accent</code></td>
@@ -320,6 +320,15 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         default to 0px. Image uses private <code>--image-ratio</code> and <code>--image-fit</code>
         variables; configure <a href={base + '/docs/reference/types/#image-data'}>ImageData</a> instead.
       </p>
+      <p>
+        Fixed Header uses <code>--ps-header-dock-extra</code> for the gap between the header and
+        satellite docking positions. Internal <code>--ps-header-dock-start</code> and
+        <code>--ps-header-dock-radius</code> define each surface's starting scroll position and
+        initial corner radius. The corners flatten over 64px of scrolling after docking.
+        <code>--ps-sidebar-header-offset</code> adds the docked menu height to desktop sidebar
+        offsets inside PageShell; it is zero without a fixed header. Configure Header's
+        <code>scrollBehavior</code> prop instead of setting these derived values.
+      </p>
     </div>
   </Section>
   <Section
@@ -372,7 +381,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td><code>cardMediaInset</code></td>
-              <td>8; contained-media inset; cover uses zero</td>
+              <td>12; contained-media inset matching the text; cover uses zero</td>
             </tr>
             <tr>
               <td><code>menu</code></td>
@@ -388,6 +397,17 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
           </tbody>
         </table>
       </div>
+      <p>
+        Overlay implementation variables <code>--ps-card-overlay-ink</code> and
+        <code>--ps-card-overlay-rgb</code> hold the local foreground and gradient channels. Choose textTone
+        instead of overriding them.
+      </p>
+      <p>
+        FeatureSection reuses the card column spans and typography. Its private <code>
+          --ps-feature-icon-size
+        </code> sets 72/104/144px circles for S/M/L; choose featureSize rather than overriding it. Circle
+        colors reuse section-standard, section-muted, accent and on-accent.
+      </p>
       <p><code>cards</code> contains:</p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -402,7 +422,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <th>eyebrowWeight</th>
               <th>lineHeight</th>
               <th>rows</th>
-              <th>gridSSpan</th>
+              <th>gridSSpan</th><th>gridLSpan</th>
             </tr>
           </thead>
           <tbody>
@@ -415,7 +435,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>400</td>
               <td>18</td>
               <td>2</td>
-              <td>Absent</td>
+              <td>Absent</td><td>Absent</td>
             </tr>
             <tr>
               <td>m</td>
@@ -426,7 +446,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>400</td>
               <td>20</td>
               <td>2</td>
-              <td>Absent</td>
+              <td>Absent</td><td>3</td>
             </tr>
             <tr>
               <td>l</td>
@@ -437,16 +457,15 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>400</td>
               <td>24</td>
               <td>3</td>
-              <td>3</td>
+              <td>3</td><td>Absent</td>
             </tr>
           </tbody>
         </table>
       </div>
       <p>
         These feed resolveCardLayout and Svelte cards. Descriptions use natural title height;
-        descriptions and additional content make the final height content-dependent. <code>
-          breadcrumb
-        </code> contains:
+        descriptions and additional content make the final height content-dependent in below mode.
+        Overlay uses a fixed media aspect and scrollable copy. <code> breadcrumb </code> contains:
       </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
@@ -498,8 +517,9 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
         </table>
       </div>
       <p>
-        Breadcrumbs consumes these generated viewport sizes and minimum heights, allowing wrapping
-        to grow beyond the minimum. Header consumes the generated menu and satellite geometry.
+        Breadcrumbs uses these generated viewport sizes and minimum heights. Its trail stays on one
+        line, with ellipses for long labels and a fixed-width Home icon. Header consumes the
+        generated menu and satellite geometry.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
@@ -554,7 +574,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>--ps-breadcrumb-font-size, --ps-breadcrumb-height</td>
               <td>Viewport values in the table above</td>
             </tr>
-            <tr>
+            <tr> <td>--ps-card-medium-span</td><td>2 columns; 3 on the L grid</td></tr><tr>
               <td>--ps-card-large-span</td>
               <td>3 in the S grid, otherwise 4</td>
             </tr>
@@ -580,7 +600,7 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
             </tr>
             <tr>
               <td>--ps-card-media-inset</td>
-              <td>8px contained-media inset; cover uses zero</td>
+              <td>12px contained-media inset matching the text; cover uses zero</td>
             </tr>
             <tr>
               <td>--ps-card-text-inset-inline, --ps-card-text-inset-block</td>

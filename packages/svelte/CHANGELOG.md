@@ -1,5 +1,36 @@
 # @page-sections/svelte
 
+## 0.9.0
+
+### Minor Changes
+
+- Support section.headingAlign and standalone Heading align with left, center and right values. Move the readable-width introduction with the headline and eyebrow, without changing body content or nested sections. HeroSection ignores headingAlign.
+
+- Extend fixed-header corner flattening to 64px of scroll after docking, and apply the satellite contour to button-group outlines, hover backgrounds and selection surfaces.
+
+- Make fixed headers dock independently from their satellites on XL–3XL layouts using native CSS sticky positioning. Flatten upper corners with scroll progress, reserve the docked header above both sidebars, and update sidebar space when the reactive scrollBehavior prop changes. Compact fixed headers and delayed/static modes retain their behavior.
+
+- Prepend an accessible icon-only Home link in Breadcrumbs, including single-page trails. Hide Home-only trails, reuse an existing Home entry, and expose site-root and label overrides through Breadcrumbs and ContentPage. Scale the icon with the text; use body-colored links without underlines, accent on hover/keyboard focus, and translucent separators and unlinked entries.
+
+- Add mediaHoverZoom (default true) to cards, grids and carousels. Refine overlay gradients to a translucent fade within the copy area and make descriptions and gradient padding follow the native card link while actions keep their own destinations.
+
+- Add FeatureSection with centered incomplete rows, shared S/M/L card spans, decorative icons, standard/muted/primary circle colors and native whole-feature links. Support serializable feature data and custom icon snippets.
+
+- Add below/overlay card content placement with fixed media aspect, theme-independent light/dark copy gradients, accessible overflow and collection support. Use three-column medium cards on the twelve-column L grid in both grids and carousels; other card spans stay unchanged.
+
+- Replace the vertical timeline with a proportional horizontal calendar, shared priority-ordered tracks, viewport-bound bar labels, fit-limited slider and pinch zoom, independent category filters and category-local clusters with standard popup list/detail navigation with outside-click dismissal. Keep sidebars visible above full stages, use standalone content menus on pages with full timelines, and place zoom controls beside the chosen axis. Add optional event labels, axis position, stage width, initial scale and configurable control labels while preserving date normalization, native no-JavaScript details and existing rich content.
+
+  This pre-1.0 minor release changes the timeline's visual layout and removes the former vertical rail, connector and sticky-header styling contract. Existing event data remains valid. Both packages move together to 0.9.0; consumers should review timeline styling. Stage width defaults to contained; opting into full also sets background.size to full while preserving its color.
+
+### Patch Changes
+
+- Use the shared body token consistently for section copy, rich text and panels. Keep headings and navigation on ink, including Markdown and custom section headings, in both color modes.
+
+- Clip both card media modes to their rounded frame during hover and keep the card border visible above images. Align contained media with the 12px text inset.
+
+- Updated dependencies
+  - @page-sections/core@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes

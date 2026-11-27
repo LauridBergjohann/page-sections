@@ -16,7 +16,7 @@
   <Actions {actions} />
 </div>
 <style>
-  .ps-panel { padding: var(--ps-grid-gap, 16px); border: 1px solid var(--ps-panel-border); border-radius: var(--ps-radius); background: var(--ps-section-muted); overflow-wrap: anywhere; }
+  .ps-panel { padding: var(--ps-grid-gap, 16px); border: 1px solid var(--ps-panel-border); border-radius: var(--ps-radius); background: var(--ps-section-muted); color: var(--ps-body); overflow-wrap: anywhere; }
   [data-tone='standard'] { background: var(--ps-section-standard); }
   h1, h2, h3, h4, h5, h6 { margin: 0 0 1rem; font-size: 1.125rem; line-height: 1.4; }
   .ps-panel > :global(.ps-actions) { margin-top: 1.25rem; }

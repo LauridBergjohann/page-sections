@@ -70,6 +70,23 @@
   >
     <div class="prose">
       <p>
+        <code>contentPlacement="below"</code> is the default. Choose
+        <code>contentPlacement="overlay"</code>
+        to place text at the bottom of the image. Overlay always uses cover, and
+        <code>mediaAspect</code>
+        fixes the entire card ratio. <code>textTone="light"</code> (default) uses pure white text
+        over a subtle dark gradient limited to the copy area; <code>textTone="dark"</code> uses dark text
+        over a light gradient. These local colors stay independent of the page theme and do not recolor
+        the image.
+      </p>
+      <p>
+        Use short titles and teasers for overlay cards. Longer copy, custom content and actions
+        remain reachable in a keyboard-focusable scrolling text area without enlarging the card.
+        Text remains selectable, the image, gradient padding, title and description share the main
+        link, and actions remain independent. Missing images retain the same fixed card shape and
+        gradient.
+      </p>
+      <p>
         Cards share one layout in the container-based ContentGrid. Supply a description when an item
         needs more context; it appears below the title automatically.
       </p>
@@ -153,6 +170,21 @@
               <td>contain</td>
             </tr>
             <tr>
+              <td><code>mediaHoverZoom</code></td><td>boolean</td><td>
+                true; false disables image enlargement on hover
+              </td>
+            </tr><tr>
+              <td><code>contentPlacement</code></td><td>
+                <a href={base + '/docs/reference/types/#card-content-placement'}>
+                  CardContentPlacement
+                </a>: below/overlay
+              </td><td>below; overlay forces cover and fixes the whole card aspect</td>
+            </tr><tr>
+              <td><code>textTone</code></td><td>
+                <a href={base + '/docs/reference/types/#card-text-tone'}>CardTextTone</a>:
+                light/dark
+              </td><td>light; only used in overlay mode</td>
+            </tr><tr>
               <td><code>itemSpan</code></td>
               <td>
                 <code><a href={base + '/docs/reference/types/#content-span'}>ContentSpan</a></code>
@@ -184,11 +216,16 @@
                     CardSize
                   </a>; shadow: boolean; tone:
                   <a href={base + '/docs/reference/types/#surface-tone'}>SurfaceTone</a>; textAlign:
-                  'start' | 'center'; mediaAspect:
+                  'start' | 'center'; contentPlacement:
+                  <a href={base + '/docs/reference/types/#card-content-placement'}>
+                    CardContentPlacement
+                  </a>; textTone:
+                  <a href={base + '/docs/reference/types/#card-text-tone'}>CardTextTone</a>;
+                  mediaAspect:
                   <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a>;
                   mediaFit:
                   <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a>;
-                  reserveEyebrow: boolean &#125;]&gt;
+                  mediaHoverZoom: boolean; reserveEyebrow: boolean &#125;]&gt;
                 </code>
               </td>
               <td>Optional complete card replacement</td>
@@ -230,12 +267,13 @@
         Forward <code>options.tone</code> when providing a complete custom card snippet.
       </p>
       <p>
-        Card sizes S/M/L span 2/2/4 columns; L spans 3 on the S grid. Only the media frame has a
-        fixed ratio, selected with mediaAspect. The text area is added below it: up to two title
-        lines for S/M, three for L, plus 12px padding on each side. S hides eyebrows. If any M/L
-        item has an eyebrow, all cards reserve a separate label line, including blank items. Labels
-        never consume title lines. S uses 12px titles, M 14px and L 18px. Titles clamp visually
-        while their full text remains in the link's accessible name and title attribute.
+        Card sizes S/M/L span 2/2/4 columns on XS and M, 2/2/3 on S, and 2/3/4 on L. In below mode,
+        only the media frame has a fixed ratio, selected with mediaAspect. The text area is added
+        below it: up to two title lines for S/M, three for L, plus 12px padding on each side. S
+        hides eyebrows. If any M/L item has an eyebrow, all cards reserve a separate label line,
+        including blank items. Labels never consume title lines. S uses 12px titles, M 14px and L
+        18px. Titles clamp visually while their full text remains in the link's accessible name and
+        title attribute.
       </p>
       <p>
         With a description, the title uses only the lines it needs and the description follows with
@@ -244,19 +282,21 @@
         geometry.
       </p>
       <p>
-        All grid rows share the tallest required card height, including rows with short titles or
-        missing labels. Descriptions and extra content grow naturally. The title link covers the
-        whole card; action links remain independent. Footers and actions align at the bottom. A
-        complete card replacement must fill its slot and use the supplied layout context to retain
-        alignment.
+        In below mode, all grid rows share the tallest required card height, including rows with
+        short titles or missing labels. Descriptions and extra content grow naturally. The title
+        link covers the whole card; action links remain independent. Footers and actions align at
+        the bottom. A complete card replacement must fill its slot and use the supplied layout
+        context to retain alignment.
       </p>
       <p>
-        Use mediaFit=&quot;contain&quot; for complete objects with an 8px media inset, or
-        mediaFit=&quot;cover&quot; for edge-to-edge cropped photos. Both use the same selected
-        mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>
+        Use mediaFit=&quot;contain&quot; for complete objects with a 12px media inset matching the
+        text, or mediaFit=&quot;cover&quot; for edge-to-edge cropped photos. Both use the same
+        selected mediaAspect. <a href={base + '/docs/reference/types/#image-data'}>
           ImageData
         </a>.aspect/objectFit do not override this collection-level contract. Compare 3:2 and 1:1 in
-        the interactive example above.
+        the interactive example above. On hover, contained media expands into its inset and covered
+        photos zoom within the frame. Both are clipped at the rounded card edges; the card outline
+        stays visible above the image.
       </p>
       <p>
         Enable <code>cardShadow</code> for a subtle resting shadow. Hover quickly animates the border

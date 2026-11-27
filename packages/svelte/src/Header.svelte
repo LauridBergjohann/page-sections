@@ -120,10 +120,51 @@
   @media (max-width: 599.98px) { .header { gap: .25rem; } }
   @media (min-width: 1200px) { .mobile-navigation { display: none; } .desktop-menu { display: block; } }
   @media (min-width: 1600px) {
+    /* The extra track lets the menu dock before the lower satellites. The negative
+       margin preserves the normal page offset, and empty track space stays clickable. */
+    [data-scroll='fixed'] {
+      --ps-header-dock-extra: max(0px, calc(var(--ps-satellite-top) - var(--ps-menu-top)));
+      position: sticky;
+      top: calc(-1 * (var(--ps-menu-top) + var(--ps-header-dock-extra)));
+      height: calc(var(--ps-nav-height) + var(--ps-header-dock-extra));
+      margin-bottom: calc(-1 * var(--ps-header-dock-extra));
+      pointer-events: none;
+    }
+    [data-scroll='fixed'] .ps-navigation-rack { position: static; }
+    [data-scroll='fixed'] .ps-navigation {
+      box-sizing: border-box;
+      min-height: calc(var(--ps-nav-height) + var(--ps-header-dock-extra));
+    }
+    [data-scroll='fixed'] .header { position: sticky; top: 0; pointer-events: auto; }
+    [data-scroll='fixed'] .satellite { pointer-events: auto; }
     .header::after { border-width: 1px; }
     .header { border-radius: var(--ps-radius); }
     .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-section-standard); border-radius: 12px; box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
+    /* A satellite's segmented controls share its contour, including their outline
+       and selection surface. Keep the satellite itself open for arbitrary popups. */
+    .satellite :global(.ps-button-group) { border-radius: 12px; overflow: clip; }
+    .satellite :global(.ps-button-group > :is(a, button)),
+    .satellite :global(.ps-button-group::before) { border-top-left-radius: 0; border-top-right-radius: 0; }
     .left { left: var(--ps-satellite-inset); } .right { right: var(--ps-satellite-inset); }
     .settings { display: none; }
+    @supports (animation-timeline: scroll(root block)) and (animation-range: 0px 1px) {
+      [data-scroll='fixed'] .header, [data-scroll='fixed'] .satellite,
+      [data-scroll='fixed'] .satellite :global(.ps-button-group) {
+        --ps-header-dock-start: var(--ps-menu-top);
+        --ps-header-dock-radius: var(--ps-radius);
+        animation: dock-corners auto linear both;
+        animation-timeline: scroll(root block);
+        animation-range: var(--ps-header-dock-start) calc(var(--ps-header-dock-start) + 64px);
+      }
+      [data-scroll='fixed'] .satellite,
+      [data-scroll='fixed'] .satellite :global(.ps-button-group) {
+        --ps-header-dock-start: var(--ps-satellite-top);
+        --ps-header-dock-radius: 12px;
+      }
+    }
+  }
+  @keyframes dock-corners {
+    from { border-top-left-radius: var(--ps-header-dock-radius); border-top-right-radius: var(--ps-header-dock-radius); }
+    to { border-top-left-radius: 0px; border-top-right-radius: 0px; }
   }
 </style>

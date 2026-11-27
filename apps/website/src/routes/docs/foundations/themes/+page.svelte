@@ -88,6 +88,14 @@
         content.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
+      <p>
+        Text colors follow the same roles across sections: <code>--ps-body</code> colors body copy,
+        introductions and descriptions, including custom section content and Markdown.
+        <code>--ps-ink</code> colors headings, navigation and controls; <code>--ps-accent</code>
+        colors content links and accents. These roles apply in both color modes. Buttons, footers and
+        overlay cards retain their surface-specific contrast colors. To use one neutral text color everywhere,
+        assign the same value to <code>ink</code> and <code>body</code> in your theme.
+      </p>
     </div>
   </Section>
   <Section

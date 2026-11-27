@@ -1,0 +1,104 @@
+{
+  "format": "timeline-overview-selection",
+  "formatVersion": 1,
+  "notASection": true,
+  "source": "timeline-showcase.json",
+  "description": "Compact selection from the same English fixture for the sections overview. This manifest is not a public component API.",
+  "categoryOrder": [
+    "programme",
+    "projects",
+    "publications",
+    "research"
+  ],
+  "eventKeys": [
+    {
+      "categoryId": "programme",
+      "eventId": "mh-programme-open-access"
+    },
+    {
+      "categoryId": "programme",
+      "eventId": "mh-programme-repair-network"
+    },
+    {
+      "categoryId": "programme",
+      "eventId": "mh-programme-open-lab-week"
+    },
+    {
+      "categoryId": "projects",
+      "eventId": "mh-projects-accessible-map"
+    },
+    {
+      "categoryId": "projects",
+      "eventId": "mh-projects-district-stations"
+    },
+    {
+      "categoryId": "projects",
+      "eventId": "mh-projects-data-platform"
+    },
+    {
+      "categoryId": "projects",
+      "eventId": "mh-projects-shade-canopy"
+    },
+    {
+      "categoryId": "projects",
+      "eventId": "mh-projects-night-measurement"
+    },
+    {
+      "categoryId": "projects",
+      "eventId": "mh-projects-shared-api"
+    },
+    {
+      "categoryId": "publications",
+      "eventId": "mh-publications-2024-station-handbook"
+    },
+    {
+      "categoryId": "publications",
+      "eventId": "mh-publications-2024-data-format"
+    },
+    {
+      "categoryId": "publications",
+      "eventId": "mh-publications-2024-rain-atlas"
+    },
+    {
+      "categoryId": "publications",
+      "eventId": "mh-publications-2024-component-catalogue"
+    },
+    {
+      "categoryId": "publications",
+      "eventId": "mh-publications-2024-energy-patterns"
+    },
+    {
+      "categoryId": "publications",
+      "eventId": "mh-publications-2024-accessible-map"
+    },
+    {
+      "categoryId": "publications",
+      "eventId": "mh-publications-2024-maintenance-log"
+    },
+    {
+      "categoryId": "research",
+      "eventId": "mh-research-longitudinal-access"
+    },
+    {
+      "categoryId": "research",
+      "eventId": "mh-research-methods-residency"
+    }
+  ],
+  "sectionOverrides": {
+    "id": "morgenhafen-timeline-overview",
+    "title": "Morgenhafen at a glance",
+    "headline": "What takes shape together.",
+    "introduction": "A selection from the entirely fictional story of the Morgenhafen urban lab: ongoing projects, shared activities and seven publications on the same day.",
+    "start": "2022",
+    "referenceDate": "2026-11-25",
+    "direction": "descending"
+  },
+  "adapterRules": [
+    "Resolve eventKeys against the canonical source using the (categoryId, eventId) pair; retain category order.",
+    "Clone the selected English data without mutating the canonical source.",
+    "Apply sectionOverrides; preserve original event dates even when an event begins before section.start.",
+    "Rewrite the source-section action anchor #morgenhafen-timeline to the actual instance ID.",
+    "Do not add section.end: existing ongoing-event semantics would let it override referenceDate.",
+    "Apply the existing application base path to local asset URLs using the established helper."
+  ]
+}

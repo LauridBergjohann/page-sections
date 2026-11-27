@@ -1,159 +1,261 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'svelte/server';
 import { TimelineSection, Sections } from '../packages/svelte/src/index.js';
-import { assignTimelineLanes, eventDateLabel, layoutTimeline, parseTimelineDate } from '../packages/svelte/src/timeline.js';
+import { DAY, EDGE, MARKER, anchoredScroll, chronological, clusterTimeline, collides, eventDateLabel, eventLabel, layoutTimeline, normalizeTimeline, parseTimelineDate, priorityOrder, projectTime, unprojectTime, viewportTime, visibleLabel } from '../packages/svelte/src/timeline.js';
 import type { TimelineEvent, TimelineSectionData } from '@page-sections/core';
-import { timelineExample } from '../apps/website/src/lib/timelineExample.js';
+import catalog from './fixtures/timeline/edge-cases.json';
+import { timelineExample, timelineExampleFor } from '../apps/website/src/lib/timelineExample.js';
 
-const section = (events: TimelineEvent[], options: Partial<TimelineSectionData> = {}): TimelineSectionData => ({
-  type: 'timeline', id: 'test', title: 'Test', categories: [{ id: 'one', title: 'One', color: '#168d91', events }], ...options
-});
+const reference = catalog.referenceDate;
+const section = (events: TimelineEvent[], options: Partial<TimelineSectionData> = {}): TimelineSectionData => ({ type: 'timeline', id: 'test', title: 'Test', categories: [{ id: 'one', title: 'One', color: '#168d91', events }], ...options });
 const period = (id: string, start: string, end?: string): TimelineEvent => ({ id, title: id, type: 'period', start, end });
+const date = (value: string) => parseTimelineDate(value)!;
+function fixture(id: string): TimelineSectionData {
+  const input = catalog.fixtures.find(f => f.id === id)!.input;
+  const events = input.events as (TimelineEvent & { categoryId: string })[];
+  const categories = 'categories' in input ? input.categories! : [...new Set(events.map(e => e.categoryId))].map(id => ({ id }));
+  return { type: 'timeline', id, title: id, referenceDate: reference, locale: 'en-GB', clustering: input.clusteringEnabled,
+    categories: categories.map(category => ({ id: category.id, title: category.id, color: '#168d91', events: events.filter(e => e.categoryId === category.id) })) };
+}
+const ids = (result: ReturnType<typeof layoutTimeline>) => result.items.flatMap(item => item.members.map(member => member.key)).sort();
 
-describe('calendar dates', () => {
-  it('accepts exact year/month/day precision in UTC, including years below 100', () => {
-    expect(parseTimelineDate('2024')).toBe(Date.UTC(2024, 0, 1));
-    expect(parseTimelineDate('2024-02')).toBe(Date.UTC(2024, 1, 1));
-    expect(parseTimelineDate('2024-02-29')).toBe(Date.UTC(2024, 1, 29));
-    expect(new Date(parseTimelineDate('0099')!).getUTCFullYear()).toBe(99);
-    for (const date of ['2023-02-29', '2024-13', '2024-04-31', '24', '2024-1', '0000', '2024-01-01T00:00Z', 'garbage']) expect(parseTimelineDate(date)).toBeUndefined();
+describe('horizontal timeline acceptance fixtures', () => {
+  it('strict-priority-chain: obeys every overlapping precedence edge, even across an otherwise free track', () => {
+    const result = layoutTimeline(fixture('strict-priority-chain'), reference);
+    expect(result.items.map(item => [item.event!.id, item.lane])).toEqual([['a', 0], ['b', 1], ['c', 2]]);
+    const [a, b, c] = result.items;
+    expect(a.end <= c.start).toBe(true);
+    expect(b.start < a.end && c.start < b.end).toBe(true);
   });
-  it('preserves date precision and custom ongoing labels', () => {
-    expect(eventDateLabel({ id: 'p', title: 'P', type: 'point', date: '2024' })).toBe('2024');
-    expect(eventDateLabel({ id: 'p', title: 'P', type: 'point', date: '2024-02' })).toBe('Feb 2024');
-    expect(eventDateLabel({ id: 'p', title: 'P', type: 'point', date: '2024-02-29' })).toBe('29 Feb 2024');
-    expect(eventDateLabel(period('p', '2022'), 'de-DE', 'Heute')).toBe('2022 – Heute');
+  it('reuse-lanes-across-categories: retains composite IDs and reuses a shared track', () => {
+    const result = layoutTimeline(fixture('reuse-lanes-across-categories'), reference);
+    expect(result.items.map(item => item.lane)).toEqual([0, 0, 0]);
+    expect(new Set(ids(result)).size).toBe(3);
+  });
+  it('stable-complete-ties: stable identity wins regardless of source ordering', () => {
+    const data = fixture('stable-complete-ties');
+    const first = layoutTimeline(data, reference);
+    expect(first.items.map(item => item.event!.id)).toEqual(['tie-a', 'tie-b', 'tie-c']);
+    expect(first.items.map(item => item.lane)).toEqual([0, 1, 2]);
+    for (const category of data.categories) category.events.reverse();
+    expect(layoutTimeline(data, reference).items).toEqual(first.items);
+  });
+  it('rendered-glyph-collision: separate dates still collide at marker and hit-target resolution', () => {
+    const result = layoutTimeline(fixture('rendered-glyph-collision'), reference, 12);
+    expect(result.items.map(item => item.lane)).toEqual([0, 1]);
+    for (const item of result.items) {
+      expect(item.duration).toBe(0);
+      expect(item.x + MARKER / 2).toBe(projectTime(item.start, result, 12));
+    }
+    expect(result.items[0].start + DAY).toBe(result.items[1].start);
+  });
+  it('sticky-label-visible-intersection: hides text before icons and never crosses the visible bar', () => {
+    for (const scroll of [0, 100, 240, 470, 510, 540]) {
+      const label = visibleLabel(80, 440, scroll, 220);
+      const left = 80 + label.left, end = left + label.width;
+      if (label.width) {
+        expect(left).toBe(Math.max(80, scroll) + 8);
+        expect(end).toBeLessThanOrEqual(Math.min(520, scroll + 220));
+      }
+      expect(label.icon).toBe(label.width >= 16);
+      expect(label.textWidth).toBe(Math.max(0, label.width - 22));
+      if (scroll >= 510) expect(label.icon).toBe(false);
+    }
+  });
+  it('direction-and-axis-independent: mirrors dates and tracks independently, retaining original durations', () => {
+    const data = fixture('direction-and-axis-independent');
+    const a = layoutTimeline({ ...data, axisPosition: 'top' }, reference);
+    for (const direction of ['ascending', 'descending'] as const) for (const axisPosition of ['top', 'bottom'] as const) {
+      const b = layoutTimeline({ ...data, direction, axisPosition }, reference);
+      for (const item of b.items) {
+        const original = a.items.find(other => other.key === item.key)!;
+        expect(item.width).toBeGreaterThan(0);
+        expect(item.lane).toBe(original.lane);
+        expect(item.duration).toBe(original.duration);
+        expect(item.width).toBeCloseTo(original.width);
+        expect(direction === 'ascending' ? item.x : b.width - item.x - item.width).toBeCloseTo(original.x);
+        if (axisPosition === 'bottom') expect(item.top + original.top).toBe(b.height - 32);
+      }
+    }
+  });
+  it('zoom-preserves-time-anchor: preserves the center time and clamps only at boundaries', () => {
+    const domain = { start: date('2000'), end: date('2030') };
+    for (const descending of [true, false]) for (const scale of [.1, .2, .4, .1]) {
+      const time = date('2013-08-20');
+      const scroll = anchoredScroll(time, .5, 400, domain, scale, descending);
+      expect(unprojectTime(scroll + 200, domain, scale, descending)).toBeCloseTo(time);
+      const edge = anchoredScroll(date('2000-01-02'), .5, 400, domain, scale, descending);
+      expect(edge).toBeGreaterThanOrEqual(0);
+      expect(edge).toBeLessThanOrEqual((domain.end - domain.start) / DAY * scale + EDGE * 2 - 400);
+    }
+  });
+  it('ultrawide-resize-preserves-scale: reveals more time at a constant user scale', () => {
+    const domain = { start: date('2000'), end: date('2030') };
+    for (const width of [700, 1300, 2200]) {
+      const scroll = anchoredScroll(date('2017-07-01'), .5, width, domain, .3);
+      const visible = unprojectTime(scroll + width, domain, .3) - unprojectTime(scroll, domain, .3);
+      expect(visible / DAY).toBeCloseTo(width / .3);
+    }
+  });
+  it('keeps a meaningful center when the full domain fits and clamps a pre-resize anchor at the boundary', () => {
+    const domain = { start: date('2022'), end: date('2027') };
+    for (const descending of [false, true]) {
+      const center = viewportTime(0, 3440, domain, .6, descending);
+      expect(center).toBe((domain.start + domain.end) / 2);
+      const scroll = anchoredScroll(center, .5, 390, domain, .6, descending);
+      expect(viewportTime(scroll, 390, domain, .6, descending)).toBeCloseTo(center);
+    }
+  });
+  it('identical-date-cluster-list: keeps every identical-date member individually addressable', () => {
+    for (const scale of [.02, .6, 64]) {
+      const result = layoutTimeline(fixture('identical-date-cluster-list'), reference, scale);
+      expect(result.items).toHaveLength(1);
+      expect(result.items[0].members).toHaveLength(6);
+      expect(chronological(result.items[0].members, true).map(item => item.event.id)).toEqual(['same-alpha', 'same-beta', 'same-delta', 'same-epsilon', 'same-gamma', 'same-zeta']);
+    }
+  });
+  it('category-local-clustering-long-bars-retained: preserves all entries, colors and actual duration priority', () => {
+    const data = fixture('category-local-clustering-long-bars-retained');
+    const result = layoutTimeline(data, reference, 6);
+    expect(result.items.find(item => item.event?.id === 'long-range')?.compact).toBe(false);
+    expect(ids(result)).toEqual(normalizeTimeline(data, reference).events.map(item => item.key).sort());
+    for (const item of result.items) {
+      expect(new Set(item.members.map(member => member.category.id))).toEqual(new Set([item.category.id]));
+      expect(item.duration).toBe(Math.max(...item.members.map(member => member.duration)));
+    }
+  });
+  it('bounded-cluster-chain: bounds transitive groups rather than swallowing the full chain', () => {
+    const normalized = normalizeTimeline(fixture('bounded-cluster-chain'), reference);
+    const result = clusterTimeline(normalized.events, normalized, 20, false, [], true, { join: 22, maxSpan: 45 });
+    expect(result.map(item => item.members.length)).toEqual([3, 2]);
+    for (const item of result) expect((item.end - item.start) / DAY * 20).toBeLessThanOrEqual(45);
+    expect(result.flatMap(item => item.members)).toHaveLength(5);
+  });
+  it('cluster-hysteresis: separates entry and exit thresholds with deterministic previous state', () => {
+    const normalized = normalizeTimeline(fixture('cluster-hysteresis'), reference);
+    let previous: string[][] = [];
+    const states = [30, 33, 35, 38, 35, 32].map(scale => {
+      const result = clusterTimeline(normalized.events, normalized, scale, false, previous, true, { join: 32, split: 38 });
+      expect(clusterTimeline(normalized.events, normalized, scale, false, previous, true, { join: 32, split: 38 })).toEqual(result);
+      previous = result.filter(item => item.cluster).map(item => item.members.map(member => member.key));
+      return previous.length > 0;
+    });
+    expect(states).toEqual([true, true, true, false, false, true]);
+  });
+  it('filtering-preserves-view-and-focus: retains the full domain and restores deterministic layout', () => {
+    const data = fixture('filtering-preserves-view-and-focus');
+    const all = layoutTimeline(data, reference, .4);
+    for (const hidden of [['programme'], ['publications'], data.categories.map(c => c.id)]) {
+      const filtered = layoutTimeline(data, reference, .4, hidden);
+      expect([filtered.start, filtered.end, filtered.width]).toEqual([all.start, all.end, all.width]);
+      expect(filtered.items.every(item => !hidden.includes(item.category.id))).toBe(true);
+    }
+    expect(layoutTimeline(data, reference, .4).items).toEqual(all.items);
+  });
+  it('fixed-reference-ongoing-and-future: retains precedence, explicit future dates and one shared clock', () => {
+    const data = fixture('fixed-reference-ongoing-and-future');
+    const result = normalizeTimeline(data, '2026-11-26');
+    expect(result.events.find(item => item.event.id === 'ongoing')?.end).toBe(date(reference));
+    expect(result.events.find(item => item.event.id === 'future-point')?.start).toBe(date('2027-04-08'));
+    expect(result.events.find(item => item.event.id === 'future-period')?.end).toBe(date('2027-06-01'));
+    for (const [options, expected] of [[{ end: '2026-12-31', referenceDate: reference }, '2026-12-31'], [{ referenceDate: reference }, reference], [{}, '2026-11-26']] as const) {
+      expect(normalizeTimeline(section([period('ongoing', '2020')], options), '2026-11-26').events[0].end).toBe(date(expected));
+    }
+    expect(normalizeTimeline(section([period('future-open', '2030')]), reference).events).toHaveLength(0);
+  });
+  it('date-precision-timezones: preserves UTC precision, DST days, small years and label fallback', () => {
+    const events = normalizeTimeline(fixture('date-precision-timezones'), reference).events;
+    for (const zone of ['UTC', 'Europe/Berlin', 'America/Los_Angeles']) {
+      const before = process.env.TZ;
+      try {
+        process.env.TZ = zone;
+        expect(eventDateLabel(events.find(item => item.event.id === 'year-only')!.event)).toBe('2019');
+        expect(eventDateLabel(events.find(item => item.event.id === 'month-only')!.event)).toBe('Mar 2024');
+        expect(eventDateLabel(events.find(item => item.event.id === 'day-only')!.event)).toBe('31 Mar 2024');
+        expect(events.find(item => item.event.id === 'dst-period')!.duration).toBe(2 * DAY);
+        expect(new Date(date('0042-03-01')).getUTCFullYear()).toBe(42);
+      } finally { process.env.TZ = before; }
+    }
+    const event = events[0].event;
+    expect(eventLabel({ ...event, label: '  ' })).toBe(event.title);
+    expect(eventLabel({ ...event, label: 'Short' })).toBe('Short');
+    expect(eventDateLabel(period('ongoing', '2022'), 'de-DE', 'Heute')).toBe('2022 – Heute');
+  });
+  it('invalid-dates-and-zero-duration: rejects invalid values without corrupting valid geometry', () => {
+    const data = fixture('invalid-dates-and-zero-duration');
+    const result = layoutTimeline(data, reference, 4);
+    expect(result.invalid).toHaveLength(5);
+    expect(ids(result)).toHaveLength(4);
+    const zero = result.items.find(item => item.event?.id === 'zero-duration-period')!;
+    expect(zero.event?.type).toBe('period'); expect(zero.duration).toBe(0); expect(zero.compact).toBe(true);
+    for (const item of result.items) expect([item.x, item.width, item.top].every(Number.isFinite)).toBe(true);
+    const first = result.events.find(item => item.event.id === 'adjacent-first')!, second = result.events.find(item => item.event.id === 'adjacent-second')!;
+    expect(first.end).toBe(second.start);
+    for (const options of [{ start: 'bad' }, { end: 'bad' }, { start: '2026', end: '2020' }]) expect(layoutTimeline(section([period('a', '2022')], options), reference).items).toEqual([]);
+    for (const value of ['2023-02-29', '2024-13', '2024-04-31', '24', '2024-1', '0000', '2024-01-01T00:00Z']) expect(parseTimelineDate(value)).toBeUndefined();
   });
 });
 
-describe('interval partitioning and labels', () => {
-  const intervals = [period('a', '2020', '2024'), period('b', '2021', '2023'), period('c', '2022', '2025'), period('d', '2023', '2026'), period('e', '2026', '2027')].map(event => ({ event, start: parseTimelineDate(event.type === 'period' ? event.start : '')!, end: parseTimelineDate(event.type === 'period' ? event.end : '')! }));
-  it('uses minimum lanes, reuses them at boundaries, and ignores input order', () => {
-    const result = assignTimelineLanes(intervals);
-    expect(result.map(item => [item.event.id, item.lane])).toEqual([['a', 0], ['b', 1], ['c', 2], ['d', 1], ['e', 0]]);
-    expect(assignTimelineLanes([...intervals].reverse())).toEqual(result);
-  });
-  it('separates simultaneous points and clustered labels deterministically', () => {
-    const events: TimelineEvent[] = ['z', 'a', 'b'].map(id => ({ id, title: id, type: 'point', date: '2024-06-01' }));
-    const layout = layoutTimeline(section(events), '2026');
-    expect(layout.categories[0].events.map(item => [item.event.id, item.lane, item.labelLane])).toEqual([['a', 0, 0], ['b', 1, 1], ['z', 2, 2]]);
-  });
-  it('uses measured label footprints, including tall final labels', () => {
-    const data = section([period('a', '2020', '2021'), period('b', '2021', '2022')], { start: '2020', end: '2022' });
-    const result = layoutTimeline(data, '2026', { '["one","a"]': 400, '["one","b"]': 900 });
-    expect(result.categories[0].events.map(item => item.labelLane)).toEqual([0, 1]);
-    expect(result.contentHeight).toBeGreaterThan(result.height + 116);
-  });
-  it('stacks labels when only one column fits, and uses horizontal space when available', () => {
-    const data = section(['a', 'b', 'c'].map(id => ({ id, title: id, type: 'point', date: '2024' })));
-    const heights = Object.fromEntries(['a', 'b', 'c'].map(id => [JSON.stringify(['one', id]), 80]));
-    const narrow = layoutTimeline(data, '2026', heights, { one: 300 }).categories[0];
-    expect(narrow.events.map(item => item.labelLane)).toEqual([0, 0, 0]);
-    expect(narrow.events.map(item => item.labelTop)).toEqual([0, 80, 160]);
-    const wide = layoutTimeline(data, '2026', heights, { one: 900 }).categories[0];
-    expect(wide.events.map(item => item.labelLane)).toEqual([0, 1, 2]);
-    expect(wide.events.map(item => item.labelTop)).toEqual([0, 0, 0]);
-    for (const category of [narrow, wide]) for (const item of category.events) {
-      expect(item.labelLeft + item.labelWidth).toBeLessThanOrEqual(category.width);
-    }
-  });
-  it('fits dense marker lanes without labels and does not cap long timelines', () => {
-    const data = section(Array.from({ length: 12 }, (_, i) => period(String(i), '1900', '2026')));
-    const result = layoutTimeline(data, '2026', {}, { one: 90 });
-    expect(result.height).toBeGreaterThan(6000);
-    for (const item of result.categories[0].events) {
-      expect(item.labelsVisible).toBe(false);
-      expect(item.markerLeft + item.markerWidth).toBeLessThanOrEqual(90);
-      expect(item.markerWidth).toBeGreaterThan(0);
-    }
-  });
-});
-
-describe('shared scale and validation', () => {
-  it('mirrors the axis and clipped periods while preserving dates and interval lanes', () => {
-    const data = section([period('older', '2018', '2021'), period('current', '2021'), period('overlap', '2022', '2025'), { id: 'point', title: 'Point', type: 'point', date: '2023-06' }], { start: '2020', end: '2024' });
-    const ascending = layoutTimeline(data, '2026');
-    const descending = layoutTimeline({ ...data, direction: 'descending' }, '2026');
-    expect(descending.ticks.map(tick => tick.label)).toEqual(ascending.ticks.map(tick => tick.label).reverse());
-    expect(descending.ticks[0].top).toBe(0);
-    expect(descending.ticks.at(-1)!.top).toBe(descending.height);
-    for (const down of descending.categories[0].events) {
-      const up = ascending.categories[0].events.find(item => item.event.id === down.event.id)!;
-      expect(down.lane).toBe(up.lane);
-      expect(down.height).toBeCloseTo(up.height);
-      expect(down.top + up.top + (down.event.type === 'point' ? 0 : down.height)).toBeCloseTo(ascending.height);
-      expect([down.start, down.end]).toEqual([up.start, up.end]);
-    }
-  });
-  it('orders newest-first labels visually, including ongoing events sharing an end', () => {
-    const data = section([period('a', '2020'), period('b', '2023'), period('c', '2022')], { end: '2026', direction: 'descending' });
-    const result = layoutTimeline(data, '2026', {}, { one: 330 });
-    const events = result.categories[0].events;
-    expect(events.map(item => item.event.id)).toEqual(['b', 'c', 'a']);
-    expect(events.map(item => item.top)).toEqual([0, 0, 0]);
-    expect(events.map(item => item.labelTop)).toEqual([0, 116, 232]);
-    expect(layoutTimeline({ ...data, categories: [{ ...data.categories[0], events: [...data.categories[0].events].reverse() }] }, '2026', {}, { one: 330 })).toEqual(result);
-  });
-  it('positions dates proportionally and clips explicit windows', () => {
-    const result = layoutTimeline(section([period('one', '2019', '2025'), period('outside', '2010', '2011'), { type: 'point', id: 'middle', title: 'Middle', date: '2022' }], { start: '2020', end: '2024' }), '2026');
-    expect(result.categories[0].events).toHaveLength(2);
-    expect(result.categories[0].events[0].top).toBe(0);
-    expect(result.categories[0].events[0].height).toBe(result.height);
-    const expected = (Date.UTC(2022, 0, 1) - Date.UTC(2020, 0, 1)) / (Date.UTC(2024, 0, 1) - Date.UTC(2020, 0, 1)) * result.height;
-    expect(result.categories[0].events[1].top).toBe(expected);
-  });
-  it('uses configured end before referenceDate for ongoing events', () => {
-    for (const options of [{ referenceDate: '2025' }, { referenceDate: '2024', end: '2025' }]) {
-      const result = layoutTimeline(section([period('ongoing', '2020')], options), '2026');
-      expect(result.categories[0].events[0].end).toBe(parseTimelineDate('2025'));
-    }
-  });
-  it('excludes periods touching only a window boundary but includes boundary points', () => {
-    const result = layoutTimeline(section([period('before', '2019', '2020'), period('after', '2024', '2025'), { id: 'point', title: 'Point', type: 'point', date: '2024' }], { start: '2020', end: '2024' }), '2026');
-    expect(result.categories[0].events.map(item => item.event.id)).toEqual(['point']);
-  });
-  it('handles empty, reversed, invalid and duplicate data without NaN or unstable keys', () => {
-    expect(layoutTimeline(section([]), '2026').categories[0].events).toEqual([]);
-    const events = [period('bad', 'invalid'), period('reverse', '2025', '2020'), period('duplicate', '2020'), period('duplicate', '2021')];
-    expect(layoutTimeline(section(events), '2026').categories[0].events).toEqual([]);
-    for (const options of [{ start: 'bad' }, { end: 'bad' }, { start: '2026', end: '2020' }]) expect(layoutTimeline(section([period('a', '2022')], options), '2026').categories[0].events).toEqual([]);
-  });
-});
-
-describe('SSR component and renderer', () => {
-  it('renders newest-first native disclosures and decorative event icons', () => {
-    const data = section([
-      { id: 'old', title: 'First release', type: 'point', date: '2024', icon: 'rocket' },
-      { id: 'new', title: 'Latest release', type: 'point', date: '2026', icon: 'git-pull-request' }
-    ], { direction: 'descending' });
-    const { body } = render(TimelineSection, { props: { section: data } });
-    expect(body.indexOf('data-event="new"')).toBeLessThan(body.indexOf('data-event="old"'));
-    expect(body).toContain('event-icon');
-    expect(body).toContain('<svg');
-    expect(body).toContain('aria-label="Latest release, 2026"');
-  });
-  it('renders chronological native disclosures and optional details without dead buttons', () => {
+describe('SSR, examples and shared-track invariants', () => {
+  it('cluster-window-interaction and responsive-stage-and-long-labels retain all native disclosures before hydration', () => {
     const { body } = render(TimelineSection, { props: { section: timelineExample } });
     expect(body).toContain('data-enhanced="false"');
-    expect(body).toContain('<summary');
-    expect(body).toContain('Illustration of the Northbridge campus');
-    expect(body).toContain('loading="lazy"');
+    expect(body.match(/<details /g)).toHaveLength(56);
     expect(body).toContain('timeline-campus-dark.svg');
-    expect(body).toContain('href="https://example.com/certificate"');
+    expect(body).toContain('loading="lazy"');
+    expect(body).toContain('Back to the timeline');
     expect(body).toContain('aria-label="Tags"');
     expect(body).not.toContain('aria-pressed');
-    expect(body).not.toContain('Close details');
-    expect(body).not.toMatch(/<details[^>]*\sopen(?:\s|>)/);
-    expect(body.indexOf('data-event="bachelor"')).toBeLessThan(body.indexOf('data-event="master"'));
+    expect(body).not.toContain('role="dialog"');
+    expect(body).toContain('data-stage-width="contained"');
+    expect(body).not.toContain('class="ps-section-stage ');
+    const minimal = section([{ id: 'bare', type: 'point', date: '2022', title: 'Bare event' }]);
+    const rendered = render(Sections, { props: { sections: [minimal] } }).body;
+    expect(rendered).toContain('<summary'); expect(rendered).not.toContain('<picture');
   });
-  it('integrates JSON models and common Section metadata; omits absent optional markup', () => {
-    const data = section([{ id: 'bare', type: 'point', date: '2022', title: 'Bare event' }], { headline: 'Visible heading', background: { color: 'muted' } });
-    const { body } = render(Sections, { props: { sections: JSON.parse(JSON.stringify([data])) } });
-    expect(body).toContain('data-ps-section="test"');
-    expect(body).toContain('data-background-color="muted"');
-    expect(body).toContain('Visible heading');
-    expect(body).not.toContain('<picture');
-    expect(body).not.toContain('class="tags');
-    expect(body).not.toContain('data-action');
+  it('defaults to contained and only a full stage overrides background size without mutating input', () => {
+    for (const background of [undefined, { color: 'muted' as const, size: 'standard' as const }, { color: 'standardToMuted' as const, size: 'full' as const }]) {
+      const data = section([], { background });
+      const before = JSON.stringify(data);
+      const implicit = render(TimelineSection, { props: { section: data } }).body;
+      const contained = render(TimelineSection, { props: { section: { ...data, stageWidth: 'contained' } } }).body;
+      for (const body of [implicit, contained]) {
+        expect(body).toContain('data-stage-width="contained"');
+        expect(body).toContain(`data-background-size="${background?.size ?? 'standard'}"`);
+        expect(body).not.toContain('class="ps-section-stage ');
+      }
+      const full = render(TimelineSection, { props: { section: { ...data, stageWidth: 'full' } } }).body;
+      expect(full).toContain('data-stage-width="full"');
+      expect(full).toContain('data-background-size="full"');
+      expect(full).toContain(`data-background-color="${background?.color ?? 'transparent'}"`);
+      expect(full).toContain('class="ps-section-stage ');
+      expect(JSON.stringify(data)).toBe(before);
+    }
+  });
+  it('derives both English examples and rewrites instance links and asset base paths without source mutation', () => {
+    const before = JSON.stringify(timelineExample);
+    const full = timelineExampleFor('/prefix', 'full'), compact = timelineExampleFor('/prefix', 'compact', true);
+    expect(full.categories.flatMap(c => c.events)).toHaveLength(56);
+    expect(compact.categories.flatMap(c => c.events)).toHaveLength(18);
+    expect(compact.introduction).toContain('fictional');
+    expect(compact.locale).toBe('en-GB'); expect(compact.direction).toBe('descending');
+    expect(compact.end).toBeUndefined();
+    expect(compact.categories.flatMap(c => c.events).find(e => e.action)?.action?.href).toBe('#compact');
+    expect(full.categories.flatMap(c => c.events).find(e => e.image)?.image?.src).toMatch(/^\/prefix\/timeline-/);
+    expect(JSON.stringify(timelineExample)).toBe(before);
+  });
+  it('clipping and label length never change original duration priority or time geometry', () => {
+    const data = section([period('a', '2000', '2026'), period('b', '2020', '2025')], { start: '2022', end: '2024', clustering: false });
+    const result = layoutTimeline(data, reference);
+    expect(result.items[0].event?.id).toBe('a');
+    data.categories[0].events[0].label = 'A very long label '.repeat(200);
+    expect(layoutTimeline(data, reference).items.map(({ x, width, lane }) => ({ x, width, lane }))).toEqual(result.items.map(({ x, width, lane }) => ({ x, width, lane })));
+  });
+  it('a deterministic 400-event dataset represents every source once and obeys every priority edge', () => {
+    const data = section([]);
+    data.categories = Array.from({ length: 4 }, (_, c) => ({ id: String(c), title: String(c), color: '#168d91', events: Array.from({ length: 100 }, (_, i) => ({ type: 'point' as const, id: String(i), title: String(i), date: new Date(date('2020') + ((i * 37) % 700) * DAY).toISOString().slice(0, 10) })) }));
+    const result = layoutTimeline(data, reference);
+    expect(ids(result)).toHaveLength(400); expect(new Set(ids(result)).size).toBe(400);
+    for (const a of result.items) for (const b of result.items) if (priorityOrder(a, b) < 0 && collides(a, b)) expect(a.lane).toBeLessThan(b.lane);
   });
 });

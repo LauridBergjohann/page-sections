@@ -201,7 +201,7 @@
     .desktop {
       display: block;
       position: sticky;
-      top: var(--ps-sidebar-sticky-top);
+      top: calc(var(--ps-sidebar-sticky-top) + var(--ps-sidebar-header-offset, 0px));
       max-height: var(--ps-sidebar-available-height, calc(100dvh - var(--ps-nav-height) - var(--ps-breadcrumb-height) - var(--ps-content-menu-offset) - var(--ps-sidebar-sticky-top)));
       overflow: auto;
       overscroll-behavior: contain;

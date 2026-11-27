@@ -1,14 +1,20 @@
 <script lang="ts">
-  import { HeroSection, ImageSection, CardGridSection } from '@page-sections/svelte';
+  import {
+    HeroSection,
+    ImageSection,
+    CardGridSection,
+    FeatureSection,
+    Image
+  } from '@page-sections/svelte';
 
   import { base } from '#lib/paths.js';
   import ContentPage from '#lib/WebsitePage.svelte';
   import { technologies } from '#lib/technologies.js';
+  import { illustrationSizes } from '#lib/illustrationSizes.js';
   const illustration = (name: string, alt: string) => ({
     src: base + `/illustrations/${name}.svg`,
     alt,
-    width: 800,
-    height: 500
+    ...illustrationSizes[name]
   });
 </script>
 
@@ -52,6 +58,7 @@
   <ImageSection
     section={{
       id: 'what-is-page-sections',
+      headingAlign: 'center',
       title: 'What is Page Sections?',
       headline: 'From content to a complete page.',
       image: {
@@ -80,22 +87,22 @@
       </p>
     </div>
   </ImageSection>
-  <CardGridSection
+  <FeatureSection
     section={{
       id: 'features',
+      headingAlign: 'center',
       title: 'Why Page Sections?',
       headline: 'Features',
       introduction: 'A consistent foundation with room for your own design.',
       spacing: 'loose',
       background: { color: 'muted', size: 'full' }
     }}
-    cardSize="l"
-    cardTone="standard"
-    mediaFit="cover"
+    featureSize="m"
+    iconTone="standard"
     list={[
       {
         id: 'layout',
-        image: illustration('feature-layout', 'One content grid adapts from desktop to mobile'),
+        icon: 'laptop',
         title: 'One responsive layout system',
         description:
           'Pages, grids and cards share content widths and spacing. Layouts adapt to their containers, including narrow columns on wide screens.',
@@ -103,7 +110,7 @@
       },
       {
         id: 'sections',
-        image: illustration('feature-sections', 'Different sections combine into a coherent page'),
+        icon: 'layers',
         title: 'Sections that work together',
         description:
           'Compose heroes, rich text, panels, images, video, card grids, carousels and code examples. Combine them without rebuilding the page structure.',
@@ -111,7 +118,7 @@
       },
       {
         id: 'content',
-        image: illustration('feature-content', 'Structured content becomes a visual page'),
+        icon: 'database',
         title: 'Your content, your source',
         description:
           'Start with ordinary Svelte and HTML. Use serializable models when your content comes from JSON or a CMS, and add custom sections when you need them.',
@@ -119,7 +126,7 @@
       },
       {
         id: 'html',
-        image: illustration('feature-html', 'Readable content arrives as a complete document'),
+        icon: 'file-code',
         title: 'Content before JavaScript',
         description:
           'With SSR or prerendering, text, links and native navigation arrive as HTML. JavaScript adds interactions to an already readable page.',
@@ -127,7 +134,7 @@
       },
       {
         id: 'theme',
-        image: illustration('feature-theme', 'A shared palette connects light and dark themes'),
+        icon: 'palette',
         title: 'A foundation for your brand',
         description:
           'Use light and dark themes, standard and muted surfaces, and shared CSS variables to make the same components feel at home in your design.',
@@ -135,10 +142,7 @@
       },
       {
         id: 'independent',
-        image: illustration(
-          'feature-independent',
-          'A section library connects to different applications'
-        ),
+        icon: 'puzzle',
         title: 'Bring your own application',
         description:
           'Use the library in plain Svelte or SvelteKit. No required CSS framework, CMS or router; syntax highlighting is an optional addition.',
@@ -149,6 +153,7 @@
   <CardGridSection
     section={{
       id: 'explore',
+      headingAlign: 'center',
       title: 'Explore',
       headline: 'See it. Try it. Build it.',
       spacing: 'loose',
@@ -156,7 +161,8 @@
     }}
     cardSize="l"
     cardTone="standard"
-    mediaFit="cover"
+    mediaFit="contain"
+    mediaHoverZoom={false}
     list={[
       {
         id: 'start',
@@ -183,13 +189,35 @@
       }
     ]}
   />
-  <CardGridSection
-    section={{ id: 'built-with', title: 'Built with', headline: 'Built with', spacing: 'loose' }}
+  <FeatureSection
+    section={{
+      id: 'built-with',
+      title: 'Techstack',
+      headline: 'Techstack',
+      headingAlign: 'center',
+      spacing: 'loose'
+    }}
     list={technologies}
-    cardSize="m"
-    cardTone="muted"
-    mediaAspect="4/3"
-    mediaFit="contain"
-    textAlign="center"
-  />
+    featureSize="m"
+    iconTone="muted"
+  >
+    {#snippet icon(item)}
+      <span class="technology-icon"><Image image={item.image} /></span>
+    {/snippet}
+  </FeatureSection>
 </ContentPage>
+
+<style>
+  .technology-icon {
+    display: block;
+    width: 50%;
+    height: 50%;
+  }
+  .technology-icon :global(picture),
+  .technology-icon :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0;
+  }
+</style>

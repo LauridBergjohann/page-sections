@@ -22,11 +22,14 @@ const anchor = name => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('{', '&#123;').replaceAll('}', '&#125;');
 const linked = value => escape(value).replace(/\b[A-Z]\w*\b/g, name => names.has(name) ? `<a href={base + '/docs/reference/types/#${anchor(name)}'}>${name}</a>` : name);
 const descriptions = {
+  FeatureIconTone: 'Icon-circle palette: standard and muted reuse section surfaces with accent icons; primary uses primary-button accent and on-accent colors. Muted is the default.',
+  FeatureItem: 'A centered benefit with a required icon key, title and description. Optional href makes the whole feature a native link. itemKey distinguishes repeated occurrences. Unknown built-in icon keys fall back to layers; a custom icon snippet can render application keys.',
+  FeatureSectionData: 'A centered feature collection. featureSize defaults to m and follows the CardGrid spans; every incomplete row is centered. iconTone defaults to muted and is independent of the section background.',
   TimelineDate: 'Strict UTC calendar date: YYYY, YYYY-MM or YYYY-MM-DD, years 0001?9999. Missing parts mean the start of that period; labels preserve input precision.',
-  TimelineSectionData: 'Shared section metadata plus categories on one proportional date scale, ascending by default or descending for newest-first timelines. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.',
+  TimelineSectionData: 'Shared section metadata plus categories on a horizontal proportional date scale with a shared priority-ordered track pool, zoom, filters and category-local clusters. Direction defaults to ascending, axisPosition to bottom and stageWidth to contained. Full stage width also sets background.size to full while preserving its color, and is recommended only without side navigation. Initial scale is clamped to the full-timeline fit minimum. Open-ended periods use end, referenceDate, or the SSR render date reused during hydration.',
   TimelineCategory: 'A named, colored time strand. IDs must be unique. Icon is a built-in Lucide key or an application key resolved to a Lucide component by the optional Svelte icon snippet.',
   TimelineEvent: 'A point with date or a period with start and optional end. Event IDs must be unique within their category.',
-  TimelineEventBase: 'Shared serializable event details. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.',
+  TimelineEventBase: 'Shared serializable event details. Optional label supplies a compact overview name; blank labels use title. Details retain the full title. An optional Lucide icon appears in the label. Optional image, rich description, tags and action appear only in the disclosure/popup.',
   TimelinePointEvent: 'A calendar milestone rendered as a circular marker.',
   TimelinePeriodEvent: 'A start-inclusive, end-exclusive interval rendered as a rounded bar. Omit end to mark it as ongoing.',
   ContentAction: 'A link styled as an action, used by HeroSection, panels and cards. Every action requires a visible label and a destination. It renders a native link, not a JavaScript callback.',
@@ -35,6 +38,8 @@ const descriptions = {
   ContentPageData: 'Metadata for ContentPage, the main content container. A browser document title is distinct from the visible h1, which you supply as content.',
   PageData: 'A data-driven page: ContentPageData plus an array of section models. Pass sections to the plural Sections component explicitly; ContentPage does not render this array itself.',
   ImageData: 'One image and its optional variants. Supply your own assets; the library does not resize images or generate srcset files.',
+  CardContentPlacement: 'below (default) adds copy under the media. overlay places copy over a gradient, forces cover and uses mediaAspect for the entire fixed card shape. Long copy scrolls within the card.',
+  CardTextTone: 'Overlay copy colors, independent of the page theme: light (default) is white on a dark gradient; dark is dark text on a light gradient. Ignored in below mode.',
   CardItem: 'The content of a single card. A supplied description appears below its title. The main link covers the card; additional actions and footer links remain independent.',
   VideoData: 'A native HTML video source or a YouTube source. Captions are an array of objects: src is the track URL, language is its language code, and label is its visible name.',
   MenuItem: 'One site-navigation entry. Children use the same shape recursively. IDs must be unique in the tree. resolveNavigation derives current and active states from the current location.',
@@ -72,6 +77,7 @@ const notes = {
   'SectionDefinition.headline': 'Visible heading. Omit it for a region without a displayed heading.',
   'SectionDefinition.headingLevel': 'HTML heading level; inherits the surrounding context when omitted.',
   'SectionDefinition.headingSize': 'Visual heading size, independent of the HTML level.',
+  'SectionDefinition.headingAlign': 'Left (default), center or right alignment for the headline, eyebrow and introduction. Does not change body content; ignored by HeroSection.',
   'SectionDefinition.background': 'Surface color and width; follow the linked type for its fields.',
   'SectionDefinition.style': 'Optional width and text color as CSS strings. Other layout settings have dedicated fields.',
   'SectionDefinition.spacing': 'Vertical spacing: normal for top-level sections and none for nested sections by default.',
@@ -112,7 +118,7 @@ const sourceText = node => node.getText(node.getSourceFile());
 function rows(type, owner) {
   return checker.getPropertiesOfType(type).map(symbol => {
     const node = symbol.valueDeclaration ?? symbol.declarations?.[0];
-    if (!node || (!ts.isPropertySignature(node) && !ts.isMethodSignature(node))) return '';
+    if (!node || program.isSourceFileDefaultLibrary(node.getSourceFile()) || (!ts.isPropertySignature(node) && !ts.isMethodSignature(node))) return '';
     const parent = node.parent.name?.getText() ?? '';
     if (owner && parent && parent !== owner) return '';
     const typeText = node.type ? sourceText(node.type) : checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, node));

@@ -70,6 +70,7 @@
     },
     "m": {
       "span": 2,
+      "gridLSpan": 3,
       "titleSize": 14,
       "titleWeight": 500,
       "eyebrowSize": 12,
@@ -135,5 +136,5 @@
       "height": 40
     }
   },
-  "cardMediaInset": 8
+  "cardMediaInset": 12
 }

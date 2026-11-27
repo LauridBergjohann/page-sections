@@ -75,6 +75,23 @@
   >
     <div class="prose">
       <p>
+        <code>contentPlacement="below"</code> is the default. Choose
+        <code>contentPlacement="overlay"</code>
+        to place text at the bottom of the image. Overlay always uses cover, and
+        <code>mediaAspect</code>
+        fixes the entire card ratio. <code>textTone="light"</code> (default) uses pure white text
+        over a subtle dark gradient limited to the copy area; <code>textTone="dark"</code> uses dark text
+        over a light gradient. These local colors stay independent of the page theme and do not recolor
+        the image.
+      </p>
+      <p>
+        Use short titles and teasers for overlay cards. Longer copy, custom content and actions
+        remain reachable in a keyboard-focusable scrolling text area without enlarging the card.
+        Text remains selectable, the image, gradient padding, title and description share the main
+        link, and actions remain independent. Missing images retain the same fixed card shape and
+        gradient.
+      </p>
+      <p>
         These low-level building blocks are useful when composing a custom section. Card supplies
         the same article used by the two collection components; Image supplies shared responsive and
         theme-aware image rendering.
@@ -85,7 +102,9 @@
         card. With <code>mediaFit="contain"</code>, the image expands through its reserved padding
         to the edges of the media area, preserving its proportions and the complete image. With
         <code>mediaFit="cover"</code>, a stronger zoom stays clipped to the media frame and cannot
-        cover the text. Reduced motion disables image enlargement.
+        cover the text. Set <code>mediaHoverZoom=&#123;false&#125;</code> to disable image enlargement
+        while retaining border and shadow feedback. This option also works on CardGridSection and CarouselSection.
+        Reduced motion disables image enlargement.
       </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
@@ -110,10 +129,11 @@
         Generic <code>
           T extends <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>
         </code>; required item. Optional cardSize (m), shadow (false), mediaAspect (3/2; also 4/3 or
-        1/1), mediaFit (contain), reserveEyebrow (otherwise follows the item), textAlign
-        (start/center), headingLevel (inherited, standalone h2), media(item), surface(item),
-        children(item) and onready(parts). Card forwards HTMLElement attributes, including class and
-        event callbacks; card identity/accessibility attributes remain component-owned.
+        1/1), mediaFit (contain), mediaHoverZoom (true), contentPlacement (below), textTone (light;
+        overlay only), reserveEyebrow (otherwise follows the item), textAlign (start/center),
+        headingLevel (inherited, standalone h2), media(item), surface(item), children(item) and
+        onready(parts). Card forwards HTMLElement attributes, including class and event callbacks;
+        card identity/accessibility attributes remain component-owned.
       </p>
       <h3 id="complete-carditem-model">
         Complete <a href={base + '/docs/reference/types/#card-item'}>CardItem</a> model
@@ -193,20 +213,20 @@
         </table>
       </div>
       <p>
-        Card height includes the selected media frame and a text area. Titles use up to two lines in
-        S/M and three in L. Cards without descriptions reserve that title space; with a description,
-        the title uses only the lines it needs. Eyebrows add a separate accent-colored line (hidden
-        for S); reserveEyebrow keeps an empty line when aligning cards with missing labels.
-        Collections compute this flag from the full list. Text padding is 12px on each side. A
-        supplied description appears below the title with a compact half-em gap. Its font scales
-        with card size and never exceeds the title size. Descriptions grow naturally, as do
-        children, footers and actions. The card fills its grid slot.
+        In below mode, card height includes the selected media frame and a text area. Titles use up
+        to two lines in S/M and three in L. Cards without descriptions reserve that title space;
+        with a description, the title uses only the lines it needs. Eyebrows add a separate
+        accent-colored line (hidden for S); reserveEyebrow keeps an empty line when aligning cards
+        with missing labels. Collections compute this flag from the full list. Text padding is 12px
+        on each side. A supplied description appears below the title with a compact half-em gap. Its
+        font scales with card size and never exceeds the title size. Descriptions grow naturally, as
+        do children, footers and actions. The card fills its grid slot.
       </p>
       <p>
         <a href={base + '/docs/reference/types/#card-media-aspect'}>CardMediaAspect</a> is 3/2, 4/3
         or 1/1. <a href={base + '/docs/reference/types/#card-media-fit'}>CardMediaFit</a> is contain
-        (8px media inset, whole image) or cover (no inset, cropped image). The frame ratio and image
-        fit are independent. Card media props override
+        (12px media inset, whole image) or cover (no inset, cropped image). The frame ratio and
+        image fit are independent. Card media props override
         <a href={base + '/docs/reference/types/#image-data'}>ImageData</a>.aspect/objectFit inside
         the slot; standalone Image behavior is unchanged. Cards without media omit the image frame.
       </p>

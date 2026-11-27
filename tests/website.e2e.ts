@@ -49,10 +49,10 @@ for (const width of [390, 1599]) {
       for (const y of [16, 32, 64, 200, 600, 0]) {
         await page.evaluate(y => window.scrollTo(0, y), y);
         await expect.poll(() => page.evaluate(() => scrollY)).toBe(y);
-        await expect.poll(async () => (await button.boundingBox())!.y).toBe(Math.max(12, initial.y - y));
+        await expect.poll(async () => (await button.boundingBox())!.y).toBe(Math.max(78, initial.y - y));
         if (width === 390 && javaScriptEnabled && y === 200) await page.screenshot({ path: test.info().outputPath('content-menu-docked.png') });
       }
-      // A genuinely fixed header still needs room above the docked control.
+      // The website defaults to fixed; page overrides must restore the smaller inset.
       const header = page.locator('.website-header');
       await header.evaluate(node => node.setAttribute('data-scroll', 'fixed'));
       await page.evaluate(() => window.scrollTo(0, 200));
@@ -95,7 +95,8 @@ for (const width of [390, 1920]) {
       const page = await context.newPage();
       await page.goto('/docs/design-system/responsive-layout/');
       const header = page.locator('.website-header');
-      await expect(header).toHaveAttribute('data-scroll', 'delayed');
+      await expect(header).toHaveAttribute('data-scroll', 'fixed');
+      await header.evaluate(node => node.setAttribute('data-scroll', 'delayed'));
       const surfaces = width >= 1600 ? header.locator('.header, .satellite') : header.locator('.header');
       const initialTops = await surfaces.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
       const content = page.locator('main').first();
@@ -198,8 +199,8 @@ test('headings, compact code tools and nested routes use the website design syst
   await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto('/docs/foundations/installation/');
   const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
-  await expect(breadcrumb.getByRole('link').nth(0)).toHaveAttribute('href', '/docs/');
-  await expect(breadcrumb.getByRole('link').nth(1)).toHaveAttribute('href', '/docs/foundations/');
+  await expect(breadcrumb.getByRole('link').nth(1)).toHaveAttribute('href', '/docs/');
+  await expect(breadcrumb.getByRole('link').nth(2)).toHaveAttribute('href', '/docs/foundations/');
   await expect(breadcrumb.locator('[aria-current="page"]')).toHaveText('Installation');
   await expect(page.locator('main h1')).toHaveCSS('font-size', '32px');
   await expect(page.locator('.ps-left-sidebar summary svg').first()).toHaveClass(/lucide/);
@@ -314,7 +315,7 @@ test('navigation surfaces, hover geometry and sidebar state stay consistent acro
   await docs.click();
   await expect(page).toHaveURL(/\/docs\/$/);
   await expect(docs).toHaveCSS('font-weight', '650');
-  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toBeVisible();
   expect((await sidebar.boundingBox())!.y).toBe(initialTop);
 });
 
@@ -348,8 +349,9 @@ test('desktop page links reveal only the second level and retain native navigati
   const menu = page.locator('.website-header .desktop-menu');
   const docs = menu.getByRole('link', { name: 'Sections', exact: true });
   await docs.hover();
-  await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(10);
-  await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(10);
+  await expect(menu.locator('.ps-submenu:visible > ul > li')).toHaveCount(11);
+  await expect(menu.locator('.ps-submenu:visible > ul > li > a')).toHaveText(sectionTitles);
+  await expect(menu.locator('.ps-submenu:visible svg')).toHaveCount(11);
   await expect(menu.locator('.ps-submenu .ps-submenu')).toHaveCount(0);
   await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toBeVisible();
   await expect(page.locator('[data-ps-popup-backdrop]:popover-open')).toHaveCSS('backdrop-filter', 'blur(3px)');
@@ -374,11 +376,11 @@ test('desktop page links reveal only the second level and retain native navigati
   await newTab.close();
   await docs.click();
   await expect(page).toHaveURL(/\/sections\/$/);
-  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toBeVisible();
   await page.locator('#section-catalog').getByRole('link', { name: 'Hero', exact: true }).click();
   await expect(page).toHaveURL(/\/sections\/hero\/$/);
   const breadcrumb = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
-  await expect(breadcrumb.locator('li')).toHaveCount(2);
+  await expect(breadcrumb.locator('li')).toHaveCount(3);
   await expect(breadcrumb).not.toContainText('Home');
   await expect(page.locator('.ps-left-sidebar [aria-current="page"]')).toHaveText('Hero');
   await expect(page.locator('.reading-path [rel="next"]')).toContainText('Image');
@@ -534,13 +536,13 @@ test('global search supports shortcuts, keyboard navigation and empty results', 
   await page.getByRole('listbox', { name: 'Search results' }).getByRole('option').click();
   await expect(page).toHaveURL(/\/showcase\/portfolio\/$/);
   await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Sections', exact: true }).click();
-  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(10);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(11);
 });
 
 test('home explains the library and getting started stays focused', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#what-is-page-sections')).toContainText('Svelte and HTML');
-  await expect(page.locator('#features .ps-card')).toHaveCount(6);
+  await expect(page.locator('#features .ps-feature')).toHaveCount(6);
   await page.goto('/getting-started/');
   await expect(page.getByRole('navigation', { name: 'Documentation chapters' })).toHaveCount(0);
   await expect(page.locator('#install')).toContainText('npm install @page-sections/svelte');
@@ -573,22 +575,25 @@ test('home uses themed hero artwork, illustrated next steps and local technology
   const textBox = (await story.locator('.prose').boundingBox())!;
   expect(textBox.x + textBox.width).toBeLessThanOrEqual(imageBox.x);
   await expect(page.locator('#features-title')).toHaveText('Features');
-  await expect(page.locator('#features .ps-card img')).toHaveCount(6);
+  await expect(page.locator('#features .ps-feature svg')).toHaveCount(6);
   await expect(page.locator('#explore .title a')).toHaveText([
     'Install it or try it in the playground', 'Explore available sections', 'Make it yours — create a custom theme'
   ]);
   expect(await page.locator('#explore .title a').evaluateAll(links => links.map(link => new URL(link.href).pathname)))
     .toEqual(['/getting-started/', '/sections/', '/docs/foundations/themes/']);
-  const technologies = page.locator('#built-with .ps-card');
+  const technologies = page.locator('#built-with .ps-feature');
   await expect(technologies).toHaveCount(8);
+  await expect(page.locator('#built-with-title')).toHaveText('Techstack');
+  await expect(page.locator('#features .ps-feature').first()).toHaveAttribute('data-feature-size', 'm');
+  await expect(technologies.first()).toHaveAttribute('data-feature-size', 'm');
+  await expect(technologies.locator('.description')).toHaveText(['install the Packages', 'check out the source', 'is used to host these pages', "without Svelte we wouldn't be here", 'used for Code editing', 'used for AI-assisted development', 'check out my other projects', 'these pages are created with Page Sections']);
   await expect(technologies.locator('.title')).toHaveText([
-    'Made with Page Sections', 'Available on NPM', 'Source available on GitHub', 'Hosted on Vercel',
-    'Made for Svelte', 'Developed by Laurid Bergjohann', 'Created in VS Code', 'Supported by Codex'
+    'npm', 'GitHub', 'Vercel', 'Svelte', 'VS Code', 'Codex', 'Laurid Bergjohann', 'Page Sections'
   ]);
-  expect(await technologies.evaluateAll(cards => cards.map(card => card.querySelector('.primary-link')?.getAttribute('href')))).toEqual([
-    'https://page-sections.bergjohann.com/', 'https://www.npmjs.com/package/@page-sections/svelte',
+  expect(await technologies.evaluateAll(cards => cards.map(card => card.getAttribute('href')))).toEqual([
+    'https://www.npmjs.com/package/@page-sections/svelte',
     'https://github.com/LauridBergjohann/page-sections', 'https://vercel.com/', 'https://svelte.dev/',
-    'https://bergjohann.com/', 'https://code.visualstudio.com/', 'https://chatgpt.com/codex'
+    'https://code.visualstudio.com/', 'https://chatgpt.com/codex', 'https://bergjohann.com/', 'https://page-sections.bergjohann.com/'
   ]);
   for (const image of await page.locator('main img').all()) {
     await image.scrollIntoViewIfNeeded();
@@ -598,7 +603,7 @@ test('home uses themed hero artwork, illustrated next steps and local technology
   await page.locator('.satellite.right').getByRole('button', { name: 'Dark', exact: true }).click();
   await expect.poll(() => hero.evaluate(img => img.currentSrc)).toContain('/hero-dark.webp');
   for (const id of ['github', 'vercel', 'codex']) {
-    const icon = page.locator(`#built-with [data-card-id="${id}"] img`);
+    const icon = page.locator(`#built-with [data-feature-id="${id}"] img`);
     await icon.scrollIntoViewIfNeeded();
     await expect.poll(() => icon.evaluate(img => img.currentSrc)).toContain(`/technology/${id}-dark.svg`);
     await expect.poll(() => icon.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
@@ -703,8 +708,8 @@ test('minimal demo renders a complete page without documentation infrastructure'
   await context.close();
 });
 
-const sectionSlugs = ['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video', 'timeline'];
-const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Video', 'Timeline'];
+const sectionSlugs = ['card-grid', 'carousel', 'code', 'features', 'headings', 'hero', 'image', 'panel', 'rich-text', 'timeline', 'video'];
+const sectionTitles = ['CardGrid', 'Carousel', 'Code', 'Features', 'Heading', 'Hero', 'Image', 'Panel', 'RichText', 'Timeline', 'Video'];
 
 test('documentation teaches concepts in order and chapter landing pages explain their scope', async ({ page }) => {
   await page.goto('/docs/');
@@ -797,8 +802,8 @@ test('sections have a complete illustrated catalog, examples and a dedicated sid
   await expect(page.locator('.desktop-menu .ps-main-menu > li > a')).toHaveText(['Getting Started', 'Sections', 'Documentation', 'About']);
   const sidebar = page.getByRole('navigation', { name: 'Sections', exact: true });
   await expect(sidebar.getByRole('link')).toHaveText(sectionTitles);
-  await expect(sidebar.locator('a svg')).toHaveCount(10);
-  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(10);
+  await expect(sidebar.locator('a svg')).toHaveCount(11);
+  await expect(page.locator('#section-catalog .ps-card')).toHaveCount(11);
   for (const [index, slug] of sectionSlugs.entries()) {
     const card = page.locator('#section-catalog .ps-card').nth(index);
     await expect(card.locator('.primary-link')).toHaveAttribute('href', `/sections/${slug}/`);
@@ -1049,3 +1054,120 @@ test('card hover shadows follow shared controls and their own override', async (
   await page.locator('.ps-shell').evaluate(el => (el as HTMLElement).style.setProperty('--ps-card-hover-shadow', 'none'));
   await expect(card.locator('.surface')).toHaveCSS('box-shadow', 'none');
 });
+
+for (const [path, id, count] of [['/sections/timeline/', 'morgenhafen-timeline', 56], ['/sections/', 'timeline-example', 18]] as const) {
+  test(`Morgenhafen keeps its shared English fixture, contained stage and no-JS events on ${path}`, async ({ page, browser, baseURL }) => {
+    await page.setViewportSize({ width: 3440, height: 1100 });
+    await page.goto(path);
+    const section = page.locator('#' + id), timeline = section.locator('.ps-timeline');
+    await expect(timeline).toHaveAttribute('data-enhanced', 'true');
+    await expect(section).toContainText('fictional');
+    await expect(timeline.locator('.legend button')).toHaveCount(4);
+    await expect(timeline.getByRole('slider')).toBeVisible();
+    await expect(timeline.getByRole('button', { name: 'Fit entire timeline', exact: true })).toHaveCount(0);
+    await expect(timeline).toHaveAttribute('data-stage-width', 'contained');
+    await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeLessThan(1536);
+    await timeline.scrollIntoViewIfNeeded();
+    await expect(page.locator('.ps-left-sidebar')).toHaveCSS('visibility', 'visible');
+    if (path === '/sections/timeline/') {
+      const right = page.locator('.ps-content-menu-slot .desktop');
+      await expect(right).toHaveCSS('border-top-left-radius', await right.evaluate(el => getComputedStyle(el).getPropertyValue('--ps-radius').trim()));
+      await expect(right).toHaveCSS('border-left-width', '1px');
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(3440);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+    const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+    const native = await context.newPage();
+    await native.goto(path);
+    await expect(native.locator('#' + id + ' details[data-event]')).toHaveCount(count);
+    const platform = native.locator('#' + id + ' [data-event="mh-projects-data-platform"]');
+    await platform.locator('summary').click();
+    await expect(platform.getByRole('link', { name: 'Back to the timeline' })).toHaveAttribute('href', '#' + id);
+    await context.close();
+  });
+}
+
+test('timeline width controls preserve overlay navigation and switch the right menu between standalone and docked', async ({ page }) => {
+  await page.setViewportSize({ width: 3440, height: 1100 });
+  await page.goto('/sections/timeline/');
+  const timeline = page.locator('#morgenhafen-timeline .ps-timeline');
+  const section = page.locator('#morgenhafen-timeline');
+  const right = page.locator('.ps-content-menu-slot .desktop');
+  await expect(timeline).toHaveAttribute('data-enhanced', 'true');
+  // Isolate stage presence from the existing standalone rule for transparent/full backgrounds.
+  const opaque = () => page.locator('.ps-section[data-nested="false"]:not(#morgenhafen-timeline)').evaluateAll(nodes => nodes.forEach(node => {
+    node.setAttribute('data-background-size', 'standard'); node.setAttribute('data-background-color', 'standard');
+  }));
+  await opaque();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'contained');
+  await expect(section).toHaveAttribute('data-background-size', 'standard');
+  await expect(right).toHaveCSS('border-left-width', '0px');
+  await page.getByRole('button', { name: 'Full page width', exact: true }).click();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'full');
+  await expect(section).toHaveAttribute('data-background-size', 'full');
+  await expect(section).toHaveAttribute('data-background-color', 'standard');
+  await expect(right).toHaveCSS('border-left-width', '1px');
+  await expect(right).toHaveCSS('border-top-left-radius', await right.evaluate(el => getComputedStyle(el).getPropertyValue('--ps-radius').trim()));
+  await timeline.scrollIntoViewIfNeeded();
+  for (const sidebar of [page.locator('.ps-left-sidebar .sidebar-panel'), right]) {
+    await expect(sidebar).toBeVisible();
+    expect(await sidebar.evaluate(el => {
+      const rect = el.getBoundingClientRect();
+      return el.contains(document.elementFromPoint(rect.x + rect.width / 2, Math.max(15, rect.y) + 30));
+    })).toBe(true);
+  }
+  await page.screenshot({ path: test.info().outputPath('timeline-visible-sidebars.png') });
+  await page.getByRole('button', { name: 'Contained width', exact: true }).click();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'contained');
+  await expect(section).toHaveAttribute('data-background-size', 'standard');
+  await opaque();
+  await expect(right).toHaveCSS('border-left-width', '0px');
+  await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeLessThan(1536);
+  await page.getByRole('button', { name: 'Full page width', exact: true }).click();
+  await expect(timeline).toHaveAttribute('data-stage-width', 'full');
+  await expect(section).toHaveAttribute('data-background-size', 'full');
+  await expect(right).toHaveCSS('border-left-width', '1px');
+  await expect.poll(() => timeline.locator('.timeline-frame').evaluate(el => el.clientWidth)).toBeGreaterThan(3000);
+  await expect(page.locator('#options')).toContainText('The shared data platform');
+});
+
+for (const javaScriptEnabled of [false, true]) {
+  test('Home breadcrumbs work on every page with JavaScript ' + javaScriptEnabled, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, javaScriptEnabled });
+    const page = await context.newPage();
+    for (const width of [320, 1920]) {
+      await page.setViewportSize({ width, height: 1000 });
+      for (const [path, current, count] of [
+        ['/sections/', 'Sections', 2], ['/docs/', 'Documentation', 2],
+        ['/about/', 'About', 2], ['/docs/foundations/installation/', 'Installation', 4]
+      ] as const) {
+        await page.goto(path);
+        const trail = page.getByRole('navigation', { name: 'Breadcrumb', exact: true });
+        await expect(trail.locator('li')).toHaveCount(count);
+        await expect(trail.locator('[aria-current="page"]')).toHaveText(current);
+        const home = trail.getByRole('link', { name: 'Home', exact: true });
+        await expect(home).toHaveAttribute('href', '/');
+        await expect(home.locator('svg')).toBeVisible();
+        await expect(home).toHaveText('');
+        const tops = await trail.locator('li').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+        expect(new Set(tops).size).toBe(1);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+        if (width === 1920) {
+          const firstSurface = page.locator('.ps-section[data-nested="false"][data-background-color="standard"] > .ps-section-surface').first();
+          await expect(firstSurface).toHaveCSS('border-top-left-radius', '12px');
+        }
+        if (javaScriptEnabled && current === 'Installation') {
+          await page.screenshot({ path: test.info().outputPath(`breadcrumb-${width}.png`) });
+        }
+        if (width === 320) {
+          await home.focus();
+          await page.keyboard.press('Enter');
+        } else await home.click();
+        await expect(page).toHaveURL(baseURL + '/');
+        await expect(page.getByRole('navigation', { name: 'Breadcrumb', exact: true })).toHaveCount(0);
+      }
+    }
+    await context.close();
+  });
+}

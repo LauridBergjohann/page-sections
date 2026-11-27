@@ -16,8 +16,8 @@
 /* A content menu only docks to a continuous column of contained, opaque surfaces.
    Evaluate rendered surfaces in CSS so SSR, no-JS and live background changes agree. */
 @media (min-width: 1600px) {
-  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot .desktop { box-shadow: var(--ps-content-menu-shadow, var(--ps-surface-shadow, var(--ps-default-surface-shadow))); }
-  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted'])) > .ps-content-menu-slot {
+  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted']), .ps-timeline[data-stage-width='full']) > .ps-content-menu-slot .desktop { box-shadow: var(--ps-content-menu-shadow, var(--ps-surface-shadow, var(--ps-default-surface-shadow))); }
+  .ps-page-frame:has(.ps-page-content .ps-section[data-nested='false']:not([data-background-size='standard'][data-background-color='standard'], [data-background-size='standard'][data-background-color='muted']), .ps-timeline[data-stage-width='full']) > .ps-content-menu-slot {
     --ps-content-menu-radius: var(--ps-radius);
     --ps-content-menu-border-start: 1px;
     margin-inline-start: var(--ps-sidebar-gap);
@@ -34,7 +34,9 @@
 .ps-media-pair { display: grid; gap: var(--ps-grid-gap, 16px); align-items: center; }
 .ps-media-pair > * { min-width: 0; }
 @container ps-content (min-width: 600px) { .ps-media-pair { grid-template-columns: 1.7fr 1fr; } .ps-media-pair[data-side='right'] { grid-template-columns: 1fr 1.7fr; } .ps-media-pair[data-side='right'] > :first-child { order: 2; } }
-.ps-prose { overflow-wrap: anywhere; line-height: 1.7; }
+/* Shared copy roles also cover Markdown and application-authored section headings. */
+:where(.ps-section, .ps-prose, .ps-panel) :where(h1, h2, h3, h4, h5, h6) { color: var(--ps-ink); }
+.ps-prose { color: var(--ps-body); overflow-wrap: anywhere; line-height: 1.7; }
 .ps-prose > :first-child { margin-top: 0; } .ps-prose > :last-child { margin-bottom: 0; }
 .ps-prose pre { overflow: auto; padding: 1rem; background: var(--ps-section-muted); }
 .ps-prose img, .ps-prose video { max-width: 100%; }
@@ -49,6 +51,10 @@
 .ps-page .ps-section[data-layout='full'] { width: 100%; margin-inline: auto; }
 
 /* Keep the compact contents control reachable while a persistent header is visible. */
+.ps-shell { --ps-sidebar-header-offset: 0px; }
+@media (min-width: 1600px) {
+  .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) { --ps-sidebar-header-offset: var(--ps-menu-height); }
+}
 @media (max-width: 1599.98px) {
   .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .mobile { top: calc(var(--ps-nav-height) + 12px); }
   .ps-shell:has(.ps-navigation-track[data-scroll='fixed']) .ps-content-menu-slot .popup { max-height: calc(100dvh - var(--ps-nav-height) - 96px); }

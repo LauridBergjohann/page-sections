@@ -269,6 +269,18 @@ declare module '@page-sections/core' {
             </tr>
             <tr>
               <td>
+                <a href={base + '/docs/reference/types/#feature-section-data'}>
+                  FeatureSectionData
+                </a>
+                / <code>features</code>
+              </td><td>
+                Required list: <a href={base + '/docs/reference/types/#feature-item'}>
+                  FeatureItem
+                </a>[]; optional featureSize and iconTone. Incomplete rows are centered.
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <code>
                   <a href={base + '/docs/reference/types/#card-grid-section-data'}>
                     CardGridSectionData
@@ -278,7 +290,8 @@ declare module '@page-sections/core' {
               </td>
               <td>
                 Required list: <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>[];
-                optional cardSize, cardShadow, mediaAspect, mediaFit, itemSpan, textAlign
+                optional cardSize, cardShadow, mediaAspect, mediaFit, contentPlacement, textTone,
+                itemSpan, textAlign
               </td>
             </tr>
             <tr>
@@ -292,8 +305,8 @@ declare module '@page-sections/core' {
               </td>
               <td>
                 Required list: <a href={base + '/docs/reference/types/#card-item'}>CardItem</a>[];
-                optional cardSize, cardShadow, mediaAspect, mediaFit, textAlign, controls,
-                initialItemKey
+                optional cardSize, cardShadow, mediaAspect, mediaFit, contentPlacement, textTone,
+                textAlign, controls, initialItemKey
               </td>
             </tr>
             <tr>

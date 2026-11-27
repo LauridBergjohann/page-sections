@@ -67,6 +67,14 @@
         full, wide, narrow or inherit. spacing can be none, tight, normal, loose or spacious.
         Top-level sections default to normal spacing; nested sections default to none.
       </p>
+      <p>
+        <code>headingAlign</code> controls the headline, eyebrow and introduction as one block:
+        <code>left</code> (default), <code>center</code> or <code>right</code>. The introduction
+        keeps its readable maximum width and follows that alignment. This does not change body copy,
+        collection items or nested sections. HeroSection retains its own composition and ignores
+        this setting. Try it in the <a href={base + '/sections/headings/'}>heading example</a> or
+        <a href={base + '/sections/features/'}>feature example</a>.
+      </p>
     </div>
   </Section>
   <Section
@@ -79,6 +87,11 @@
   >
     <div class="prose">
       <dl>
+        <dt><code>stage</code></dt>
+        <dd>
+          Optional snippet outside the 1536px content wrapper. With layout full it supports a wide
+          timeline stage while the heading remains constrained. Background selection is independent.
+        </dd>
         <dt><code>children</code></dt>
         <dd>
           A Svelte snippet containing the content. A snippet is a reusable fragment of markup

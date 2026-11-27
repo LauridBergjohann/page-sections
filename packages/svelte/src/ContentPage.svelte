@@ -23,6 +23,8 @@
     footer,
     showContentMenu = false,
     contentMenuLabel,
+    breadcrumbHomeHref = '/',
+    breadcrumbHomeLabel = 'Home',
     theme,
     class: className = '',
     ...rest
@@ -35,6 +37,10 @@
     footer?: Snippet;
     showContentMenu?: boolean;
     contentMenuLabel?: string;
+    /** Site root, including an optional application base path. */
+    breadcrumbHomeHref?: string;
+    /** Accessible label for the icon-only Home link. */
+    breadcrumbHomeLabel?: string;
     theme?: PageTheme;
     class?: string;
     manageDocumentTitle?: boolean;
@@ -78,7 +84,7 @@
 >
   <div class="ps-page-frame">
     <div class="breadcrumbs ps-grid-scope">
-      <Breadcrumbs items={page.breadcrumbs ?? []} />
+      <Breadcrumbs items={page.breadcrumbs ?? []} homeHref={breadcrumbHomeHref} homeLabel={breadcrumbHomeLabel} />
     </div>
     {#if leftSidebar}<aside class="ps-left-sidebar">
         <div class="sidebar-panel ps-sidebar-scroll ps-shadow-surface" use:fitSidebar>{@render leftSidebar()}</div>
@@ -164,7 +170,7 @@
     .sidebar-panel {
       border: 1px solid var(--ps-panel-border);
       position: sticky;
-      top: var(--ps-sidebar-sticky-top);
+      top: calc(var(--ps-sidebar-sticky-top) + var(--ps-sidebar-header-offset, 0px));
       max-height: var(--ps-sidebar-available-height, calc(100dvh - var(--ps-nav-height) - var(--ps-breadcrumb-height) - var(--ps-sidebar-sticky-top)));
       overflow: auto;
       overscroll-behavior: contain;

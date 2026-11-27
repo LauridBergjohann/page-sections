@@ -1,5 +1,12 @@
 import { base } from '#lib/paths.js';
+import { illustrationSizes } from './illustrationSizes.js';
 export const sectionCatalog = [
+  {
+    slug: 'features',
+    title: 'Features',
+    icon: 'layers',
+    description: 'Centered icons, titles and benefits with optional links and shared grid sizes.'
+  },
   {
     slug: 'card-grid',
     title: 'CardGrid',
@@ -58,25 +65,27 @@ export const sectionCatalog = [
     slug: 'timeline',
     title: 'Timeline',
     icon: 'timeline',
-    description: 'Parallel journeys and milestones on a shared calendar.'
+    description:
+      'Explore shared tracks, milestones and clustered releases on a horizontal calendar.'
   }
-].map((item) => ({
-  ...item,
-  id: item.slug,
-  href: `/sections/${item.slug}/`,
-  image: {
-    src: base + `/illustrations/${item.slug}.svg`,
-    alt: `${item.title} section layout`,
-    width: 800,
-    height: 500
-  }
-}));
+]
+  .sort((a, b) => a.title.localeCompare(b.title, 'en'))
+  .map((item) => ({
+    ...item,
+    id: item.slug,
+    href: `/sections/${item.slug}/`,
+    image: {
+      src: base + `/illustrations/${item.slug}.svg`,
+      alt: `${item.title} section layout`,
+      ...illustrationSizes[item.slug]
+    }
+  }));
 export const sectionCards = sectionCatalog.map((item) => ({ ...item, href: base + item.href }));
 export const nextStepCards = [
   {
     id: 'add-sections',
     title: 'Add Sections',
-    description: 'Choose from ten composable section types.',
+    description: 'Choose from eleven composable section types.',
     href: '/sections/'
   },
   {
@@ -100,5 +109,9 @@ export const nextStepCards = [
 ].map((item) => ({
   ...item,
   href: item.href.startsWith('/') ? base + item.href : item.href,
-  image: { src: base + `/illustrations/${item.id}.svg`, alt: item.title, width: 800, height: 500 }
+  image: {
+    src: base + `/illustrations/${item.id}.svg`,
+    alt: item.title,
+    ...illustrationSizes[item.id]
+  }
 }));

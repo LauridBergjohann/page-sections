@@ -17,7 +17,7 @@
       headingLevel: 1,
       headingSize: 'l',
       introduction:
-        'Ten building blocks for your content. Pick a section, try its live example and explore the details.',
+        'Eleven building blocks for your content. Pick a section, try its live example and explore the details.',
       background: { color: 'standard', size: 'standard' }
     }}
   />

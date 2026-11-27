@@ -51,3 +51,5 @@ export type { ButtonProps, IconButtonProps } from './button.js';
 export type { CardElements } from './card.js';
 export type { FooterSocialLink } from './footer.js';
 export type * from '@page-sections/core';
+
+export { default as FeatureSection } from './FeatureSection.svelte';

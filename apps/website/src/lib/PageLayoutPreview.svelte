@@ -7,18 +7,21 @@
   let host = $state<HTMLDivElement>();
   let enabled = $state(true);
   let ready = $state(false);
+  let scrollBehavior = $state('fixed');
   const optionLabel = $derived(
     (
       {
         header: 'Show satellites',
-        breadcrumbs: 'Show full breadcrumb path',
+        breadcrumbs: 'Show inner-page breadcrumb path',
         'content-page': 'Show sidebars',
         'headings-and-anchors': 'Show nested heading',
         footer: 'Show footer groups'
       } as Record<string, string>
     )[kind]
   );
-  const src = $derived(`${base}/examples/page-layout/?kind=${kind}&enabled=${enabled}`);
+  const src = $derived(
+    `${base}/examples/page-layout/?kind=${kind}&enabled=${enabled}${kind === 'header' ? `&scroll=${scrollBehavior}` : ''}`
+  );
   const frameWidth = $derived(width || available);
   const scale = $derived(Math.min(1, available / frameWidth));
   onMount(() => {
@@ -47,13 +50,28 @@
     <input type="checkbox" bind:checked={enabled} disabled={!ready} />
     {optionLabel}
   </label>
+  {#if kind === 'header'}
+    <label>
+      Header scroll behavior
+      <select bind:value={scrollBehavior} disabled={!ready}>
+        <option value="fixed">Fixed</option><option value="delayed">Delayed</option><option
+          value="static"
+        >
+          Static
+        </option>
+      </select>
+    </label>
+  {/if}
 </div>
 <p class="hint">
   This is a real page in its own viewport. Wide views are scaled to fit here; use the separate tab
   to inspect them at full size. Follow the topic links or open the menus to try their behavior.
-  {#if kind === 'header'}Choose Desktop or Wide desktop to see the satellites beside the header; in
-    smaller windows they appear inside Settings.{:else if kind === 'footer'}Choose Desktop or Wide
-    desktop to see the footer link groups. Scroll inside the preview to reach the footer.{/if}
+  {#if kind === 'breadcrumbs'}Disable the breadcrumb path to preview the homepage, where Home would
+    be the only entry and the trail is hidden.{:else if kind === 'header'}Choose Desktop or Wide
+    desktop to see the satellites beside the header; in smaller windows they appear inside Settings.
+    Scroll inside the preview to compare fixed, delayed and static positioning.{:else if kind === 'footer'}Choose
+    Desktop or Wide desktop to see the footer link groups. Scroll inside the preview to reach the
+    footer.{/if}
 </p>
 <div class="preview-host" bind:this={host} style:height={`${680 * scale}px`}>
   <iframe

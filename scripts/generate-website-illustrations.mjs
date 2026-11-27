@@ -1,5 +1,6 @@
 // Original vector illustrations for the section catalog, Getting Started and homepage.
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { format } from 'prettier';
 const output = new URL('../apps/website/static/illustrations/', import.meta.url);
 mkdirSync(output, { recursive: true });
 const rect = (x, y, w, h, fill = '#e4eeea', r = 10) =>
@@ -14,20 +15,11 @@ const card = (x, y, w = 170, h = 125) =>
   landscape(x + 8, y + 8, w - 16, h * 0.54) +
   line(x + 12, y + h * 0.66, w - 35, '#347e66') +
   line(x + 12, y + h * 0.82, w - 55);
-const frame = (content, outlined = false) =>
-  (outlined
-    ? '<rect x="62" y="38" width="676" height="404" rx="20" fill="#fff" filter="url(#window-shadow)"/>'
-    : rect(62, 48, 676, 404, '#91b4a5', 20) + rect(62, 38, 676, 404, '#fff', 20)) +
-  rect(62, 38, 676, 44, '#f1f6f3', 20) +
-  `<path d="M62 66h676v16H62" fill="#f1f6f3"/>` +
-  [86, 104, 122].map((x) => `<circle cx="${x}" cy="60" r="4" fill="#94b8a9"/>`).join('') +
-  (outlined ? '<path d="M63 82h674" stroke="#d5dedb" stroke-width="1.5"/>' : '') +
-  content +
-  (outlined ? '<rect x="62" y="38" width="676" height="404" rx="20" fill="none" stroke="#9caba6" stroke-width="2"/>' : '');
 const text = (x, y, value, size = 24, color = '#185b48') =>
   `<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" font-weight="700" fill="${color}">${value}</text>`;
 const scenes = {
-  timeline: { title: 'Parallel journeys on a shared calendar', art: "<g stroke=\"#bed8cc\" stroke-dasharray=\"3 5\"><path d=\"M70 130h660M70 210h660M70 290h660M70 370h660\"/></g><g stroke=\"#369c79\" stroke-width=\"3\"><path d=\"M160 80v350m230-350v350m230-350v350\"/></g><g fill=\"#8bcba3\"><rect x=\"148\" y=\"130\" width=\"24\" height=\"160\" rx=\"12\"/><rect x=\"378\" y=\"210\" width=\"24\" height=\"160\" rx=\"12\"/><rect x=\"608\" y=\"130\" width=\"24\" height=\"250\" rx=\"12\"/></g><g fill=\"#368c70\"><circle cx=\"160\" cy=\"370\" r=\"12\"/><rect x=\"410\" y=\"290\" width=\"24\" height=\"130\" rx=\"12\"/></g><g fill=\"#fff\" stroke=\"#c3d9ce\"><rect x=\"188\" y=\"150\" width=\"120\" height=\"44\" rx=\"8\"/><rect x=\"416\" y=\"220\" width=\"120\" height=\"44\" rx=\"8\"/><rect x=\"642\" y=\"150\" width=\"110\" height=\"44\" rx=\"8\"/></g>" },
+  features: { title: 'Centered feature icons with titles and descriptions', art: [0,1,2,3,4,5].map(i => { const x = 200 + i % 3 * 200, y = 170 + Math.floor(i / 3) * 170; return '<circle cx="'+x+'" cy="'+y+'" r="54" fill="#e4eeea"/><path d="M'+(x-26)+' '+y+'l26-20 26 20-26 20z" fill="none" stroke="#347e66" stroke-width="4"/>' + line(x-70,y+74,140,'#185b48') + line(x-60,y+96,120); }).join('') },
+  timeline: {"title":"Horizontal projects and clustered releases on shared tracks","art":"<rect x=\"42\" y=\"58\" width=\"716\" height=\"384\" rx=\"22\" fill=\"#f2f8f5\" stroke=\"#bfd9ce\"/><g stroke=\"#bdd5cb\" stroke-dasharray=\"3 5\"><path d=\"M110 120v270m145-270v270m145-270v270m145-270v270m145-270v270\"/></g><path d=\"M72 390h656\" stroke=\"#588775\" stroke-width=\"2\"/><g fill=\"#89b5ce\" stroke=\"#2f6ea6\"><rect x=\"100\" y=\"326\" width=\"525\" height=\"32\" rx=\"16\"/><rect x=\"225\" y=\"274\" width=\"360\" height=\"32\" rx=\"16\"/></g><g fill=\"#a4c8b1\" stroke=\"#438468\"><rect x=\"150\" y=\"222\" width=\"265\" height=\"32\" rx=\"16\"/><rect x=\"458\" y=\"222\" width=\"240\" height=\"32\" rx=\"16\"/></g><g fill=\"#e6bd89\" stroke=\"#ad651e\"><circle cx=\"545\" cy=\"170\" r=\"22\"/><circle cx=\"320\" cy=\"170\" r=\"16\"/></g><g fill=\"#224d40\" font-family=\"sans-serif\" font-size=\"15\"><text x=\"128\" y=\"347\">Open access</text><text x=\"252\" y=\"295\">Shared stations</text><text x=\"174\" y=\"244\">Field research</text><text x=\"540\" y=\"176\" font-weight=\"bold\">7</text><text x=\"92\" y=\"418\">2026</text><text x=\"382\" y=\"418\">2022</text><text x=\"672\" y=\"418\">2018</text></g><g fill=\"#2f6ea6\"><circle cx=\"468\" cy=\"88\" r=\"6\"/></g><circle cx=\"575\" cy=\"88\" r=\"6\" fill=\"#438468\"/><circle cx=\"680\" cy=\"88\" r=\"6\" fill=\"#ad651e\"/>"},
   'feature-layout': {
     title: 'One responsive grid, from desktop to phone',
     art: rect(108, 115, 390, 245, '#e4eeea') + rect(124, 131, 358, 32, '#347e66') +
@@ -235,8 +227,7 @@ const scenes = {
       lines(422, 306, 230, 3)
   }
 };
-// Homepage and Getting Started: transparent outside the browser window, with
-// brand-green accents, restrained companion colors and neutral browser chrome.
+// Homepage and Getting Started use brand-green accents and restrained companion colors.
 const palettes = {
   'feature-layout': ['#007b5e', '#839bad', '#edf2f4', '#e6d7b9'],
   'feature-sections': ['#347e66', '#a79cae', '#f0edf3', '#ddd2bf'],
@@ -268,19 +259,44 @@ function recolor(art, [accent, secondary, tint, warm]) {
   };
   return art.replace(/#[\da-f]{8}\b|#[\da-f]{6}\b/gi, color => colors[color.toLowerCase()] ?? color);
 }
+// Tight visible-art bounds, including text and the timeline outline. Nested landscape
+// viewports are already clipped; their offscreen geometry is not part of these bounds.
+const artBounds = {
+  features: [130, 116, 540, 328],
+  'timeline': [41.5, 57.5, 717, 385],
+  'feature-layout': [108, 105, 574, 294],
+  'feature-sections': [118, 109, 560, 304],
+  'feature-content': [108, 123, 580, 263],
+  'feature-html': [166, 106, 477, 298],
+  'feature-theme': [108, 113, 584, 292],
+  'feature-independent': [140, 108, 520, 298],
+  'explore-start': [108, 117, 578, 272],
+  'explore-sections': [112, 109, 574, 293],
+  'explore-theme': [108, 104, 543, 299],
+  'card-grid': [110, 112, 580, 290],
+  'carousel': [110, 132, 590, 274],
+  'code': [104, 108, 592, 292],
+  'headings': [111, 135, 575, 251],
+  'hero': [92, 100, 616, 308],
+  'image': [106, 126, 555, 246],
+  'panel': [114, 116, 572, 278],
+  'rich-text': [122, 120, 530, 286],
+  'video': [102, 106, 596, 292],
+  'add-sections': [120, 110, 552, 282],
+  'page-layout': [106, 112, 588, 286],
+  'adapt-theme': [108, 108, 584, 305],
+  'minimal-demo': [108, 110, 584, 284]
+};
+const sizes = {};
 for (const [slug, { title, art }] of Object.entries(scenes)) {
-  if (['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video', 'timeline'].includes(slug)) {
-    // Center the original content without browser chrome, shadows or a backdrop.
-    const content = slug === 'timeline' ? art : '<g transform="translate(0 -12)">' + art + '</g>';
-    writeFileSync(new URL(slug + '.svg', output), '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500"><title>' + title + '</title>' + content + '</svg>\n');
-    continue;
-  }
-  const palette = palettes[slug];
-  const transparent = Boolean(palette) || ['card-grid', 'carousel', 'code', 'headings', 'hero', 'image', 'panel', 'rich-text', 'video'].includes(slug);
-  const window = frame(`<g clip-path="url(#window)">${art}</g>`, transparent);
-  const shadow = transparent ? '<filter id="window-shadow" filterUnits="userSpaceOnUse" x="24" y="6" width="752" height="480" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#18231f" flood-opacity="0.18"/></filter>' : '';
-  const backdrop = transparent ? '' : '<rect width="800" height="500" fill="#dcebe4"/><circle cx="732" cy="46" r="145" fill="#c9e1d4"/><circle cx="70" cy="477" r="138" fill="#eee6cb"/>';
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500"><title>${title}</title><defs><clipPath id="window"><rect x="62" y="82" width="676" height="360" rx="16"/></clipPath>${shadow}</defs>${backdrop}${palette ? recolor(window, palette) : window}</svg>\n`;
-  writeFileSync(new URL(`${slug}.svg`, output), svg);
+  const [x, y, width, height] = artBounds[slug];
+  const content = palettes[slug] ? recolor(art, palettes[slug]) : art;
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '" viewBox="' + [x, y, width, height].join(' ') + '"><title>' + title + '</title>' + content + '</svg>\n';
+  writeFileSync(new URL(slug + '.svg', output), svg);
+  sizes[slug] = { width, height };
 }
-console.log(`Created ${Object.keys(scenes).length} original SVG illustrations.`);
+writeFileSync(new URL('../apps/website/src/lib/illustrationSizes.ts', import.meta.url), await format(
+  '// Generated by scripts/generate-website-illustrations.mjs.\n' +
+  'export const illustrationSizes: Record<string, { width: number; height: number }> = ' +
+  JSON.stringify(sizes, null, 2) + ';\n', { parser: 'typescript', singleQuote: true, printWidth: 100, trailingComma: 'none' }));
+console.log('Created ' + Object.keys(scenes).length + ' tightly cropped SVG illustrations.');

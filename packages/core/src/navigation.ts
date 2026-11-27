@@ -1,6 +1,6 @@
 import type { Breadcrumb, MenuItem } from './types.js';
 
-/** A site tree starts at the main-menu entries. Home belongs to the brand link. */
+/** A site tree starts at the main-menu entries. Breadcrumbs adds the Home link. */
 export interface NavigationLocation {
   pathname?: string;
   currentId?: string;

@@ -60,7 +60,8 @@
             </tr>
             <tr>
               <td><code>TimelineSection</code></td><td>
-                Parallel date-based events; section and optional icon snippet.
+                Horizontal shared tracks, anchored zoom and cluster lists; section plus optional
+                icon and eventIcon snippets.
               </td><td><a href={base + '/sections/timeline/'}>Timeline</a></td>
             </tr>
             <tr>
@@ -87,7 +88,7 @@
             </tr>
             <tr>
               <td><code>ContentPage</code></td>
-              <td>Main content; page</td>
+              <td>Main content; page, breadcrumbHomeHref, breadcrumbHomeLabel</td>
               <td><a href={base + '/docs/page-layout/content-page/'}>Pages</a></td>
             </tr>
             <tr>
@@ -172,6 +173,11 @@
               <td><a href={base + '/sections/video/'}>VideoSection</a></td>
             </tr>
             <tr>
+              <td><code>FeatureSection</code></td><td>
+                Centered icon features; section, list, featureSize, iconTone and optional icon
+                snippet
+              </td><td><a href={base + '/sections/features/'}>FeatureSection</a></td>
+            </tr><tr>
               <td><code>CardGridSection</code></td>
               <td>Responsive card collection; section, list</td>
               <td><a href={base + '/sections/card-grid/'}>CardGridSection</a></td>
@@ -219,13 +225,15 @@
             </tr>
             <tr>
               <td><code>Breadcrumbs</code></td>
-              <td>Site ancestry; items</td>
-              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs and index</a></td>
+              <td>Site ancestry with automatic Home icon; items, label, homeHref, homeLabel</td>
+              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs</a></td>
             </tr>
             <tr>
               <td><code>SectionNavigation</code></td>
               <td>Explicit anchor list; items</td>
-              <td><a href={base + '/docs/page-layout/breadcrumbs/'}>Breadcrumbs and index</a></td>
+              <td>
+                <a href={base + '/docs/page-layout/headings-and-anchors/'}>Headings and anchors</a>
+              </td>
             </tr>
             <tr>
               <td><code>Sections</code></td>
@@ -371,7 +379,9 @@
         HeadingLevel
       </a>, default 2), size (<a href={base + '/docs/reference/types/#heading-size'}>
         HeadingSize
-      </a>, default m), id, eyebrow and introduction. It renders typography only.
+      </a>, default m), align (left, center or right; default left), id, eyebrow and introduction.
+      It renders typography only. Sections pass their shared headingAlign setting to Heading;
+      HeroSection keeps its own composition.
       <code>HeadingSection</code>
       accepts section: Omit&lt;<a href={base + '/docs/reference/types/#heading-section-data'}>
         HeadingSectionData

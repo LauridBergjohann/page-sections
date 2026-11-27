@@ -8,6 +8,25 @@ import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
 import ImplicitNestedSurfaces from './ImplicitNestedSurfaces.svelte';
 import StructuredPage from './StructuredPage.svelte';
+it('preserves heading alignment through every serialized section renderer except Hero', () => {
+  const shared = { id: 'aligned', title: 'Section', headline: 'Aligned heading', introduction: 'Introduction', headingAlign: 'right' as const };
+  const sections: SectionData[] = [
+    { ...shared, type: 'heading' }, { ...shared, type: 'richText', body: 'Body' },
+    { ...shared, type: 'panel', blocks: [] }, { ...shared, type: 'code', code: 'const x = 1;' },
+    { ...shared, type: 'image', image: { src: '/image.svg', alt: 'Image' } },
+    { ...shared, type: 'video', video: { provider: 'html5', src: '/video.webm' } },
+    { ...shared, type: 'features', list: [] }, { ...shared, type: 'cardGrid', list: [] },
+    { ...shared, type: 'carousel', list: [] }, { ...shared, type: 'grid', blocks: [] },
+    { ...shared, type: 'timeline', categories: [], referenceDate: '2026-01-01' },
+    { ...shared, type: 'hero' }
+  ];
+  for (const section of sections) {
+    const { body } = render(Sections, { props: { sections: JSON.parse(JSON.stringify([section])) } });
+    expect(body).toContain(`data-align="${section.type === 'hero' ? 'left' : 'right'}"`);
+    expect(body).toContain('Aligned heading');
+    expect(body).toContain('Introduction');
+  }
+});
 it.each(['cardGrid', 'carousel'] as const)('forwards optional shadows and descriptions through %s data', (type) => {
   for (const cardShadow of [undefined, false, true]) {
     const sections: SectionData[] = [{ type, id: 'cards', title: 'Cards', cardShadow, list: [{ id: 'one', title: 'One', description: 'Optional copy' }] }];
@@ -43,9 +62,29 @@ it('keeps page metadata separate from visible content', () => {
   expect(body).toContain('aria-label="Page heading"');
   expect(head).toContain('<title>Browser title</title>');
 });
-it('omits empty content menus and single-entry breadcrumbs on the server', () => {
+it('omits empty content menus and Home-only breadcrumbs on the server', () => {
   expect(render(ContentPage, { props: { page: { title: 'Empty' }, showContentMenu: true } }).body).not.toContain('class="ps-content-menu-slot');
-  expect(render(Breadcrumbs, { props: { items: [{ label: 'Docs', href: '/docs/' }] } }).body).not.toContain('<nav');
+  for (const items of [[], [{ label: 'Home', href: '/' }]]) {
+    expect(render(Breadcrumbs, { props: { items } }).body).not.toContain('<nav');
+  }
+});
+it('adds an icon-only Home link to even a single-page breadcrumb', () => {
+  const { body } = render(Breadcrumbs, { props: { items: [{ label: 'Docs', href: '/docs/' }] } });
+  expect(body).toContain('href="/" aria-label="Home"');
+  expect(body).toContain('<svg');
+  expect(body).not.toContain('>Home<');
+  expect(body).toMatch(/aria-current="page"[^>]*>Docs<\/span>/);
+  expect(body).not.toContain('href="/docs/"');
+});
+it('reuses an existing Home entry and supports a localized site root through ContentPage', () => {
+  const { body } = render(ContentPage, { props: {
+    page: { title: 'Docs', breadcrumbs: [{ label: 'Start', href: '/app' }, { label: 'Docs' }] },
+    breadcrumbHomeHref: '/app/', breadcrumbHomeLabel: 'Startseite'
+  } });
+  expect(body.match(/<li\b/g)).toHaveLength(2);
+  expect(body).toContain('href="/app/" aria-label="Startseite"');
+  expect(body).not.toContain('>Start<');
+  expect(render(Breadcrumbs, { props: { items: [{ label: 'Docs' }], homeHref: 'javascript:alert(1)' } }).body).not.toContain('javascript:');
 });
 it('decouples heading size from semantics and renders heading sections from JSON', () => {
   for (const level of [1, 2, 3] as const) for (const size of ['m', 'l', 'xl'] as const) {
@@ -199,4 +238,18 @@ it('escapes structured inline content and rejects unsafe action and inline links
   expect(body).not.toContain('<script>');
   expect(body).not.toContain('href="javascript:');
   expect(body).toContain('&lt;script');
+});
+
+it('renders feature data with native links and inherited headings before hydration', () => {
+  const sections: SectionData[] = [{ type: 'features', id: 'benefits', title: 'Benefits', headline: 'Benefits', featureSize: 'l', iconTone: 'primary', list: [
+    { id: 'linked', icon: 'laptop', title: 'Linked feature', description: 'Selectable copy', href: '/guide/' },
+    { id: 'unsafe', icon: 'unknown', title: 'Plain feature', description: 'Still readable', href: 'javascript:alert(1)' }
+  ] }];
+  const { body } = render(Sections, { props: { sections } });
+  expect(body).toContain('href="/guide/"');
+  expect(body).not.toContain('javascript:');
+  expect(body).toContain('data-icon-tone="primary"');
+  expect(body).toContain('data-ps-card-size="l"');
+  expect(body).toMatch(/<h3[^>]*>Linked feature/);
+  expect(body.match(/<svg /g)).toHaveLength(2);
 });

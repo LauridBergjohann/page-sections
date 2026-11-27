@@ -2,10 +2,13 @@ import type { ContentSpan } from './responsiveLayout.js';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export type HeadingSize = 'm' | 'l' | 'xl';
+export type HeadingAlign = 'left' | 'center' | 'right';
 export type PageKind = 'content' | 'detail';
 export type SurfaceTone = 'standard' | 'muted';
 export type CardMediaAspect = '3/2' | '4/3' | '1/1';
 export type CardMediaFit = 'contain' | 'cover';
+export type CardContentPlacement = 'below' | 'overlay';
+export type CardTextTone = 'light' | 'dark';
 export type InlineText = string | InlineRun[];
 export type InlineRun =
   | { type: 'text' | 'strong' | 'emphasis' | 'code'; text: string }
@@ -33,6 +36,8 @@ export interface SectionDefinition {
   introduction?: string;
   headingLevel?: HeadingLevel;
   headingSize?: HeadingSize;
+  /** Align the headline, eyebrow and introduction. Default left; HeroSection ignores this option. */
+  headingAlign?: HeadingAlign;
   background?: SectionBackground;
   layout?: 'full' | 'wide' | 'narrow' | 'inherit';
   spacing?: 'none' | 'tight' | 'normal' | 'loose' | 'spacious';
@@ -67,6 +72,8 @@ export type TimelineDate = string;
 export interface TimelineEventBase {
   id: string;
   title: string;
+  /** Compact overview name. Empty labels fall back to title; details always show title. */
+  label?: string;
   /** Optional Lucide key shown in the label; resolve additional keys with the eventIcon snippet. */
   icon?: string;
   description?: string | RichTextContentData;
@@ -88,8 +95,20 @@ export interface TimelineCategory {
 export interface TimelineSectionData extends SectionDefinition {
   type: 'timeline';
   categories: TimelineCategory[];
-  /** Date axis direction from top to bottom. Default ascending (oldest first). */
+  /** Date axis direction from left to right. Default ascending (oldest first). */
   direction?: 'ascending' | 'descending';
+  /** Lane zero is nearest the axis. Default bottom. */
+  axisPosition?: 'top' | 'bottom';
+  /** Embedded content width by default. Full also sets background.size to full, preserving its color; recommended only without side navigation, which overlays the stage. */
+  stageWidth?: 'full' | 'contained';
+  /** Initial CSS pixels per calendar day. Default 0.6; clamped to at least the scale that fits the full timeline. */
+  initialScale?: number;
+  /** Group nearby compact events within their category. Default true. */
+  clustering?: boolean;
+  zoomLabel?: string;
+  categoriesLabel?: string;
+  eventsLabel?: string;
+  closeLabel?: string;
   start?: TimelineDate;
   end?: TimelineDate;
   /** End of ongoing events, unless end is supplied. Default: the SSR render's UTC date. */
@@ -105,11 +124,15 @@ export type RichTextSectionData = SectionDefinition & RichTextContentData & { ty
 export interface PanelSectionData extends SectionDefinition { type: 'panel'; blocks: RichTextBlock[]; tone?: SurfaceTone; actions?: ContentAction[] }
 export interface ImageSectionData extends SectionDefinition { type: 'image'; image: ImageData; description?: string; imageSide?: 'left' | 'right' }
 export interface VideoSectionData extends SectionDefinition { type: 'video'; video: VideoData; description?: string; videoSide?: 'left' | 'right' }
-export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid'; list: CardItem[]; cardSize?: CardSize; variant?: SectionDefinition['variant']; cardShadow?: boolean; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; itemSpan?: ContentSpan; textAlign?: 'start' | 'center' }
-export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; cardShadow?: boolean; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string }
+/** Circle colors reuse section surfaces or the primary-button foreground/background. */
+export type FeatureIconTone = SurfaceTone | 'primary';
+export interface FeatureItem { id: string; itemKey?: string; icon: string; title: string; description: string; href?: string }
+export interface FeatureSectionData extends SectionDefinition { type: 'features'; list: FeatureItem[]; featureSize?: CardSize; iconTone?: FeatureIconTone }
+export interface CardGridSectionData extends SectionDefinition { type: 'cardGrid'; list: CardItem[]; cardSize?: CardSize; variant?: SectionDefinition['variant']; cardShadow?: boolean; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; mediaHoverZoom?: boolean; contentPlacement?: CardContentPlacement; textTone?: CardTextTone; itemSpan?: ContentSpan; textAlign?: 'start' | 'center' }
+export interface CarouselSectionData extends SectionDefinition { type: 'carousel'; list: CardItem[]; cardSize?: CardSize; cardShadow?: boolean; cardTone?: SurfaceTone; mediaAspect?: CardMediaAspect; mediaFit?: CardMediaFit; mediaHoverZoom?: boolean; contentPlacement?: CardContentPlacement; textTone?: CardTextTone; textAlign?: 'start' | 'center'; controls?: boolean; initialItemKey?: string }
 export interface GridSectionData extends SectionDefinition { type: 'grid'; blocks: { id: string; span?: ContentSpan; sections: SectionData[] }[] }
 /** Extend this map by module augmentation. Models remain JSON data; renderers are separate. */
-export interface SectionTypeMap { heading: HeadingSectionData; hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData; code: CodeSectionData; timeline: TimelineSectionData }
+export interface SectionTypeMap { heading: HeadingSectionData; hero: HeroSectionData; richText: RichTextSectionData; panel: PanelSectionData; image: ImageSectionData; video: VideoSectionData; features: FeatureSectionData; cardGrid: CardGridSectionData; carousel: CarouselSectionData; grid: GridSectionData; code: CodeSectionData; timeline: TimelineSectionData }
 export type SectionData = SectionTypeMap[keyof SectionTypeMap];
 export interface PageData extends ContentPageData { sections: SectionData[] }
 export interface MenuItem { id: string; label: string; href: string; current?: boolean; active?: boolean; icon?: string; children?: MenuItem[] }

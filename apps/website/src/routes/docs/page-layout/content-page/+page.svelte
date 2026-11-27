@@ -228,9 +228,10 @@
         Place a HeadingSection or HeroSection with headingLevel: 1 directly in the page content. It
         controls its own background, position and typography, like every other section. Breadcrumbs
         remain separate. Supply the path from the first main-menu entry through the current page;
-        exclude Home. A one-entry breadcrumb is hidden. Its row remains reserved, including on pages
-        without breadcrumbs, so the content and sidebars keep their vertical position. The logo
-        links to Home.
+        the component adds an icon-only Home link automatically. Only a trail containing Home alone
+        is hidden. Set breadcrumbHomeHref for an application base path and breadcrumbHomeLabel to
+        translate the icon's accessible label. The row remains reserved, including on the homepage,
+        so the content and sidebars keep their vertical position.
       </p>
       <p>
         Supply exactly one h1. The main landmark uses page.title as its accessible label, unless
@@ -289,6 +290,13 @@
         pages or reading links in <code>pageEnd</code>. An attached menu keeps 16px of space at both
         ends of the section column; a detached menu ends flush with it. Long sidebars scroll
         independently, while the main content stays readable.
+      </p>
+      <p>
+        When PageShell contains a Header with <code>scrollBehavior="fixed"</code>, both desktop
+        sidebars dock 80px from the viewport top: the 64px header plus the usual 16px gap. Smaller
+        layouts reserve the compact header height above the contents button. Changing the Header
+        prop to static or delayed restores the normal offsets automatically, including during
+        client-side navigation.
       </p>
       <p>
         The <a href={base + '/docs/design-system/responsive-layout/'}>responsive design system</a> explains
