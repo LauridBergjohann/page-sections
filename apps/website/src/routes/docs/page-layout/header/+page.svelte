@@ -214,9 +214,10 @@
         Positioning uses CSS and works without JavaScript.
       </p>
       <p>
-        Once a surface reaches the top, its upper corner radius decreases by one pixel per pixel
-        scrolled. With a 12px radius, the header becomes square at scroll position 28px and
-        satellites at 40px. Lower corners stay rounded. The effect follows scrolling in both
+        Once a surface reaches the top, its upper corners flatten over the next 64px of scrolling:
+        the header transitions from scroll position 16px to 80px, and satellites from 28px to 92px.
+        Satellite button groups follow the same contour. Lower corners remain unchanged; the scroll
+        range is independent of the theme's corner radius. The effect follows scrolling in both
         directions, with no timed transition. It uses <a
           href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation-timeline/scroll"
         >

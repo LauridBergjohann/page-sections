@@ -140,17 +140,24 @@
     .header::after { border-width: 1px; }
     .header { border-radius: var(--ps-radius); }
     .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-section-standard); border-radius: 12px; box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
+    /* A satellite's segmented controls share its contour, including their outline
+       and selection surface. Keep the satellite itself open for arbitrary popups. */
+    .satellite :global(.ps-button-group) { border-radius: 12px; overflow: clip; }
+    .satellite :global(.ps-button-group > :is(a, button)),
+    .satellite :global(.ps-button-group::before) { border-top-left-radius: 0; border-top-right-radius: 0; }
     .left { left: var(--ps-satellite-inset); } .right { right: var(--ps-satellite-inset); }
     .settings { display: none; }
     @supports (animation-timeline: scroll(root block)) and (animation-range: 0px 1px) {
-      [data-scroll='fixed'] .header, [data-scroll='fixed'] .satellite {
+      [data-scroll='fixed'] .header, [data-scroll='fixed'] .satellite,
+      [data-scroll='fixed'] .satellite :global(.ps-button-group) {
         --ps-header-dock-start: var(--ps-menu-top);
         --ps-header-dock-radius: var(--ps-radius);
         animation: dock-corners auto linear both;
         animation-timeline: scroll(root block);
-        animation-range: var(--ps-header-dock-start) calc(var(--ps-header-dock-start) + var(--ps-header-dock-radius));
+        animation-range: var(--ps-header-dock-start) calc(var(--ps-header-dock-start) + 64px);
       }
-      [data-scroll='fixed'] .satellite {
+      [data-scroll='fixed'] .satellite,
+      [data-scroll='fixed'] .satellite :global(.ps-button-group) {
         --ps-header-dock-start: var(--ps-satellite-top);
         --ps-header-dock-radius: 12px;
       }

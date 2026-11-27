@@ -323,7 +323,8 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       <p>
         Fixed Header uses <code>--ps-header-dock-extra</code> for the gap between the header and
         satellite docking positions. Internal <code>--ps-header-dock-start</code> and
-        <code>--ps-header-dock-radius</code> define each surface's corner animation range.
+        <code>--ps-header-dock-radius</code> define each surface's starting scroll position and
+        initial corner radius. The corners flatten over 64px of scrolling after docking.
         <code>--ps-sidebar-header-offset</code> adds the docked menu height to desktop sidebar
         offsets inside PageShell; it is zero without a fixed header. Configure Header's
         <code>scrollBehavior</code> prop instead of setting these derived values.

@@ -5,9 +5,11 @@
     ContentPage,
     HeadingSection,
     Section,
-    SidebarNavigation
+    SidebarNavigation,
+    ButtonGroup
   } from '@page-sections/svelte';
   let scrollBehavior = $state<'static' | 'delayed' | 'fixed'>('fixed');
+  let appearance = $state('light');
   const chapters = Array.from({ length: 24 }, (_, i) => ({
     id: `chapter-${i + 1}`,
     label: `Chapter ${i + 1}`,
@@ -19,7 +21,21 @@
   <Header {scrollBehavior} items={[{ id: 'first', label: 'First chapter', href: '#chapter-1' }]}>
     {#snippet brand()}<a href="/header-scroll/">Header example</a>{/snippet}
     {#snippet left()}<a href="#chapter-1">Left satellite</a>{/snippet}
-    {#snippet right()}<a href="#chapter-2">Right satellite</a>{/snippet}
+    {#snippet right()}
+      <div class="appearance-controls">
+        <ButtonGroup
+          label="Appearance"
+          iconOnly
+          items={[
+            { id: 'light', label: 'Light', selected: appearance === 'light' },
+            { id: 'dark', label: 'Dark', selected: appearance === 'dark' }
+          ]}
+          onselect={(item) => (appearance = item.id)}
+        >
+          {#snippet icon(item)}<span>{item.id === 'light' ? '☀' : '☾'}</span>{/snippet}
+        </ButtonGroup>
+      </div>
+    {/snippet}
   </Header>
   <ContentPage
     page={{ title: 'Header scrolling', breadcrumbs: [{ label: 'Header scrolling' }] }}

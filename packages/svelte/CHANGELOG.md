@@ -4,6 +4,8 @@
 
 ### Minor Changes
 
+- Extend fixed-header corner flattening to 64px of scroll after docking, and apply the satellite contour to button-group outlines, hover backgrounds and selection surfaces.
+
 - Make fixed headers dock independently from their satellites on XL–3XL layouts using native CSS sticky positioning. Flatten upper corners with scroll progress, reserve the docked header above both sidebars, and update sidebar space when the reactive scrollBehavior prop changes. Compact fixed headers and delayed/static modes retain their behavior.
 
 - Prepend an accessible icon-only Home link in Breadcrumbs, including single-page trails. Hide Home-only trails, reuse an existing Home entry, and expose site-root and label overrides through Breadcrumbs and ContentPage. Scale the icon with the text; use body-colored links without underlines, accent on hover/keyboard focus, and translucent separators and unlinked entries.
