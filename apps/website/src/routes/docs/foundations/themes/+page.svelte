@@ -122,6 +122,9 @@
             <tr><td><code>border</code></td><td><code>--ps-border</code></td></tr>
             <tr><td><code>panelBorder</code></td><td><code>--ps-panel-border</code></td></tr>
             <tr>
+              <td><code>panelBackground</code></td><td><code>--ps-panel-background</code></td>
+            </tr>
+            <tr>
               <td><code>footerBackground</code></td><td><code>--ps-footer-background</code></td>
             </tr>
             <tr><td><code>footerInk</code></td><td><code>--ps-footer-ink</code></td></tr>
@@ -185,6 +188,14 @@
         <code>panelBorder</code>
         for panels and navigation. Set either to <code>transparent</code> to hide that edge without changing
         layout. Other CSS variables can be set directly in CSS.
+      </p>
+      <p>
+        Use <code>panelBackground</code> (or <code>--ps-panel-background</code>) for the header,
+        satellites, sidebars and floating popups independently of section backgrounds. For example,
+        <code>theme=&#123;&#123; panelBackground: '#f0f3f5', standard: '#fff' &#125;&#125;</code>
+        gives navigation panels a tinted surface while content stays white. If omitted, panels follow
+        <code>--ps-section-standard</code> in both light and dark mode. ContentPanel keeps its explicitly
+        selected standard or muted tone.
       </p>
     </div>
   </Section>

@@ -1,5 +1,13 @@
 # @page-sections/svelte
 
+## 0.9.1
+
+### Patch Changes
+
+- Keep focused popup inputs open when the mobile keyboard changes viewport height, constrain floating surfaces to the visual viewport, and preserve width-change and scroll dismissal. Align ButtonGroup selection backgrounds with text controls inside animated popups. Add PageTheme.panelBackground and --ps-panel-background for header, satellite, sidebar and popup surfaces, with the existing standard surface as the fallback.
+- Updated dependencies
+  - @page-sections/core@0.9.1
+
 ## 0.9.0
 
 ### Minor Changes

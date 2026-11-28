@@ -2,6 +2,70 @@ import { expect, test, type Locator } from '@playwright/test';
 
 const route = '/docs/design-system/responsive-layout/';
 
+test('text ButtonGroup selection meets its divider after popup entrance', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  await expect(page.locator('.mobile-search')).toBeAttached();
+  for (let opening = 0; opening < 2; opening++) {
+    await page.locator('.settings > summary').click();
+    const panel = page.locator('.settings-panel:popover-open');
+    await panel.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
+    const group = panel.getByRole('group', { name: 'Appearance' });
+    await expect(group).toHaveAttribute('data-ps-selection-animated', '');
+    await expect.poll(() => group.evaluate(node => {
+      const selected = node.querySelector('[aria-pressed="true"]')!;
+      const box = selected.getBoundingClientRect();
+      const host = node.getBoundingClientRect();
+      const style = getComputedStyle(node, '::before');
+      const matrix = new DOMMatrixReadOnly(style.transform);
+      return Math.max(Math.abs(host.left + matrix.m41 - box.left),
+        Math.abs(parseFloat(style.width) - box.width), Math.abs(parseFloat(style.height) - box.height));
+    })).toBeLessThan(0.1);
+    await page.keyboard.press('Escape');
+    await expect(panel).toHaveCount(0);
+  }
+});
+
+for (const native of [true, false]) test(`mobile search survives keyboard viewport changes, native popover=${native}`, async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  if (!native) await context.addInitScript(() => { Reflect.deleteProperty(HTMLElement.prototype, 'showPopover'); });
+  const page = await context.newPage();
+  await page.goto(route);
+  const trigger = page.getByRole('button', { name: 'Open search', exact: true });
+  const input = page.getByRole('combobox', { name: 'Search documentation' });
+  await trigger.tap();
+  await expect(input).toBeFocused();
+  // Android configurations can resize the layout viewport when the keyboard opens.
+  await page.setViewportSize({ width: 390, height: 470 });
+  await expect(input).toBeFocused();
+  await input.pressSequentially('theme');
+  await expect(input).toHaveValue('theme');
+  await expect(page.getByRole('listbox', { name: 'Search results' })).toBeVisible();
+  if (native) {
+    // Other configurations shrink only the visual viewport. Verify that the
+    // top-layer surface fits the available space and retains the focused editor.
+    await page.evaluate(() => {
+      Object.defineProperty(visualViewport, 'height', { configurable: true, value: 330 });
+      visualViewport!.dispatchEvent(new Event('resize'));
+    });
+    await expect(input).toBeFocused();
+    await expect.poll(() => page.locator('.search-surface').evaluate(node => node.getBoundingClientRect().bottom)).toBeLessThanOrEqual(318);
+    await page.evaluate(() => {
+      Reflect.deleteProperty(visualViewport!, 'height');
+      visualViewport!.dispatchEvent(new Event('resize'));
+    });
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(input).toBeFocused();
+  await input.press('Escape');
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  await trigger.tap();
+  await expect(input).toBeFocused();
+  await page.setViewportSize({ width: 844, height: 390 });
+  await expect(page.locator('.mobile-search')).toHaveAttribute('aria-expanded', 'false');
+  await context.close();
+});
+
 test('popup close controls dismiss website panels and preserve hover menus', async ({ page }) => {
   for (const width of [390, 1250, 1700]) {
     await page.setViewportSize({ width, height: 900 });

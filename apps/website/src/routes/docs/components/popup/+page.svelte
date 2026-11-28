@@ -178,9 +178,9 @@
     <div class="prose">
       <p>
         Use <code>--ps-panel-border</code>, <code>--ps-radius</code>,
-        <code>--ps-section-standard</code>
-        and <a href={base + '/docs/reference/tokens/#shadows'}>the shared shadow controls</a>. A
-        trigger uses the
+        <code>--ps-panel-background</code> (falls back to <code>--ps-section-standard</code>) and
+        <a href={base + '/docs/reference/tokens/#shadows'}>the shared shadow controls</a>. A trigger
+        uses the
         <a href={base + '/docs/components/buttons/#props'}>IconButton properties</a> active state and
         the shared selection color. The desktop On this page panel uses the same title typography while
         its surrounding sticky layout owns docking and scrolling.

@@ -123,7 +123,7 @@
 </div>
 
 <style>
-  .ps-popup { position: absolute; top: calc(100% + 8px); right: 0; box-sizing: border-box; width: min(280px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; overscroll-behavior: contain; margin: 0; padding: 1rem; border: 1px solid var(--ps-panel-border); border-radius: var(--ps-radius); background: var(--ps-section-standard); color: var(--ps-ink); box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))); font-size: .875rem; line-height: 1.5; }
+  .ps-popup { position: absolute; top: calc(100% + 8px); right: 0; box-sizing: border-box; width: min(280px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; overscroll-behavior: contain; margin: 0; padding: 1rem; border: 1px solid var(--ps-panel-border); border-radius: var(--ps-radius); background: var(--ps-panel-background, var(--ps-section-standard)); color: var(--ps-ink); box-shadow: var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow))); font-size: .875rem; line-height: 1.5; }
   .ps-popup-inline { position: static; width: auto; max-height: none; overflow: visible; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
   .ps-popup-heading { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; }
   .ps-popup-title { flex: 1; min-width: 0; overflow-wrap: anywhere; margin: 0; color: var(--ps-ink); font-size: 1rem; line-height: 1.5; font-weight: 650; }

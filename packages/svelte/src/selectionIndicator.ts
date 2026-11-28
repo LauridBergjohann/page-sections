@@ -32,16 +32,26 @@ export function selectionIndicator(
     }
     const bounds = host.getBoundingClientRect();
     const box = target.getBoundingClientRect();
+    // Popup entrance scales an ancestor without changing layout. Convert viewport
+    // rectangles back to layout pixels so the highlight does not retain that scale
+    // after the animation ends (text controls often have fractional widths).
+    const style = getComputedStyle(host);
+    const layoutWidth = parseFloat(style.width) + (style.boxSizing === 'border-box' ? 0 :
+      parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth));
+    const layoutHeight = parseFloat(style.height) + (style.boxSizing === 'border-box' ? 0 :
+      parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth));
+    const scaleX = bounds.width / layoutWidth || 1;
+    const scaleY = bounds.height / layoutHeight || 1;
     host.style.setProperty(
       '--ps-selection-x',
-      `${box.left - bounds.left + host.scrollLeft - host.clientLeft}px`
+      `${(box.left - bounds.left) / scaleX + host.scrollLeft - host.clientLeft}px`
     );
     host.style.setProperty(
       '--ps-selection-y',
-      `${box.top - bounds.top + host.scrollTop - host.clientTop}px`
+      `${(box.top - bounds.top) / scaleY + host.scrollTop - host.clientTop}px`
     );
-    host.style.setProperty('--ps-selection-width', `${box.width}px`);
-    host.style.setProperty('--ps-selection-height', `${box.height}px`);
+    host.style.setProperty('--ps-selection-width', `${box.width / scaleX}px`);
+    host.style.setProperty('--ps-selection-height', `${box.height / scaleY}px`);
     host.style.setProperty('--ps-selection-radius', getComputedStyle(target).borderRadius);
     if (!host.hasAttribute('data-ps-selection-ready')) {
       host.dataset.psSelectionReady = '';

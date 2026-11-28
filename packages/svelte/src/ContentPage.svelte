@@ -175,7 +175,7 @@
       overflow: auto;
       overscroll-behavior: contain;
       padding-block: 0.75rem;
-      background: var(--ps-section-standard);
+      background: var(--ps-panel-background, var(--ps-section-standard));
       border-radius: var(--ps-radius);
       box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow));
     }

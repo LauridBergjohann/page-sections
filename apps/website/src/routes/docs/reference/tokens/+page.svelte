@@ -178,6 +178,13 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>Panels, popups and navigation; docked headers have a bottom edge only</td>
             </tr>
             <tr>
+              <td><code>--ps-panel-background</code></td>
+              <td>var(--ps-section-standard)</td>
+              <td>
+                Header, satellites, sidebars and floating popups; independent of content surfaces
+              </td>
+            </tr>
+            <tr>
               <td><code>--ps-navigation-shadow</code></td>
               <td>0 4px 8px rgb(0 0 0 / 12%)</td>
               <td>

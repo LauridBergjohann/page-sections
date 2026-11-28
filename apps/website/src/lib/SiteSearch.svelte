@@ -61,6 +61,7 @@
   let query = $state('');
   let opened = $state(false);
   let active = $state(-1);
+  let viewportWidth = 0;
   const words = $derived(query.trim().toLowerCase().split(/\s+/).filter(Boolean));
   function relevance(item: (typeof entries)[number]) {
     const title = item.title.toLowerCase();
@@ -82,6 +83,7 @@
   );
   const matches = $derived(found.slice(0, 10));
   onMount(() => {
+    viewportWidth = window.innerWidth;
     const media = matchMedia(
       '(max-width: 799.98px), (min-width: 1200px) and (max-width: 1599.98px)'
     );
@@ -106,7 +108,7 @@
   async function focusSearch() {
     opened = true;
     await tick();
-    input?.focus();
+    input?.focus({ preventScroll: true });
     input?.select();
   }
   function dismiss(restoreFocus = false) {
@@ -149,7 +151,11 @@
 
 <svelte:window
   onkeydown={shortcut}
-  onresize={() => dismiss()}
+  onresize={() => {
+    // Opening the on-screen keyboard changes height, not the search layout.
+    if (window.innerWidth !== viewportWidth) dismiss();
+    viewportWidth = window.innerWidth;
+  }}
   onpointerdown={(event) => {
     if (event.target instanceof Node && !root?.contains(event.target)) dismiss();
   }}

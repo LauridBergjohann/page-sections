@@ -2568,6 +2568,8 @@
   border?: string;
   /** Panels, navigation and popups. Use transparent to hide. */
   panelBorder?: string;
+  /** Header, satellites, sidebars and floating popups. Defaults to standard. */
+  panelBackground?: string;
   background?: string; ink?: string; body?: string; accent?: string; onAccent?: string;
   standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string;
   footerBorder?: string; footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;
@@ -2589,6 +2591,11 @@
             <tr>
               <td><code>panelBorder</code></td><td><code>string</code></td><td>Optional</td><td>
                 Panels, navigation and popups. Use transparent to hide.
+              </td>
+            </tr>
+            <tr>
+              <td><code>panelBackground</code></td><td><code>string</code></td><td>Optional</td><td>
+                Header, satellites, sidebars and floating popups. Defaults to standard.
               </td>
             </tr>
             <tr>
