@@ -305,6 +305,14 @@
   .site-search :global(.mobile-search) {
     display: none;
   }
+  .site-search :global(.mobile-search[data-active='false']) {
+    background: transparent;
+  }
+  @media (hover: hover) {
+    .site-search :global(.mobile-search[data-active='false']:hover) {
+      background: var(--ps-selection, var(--ps-section-muted));
+    }
+  }
   .site-search :global(.search-panel) {
     top: 100%;
     right: 0;

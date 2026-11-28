@@ -96,6 +96,12 @@
         variables on an ancestor, or use PageShell to scope a typed theme across navigation and page
         content.
       </p>
+      <p>
+        An explicit <code>mode="light"</code> or <code>mode="dark"</code> also sets
+        <code>color-scheme</code> within PageShell, so native scrollbars and form controls follow
+        that mode. For a document that scrolls at the viewport, apply the same
+        <code>color-scheme</code> to <code>html</code>; it sits outside the wrapper.
+      </p>
       <CodeBlock {...examples[0]} highlighted={data.highlights[0]} />
       <p>
         Text colors follow the same roles across sections: <code>--ps-body</code> colors body copy,

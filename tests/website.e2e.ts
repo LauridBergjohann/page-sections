@@ -7,12 +7,20 @@ test('panel backgrounds are independent of section surfaces in light and dark mo
   for (const mode of ['light', 'dark']) {
     await page.locator('.ps-shell').first().evaluate((node, mode) => node.setAttribute('data-ps-theme', mode), mode);
     const standard = await page.locator('.website-header .header').evaluate(node => getComputedStyle(node).backgroundColor);
-    const sheet = await page.addStyleTag({ content: '.ps-shell { --ps-panel-background: rgb(227, 235, 240); }' });
-    for (const panel of await panels.all()) await expect(panel).toHaveCSS('background-color', 'rgb(227, 235, 240)');
+    const sheet = await page.addStyleTag({ content: '.ps-shell[data-ps-theme] { --ps-panel-background: rgb(227, 235, 240); }' });
+    const fill = await page.locator('.ps-shell').evaluate(node => {
+      const probe = document.createElement('span');
+      probe.style.background = 'color-mix(in srgb, rgb(227, 235, 240) calc(var(--ps-panel-tint-opacity, 1) * 100%), transparent)';
+      node.append(probe);
+      const color = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return color;
+    });
+    for (const panel of await panels.all()) await expect(panel).toHaveCSS('background-color', fill);
     expect(await page.locator('.ps-section-surface').first().evaluate(node => getComputedStyle(node).backgroundColor)).not.toBe('rgb(227, 235, 240)');
     await page.mouse.move(0, 0);
     await page.locator('.desktop-menu a[aria-expanded]').first().hover();
-    await expect(page.locator('.ps-submenu:popover-open')).toHaveCSS('background-color', 'rgb(227, 235, 240)');
+    await expect(page.locator('.ps-submenu:popover-open')).toHaveCSS('background-color', fill);
     await page.keyboard.press('Escape');
     await sheet.evaluate(node => node.remove());
     await expect(page.locator('.website-header .header')).toHaveCSS('background-color', standard);

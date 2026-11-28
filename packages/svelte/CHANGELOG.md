@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Apply the scoped theme mode to native scrollbars and form controls, including floating panels.
+
 - Support independent panel tint opacity and backdrop blur for headers, satellites, sidebars and floating popups through --ps-panel-tint-opacity and --ps-panel-backdrop-blur. Keep text and controls opaque, preserve existing defaults and leave inline/content surfaces unchanged.
 
 - Keep focused popup inputs open when the mobile keyboard changes viewport height, constrain floating surfaces to the visual viewport, and preserve width-change and scroll dismissal. Align ButtonGroup selection backgrounds with text controls inside animated popups. Add PageTheme.panelBackground and --ps-panel-background for header, satellite, sidebar and popup surfaces, with the existing standard surface as the fallback.

@@ -2,6 +2,39 @@ import { expect, test, type Locator } from '@playwright/test';
 
 const route = '/docs/design-system/responsive-layout/';
 
+test('native scrollbars and idle search follow the selected theme, independent of the OS', async ({ page }) => {
+  await page.setViewportSize({ width: 720, height: 900 });
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await page.goto(route);
+  const search = page.getByRole('button', { name: 'Open search', exact: true });
+  for (const mode of ['light', 'dark', 'light']) {
+    // Deliberately choose the opposite OS preference.
+    await page.emulateMedia({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+    await page.locator('.settings > summary').click();
+    await page.locator('.settings-panel').getByRole('button', { name: mode === 'light' ? 'Light' : 'Dark', exact: true }).click();
+    await page.mouse.move(0, 0);
+    await expect(page.locator('html')).toHaveCSS('color-scheme', mode);
+    await expect(search).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await page.locator('.mobile-menu > summary').click();
+    const panel = page.locator('.mobile-panel:popover-open');
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveCSS('color-scheme', mode);
+    for (const label of ['Show pages in Sections', 'Show pages in Documentation']) {
+      const disclosure = panel.getByRole('button', { name: label, exact: true });
+      if (!await disclosure.evaluate(node => node.closest('details')?.open)) await disclosure.click();
+    }
+    await expect.poll(() => panel.evaluate(node => node.scrollHeight > node.clientHeight)).toBe(true);
+    await page.screenshot({ path: test.info().outputPath(`navigation-${mode}.png`) });
+    await page.keyboard.press('Escape');
+    await search.click();
+    await expect(page.locator('.search-surface:popover-open')).toHaveCSS('color-scheme', mode);
+    await expect(page.getByRole('combobox', { name: 'Search documentation' })).toHaveCSS('color-scheme', mode);
+    await page.keyboard.press('Escape');
+    await page.mouse.move(0, 0);
+    await expect(search).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  }
+});
+
 test('text ButtonGroup selection meets its divider after popup entrance', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(route);

@@ -79,5 +79,6 @@
     list={nextStepCards}
     cardSize="m"
     cardTone="standard"
+    mediaHoverZoom={false}
   />
 </ContentPage>
