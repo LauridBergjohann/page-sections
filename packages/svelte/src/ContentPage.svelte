@@ -175,7 +175,7 @@
       overflow: auto;
       overscroll-behavior: contain;
       padding-block: 0.75rem;
-      background: var(--ps-panel-background, var(--ps-section-standard));
+      --ps-panel-tint-fill: color-mix(in srgb, var(--ps-panel-background, var(--ps-section-standard)) calc(clamp(0, var(--ps-panel-tint-opacity), 1) * 100%), transparent); --ps-panel-filter: blur(clamp(0px, var(--ps-panel-backdrop-blur), 100px)); background: var(--ps-panel-tint-fill, var(--ps-panel-background, var(--ps-section-standard))); -webkit-backdrop-filter: var(--ps-panel-filter, none); backdrop-filter: var(--ps-panel-filter, none);
       border-radius: var(--ps-radius);
       box-shadow: var(--ps-surface-shadow, var(--ps-default-surface-shadow));
     }

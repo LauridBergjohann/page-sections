@@ -17,6 +17,17 @@ it('maps independent panel surfaces without changing the content surface', () =>
   expect(themeStyle()).not.toContain('--ps-panel-background');
   expect(() => themeStyle({ panelBackground: 'red;display:none' })).toThrow();
 });
+it('uses spatial-elements units and limits for the panel material', () => {
+  expect(themeStyle({ panelTintOpacity: undefined, panelBackdropBlur: undefined })).toBe('');
+  expect(themeStyle({ panelTintOpacity: 0.65, panelBackdropBlur: 8 })).toBe('--ps-panel-tint-opacity:0.65;--ps-panel-backdrop-blur:8px');
+  expect(themeStyle({ panelTintOpacity: -1, panelBackdropBlur: 150 })).toBe('--ps-panel-tint-opacity:0;--ps-panel-backdrop-blur:100px');
+  expect(themeStyle({ panelTintOpacity: 2, panelBackdropBlur: -4 })).toBe('--ps-panel-tint-opacity:1;--ps-panel-backdrop-blur:0px');
+  expect(themeStyle({ panelTintOpacity: 0, panelBackdropBlur: 0 })).toBe('--ps-panel-tint-opacity:0;--ps-panel-backdrop-blur:0px');
+  for (const value of [NaN, Infinity, -Infinity, '8px', '1;display:none']) {
+    expect(() => themeStyle({ panelTintOpacity: value as number })).toThrow(/Invalid theme property/);
+    expect(() => themeStyle({ panelBackdropBlur: value as number })).toThrow(/Invalid theme property/);
+  }
+});
 
 describe('shared navigation and catalog geometry', () => {
   it.each([[320, 320, 66, 0], [1599, 1599, 66, 0], [1600, 1328, 64, 16], [1808, 1536, 64, 16], [1809, 1536, 64, 16], [2300, 1536, 64, 16]])('resolves the menu at %s pixels', (width, menuWidth, height, y) => {

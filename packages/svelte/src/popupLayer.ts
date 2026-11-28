@@ -217,6 +217,10 @@ function createController(): Controller {
         originals.set(panel, { style: panel.getAttribute('style'), viewport: viewport(), anchor: anchorRect ? { x: anchorRect.x, y: anchorRect.y } : undefined });
         originalInert.set(panel, panel.inert);
         panel.popover = 'manual';
+        if (!panel.classList.contains('ps-popup')) {
+          panel.style.setProperty('--ps-panel-tint-fill', 'color-mix(in srgb, var(--ps-panel-background, var(--ps-section-standard)) calc(clamp(0, var(--ps-panel-tint-opacity), 1) * 100%), transparent)');
+          panel.style.setProperty('--ps-panel-filter', 'blur(clamp(0px, var(--ps-panel-backdrop-blur), 100px))');
+        }
         Object.assign(panel.style, {
           position: 'fixed',
           inset: 'auto',
@@ -234,7 +238,7 @@ function createController(): Controller {
             borderTopWidth: headerRect ? '0px' : '1px',
             borderRadius: 'var(--ps-radius)',
             boxShadow: 'var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)))',
-            background: 'var(--ps-panel-background, var(--ps-section-standard))', color: 'var(--ps-ink)'
+            background: 'var(--ps-panel-tint-fill, var(--ps-panel-background, var(--ps-section-standard)))', backdropFilter: 'var(--ps-panel-filter, none)', webkitBackdropFilter: 'var(--ps-panel-filter, none)', color: 'var(--ps-ink)'
           }),
           maxHeight: (availableHeight ?? Math.max(0, innerHeight - top - 12)) + 'px',
           overflowY: 'auto'

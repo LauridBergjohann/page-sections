@@ -146,6 +146,10 @@ export interface PageTheme {
   panelBorder?: string;
   /** Header, satellites, sidebars and floating popups. Defaults to standard. */
   panelBackground?: string;
+  /** Background tint opacity, matching spatial-elements tintOpacity: 0–1, default 1. Does not fade content. */
+  panelTintOpacity?: number;
+  /** Backdrop blur radius in pixels, matching spatial-elements backdropBlur: 0–100, default 0. */
+  panelBackdropBlur?: number;
   background?: string; ink?: string; body?: string; accent?: string; onAccent?: string;
   standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string;
   footerBorder?: string; footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;

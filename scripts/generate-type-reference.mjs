@@ -44,7 +44,7 @@ const descriptions = {
   VideoData: 'A native HTML video source or a YouTube source. Captions are an array of objects: src is the track URL, language is its language code, and label is its visible name.',
   MenuItem: 'One site-navigation entry. Children use the same shape recursively. IDs must be unique in the tree. resolveNavigation derives current and active states from the current location.',
   Breadcrumb: 'One step in the current page’s site hierarchy. The label is required; the destination is optional. The final item represents the current page.',
-  PageTheme: 'Optional CSS values applied to a shared ancestor. Include units for lengths, such as 12px for radius. Omitted properties retain inherited values or library defaults.',
+  PageTheme: 'Optional theme values applied to a shared ancestor. Most properties are CSS strings with units for lengths, such as 12px for radius. panelTintOpacity is a number from 0 to 1; panelBackdropBlur is a pixel radius from 0 to 100, matching spatial-elements tintOpacity and backdropBlur. Omitted properties retain inherited values or library defaults.',
   InlineText: 'Either a plain string or an array of InlineRun objects for inline formatting and links. Choose runs when one line contains differently formatted parts.',
   InlineRun: 'One inline text fragment. The type discriminator selects text, strong, emphasis, code, link or a line break. Each alternative below shows its own required fields.',
   RichTextBlock: 'One structured paragraph, address, list or panel. The type discriminator selects the variant. A panel can contain more blocks and link actions.',

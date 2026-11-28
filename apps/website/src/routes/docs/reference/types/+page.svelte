@@ -2557,8 +2557,10 @@
   >
     <div class="prose">
       <p>
-        Optional CSS values applied to a shared ancestor. Include units for lengths, such as 12px
-        for radius. Omitted properties retain inherited values or library defaults.
+        Optional theme values applied to a shared ancestor. Most properties are CSS strings with
+        units for lengths, such as 12px for radius. panelTintOpacity is a number from 0 to 1;
+        panelBackdropBlur is a pixel radius from 0 to 100, matching spatial-elements tintOpacity and
+        backdropBlur. Omitted properties retain inherited values or library defaults.
       </p>
       <details>
         <summary>Type declaration</summary>
@@ -2570,6 +2572,10 @@
   panelBorder?: string;
   /** Header, satellites, sidebars and floating popups. Defaults to standard. */
   panelBackground?: string;
+  /** Background tint opacity, matching spatial-elements tintOpacity: 0–1, default 1. Does not fade content. */
+  panelTintOpacity?: number;
+  /** Backdrop blur radius in pixels, matching spatial-elements backdropBlur: 0–100, default 0. */
+  panelBackdropBlur?: number;
   background?: string; ink?: string; body?: string; accent?: string; onAccent?: string;
   standard?: string; muted?: string; radius?: string; narrowMax?: string; fontFamily?: string;
   footerBorder?: string; footerBackground?: string; footerInk?: string; footerRadius?: string; footerShadow?: string;
@@ -2596,6 +2602,22 @@
             <tr>
               <td><code>panelBackground</code></td><td><code>string</code></td><td>Optional</td><td>
                 Header, satellites, sidebars and floating popups. Defaults to standard.
+              </td>
+            </tr>
+            <tr>
+              <td><code>panelTintOpacity</code></td><td><code>number</code></td><td>
+                Optional
+              </td><td>
+                Background tint opacity, matching spatial-elements tintOpacity: 0–1, default 1. Does
+                not fade content.
+              </td>
+            </tr>
+            <tr>
+              <td><code>panelBackdropBlur</code></td><td><code>number</code></td><td>
+                Optional
+              </td><td>
+                Backdrop blur radius in pixels, matching spatial-elements backdropBlur: 0–100,
+                default 0.
               </td>
             </tr>
             <tr>

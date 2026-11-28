@@ -3,18 +3,24 @@
     {
       language: 'svelte',
       code: `<script>
-  import { PageShell, ContentPage, Section } from '@page-sections/svelte';
+  import { PageShell, Header, ContentPage, Section } from '@page-sections/svelte';
 <\/script>
 
 <PageShell
   mode="light"
   theme={{
     accent: '#286449',
+    panelBackground: '#ffffff',
+    panelTintOpacity: 0.65,
+    panelBackdropBlur: 8,
     radius: '12px',
     fontFamily: 'Georgia, serif',
     narrowMax: '720px'
   }}
 >
+  <Header scrollBehavior="fixed" items={[{ id: 'news', label: 'News', href: '#news' }]}>
+    {#snippet brand()}<a href="/">Garden journal</a>{/snippet}
+  </Header>
   <ContentPage page={{ title: 'Garden journal' }}>
     <Section
       section={{
@@ -37,6 +43,9 @@
   --ps-body: var(--text-secondary);
   --ps-section-standard: var(--surface);
   --ps-section-muted: var(--surface-muted);
+  --ps-panel-background: var(--surface);
+  --ps-panel-tint-opacity: 0.65;
+  --ps-panel-backdrop-blur: 8px;
   --ps-radius: 12px;
 }`
     }
@@ -108,7 +117,10 @@
     }}
   >
     <div class="prose">
-      <p>Every property is an optional CSS string, including units where needed.</p>
+      <p>
+        Properties are optional CSS strings, including units where needed, except the numeric panel
+        material controls described below.
+      </p>
       <!-- svelte-ignore a11y_no_noninteractive_tabindex (Overflowing reference tables need keyboard scrolling.) -->
       <div class="table-scroll" tabindex="0" role="region" aria-label="Reference table">
         <table>
@@ -123,6 +135,12 @@
             <tr><td><code>panelBorder</code></td><td><code>--ps-panel-border</code></td></tr>
             <tr>
               <td><code>panelBackground</code></td><td><code>--ps-panel-background</code></td>
+            </tr>
+            <tr>
+              <td><code>panelTintOpacity</code></td><td><code>--ps-panel-tint-opacity</code></td>
+            </tr>
+            <tr>
+              <td><code>panelBackdropBlur</code></td><td><code>--ps-panel-backdrop-blur</code></td>
             </tr>
             <tr>
               <td><code>footerBackground</code></td><td><code>--ps-footer-background</code></td>
@@ -196,6 +214,25 @@
         gives navigation panels a tinted surface while content stays white. If omitted, panels follow
         <code>--ps-section-standard</code> in both light and dark mode. ContentPanel keeps its explicitly
         selected standard or muted tone.
+      </p>
+      <p>
+        The material controls follow spatial-elements: <code>panelTintOpacity</code> corresponds to
+        <code>panelTheme.tintOpacity</code> (a number from 0 to 1), and
+        <code>panelBackdropBlur</code>
+        to <code>panelTheme.backdropBlur</code> (a pixel radius from 0 to 100). For example, use
+        <code>panelTintOpacity: 0.65, panelBackdropBlur: 8</code> for the same tint strength and
+        blur as its regular panel preset. The background color corresponds to its <code>tint</code>.
+        Only the background tint becomes transparent; text, controls and borders keep their own
+        opacity. This is different from spatial-elements' whole-panel <code>opacity</code>.
+      </p>
+      <p>
+        Page Sections keeps opaque, unblurred defaults (1 and 0). Numeric theme values are clamped
+        to the ranges above; non-finite values are rejected. In CSS, use a unitless
+        <code>--ps-panel-tint-opacity</code> and a length such as <code>8px</code> for
+        <code>--ps-panel-backdrop-blur</code>. Both inherit and can be overridden locally. Blur is
+        visible through a translucent tint; a fully opaque background hides it. Browsers without
+        backdrop-filter support still render the tint and readable content. The separate blur of the
+        page behind an open popup remains independent of this panel material.
       </p>
     </div>
   </Section>

@@ -99,7 +99,7 @@
   [data-scroll='fixed'] { height: var(--ps-nav-height); }
   [data-scroll='fixed'] .ps-navigation-rack { position: fixed; inset: 0 0 auto; }
   .ps-navigation { position: relative; padding-top: var(--ps-menu-top); min-height: var(--ps-nav-height); }
-  .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; background: var(--ps-panel-background, var(--ps-section-standard)); box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
+  .header { position: relative; display: flex; align-items: center; gap: .5rem; min-height: var(--ps-menu-height); padding: 0 12px; --ps-panel-tint-fill: color-mix(in srgb, var(--ps-panel-background, var(--ps-section-standard)) calc(clamp(0, var(--ps-panel-tint-opacity), 1) * 100%), transparent); --ps-panel-filter: blur(clamp(0px, var(--ps-panel-backdrop-blur), 100px)); background: var(--ps-panel-tint-fill, var(--ps-panel-background, var(--ps-section-standard))); -webkit-backdrop-filter: var(--ps-panel-filter, none); backdrop-filter: var(--ps-panel-filter, none); box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
   .brand, .tools { flex-shrink: 0; }
   .brand { min-width: 0; display: flex; align-items: center; }
   .mobile-navigation { display: flex; align-items: center; }
@@ -143,7 +143,7 @@
     [data-scroll='fixed'] .satellite { pointer-events: auto; }
     .header::after { border-width: 1px; }
     .header { border-radius: var(--ps-radius); }
-    .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); background: var(--ps-panel-background, var(--ps-section-standard)); border-radius: 12px; box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
+    .satellite { display: flex; align-items: center; justify-content: center; position: absolute; top: var(--ps-satellite-top); width: var(--ps-satellite-width); height: var(--ps-satellite-height); --ps-panel-tint-fill: color-mix(in srgb, var(--ps-panel-background, var(--ps-section-standard)) calc(clamp(0, var(--ps-panel-tint-opacity), 1) * 100%), transparent); --ps-panel-filter: blur(clamp(0px, var(--ps-panel-backdrop-blur), 100px)); background: var(--ps-panel-tint-fill, var(--ps-panel-background, var(--ps-section-standard))); -webkit-backdrop-filter: var(--ps-panel-filter, none); backdrop-filter: var(--ps-panel-filter, none); border-radius: 12px; box-shadow: var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)); }
     /* A satellite's segmented controls share its contour, including their outline
        and selection surface. Keep the satellite itself open for arbitrary popups. */
     .satellite :global(.ps-button-group) { border-radius: 12px; overflow: clip; }

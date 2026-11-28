@@ -298,7 +298,7 @@ export const typeDocuments = [
     href: '/docs/reference/types/#page-theme',
     group: 'Data types',
     description:
-      'Optional CSS values applied to a shared ancestor. Include units for lengths, such as 12px for radius. Omitted properties retain inherited values or library defaults.'
+      'Optional theme values applied to a shared ancestor. Most properties are CSS strings with units for lengths, such as 12px for radius. panelTintOpacity is a number from 0 to 1; panelBackdropBlur is a pixel radius from 0 to 100, matching spatial-elements tintOpacity and backdropBlur. Omitted properties retain inherited values or library defaults.'
   },
   {
     title: 'PanelSectionData',
