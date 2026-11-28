@@ -217,6 +217,10 @@ function createController(): Controller {
         originals.set(panel, { style: panel.getAttribute('style'), viewport: viewport(), anchor: anchorRect ? { x: anchorRect.x, y: anchorRect.y } : undefined });
         originalInert.set(panel, panel.inert);
         panel.popover = 'manual';
+        if (!panel.classList.contains('ps-popup')) {
+          panel.style.setProperty('--ps-panel-tint-fill', 'color-mix(in srgb, var(--ps-panel-background, var(--ps-section-standard)) calc(clamp(0, var(--ps-panel-tint-opacity), 1) * 100%), transparent)');
+          panel.style.setProperty('--ps-panel-filter', 'blur(clamp(0px, var(--ps-panel-backdrop-blur), 100px))');
+        }
         Object.assign(panel.style, {
           position: 'fixed',
           inset: 'auto',
@@ -234,7 +238,7 @@ function createController(): Controller {
             borderTopWidth: headerRect ? '0px' : '1px',
             borderRadius: 'var(--ps-radius)',
             boxShadow: 'var(--ps-popup-shadow, var(--ps-navigation-shadow, var(--ps-default-navigation-shadow)))',
-            background: 'var(--ps-section-standard)', color: 'var(--ps-ink)'
+            background: 'var(--ps-panel-tint-fill, var(--ps-panel-background, var(--ps-section-standard)))', backdropFilter: 'var(--ps-panel-filter, none)', webkitBackdropFilter: 'var(--ps-panel-filter, none)', color: 'var(--ps-ink)'
           }),
           maxHeight: (availableHeight ?? Math.max(0, innerHeight - top - 12)) + 'px',
           overflowY: 'auto'
@@ -243,6 +247,7 @@ function createController(): Controller {
       // Closing a details ancestor can hide its native popover before the observer runs.
       // Always reconcile the actual browser state, including a rapid close/reopen.
       if (!panel.matches(':popover-open')) panel.showPopover();
+      if (entering && window.visualViewport && window.visualViewport.height < innerHeight) fitVisualViewport(panel);
       if (entering && !reducedMotion()) {
         const rect = panel.getBoundingClientRect();
         const trigger = anchorRectFor(panel);
@@ -272,6 +277,18 @@ function createController(): Controller {
     )) return;
     const legacy: HTMLElement[] = [];
     for (const panel of originals.keys()) {
+      const positioned = originals.get(panel)!;
+      const focused = document.activeElement;
+      // Virtual keyboards can resize the layout viewport on Android. Keep an
+      // active editor open if its anchor has not moved horizontally or scrolled.
+      if (positioned.viewport.x === current.x && positioned.viewport.y === current.y &&
+          positioned.viewport.width === current.width && focused instanceof HTMLElement &&
+          focused.matches('input, textarea, [contenteditable]:not([contenteditable="false"])') &&
+          (panel.contains(focused) || triggerFor(panel) === focused)) {
+        positioned.viewport = current;
+        fitVisualViewport(panel);
+        continue;
+      }
       const dismiss = popupDismissals.get(panel);
       if (dismiss) { dismiss(); continue; }
       legacy.push(panel);
@@ -284,6 +301,20 @@ function createController(): Controller {
         if (details instanceof HTMLDetailsElement) details.open = false;
       }
     }
+  }
+  function fitVisualViewport(panel: HTMLElement) {
+    const view = window.visualViewport;
+    const bottom = view ? view.offsetTop + view.height : innerHeight;
+    const top = parseFloat(panel.style.top);
+    const available = Number.isFinite(top)
+      ? bottom - Math.max(top, view?.offsetTop ?? 0) - 12
+      : innerHeight - parseFloat(panel.style.bottom) - (view?.offsetTop ?? 0) - 12;
+    panel.style.maxHeight = Math.max(0, available) + 'px';
+  }
+  function resizeVisualViewport() {
+    // Modern mobile browsers resize only the visual viewport for the keyboard.
+    // Reflow the scrollable surface without dismissing it or moving focus.
+    for (const panel of originals.keys()) if (!closing.has(panel)) fitVisualViewport(panel);
   }
   function closeOnContainerScroll(event: Event) {
     if (!(event.target instanceof Element)) return;
@@ -305,6 +336,7 @@ function createController(): Controller {
       if (!roots.size) {
         window.addEventListener('scroll', closeOnViewportChange, { passive: true });
         window.addEventListener('resize', closeOnViewportChange, { passive: true });
+        window.visualViewport?.addEventListener('resize', resizeVisualViewport, { passive: true });
         document.addEventListener('scroll', closeOnContainerScroll, { capture: true, passive: true });
       }
       const existing = roots.get(root);
@@ -331,6 +363,7 @@ function createController(): Controller {
         if (!roots.size) {
           window.removeEventListener('scroll', closeOnViewportChange);
           window.removeEventListener('resize', closeOnViewportChange);
+          window.visualViewport?.removeEventListener('resize', resizeVisualViewport);
           document.removeEventListener('scroll', closeOnContainerScroll, true);
         }
         schedule();

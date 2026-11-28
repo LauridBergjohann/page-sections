@@ -527,8 +527,11 @@ console.log(background.cssBackground);`
         maps recognized fields to semicolon-separated <code>--ps-*</code> declarations. Unknown keys
         or values containing
         <code>;</code>, <code>&#123;</code>, <code>&#125;</code>, <code>&lt;</code> or
-        <code>&gt;</code> throw. This prevents additional declaration injection but does not validate
-        arbitrary CSS grammar. Defaults to an empty string; palette defaults live in CSS.
+        <code>&gt;</code> throw. This prevents additional declaration injection but does not
+        validate arbitrary CSS grammar. Undefined optional values are omitted. Numeric
+        <code>panelTintOpacity</code> is clamped to 0–1; <code>panelBackdropBlur</code> to 0–100 and serialized
+        with a px unit. Non-finite numbers and strings for these two fields throw. Defaults to an empty
+        string; palette defaults live in CSS.
       </p>
       <p>
         <code>safeHref(href: string | undefined): string | undefined</code> returns undefined for unsupported

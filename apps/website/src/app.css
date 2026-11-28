@@ -1,3 +1,10 @@
+/* The viewport scrollbar belongs to html, outside PageShell's inherited mode. */
+:root {
+  color-scheme: light;
+}
+:root:has(body > div > .ps-shell[data-ps-theme='dark']) {
+  color-scheme: dark;
+}
 body {
   margin: 0;
 }
@@ -21,6 +28,9 @@ body {
   --ps-body: #666666;
   --ps-accent: #007b5e;
   --ps-on-accent: #ffffff;
+  --ps-panel-background: #ffffff;
+  --ps-panel-tint-opacity: 0.9;
+  --ps-panel-backdrop-blur: 8px;
   --ps-panel-border: #dbdbdb;
   --ps-border: #dbdbdb;
   --ps-radius: 12px;
@@ -31,7 +41,7 @@ body {
   --ps-shadow-color: #000;
 }
 .ps-shell[data-ps-theme='dark'] {
-  --ps-background: #282b31;
+  --ps-background: #2f333a;
   --ps-section-standard: #1f2126;
   --ps-section-muted: #23272e;
   --ps-selection: rgba(72, 77, 83, 0.5);
@@ -39,14 +49,17 @@ body {
   --ps-body: #e6e6e6;
   --ps-accent: #2bc093;
   --ps-on-accent: hsl(220, 10%, 12%);
-  --ps-panel-border: #2a2c33;
+  --ps-panel-background: #23252b;
+  --ps-panel-tint-opacity: 0.9;
+  --ps-panel-backdrop-blur: 8px;
+  --ps-panel-border: #424550;
   --ps-border: #2a2c33;
   --ps-radius: 12px;
   --ps-footer-background: #212126;
   --ps-footer-bar-background: #262a30;
   --ps-footer-bar-ink: hsl(220, 5%, 65%);
   --ps-footer-ink: hsl(216, 10%, 80%);
-  --ps-shadow-color: #3f434b;
+  --ps-shadow-color: #565c68;
 }
 .site-brand {
   display: inline-flex;

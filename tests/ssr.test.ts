@@ -1,9 +1,13 @@
 import { expect, it } from 'vitest';
 import { render } from 'svelte/server';
 import App from './fixtures/plain-svelte/src/App.svelte';
-import { Card, CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation, Heading } from '../packages/svelte/src/index.js';
+import { Card, CarouselSection, RichTextSection, Navigation, Sections, ContentPage, HeroSection, Breadcrumbs, SidebarNavigation, Heading, PageShell } from '../packages/svelte/src/index.js';
 import PageHeaders from './PageHeaders.svelte';
 import type { SectionData } from '@page-sections/core';
+it('renders numeric panel material settings on the shared theme ancestor before hydration', () => {
+  const { body } = render(PageShell, { props: { theme: { panelBackground: '#fff', panelTintOpacity: .65, panelBackdropBlur: 8 } } });
+  expect(body).toContain('--ps-panel-background:#fff;--ps-panel-tint-opacity:0.65;--ps-panel-backdrop-blur:8px');
+});
 import CustomSection from './CustomSection.svelte';
 import NestedSurfaces from './NestedSurfaces.svelte';
 import ImplicitNestedSurfaces from './ImplicitNestedSurfaces.svelte';

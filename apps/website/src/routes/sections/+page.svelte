@@ -29,7 +29,7 @@
       headingLevel: 2,
       headingSize: 'l',
       introduction: "Below you'll find examples of all the sections..",
-      background: { color: 'standard', size: 'standard' }
+      background: { color: 'standard', size: 'full' }
     }}
   />
   {#each sectionCatalog as item, index (item.slug)}
@@ -41,11 +41,11 @@
         headingLevel: 3,
         headingSize: 'm',
         introduction: item.description,
-        background: { color: index % 2 === 0 ? 'muted' : 'standard', size: 'standard' }
+        background: { color: index % 2 === 0 ? 'muted' : 'standard', size: 'full' }
       }}
     >
       <Sections sections={[sectionExample(item.slug)]} codeHighlights={data.codeHighlights} />
-      <p class="detail-link"><a href={base + item.href}>Explore {item.title} →</a></p>
+      <p class="detail-link"><a href={base + item.href}>Explore {item.title} Section →</a></p>
     </Section>
   {/each}
 </ContentPage>

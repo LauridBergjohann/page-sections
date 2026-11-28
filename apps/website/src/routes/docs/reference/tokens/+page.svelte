@@ -178,6 +178,27 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
               <td>Panels, popups and navigation; docked headers have a bottom edge only</td>
             </tr>
             <tr>
+              <td><code>--ps-panel-background</code></td>
+              <td>var(--ps-section-standard)</td>
+              <td>
+                Header, satellites, sidebars and floating popups; independent of content surfaces
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-panel-tint-opacity</code></td><td>1</td>
+              <td>
+                Panel background tint coverage, clamped to 0–1. Text, controls and borders stay
+                opaque.
+              </td>
+            </tr>
+            <tr>
+              <td><code>--ps-panel-backdrop-blur</code></td><td>0px</td>
+              <td>
+                Panel backdrop blur radius, clamped to 0–100px. Use a translucent tint to see the
+                blur.
+              </td>
+            </tr>
+            <tr>
               <td><code>--ps-navigation-shadow</code></td>
               <td>0 4px 8px rgb(0 0 0 / 12%)</td>
               <td>
@@ -712,8 +733,11 @@ console.log(layoutTokens.grid.m.columns, layoutTokens.grid.m.gap); // 8, 16`
       <p>
         Internal <code>--ps-default-navigation-shadow</code>,
         <code>--ps-default-surface-shadow</code>
-        and <code>--ps-default-card-hover-shadow</code> resolve the shared controls on each surface. Use
-        the public controls above rather than setting these internal values.
+        and <code>--ps-default-card-hover-shadow</code> resolve the shared controls on each surface.
+        Use the public controls above rather than setting these internal values. Panel surfaces
+        similarly compute <code>--ps-panel-tint-fill</code> and
+        <code>--ps-panel-filter</code> locally from the public tint and blur controls; leave these derived
+        values to the component.
       </p>
       <p>
         The role variables are optional overrides, rather than precomputed values on <code>

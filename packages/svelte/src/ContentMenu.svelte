@@ -205,7 +205,7 @@
       max-height: var(--ps-sidebar-available-height, calc(100dvh - var(--ps-nav-height) - var(--ps-breadcrumb-height) - var(--ps-content-menu-offset) - var(--ps-sidebar-sticky-top)));
       overflow: auto;
       overscroll-behavior: contain;
-      background: var(--ps-section-standard);
+      --ps-panel-tint-fill: color-mix(in srgb, var(--ps-panel-background, var(--ps-section-standard)) calc(clamp(0, var(--ps-panel-tint-opacity), 1) * 100%), transparent); --ps-panel-filter: blur(clamp(0px, var(--ps-panel-backdrop-blur), 100px)); background: var(--ps-panel-tint-fill, var(--ps-panel-background, var(--ps-section-standard))); -webkit-backdrop-filter: var(--ps-panel-filter, none); backdrop-filter: var(--ps-panel-filter, none);
       border-radius: var(--ps-content-menu-radius, 0 var(--ps-radius) var(--ps-radius) 0);
       box-shadow: var(--ps-content-menu-shadow, none);
     }

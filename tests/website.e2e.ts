@@ -1,5 +1,32 @@
 import { expect, test, type Locator } from '@playwright/test';
 
+test('panel backgrounds are independent of section surfaces in light and dark mode', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.goto('/docs/');
+  const panels = page.locator('.website-header .header, .website-header .satellite, .sidebar-panel, .ps-content-menu-slot .desktop');
+  for (const mode of ['light', 'dark']) {
+    await page.locator('.ps-shell').first().evaluate((node, mode) => node.setAttribute('data-ps-theme', mode), mode);
+    const standard = await page.locator('.website-header .header').evaluate(node => getComputedStyle(node).backgroundColor);
+    const sheet = await page.addStyleTag({ content: '.ps-shell[data-ps-theme] { --ps-panel-background: rgb(227, 235, 240); }' });
+    const fill = await page.locator('.ps-shell').evaluate(node => {
+      const probe = document.createElement('span');
+      probe.style.background = 'color-mix(in srgb, rgb(227, 235, 240) calc(var(--ps-panel-tint-opacity, 1) * 100%), transparent)';
+      node.append(probe);
+      const color = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return color;
+    });
+    for (const panel of await panels.all()) await expect(panel).toHaveCSS('background-color', fill);
+    expect(await page.locator('.ps-section-surface').first().evaluate(node => getComputedStyle(node).backgroundColor)).not.toBe('rgb(227, 235, 240)');
+    await page.mouse.move(0, 0);
+    await page.locator('.desktop-menu a[aria-expanded]').first().hover();
+    await expect(page.locator('.ps-submenu:popover-open')).toHaveCSS('background-color', fill);
+    await page.keyboard.press('Escape');
+    await sheet.evaluate(node => node.remove());
+    await expect(page.locator('.website-header .header')).toHaveCSS('background-color', standard);
+  }
+});
+
 test('control and panel edges are independent and preserve header geometry', async ({ page }) => {
   await page.goto('/docs/');
   await page.addStyleTag({ content: ':root, .ps-shell { --ps-border: rgb(200, 50, 30) !important; --ps-panel-border: rgb(30, 60, 200) !important; }' });
